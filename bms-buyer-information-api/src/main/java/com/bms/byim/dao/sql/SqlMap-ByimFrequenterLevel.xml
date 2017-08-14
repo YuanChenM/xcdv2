@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimFrequenterLevelDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		LEVEL_ID AS levelId,
+		BUYER_ID AS buyerId,
+		FREQUENTER_LEVEL_F AS frequenterLevelF,
+		FREQUENTER_LEVEL_A AS frequenterLevelA,
+		FREQUENCY AS frequency,
+		AMOUNT AS amount,
+		CRT_TIME AS crtTime
+	</sql>
+
+    <insert id="save" parameterType="com.bms.byim.bean.entity.ByimFrequenterLevel">
+		INSERT INTO byim_frequenter_level (
+		LEVEL_ID,
+		BUYER_ID,
+		FREQUENTER_LEVEL_CODE,
+		FREQUENTER_LEVEL_F,
+		FREQUENTER_LEVEL_A,
+		FREQUENCY,
+		AMOUNT,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		UPD_ID,
+		UPD_TIME,
+		VERSION
+		)
+		VALUES (
+		#{levelId},
+		#{buyerId},
+		#{frequenterLevelCode},
+		#{frequenterLevelF},
+		#{frequenterLevelA},
+		#{frequency},
+		#{amount},
+		#{delFlg},
+		#{crtId},
+		#{crtTime},
+		#{updId},
+		#{updTime},
+		#{version}
+		)
+	</insert>
+
+    <select id="findPageList" parameterType="com.bms.byim.bean.param.FrequenterLevelRsParam"
+            resultType="com.bms.byim.bean.param.FrequenterLevelRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        byim_frequenter_level
+        WHERE DEL_FLG = FALSE
+        <if test="buyerId != null and buyerId != ''">
+            AND BUYER_ID = #{buyerId}
+        </if>
+        <if test="frequenterLevelF != null and frequenterLevelF != ''">
+            AND FREQUENTER_LEVEL_F LIKE #{frequenterLevelF}
+        </if>
+        <if test="frequenterLevelA != null and frequenterLevelA != ''">
+            AND FREQUENTER_LEVEL_A LIKE #{frequenterLevelA}
+        </if>
+    </select>
+</mapper>

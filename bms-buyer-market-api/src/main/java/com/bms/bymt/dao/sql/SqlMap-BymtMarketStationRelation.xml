@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bymt.dao.BymtMarketStationRelationDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		DISTRIBUTION_MARKET_ID AS distributionMarketId,
+		STATION_ID AS stationId,
+		STATION_NAME AS stationName,
+		STATION_CODE AS stationCode,
+		TERM_MARKET_ID AS termMarketId,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.bymt.bean.entity.BymtMarketStationRelation">
+		INSERT INTO BYMT_MARKET_STATION_RELATION (
+			DISTRIBUTION_MARKET_ID,
+			STATION_ID,
+			STATION_NAME,
+			STATION_CODE,
+			TERM_MARKET_ID,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES (
+			#{distributionMarketId},
+			#{stationId},
+			#{stationName},
+			#{stationCode},
+			#{termMarketId},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.bymt.bean.entity.BymtMarketStationRelation">
+		UPDATE BYMT_MARKET_STATION_RELATION 
+		SET 
+			STATION_ID = #{stationId},
+			STATION_NAME = #{stationName},
+			STATION_CODE = #{stationCode},
+			TERM_MARKET_ID = #{termMarketId},
+			DEL_FLG = #{delFlg},
+			CRT_ID = #{crtId},
+			CRT_TIME = #{crtTime},
+			UPD_ID = #{updId},
+			UPD_TIME = #{updTime},
+			VERSION = #{version}
+		WHERE
+			DISTRIBUTION_MARKET_ID = #{distributionMarketId}		
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.bymt.bean.entity.BymtMarketStationRelation">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYMT_MARKET_STATION_RELATION
+		WHERE	
+			DISTRIBUTION_MARKET_ID = #{distributionMarketId}	
+	</select>
+	
+	<select id="findAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="com.bms.bymt.bean.entity.BymtMarketStationRelation">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYMT_MARKET_STATION_RELATION
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND DEL_FLG = #{filterMap.delFlg}
+			</if>		
+	</select>
+	
+	<select id="countAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			BYMT_MARKET_STATION_RELATION
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND DEL_FLG = #{filterMap.delFlg}
+			</if>				
+	</select>
+	
+</mapper>

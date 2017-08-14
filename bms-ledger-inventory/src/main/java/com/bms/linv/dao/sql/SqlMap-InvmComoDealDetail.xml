@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmComoDealDetailDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		STORE_DEAL_ID AS storeDealId,
+		STORE_NO AS storeNo,
+		TRANSACTION_ID AS transactionId,
+		TRANSACTION_NO AS transactionNo,
+		TRANSACTION_DETAIL_ID AS transactionDetailId,
+		TRANSACTION_SOURCE AS transactionSource,
+		TRANSACTION_TYPE AS transactionType,
+		TRANSACTION_TIME AS transactionTime,
+		REF_NO AS refNo,
+		BIZ_TYPE AS bizType,
+		DEAL_PRICE AS dealPrice,
+		DEAL_QTY AS dealQty,
+		TGT_ID AS tgtId,
+		TGT_CODE AS tgtCode,
+		TGT_TYPE AS tgtType
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.linv.bean.entity.InvmComoDealDetail">
+		INSERT INTO invm_como_deal_detail (
+			STORE_DEAL_ID,
+			STORE_NO,
+			TRANSACTION_ID,
+			TRANSACTION_NO,
+			TRANSACTION_DETAIL_ID,
+			TRANSACTION_SOURCE,
+			TRANSACTION_TYPE,
+			TRANSACTION_TIME,
+			REF_NO,
+			BIZ_TYPE,
+			DEAL_PRICE,
+			DEAL_QTY,
+			TGT_ID,
+			TGT_CODE,
+			TGT_TYPE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+		   #{storeDealId},
+			#{storeNo},
+			#{transactionId},
+			#{transactionNo},
+			#{transactionDetailId},
+			#{transactionSource},
+			#{transactionType},
+			#{transactionTime},
+			#{refNo},
+			#{bizType},
+			#{dealPrice},
+			#{dealQty},
+			#{tgtId},
+			#{tgtCode},
+			#{tgtType},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.linv.bean.entity.InvmComoDealDetail">
+		UPDATE invm_como_deal_detail 
+		SET 
+			STORE_NO = #{storeNo},
+			TRANSACTION_ID = #{transactionId},
+			TRANSACTION_NO = #{transactionNo},
+			TRANSACTION_DETAIL_ID = #{transactionDetailId},
+			TRANSACTION_SOURCE = #{transactionSource},
+			TRANSACTION_TYPE = #{transactionType},
+			TRANSACTION_TIME = #{transactionTime},
+			REF_NO = #{refNo},
+			BIZ_TYPE = #{bizType},
+			DEAL_PRICE = #{dealPrice},
+			DEAL_QTY = #{dealQty},
+			TGT_ID = #{tgtId},
+			TGT_CODE = #{tgtCode},
+			TGT_TYPE = #{tgtType}
+		WHERE
+			STORE_DEAL_ID = #{storeDealId}		
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.linv.bean.entity.InvmComoDealDetail">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_deal_detail
+		WHERE	
+			STORE_DEAL_ID = #{storeDealId}	
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.linv.bean.entity.InvmComoDealDetail" resultType="com.bms.linv.bean.entity.InvmComoDealDetail">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_deal_detail
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>		
+	</select>
+	
+	<select id="count" parameterType="com.bms.linv.bean.entity.InvmComoDealDetail" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			invm_como_deal_detail
+		WHERE	
+			1 = 1
+			<if test="transactionId != null and transactionId !=''">
+			AND TRANSACTION_ID = #{transactionId}
+		</if>
+		<if test="transactionNo != null and transactionNo != ''">
+			AND TRANSACTION_NO = #{transactionNo}
+		</if>
+		<if test="transactionSource != null and transactionSource != ''">
+			AND TRANSACTION_SOURCE = #{transactionSource}
+		</if>
+		<if test="transactionDetailId != null and transactionDetailId !=''">
+			AND TRANSACTION_DETAIL_ID = #{transactionDetailId}
+		</if>
+		<if test="bizType != null and bizType != ''">
+			AND BIZ_TYPE = #{bizType}
+			</if>				
+	</select>
+	
+    <select id="findOutBoundInfo" parameterType="com.bms.linv.bean.param.LINV0116IParam"
+            resultType="com.bms.linv.bean.result.LINV0116IResult">
+        SELECT
+        T.L_A_ID AS logisticsId,
+        T.OWNER_ID AS ownerId,
+        T.OWNER_CODE AS ownerCode,
+        T.OWNER_TYPE AS ownerType,
+        T.TGT_ID AS targetId,
+        T.TGT_CODE AS targetCode,
+        T.TGT_TYPE AS targetType,
+        T.BIZ_TYPE AS bizType,
+        T.TRANSACTION_ID AS transactionId,
+        T.TRANSACTION_NO AS transactionNo,
+        T.TRANSACTION_SOURCE AS transactionSource,
+        T.TRANSACTION_DETAIL_ID AS transactionDetailId,
+        T.COMMODITY_ID AS commodityId,
+        T.COMMODITY_NAME AS commodityName,
+        T.UOM AS uom,
+        T.IV_TYPE AS ivType,
+        sum(T.DEAL_QTY) AS dealQty,
+        T.DEAL_PRICE AS dealPrice
+        FROM
+        (
+        SELECT
+        como.L_A_ID,
+        como.OWNER_ID,
+        como.OWNER_CODE,
+        como.OWNER_TYPE,
+        deal.TGT_ID,
+        deal.TGT_CODE,
+        deal.TGT_TYPE,
+        deal.BIZ_TYPE,
+        deal.TRANSACTION_ID,
+        deal.TRANSACTION_NO,
+        deal.TRANSACTION_SOURCE,
+        deal.TRANSACTION_DETAIL_ID,
+        como.COMMODITY_ID,
+        info.COMMODITY_NAME,
+        como.UOM,
+        como.IV_TYPE,
+		(0-deal.DEAL_QTY) AS DEAL_QTY,
+        deal.DEAL_PRICE
+        FROM
+        invm_como_deal_detail deal
+        LEFT JOIN invm_como_inventory como ON deal.STORE_NO = como.STORE_NO
+        LEFT JOIN invm_comm_info info ON como.COMMODITY_ID = info.COMMODITY_ID
+        ) T
+        WHERE
+        1=1
+        <if test="logisticsId != null and logisticsId !=''">
+            AND T.L_A_ID = #{logisticsId}
+        </if>
+        <if test="ownerId != null and ownerId !=''">
+            AND T.OWNER_ID = #{ownerId}
+        </if>
+        <if test="ownerCode != null and ownerCode !=''">
+            AND T.OWNER_CODE = #{ownerCode}
+        </if>
+        <if test="ownerType != null and ownerType !=''">
+            AND T.OWNER_TYPE = #{ownerType}
+        </if>
+        <if test="targetId != null and targetId !=''">
+            AND T.TGT_ID = #{targetId}
+        </if>
+        <if test="targetCode != null and targetCode !=''">
+            AND T.TGT_CODE = #{targetCode}
+        </if>
+        <if test="targetType != null and targetType !=''">
+			AND T.TGT_TYPE = #{targetType}
+        </if>
+        <if test="bizType != null and bizType !=''">
+            AND T.BIZ_TYPE = #{bizType}
+        </if>
+        <if test="transactionId != null">
+            AND T.TRANSACTION_ID = #{transactionId}
+        </if>
+        <if test="transactionNo != null and transactionNo !=''">
+            AND T.TRANSACTION_NO = #{transactionNo}
+        </if>
+        <if test="transactionSource != null and transactionSource !=''">
+            AND T.TRANSACTION_SOURCE = #{transactionSource}
+        </if>
+        <if test="transactionDetailId != null">
+            AND T.TRANSACTION_DETAIL_ID = #{transactionDetailId}
+        </if>
+        <if test="commodityId != null and commodityId !=''">
+            AND T.COMMODITY_ID = #{commodityId}
+        </if>
+        <if test="uom != null and uom !=''">
+            AND T.UOM = #{uom}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.issue.dao.QuestionAccessoryDao">
+<insert id="save" parameterType="com.bms.issue.bean.entity.QuestionAccessoryEntity">
+INSERT INTO
+ISSU_QUESTION_ACCESSORY
+(
+ACCESSORY_ID
+, ACCESSORY_TYPE
+, QUESTION_ID
+, ITEM_ID
+, FILE_ID
+, FILE_NAME
+, FILE_TYPE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{accessoryId}
+, #{accessoryType}
+, #{questionId}
+, #{itemId}
+, #{fileId}
+, #{fileName}
+, #{fileType}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ISSU_QUESTION_ACCESSORY
+(
+ACCESSORY_ID
+, ACCESSORY_TYPE
+, QUESTION_ID
+, ITEM_ID
+, FILE_ID
+, FILE_NAME
+, FILE_TYPE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.accessoryId}
+, #{entity.accessoryType}
+, #{entity.questionId}
+, #{entity.itemId}
+, #{entity.fileId}
+, #{entity.fileName}
+, #{entity.fileType}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.issue.bean.entity.QuestionAccessoryEntity">
+UPDATE ISSU_QUESTION_ACCESSORY
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+ACCESSORY_ID = #{accessoryId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ISSU_QUESTION_ACCESSORY
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+ACCESSORY_ID = #{entity.accessoryId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.issue.bean.entity.QuestionAccessoryEntity">
+UPDATE ISSU_QUESTION_ACCESSORY
+SET
+ACCESSORY_ID = #{accessoryId}
+, ACCESSORY_TYPE = #{accessoryType}
+, QUESTION_ID = #{questionId}
+, ITEM_ID = #{itemId}
+, FILE_ID = #{fileId}
+, FILE_NAME = #{fileName}
+, FILE_TYPE = #{fileType}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+ACCESSORY_ID = #{accessoryId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ISSU_QUESTION_ACCESSORY
+SET
+ACCESSORY_ID = #{entity.accessoryId}
+, ACCESSORY_TYPE = #{entity.accessoryType}
+, QUESTION_ID = #{entity.questionId}
+, ITEM_ID = #{entity.itemId}
+, FILE_ID = #{entity.fileId}
+, FILE_NAME = #{entity.fileName}
+, FILE_TYPE = #{entity.fileType}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+ACCESSORY_ID = #{entity.accessoryId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.issue.bean.entity.QuestionAccessoryEntity" resultType="com.bms.issue.bean.entity.QuestionAccessoryEntity">
+SELECT
+ACCESSORY_ID AS accessoryId
+, ACCESSORY_TYPE AS accessoryType
+, QUESTION_ID AS questionId
+, ITEM_ID AS itemId
+, FILE_ID AS fileId
+, FILE_NAME AS fileName
+, FILE_TYPE AS fileType
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ISSU_QUESTION_ACCESSORY
+<where>
+<if test="accessoryId!=null">
+AND ACCESSORY_ID = #{accessoryId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.issue.bean.entity.QuestionAccessoryEntity">
+SELECT
+ACCESSORY_ID AS accessoryId
+, ACCESSORY_TYPE AS accessoryType
+, QUESTION_ID AS questionId
+, ITEM_ID AS itemId
+, FILE_ID AS fileId
+, FILE_NAME AS fileName
+, FILE_TYPE AS fileType
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ISSU_QUESTION_ACCESSORY
+<where>
+<if test="ids!=null">
+AND ACCESSORY_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="questions!=null">
+AND QUESTION_ID IN (<foreach item="item" collection="questions" separator=",">#{item.entity.questionId}</foreach>)
+</if>
+<if test="questionItems!=null">
+AND ITEM_ID IN (<foreach item="item" collection="questionItems" separator=",">#{item.entity.itemId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+</mapper>

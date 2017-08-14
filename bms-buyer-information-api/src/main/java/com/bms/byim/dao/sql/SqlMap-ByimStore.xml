@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimStoreDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		STORE_ID AS storeId,
+		BUYER_ID AS buyerId,
+		MARKET_ID AS marketId,
+		MARKET_CODE AS marketCode,
+		MARKET_NAME AS marketName,
+		MARKET_TYPE AS marketType,
+		MARKET_SCALE AS marketScale,
+		LEGAL_PAPER_NAME AS legalPaperName,
+		LEGAL_PAPER_TYPE AS legalPaperType,
+		LEGAL_PAPER_NO AS legalPaperNo,
+		LEGAL_PAPER_PIC AS legalPaperPic,
+		STORE_ADDR AS storeAddr,
+		STORE_NO AS storeNo,
+		STORE_TEL AS storeTel,
+		STORE_WEBSITE AS storeWebsite,
+		STORE_WECHAT AS storeWechat,
+		STORE_LICENSE_TYPE AS storeLicenseType,
+		STORE_LICENSE_NO AS storeLicenseNo,
+		REGISTRANT_ID AS registrantId,
+		REGISTRANT_DATE AS registrantDate,
+		PRE_REGISTRANT_ID AS preRegistrantId,
+		PRE_REGISTRATION_DATE AS preRegistrationDate,
+		DEFAULT_STORE_FLG AS defaultStoreFlg
+	</sql>
+
+	<insert id="save" parameterType="com.bms.byim.bean.entity.ByimStore">
+		INSERT INTO BYIM_STORE (
+			STORE_ID,
+			BUYER_ID,
+			MARKET_ID,
+			MARKET_CODE,
+			MARKET_NAME,
+			MARKET_TYPE,
+			MARKET_SCALE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{storeId},
+			#{buyerId},
+			#{marketId},
+			#{marketCode},
+			#{marketName},
+			#{marketType},
+			#{marketScale},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+	<update id="modify" parameterType="com.bms.byim.bean.param.BaseBean">
+		UPDATE BYIM_STORE
+		SET
+		DEL_FLG = #{target.delFlg}
+		<if test = "target.marketId != null">
+			,MARKET_ID = #{target.marketId}
+		</if>
+		<if test = "target.marketCode != null">
+			,MARKET_CODE = #{target.marketCode}
+		</if>
+		<if test = "target.marketName != null">
+			,MARKET_NAME = #{target.marketName}
+		</if>
+		<if test = "target.marketScale != null">
+			,MARKET_SCALE = #{target.marketScale}
+		</if>
+
+		<if test = "target.legalPaperName != null">
+			,LEGAL_PAPER_NAME = #{target.legalPaperName}
+		</if>
+		<if test = "target.legalPaperType != null">
+			,LEGAL_PAPER_TYPE = #{target.legalPaperType}
+		</if>
+		<if test = "target.legalPaperNo != null">
+			,LEGAL_PAPER_NO = #{target.legalPaperNo}
+		</if>
+		<if test = "target.legalPaperPic != null">
+			,LEGAL_PAPER_PIC = #{target.legalPaperPic}
+		</if>
+		<if test = "target.storeAddr != null">
+			,STORE_ADDR = #{target.storeAddr}
+		</if>
+		<if test = "target.storeNo != null">
+			,STORE_NO = #{target.storeNo}
+		</if>
+		<if test = "target.storeTel != null">
+			,STORE_TEL = #{target.storeTel}
+		</if>
+		<if test = "target.storeWebsite != null">
+			,STORE_WEBSITE = #{target.storeWebsite}
+		</if>
+		<if test = "target.storeWechat != null">
+			,STORE_WECHAT = #{target.storeWechat}
+		</if>
+		<if test = "target.storeLicenseType != null">
+			,STORE_LICENSE_TYPE = #{target.storeLicenseType}
+		</if>
+		<if test = "target.storeLicenseNo != null">
+			,STORE_LICENSE_NO = #{target.storeLicenseNo}
+		</if>
+		<if test = "target.registrantId != null">
+			,REGISTRANT_ID = #{target.registrantId}
+		</if>
+		<if test = "target.registrantDate != null">
+			,REGISTRANT_DATE = #{target.registrantDate}
+		</if>
+		<if test = "target.preRegistrantId != null">
+			,PRE_REGISTRANT_ID = #{target.preRegistrantId}
+		</if>
+		<if test = "target.preRegistrationDate != null">
+			,PRE_REGISTRATION_DATE = #{target.preRegistrationDate}
+		</if>
+		,UPD_ID = #{target.updId}
+		,UPD_TIME = #{target.updTime}
+		WHERE
+		    BUYER_ID = #{filter.buyerId}
+		<if test = "filter.storeId != null">
+			AND STORE_ID = #{filter.storeId}
+		</if>
+		    AND DEL_FLG = FALSE
+	</update>
+
+	<update id="modifyStore" parameterType="com.bms.byim.bean.entity.ByimStore">
+		UPDATE BYIM_STORE
+		SET
+		<if test="marketCode != null">
+			MARKET_CODE = #{marketCode},
+		</if>
+		<if test="marketName != null">
+			MARKET_NAME = #{marketName},
+		</if>
+		<if test="marketScale != null">
+			MARKET_SCALE = #{marketScale},
+		</if>
+		UPD_ID = #{updId},
+		UPD_TIME = #{updTime}
+		WHERE MARKET_ID = #{marketId}
+		AND DEL_FLG = FALSE
+	</update>
+
+	<select id="findOne" parameterType="long" resultType="com.bms.byim.bean.entity.ByimStore">
+		SELECT
+			<include refid="selectColumns" />
+		FROM
+			BYIM_STORE
+		WHERE
+			STORE_ID = #{storeId}
+	</select>
+
+	<select id ="findTerminalMarketUse" resultType="int" parameterType="com.bms.byim.bean.param.StoreRsParam">
+		SELECT
+	      COUNT(1)
+        FROM
+            BYIM_STORE
+        WHERE DEL_FLG = FALSE
+        AND MARKET_ID = #{marketId}
+	</select>
+
+	<select id="findList" parameterType="com.bms.byim.bean.param.StoreRsParam" resultType="com.bms.byim.bean.param.StoreRsParam">
+		SELECT
+	      <include refid="selectColumns"/>
+        FROM
+            BYIM_STORE
+        WHERE DEL_FLG = FALSE
+        AND MARKET_ID = #{marketId}
+        <if test="buyerId != null and buyerId != ''">
+            AND BUYER_ID = #{buyerId}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmComoAlocDealDetailDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		AL_DEAL_ID AS alDealId,
+		ALOC_NO AS alocNo,
+		TRANSACTION_ID AS transactionId,
+		TRANSACTION_NO AS transactionNo,
+		TRANSACTION_DETAIL_ID AS transactionDetailId,
+		TRANSACTION_SEQUENCE AS transactionSequence,
+		TRANSACTION_SOURCE AS transactionSource,
+		TRANSACTION_TYPE AS transactionType,
+		TRANSACTION_TIME AS transactionTime,
+		REF_NO AS refNo,
+		BIZ_TYPE AS bizType,
+		ALOC_PRICE AS alocPrice,
+		ALOC_QTY AS alocQty,
+		TGT_ID AS tgtId,
+		TGT_CODE AS tgtCode,
+		TGT_TYPE AS tgtType
+	</sql>
+	
+	<!-- 条件-->
+	<sql id="whereCondition">
+		<where>1=1
+			<if test="transactionId!=null and transactionId!=''">
+				AND TRANSACTION_ID=#{transactionId}
+			</if>
+			<if test="transactionNo!=null and transactionNo!=''">
+				AND TRANSACTION_NO=#{transactionNo}
+			</if>
+			<if test="transactionDetailId!=null and transactionDetailId!=''">
+				AND TRANSACTION_DETAIL_ID=#{transactionDetailId}
+			</if>
+			<if test="transactionSequence!=null and transactionSequence!=''">
+				AND TRANSACTION_SEQUENCE=#{transactionSequence}
+			</if>
+		<if test="bizType != null and bizType != ''">
+                AND BIZ_TYPE = #{bizType}
+            </if>
+            <if test="transactionSource != null and transactionSource != ''">
+                AND TRANSACTION_SOURCE = #{transactionSource}
+            </if>
+        <if test="refNo != null and refNo != ''">
+				AND REF_NO = #{refNo}
+			</if>
+        </where>
+	</sql>
+
+	<insert id="save" parameterType="com.bms.linv.bean.entity.InvmComoAlocDealDetail">
+		INSERT INTO invm_como_aloc_deal_detail (
+			AL_DEAL_ID,
+			ALOC_NO,
+			TRANSACTION_ID,
+			TRANSACTION_NO,
+			TRANSACTION_DETAIL_ID,
+			TRANSACTION_SEQUENCE,
+			TRANSACTION_SOURCE,
+			TRANSACTION_TYPE,
+			TRANSACTION_TIME,
+			REF_NO,
+			BIZ_TYPE,
+			ALOC_PRICE,
+			ALOC_QTY,
+			TGT_ID,
+			TGT_CODE,
+			TGT_TYPE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			VERSION
+		)
+		VALUES (
+			#{alDealId},
+			#{alocNo},
+			#{transactionId},
+			#{transactionNo},
+			#{transactionDetailId},
+			#{transactionSequence},
+			#{transactionSource},
+			#{transactionType},
+			#{transactionTime},
+			#{refNo},
+			#{bizType},
+			#{alocPrice},
+			#{alocQty},
+			#{tgtId},
+			#{tgtCode},
+			#{tgtType},
+			0,
+			#{crtId},
+			#{crtTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.linv.bean.entity.InvmComoAlocDealDetail">
+		UPDATE invm_como_aloc_deal_detail 
+		SET 
+			ALOC_NO = #{alocNo},
+			TRANSACTION_ID = #{transactionId},
+			TRANSACTION_NO = #{transactionNo},
+			TRANSACTION_DETAIL_ID = #{transactionDetailId},
+			TRANSACTION_SEQUENCE = #{transactionSequence},
+			TRANSACTION_SOURCE = #{transactionSource},
+			TRANSACTION_TYPE = #{transactionType},
+			TRANSACTION_TIME = #{transactionTime},
+			REF_NO = #{refNo},
+			BIZ_TYPE = #{bizType},
+			ALOC_PRICE = #{alocPrice},
+			ALOC_QTY = #{alocQty},
+			TGT_ID = #{tgtId},
+			TGT_CODE = #{tgtCode},
+			TGT_TYPE = #{tgtType}
+		WHERE
+			AL_DEAL_ID = #{alDealId}		
+	</update>
+	
+	<select id="findOne" parameterType="com.bms.linv.bean.entity.InvmComoAlocDealDetail"
+            resultType="com.bms.linv.bean.entity.InvmComoAlocDealDetail">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_aloc_deal_detail
+		<include refid="whereCondition"/>
+        LIMIT 1
+	</select>
+	
+	<select id="querySumQtyByTran" parameterType="com.bms.linv.bean.entity.InvmComoAlocDealDetail"
+			resultType="com.bms.linv.bean.entity.InvmComoAlocDealDetail">
+		SELECT
+		ALOC_NO AS alocNo,
+		TRANSACTION_ID AS transactionId,
+		TRANSACTION_DETAIL_ID AS transactionDetailId,
+		SUM(ALOC_QTY) AS alocQty
+		FROM
+		invm_como_aloc_deal_detail
+		<include refid="whereCondition"/>
+		GROUP BY
+		ALOC_NO,
+		TRANSACTION_ID,
+		TRANSACTION_DETAIL_ID
+	</select>
+
+    <select id="findAll" parameterType="com.bms.linv.bean.entity.InvmComoAlocDealDetail"             resultType="com.bms.linv.bean.entity.InvmComoAlocDealDetail">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_aloc_deal_detail
+	</select>
+	
+	<select id="count" parameterType="com.bms.linv.bean.entity.InvmComoAlocDealDetail" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			invm_como_aloc_deal_detail
+			<include refid="whereCondition"/>
+	</select>
+	
+</mapper>

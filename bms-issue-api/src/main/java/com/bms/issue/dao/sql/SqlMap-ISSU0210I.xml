@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.issue.dao.ISSU0210IDao">
+
+
+  <resultMap id="L1Result" type="com.bms.issue.bean.result.ISSU0210IRestResult">
+    <id property="questionId" column="questionId"/>
+    <result property="questionCode" column="questionCode"/>
+    <result property="issueId" column="issueId"/>
+    <result property="orderDetailId" column="orderDetailId"/>
+    <result property="questionCatagory1" column="questionCatagory1"/>
+    <result property="questionCatagory2" column="questionCatagory2"/>
+    <result property="questionCatagory3" column="questionCatagory3"/>
+    <result property="questionKeyword" column="questionKeyword"/>
+    <result property="questionDesc" column="questionDesc"/>
+    <result property="questionStartTime" column="questionStartTime"/>
+    <result property="questionStartUid" column="questionStartUid"/>
+    <result property="questionStartUname" column="questionStartUname"/>
+    <result property="questionIsClose" column="questionIsClose"/>
+    <result property="questionCloseTime" column="questionCloseTime"/>
+    <result property="questionCloseUid" column="questionCloseUid"/>
+    <result property="questionCloseUname" column="questionCloseUname"/>
+    <result property="delFlg" column="L1_delFlg"/>
+    <result property="crtId" column="L1_crtId"/>
+    <result property="crtTime" column="L1_crtTime"/>
+    <result property="updId" column="L1_updId"/>
+    <result property="updTime" column="L1_updTime"/>
+    <result property="ver" column="L1_ver"/>
+    <result property="orderCode" column="orderCode"/>
+    <result property="sortSeq" column="L1_sortSeq"/>
+    <collection property="accessorys" resultMap="L2Result" />
+  </resultMap>
+
+  <resultMap id="L2Result" type="com.bms.issue.bean.result.ISSUAccessorysRestResult">
+    <id property="accessoryId" column="accessoryId"/>
+    <result property="accessoryType" column="accessoryType"/>
+    <result property="fileId" column="fileId"/>
+    <result property="fileName" column="fileName"/>
+    <result property="fileType" column="fileType"/>
+    <result property="L2_delFlg" column=""/>
+    <result property="delFlg" column="L2_delFlg"/>
+    <result property="crtId" column="L2_crtId"/>
+    <result property="crtTime" column="L2_crtTime"/>
+    <result property="updId" column="L2_updId"/>
+    <result property="updTime" column="L2_updTime"/>
+    <result property="ver" column="L2_ver"/>
+    <result property="sortSeq" column="L2_sortSeq"/>
+  </resultMap>
+
+
+    <sql id="L1Select">
+      L1.QUESTION_ID AS questionId,
+      QUESTION_CODE AS questionCode,
+      L1.ISSUE_ID AS issueId,
+      ORDER_DETAIL_ID AS orderDetailId,
+      QUESTION_CATAGORY_1 AS questionCatagory1,
+      QUESTION_CATAGORY_2 AS questionCatagory2,
+      QUESTION_CATAGORY_3 AS questionCatagory3,
+      QUESTION_KEYWORD AS questionKeyword,
+      QUESTION_DESC AS questionDesc,
+      DATE_FORMAT(QUESTION_START_TIME,'%Y-%m-%d %T') AS questionStartTime,
+      QUESTION_START_UID AS questionStartUid,
+      QUESTION_START_UNAME AS questionStartUname,
+      QUESTION_IS_CLOSE AS questionIsClose,
+      DATE_FORMAT(QUESTION_CLOSE_TIME,'%Y-%m-%d %T') AS questionCloseTime,
+      QUESTION_CLOSE_UID AS questionCloseUid,
+      QUESTION_CLOSE_UNAME AS questionCloseUname,
+      L1.DEL_FLG AS L1_delFlg,
+      L1.CRT_ID AS L1_crtId,
+      DATE_FORMAT(L1.CRT_TIME,'%Y-%m-%d %T') AS L1_crtTime,
+      L1.UPD_ID AS L1_updId,
+      DATE_FORMAT(L1.UPD_TIME,'%Y-%m-%d %T') AS L1_updTime,
+      L1.VERSION AS L1_ver
+       ,issue.ORDER_CODE AS orderCode
+    </sql>
+
+    <sql id="L2Select">
+      ,ACCESSORY_ID AS accessoryId,
+      ACCESSORY_TYPE AS accessoryType,
+      FILE_ID AS fileId,
+      FILE_NAME AS fileName,
+      FILE_TYPE AS fileType,
+      L2.DEL_FLG AS L2_delFlg,
+      L2.CRT_ID AS L2_crtId,
+      DATE_FORMAT(L2.CRT_TIME,'%Y-%m-%d %T') AS L2_crtTime,
+      L2.UPD_ID AS L2_updId,
+      DATE_FORMAT(L2.UPD_TIME,'%Y-%m-%d %T') AS L2_updTime,
+      L2.VERSION AS L2_ver
+    </sql>
+
+
+  <select id="findPageList" parameterType="com.bms.issue.common.rest.SearchRestParam" resultMap="L1Result">
+    SELECT
+    <if test="pagingLevel>=1">
+      <include refid="L1Select" />
+    </if>
+    <if test="pagingLevel>=2">
+      <include refid="L2Select" />
+    </if>
+    <if test="pagingLevel==1">
+      , (@sortSeq := @sortSeq + 1) AS L1_sortSeq
+    </if>
+    <if test="pagingLevel==2">
+      , (@sortSeq := @sortSeq + 1) AS L2_sortSeq
+    </if>
+    FROM
+    <include refid="From" />
+    <where>
+      <include refid="Where" />
+    </where>
+    <include refid="GroupBy" />
+  </select>
+
+  <sql id="From">
+    (select @sortSeq := 0) AS SEQ,
+    <if test="searchLevel>=1">
+      ISSU_QUESTION AS L1
+    </if>
+    <if test="searchLevel==2">
+      INNER JOIN ISSU_QUESTION_ACCESSORY AS L2
+      ON L2.QUESTION_ID = L1.QUESTION_ID
+      AND L2.DEL_FLG = 0
+    </if>
+    <if test="searchLevel>2">
+      LEFT JOIN ISSU_QUESTION_ACCESSORY AS L2
+      ON L2.QUESTION_ID = L1.QUESTION_ID
+      AND L2.DEL_FLG = 0
+    </if>
+     LEFT JOIN ISSU_ISSUE issue
+    ON L1.ISSUE_ID = issue.ISSUE_ID
+    AND issue.DEL_FLG = 0
+  </sql>
+
+  <sql id="Where">
+    AND L1.DEL_FLG = 0
+
+    <if test="null != filter">
+    <if test="filter.issueId != null">
+      AND L1.ISSUE_ID IN
+      <foreach collection="filter.issueId" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+
+    <if test="filter.questionId != null">
+      AND L1.QUESTION_ID IN
+      <foreach collection="filter.questionId" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+
+     <if test="filter.orderCode != null">
+      AND issue.ORDER_CODE = #{filter.orderCode}
+    </if>
+
+    <if test="filter.questionCode != null">
+      AND L1.QUESTION_CODE LIKE #{filter.questionCode}
+    </if>
+
+    <if test="filter.questionKeyword != null">
+      AND L1.QUESTION_KEYWORD LIKE #{filter.questionKeyword}
+    </if>
+
+    <if test="filter.questionStartUname != null">
+      AND L1.QUESTION_START_UNAME LIKE #{filter.questionStartUname}
+    </if>
+
+    <if test="filter.questionCloseUname != null">
+      AND L1.QUESTION_CLOSE_UNAME LIKE #{filter.questionCloseUname}
+    </if>
+
+    <if test="filter.questionStartTimeFrom != null">
+      AND DATE_FORMAT(L1.QUESTION_START_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{filter.questionStartTimeFrom},'%Y-%m-%d')
+    </if>
+
+    <if test="filter.questionStartTimeTo != null">
+      AND DATE_FORMAT(L1.QUESTION_START_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{filter.questionStartTimeTo},'%Y-%m-%d')
+    </if>
+
+    <if test="filter.questionCloseTimeFrom != null">
+      AND DATE_FORMAT(L1.QUESTION_CLOSE_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{filter.questionCloseTimeFrom},'%Y-%m-%d')
+    </if>
+
+    <if test="filter.questionCloseTimeTo != null">
+      AND DATE_FORMAT(L1.QUESTION_CLOSE_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{filter.questionCloseTimeTo},'%Y-%m-%d')
+    </if>
+
+    <if test="filter.questionIsClose != null">
+      AND L1.QUESTION_IS_CLOSE = #{filter.questionIsClose}
+    </if>
+
+    <if test="filter.accessoryId != null">
+      AND L2.ACCESSORY_ID IN
+      <foreach collection="filter.accessoryId" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+
+    <if test="filter.fileId != null">
+      AND L2.FILE_ID IN
+      <foreach collection="filter.fileId" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+      <if test="filter.issueStatus">
+        AND issue.ISSUE_STATUS IN
+        <foreach collection="filter.issueStatus" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+      </if>
+    </if>
+  </sql>
+
+
+
+  <sql id="GroupBy">
+    <if test="pagingLevel==1 and searchLevel>1">
+      GROUP BY L1.QUESTION_ID
+    </if>
+  </sql>
+</mapper>

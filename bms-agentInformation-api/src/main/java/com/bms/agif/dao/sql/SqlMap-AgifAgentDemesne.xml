@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifAgentDemesneDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		AGENT_DEMESNE_ID AS agentDemesneId,
+        AGENT_ID AS agentId,
+        LGCS_AREA_ID AS lgcsAreaId,
+        LGCS_AREA_CODE AS lgcsAreaCode,
+        LGCS_AREA_NAME AS lgcsAreaName,
+        ZONE_ID AS zoneId,
+        ZONE_CODE AS zoneCode,
+        ZONE_NAME AS zoneName,
+        DISTRIBUTION_ID AS distributionId,
+        DISTRIBUTION_TYPE AS distributionType,
+        DISTRIBUTION_NAME AS distributionName,
+        DISTRIBUTION_CODE AS distributionCode,
+        AUTHORIZED_PARTNER AS authorizedPartner,
+        DEMESNE_ID AS demesneId,
+        DEMESNE_TYPE AS demesneType,
+        DEMESNE_NAME AS demesneName,
+        DEMESNE_CODE AS demesneCode,
+        AUTHORIZED_AGENT AS authorizedAgent,
+        DEMESNE_AREA AS demesneArea,
+        MANAGEMENT_DISTRICT AS managementDistrict,
+        DEMESNE_EAST AS demesneEast,
+        DEMESNE_SOUTH AS demesneSouth,
+        DEMESNE_WEST AS demesneWest,
+        DEMESNE_NORTH AS demesneNorth,
+        TERMINAL_MARKET_NUM AS terminalMarketNum,
+        FOOD_MARKET_NUM AS foodMarketNum,
+        COOKING_GATHERING_NUM AS cookingGatheringNum,
+        MEALS_GATHERING_NUM AS mealsGatheringNum,
+        PROCESS_NUM AS processNum,
+        PLAN_PIC AS planPic,
+        REMARKS AS remarks
+	</sql>
+
+    <sql id="selectColumns2">
+        a.AGENT_DEMESNE_ID AS agentDemesneId,
+        a.AGENT_ID AS agentId,
+        a.LGCS_AREA_ID AS lgcsAreaId,
+        a.LGCS_AREA_CODE AS lgcsAreaCode,
+        a.LGCS_AREA_NAME AS lgcsAreaName,
+        a.ZONE_ID AS zoneId,
+        a.ZONE_CODE AS zoneCode,
+        a.ZONE_NAME AS zoneName,
+        a.DISTRIBUTION_ID AS distributionId,
+        a.DISTRIBUTION_TYPE AS distributionType,
+        a.DISTRIBUTION_NAME AS distributionName,
+        a.DISTRIBUTION_CODE AS distributionCode,
+        l.AUTHORIZED_PARTNER AS authorizedPartner,
+        a.DEMESNE_ID AS demesneId,
+        a.DEMESNE_TYPE AS demesneType,
+        a.DEMESNE_NAME AS demesneName,
+        a.DEMESNE_CODE AS demesneCode,
+        a.AUTHORIZED_AGENT AS authorizedAgent,
+        a.DEMESNE_AREA AS demesneArea,
+        a.MANAGEMENT_DISTRICT AS managementDistrict,
+        a.DEMESNE_EAST AS demesneEast,
+        a.DEMESNE_SOUTH AS demesneSouth,
+        a.DEMESNE_WEST AS demesneWest,
+        a.DEMESNE_NORTH AS demesneNorth,
+        a.TERMINAL_MARKET_NUM AS terminalMarketNum,
+        a.FOOD_MARKET_NUM AS foodMarketNum,
+        a.COOKING_GATHERING_NUM AS cookingGatheringNum,
+        a.MEALS_GATHERING_NUM AS mealsGatheringNum,
+        a.PROCESS_NUM AS processNum,
+        a.PLAN_PIC AS planPic,
+        a.REMARKS AS remarks
+    </sql>
+    <insert id="save" parameterType="com.bms.agif.bean.entity.AgifAgentDemesne">
+		INSERT INTO AGIF_AGENT_DEMESNE (
+			AGENT_DEMESNE_ID,
+			AGENT_ID,
+			LGCS_AREA_ID,
+			LGCS_AREA_CODE,
+			LGCS_AREA_NAME,
+			ZONE_ID,
+			ZONE_CODE,
+			ZONE_NAME,
+			DISTRIBUTION_ID,
+			DISTRIBUTION_TYPE,
+			DISTRIBUTION_NAME,
+			DISTRIBUTION_CODE,
+			AUTHORIZED_PARTNER,
+			DEMESNE_ID,
+			DEMESNE_TYPE,
+			DEMESNE_NAME,
+			DEMESNE_CODE,
+			AUTHORIZED_AGENT,
+			DEMESNE_AREA,
+			MANAGEMENT_DISTRICT,
+			DEMESNE_EAST,
+			DEMESNE_SOUTH,
+			DEMESNE_WEST,
+			DEMESNE_NORTH,
+			TERMINAL_MARKET_NUM,
+			FOOD_MARKET_NUM,
+			COOKING_GATHERING_NUM,
+			MEALS_GATHERING_NUM,
+			PROCESS_NUM,
+			PLAN_PIC,
+			REMARKS,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{agentDemesneId},
+			#{agentId},
+			#{lgcsAreaId},
+			#{lgcsAreaCode},
+			#{lgcsAreaName},
+			#{zoneId},
+			#{zoneCode},
+			#{zoneName},
+			#{distributionId},
+			#{distributionType},
+			#{distributionName},
+			#{distributionCode},
+			#{authorizedPartner},
+			#{demesneId},
+			#{demesneType},
+			#{demesneName},
+			#{demesneCode},
+			#{authorizedAgent},
+            #{demesneArea},
+			#{managementDistrict},
+			#{demesneEast},
+			#{demesneSouth},
+			#{demesneWest},
+			#{demesneNorth},
+			#{terminalMarketNum},
+			#{foodMarketNum},
+			#{cookingGatheringNum},
+			#{mealsGatheringNum},
+			#{processNum},
+			#{planPic},
+			#{remarks},
+			FALSE,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.param.BaseBean">
+        UPDATE AGIF_AGENT_DEMESNE
+        SET
+        <if test="target.agentId !=null">
+            AGENT_ID = #{target.agentId},
+        </if>
+        <if test="target.lgcsAreaId !=null">
+            LGCS_AREA_ID = #{target.lgcsAreaId},
+        </if>
+        <if test="target.lgcsAreaCode !=null">
+            LGCS_AREA_CODE = #{target.lgcsAreaCode},
+        </if>
+        <if test="target.lgcsAreaName !=null">
+            LGCS_AREA_NAME = #{target.lgcsAreaName},
+        </if>
+        <if test="target.zoneId !=null">
+            ZONE_ID = #{target.zoneId},
+        </if>
+        <if test="target.zoneCode !=null">
+            ZONE_CODE = #{target.zoneCode},
+        </if>
+        <if test="target.zoneName !=null">
+            ZONE_NAME = #{target.zoneName},
+        </if>
+        <if test="target.distributionId !=null">
+            DISTRIBUTION_ID = #{target.distributionId},
+        </if>
+        <if test="target.distributionType !=null">
+            DISTRIBUTION_TYPE = #{target.distributionType},
+        </if>
+        <if test="target.distributionName !=null">
+            DISTRIBUTION_NAME = #{target.distributionName},
+        </if>
+        <if test="target.distributionCode !=null">
+            DISTRIBUTION_CODE = #{target.distributionCode},
+        </if>
+        <if test="target.authorizedPartner !=null">
+            AUTHORIZED_PARTNER = #{target.authorizedPartner},
+        </if>
+        <if test="target.demesneId !=null">
+            DEMESNE_ID = #{target.demesneId},
+        </if>
+        <if test="target.demesneType !=null">
+            DEMESNE_TYPE = #{target.demesneType},
+        </if>
+        <if test="target.demesneName !=null">
+            DEMESNE_NAME = #{target.demesneName},
+        </if>
+        <if test="target.demesneCode !=null">
+            DEMESNE_CODE = #{target.demesneCode},
+        </if>
+        <if test="target.authorizedAgent !=null">
+            AUTHORIZED_AGENT = #{target.authorizedAgent},
+        </if>
+        <if test="target.delFlg !=null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+        UPD_ID=#{target.updId},
+        UPD_TIME=#{target.updTime}
+        WHERE
+        AGENT_DEMESNE_ID = #{filter.agentDemesneId}
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.agif.bean.param.DemesneParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_AGENT_DEMESNE
+        WHERE
+        AGENT_DEMESNE_ID = #{agentDemesneId}
+    </select>
+
+    <select id="findAll" parameterType="com.bms.agif.bean.entity.AgifAgentDemesne"
+            resultType="com.bms.agif.bean.entity.AgifAgentDemesne">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_AGENT_DEMESNE
+        WHERE
+        1 = 1
+        <if test="delFlg != null and delFlg != ''">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.bms.agif.bean.entity.AgifAgentDemesne" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        AGIF_AGENT_DEMESNE
+        WHERE
+        1 = 1
+        <if test="delFlg != null and delFlg != ''">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.agif.bean.param.AgentDemesnePageParam"
+            resultType="com.bms.agif.bean.param.AgentDemesnePageParam">
+
+        SELECT
+        <include refid="selectColumns2"/>
+        FROM
+        AGIF_AGENT_DEMESNE a
+        LEFT JOIN
+          (SELECT DISTINCT DISTRIBUTION_ID,AUTHORIZED_PARTNER from agif_partner_distribution where DEL_FLG = FALSE) l
+        on l.DISTRIBUTION_ID = a.DISTRIBUTION_ID
+        LEFT JOIN agif_agent agen ON a.DEL_FLG = agen.DEL_FLG AND a.AGENT_ID = agen.AGENT_ID
+        WHERE a.DEL_FLG = FALSE
+        <if test="agentId != null and agentId != ''">
+            AND a.AGENT_ID = #{agentId}
+        </if>
+        <if test="agentCode != null and agentCode != ''">
+            AND agen.AGENT_CODE = #{agentCode}
+        </if>
+        <if test="authorizedAgent != null and authorizedAgent != ''">
+            AND a.AUTHORIZED_AGENT LIKE #{authorizedAgent}
+        </if>
+        <if test="authorizedPartner != null and authorizedPartner != ''">
+            AND l.AUTHORIZED_PARTNER LIKE #{authorizedPartner}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND a.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND a.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND a.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="zoneId != null and zoneId != ''">
+            AND a.ZONE_ID = #{zoneId}
+        </if>
+        <if test="zoneCode != null and zoneCode != ''">
+            AND a.ZONE_CODE = #{zoneCode}
+        </if>
+        <if test="zoneName != null and zoneName != ''">
+            AND a.ZONE_NAME LIKE #{zoneName}
+        </if>
+        <if test="distributionId != null and distributionId != ''">
+            AND a.DISTRIBUTION_ID = #{distributionId}
+        </if>
+        <if test="distributionName != null and distributionName != ''">
+            AND a.DISTRIBUTION_NAME LIKE #{distributionName}
+        </if>
+        <if test="distributionType != null and distributionType != ''">
+            AND a.DISTRIBUTION_TYPE = #{distributionType}
+        </if>
+        <if test="distributionCode != null and distributionCode != ''">
+            AND a.DISTRIBUTION_CODE LIKE #{distributionCode}
+        </if>
+        <if test="demesneId != null and demesneId != ''">
+            AND a.DEMESNE_ID = #{demesneId}
+        </if>
+        <if test="demesneName != null and demesneName != ''">
+            AND a.DEMESNE_NAME LIKE #{demesneName}
+        </if>
+        <if test="demesneCode != null and demesneCode != ''">
+            AND a.DEMESNE_CODE LIKE #{demesneCode}
+        </if>
+        <if test="demesneType != null and demesneType != ''">
+            AND a.DEMESNE_TYPE = #{demesneType}
+        </if>
+    </select>
+
+    <delete id="remove" parameterType="List">
+        DELETE FROM AGIF_AGENT_DEMESNE
+        WHERE AGENT_DEMESNE_ID IN
+        <foreach item="item" index="index" collection="list" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteButlerDemesne" parameterType="com.bms.agif.bean.entity.AgifAgentDemesne">
+        DELETE FROM AGIF_BUTLER_DEMESNE
+        WHERE AGENT_DEMESNE_ID IN (SELECT AGENT_DEMESNE_ID FROM AGIF_AGENT_DEMESNE WHERE DEMESNE_ID = #{demesneId})
+    </delete>
+
+
+    <delete id="deleteDemesne" parameterType="com.bms.agif.bean.entity.AgifAgentDemesne">
+        DELETE FROM AGIF_AGENT_DEMESNE
+        WHERE DEMESNE_ID = #{demesneId}
+    </delete>
+
+    <!--<select id="findDemesneId" parameterType="long" resultType="long">-->
+        <!--SELECT-->
+        <!--DEMESNE_ID as demesneId-->
+        <!--FROM-->
+        <!--AGIF_AGENT_DEMESNE-->
+        <!--WHERE-->
+        <!--AGENT_DEMESNE_ID = #{demesneId}-->
+    <!--</select>-->
+</mapper>

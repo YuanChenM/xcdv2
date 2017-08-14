@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.region.dao.RegnLogisticsDistributionDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		DISTRIBUTION_ID AS distributionId,
+		ZONE_ID AS zoneId,
+		DISTRIBUTION_TYPE AS distributionType,
+		DISTRIBUTION_NAME AS distributionName,
+		DISTRIBUTION_CODE AS distributionCode,
+		DISTRIBUTION_AREA AS distributionArea,
+		MANAGEMENT_DISTRICT AS managementDistrict,
+		DISTRIBUTION_EAST AS distributionEast,
+		DISTRIBUTION_SOUTH AS distributionSouth,
+		DISTRIBUTION_WEST AS distributionWest,
+		DISTRIBUTION_NORTH AS distributionNorth,
+		TERMINAL_MARKET_NUM AS terminalMarketNum,
+		FOOD_MARKET_NUM AS foodMarketNum,
+		COOKING_GATHERING_NUM AS cookingGatheringNum,
+		MEALS_GATHERING_NUM AS mealsGatheringNum,
+		PROCESS_NUM AS processNum,
+		AUTHORIZED_PARTNER AS authorizedPartner,
+		REMARKS AS remarks,
+		PLAN_PIC AS planPic,
+		DISABLE_FLG AS disableFlg
+	</sql>
+    <sql id="selectColumns2">
+		a.LGCS_AREA_ID AS lgcsAreaId,
+		a.LGCS_AREA_CODE AS lgcsAreaCode,
+		a.LGCS_AREA_NAME AS lgcsAreaName,
+		c.ZONE_ID AS zoneId,
+		c.ZONE_CODE AS zoneCode,
+		c.ZONE_NAME AS zoneName,
+		d.DISTRIBUTION_ID AS distributionId,
+		d.DISTRIBUTION_TYPE AS distributionType,
+		d.DISTRIBUTION_NAME AS distributionName,
+		d.DISTRIBUTION_CODE AS distributionCode,
+		d.DISTRIBUTION_AREA AS distributionArea,
+		d.MANAGEMENT_DISTRICT AS managementDistrict,
+		d.DISTRIBUTION_EAST AS distributionEast,
+		d.DISTRIBUTION_SOUTH AS distributionSouth,
+		d.DISTRIBUTION_WEST AS distributionWest,
+		d.DISTRIBUTION_NORTH AS distributionNorth,
+		d.TERMINAL_MARKET_NUM AS terminalMarketNum,
+		d.FOOD_MARKET_NUM AS foodMarketNum,
+		d.COOKING_GATHERING_NUM AS cookingGatheringNum,
+		d.MEALS_GATHERING_NUM AS mealsGatheringNum,
+		d.PROCESS_NUM AS processNum,
+		d.AUTHORIZED_PARTNER AS authorizedPartner,
+		d.REMARKS AS remarks,
+		d.PLAN_PIC AS planPic,
+		d.DEL_FLG AS delFlg,
+		d.DISABLE_FLG AS disableFlg
+	</sql>
+
+    <insert id="save" parameterType="com.bms.region.bean.entity.RegnLogisticsDistribution">
+		INSERT INTO REGN_LOGISTICS_DISTRIBUTION (
+			DISTRIBUTION_ID,
+			ZONE_ID,
+			DISTRIBUTION_TYPE,
+			DISTRIBUTION_NAME,
+			DISTRIBUTION_CODE,
+			DISTRIBUTION_AREA,
+			MANAGEMENT_DISTRICT,
+			DISTRIBUTION_EAST,
+			DISTRIBUTION_SOUTH,
+			DISTRIBUTION_WEST,
+			DISTRIBUTION_NORTH,
+			TERMINAL_MARKET_NUM,
+			FOOD_MARKET_NUM,
+			COOKING_GATHERING_NUM,
+			MEALS_GATHERING_NUM,
+			PROCESS_NUM,
+			AUTHORIZED_PARTNER,
+			REMARKS,
+			PLAN_PIC,
+			DISABLE_FLG,
+			DEL_FLG,
+            CRT_ID,
+            CRT_TIME,
+            UPD_ID,
+            UPD_TIME,
+            VERSION
+		)
+		VALUES (
+			#{distributionId},
+			#{zoneId},
+			#{distributionType},
+			#{distributionName},
+			#{distributionCode},
+			#{distributionArea},
+			#{managementDistrict},
+			#{distributionEast},
+			#{distributionSouth},
+			#{distributionWest},
+			#{distributionNorth},
+			#{terminalMarketNum},
+			#{foodMarketNum},
+			#{cookingGatheringNum},
+			#{mealsGatheringNum},
+			#{processNum},
+			#{authorizedPartner},
+			#{remarks},
+			#{planPic},
+            '1',
+            false,
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            1
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.region.bean.param.BaseBean">
+        UPDATE REGN_LOGISTICS_DISTRIBUTION
+        SET
+        <if test="target.zoneId!= null">
+            ZONE_ID = #{target.zoneId},
+        </if>
+        <if test="target.distributionType!= null">
+            DISTRIBUTION_TYPE = #{target.distributionType},
+        </if>
+        <if test="target.distributionName!= null">
+            DISTRIBUTION_NAME = #{target.distributionName},
+        </if>
+        <if test="target.distributionCode!= null">
+            DISTRIBUTION_CODE = #{target.distributionCode},
+        </if>
+        <if test="target.distributionArea!= null">
+            DISTRIBUTION_AREA = #{target.distributionArea},
+        </if>
+        <if test="target.managementDistrict!= null">
+            MANAGEMENT_DISTRICT = #{target.managementDistrict},
+        </if>
+        <if test="target.distributionEast!= null">
+            DISTRIBUTION_EAST = #{target.distributionEast},
+        </if>
+        <if test="target.distributionSouth!= null">
+            DISTRIBUTION_SOUTH = #{target.distributionSouth},
+        </if>
+        <if test="target.distributionWest!= null">
+            DISTRIBUTION_WEST = #{target.distributionWest},
+        </if>
+        <if test="target.distributionNorth!= null">
+            DISTRIBUTION_NORTH = #{target.distributionNorth},
+        </if>
+        <if test="target.terminalMarketNum!= null">
+            TERMINAL_MARKET_NUM = #{target.terminalMarketNum},
+        </if>
+        <if test="target.foodMarketNum!= null">
+            FOOD_MARKET_NUM = #{target.foodMarketNum},
+        </if>
+        <if test="target.cookingGatheringNum!= null">
+            COOKING_GATHERING_NUM = #{target.cookingGatheringNum},
+        </if>
+        <if test="target.mealsGatheringNum!= null">
+            MEALS_GATHERING_NUM = #{target.mealsGatheringNum},
+        </if>
+        <if test="target.processNum!= null">
+            PROCESS_NUM = #{target.processNum},
+        </if>
+        <if test="target.authorizedPartner!= null">
+            AUTHORIZED_PARTNER = #{target.authorizedPartner},
+        </if>
+        <if test="target.remarks!= null">
+            REMARKS = #{target.remarks},
+        </if>
+        <if test="target.planPic!= null">
+            PLAN_PIC = #{target.planPic},
+        </if>
+        <if test="target.disableFlg!= null">
+            DISABLE_FLG = #{target.disableFlg},
+        </if>
+        <if test="target.delFlg!= null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        DEL_FLG = FALSE
+        AND DISABLE_FLG = '1'
+        AND DISTRIBUTION_ID = #{filter.distributionId}
+    </update>
+
+    <select id="getParamCount" parameterType="com.bms.region.bean.param.RegnLogDistributionParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        REGN_LOGISTICS_DISTRIBUTION
+        WHERE
+        DEL_FLG = FALSE
+        AND DISABLE_FLG='1'
+        AND ZONE_ID = #{zoneId}
+        AND DISTRIBUTION_NAME = #{distributionName}
+        <if test="distributionId!= null and distributionId!= ''">
+            AND DISTRIBUTION_ID &lt;&gt; #{distributionId}
+        </if>
+
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.region.bean.param.RegnLogDistributionPageParm"
+            resultType="com.bms.region.bean.result.LogisticsDistributionRsResult">
+        SELECT
+        <include refid="selectColumns2"/>
+        FROM
+        REGN_LOGISTICS_DISTRIBUTION d
+        INNER JOIN REGN_LOGISTICS_ZONE c ON c.ZONE_ID = d.ZONE_ID AND c.DEL_FLG = d.DEL_FLG AND c.DISABLE_FLG
+        = d.DISABLE_FLG
+        INNER JOIN REGN_LOGISTICS_AREA a ON a.LGCS_AREA_ID = c.LGCS_AREA_ID AND c.DEL_FLG = a.DEL_FLG AND c.DISABLE_FLG
+        = a.DISABLE_FLG
+        WHERE d.DEL_FLG = FALSE
+        AND d.DISABLE_FLG = 1
+        <if test="zoneId!= null and zoneId!= ''">
+            AND c.ZONE_ID = #{zoneId}
+        </if>
+        <if test="zoneCode!= null and zoneCode!= ''">
+            AND c.ZONE_CODE = #{zoneCode}
+        </if>
+        <if test="zoneName!= null and zoneName!= ''">
+            AND c.ZONE_NAME LIKE #{zoneName}
+        </if>
+        <if test="lgcsAreaId!= null and lgcsAreaId!= ''">
+            AND a.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="lgcsAreaCode!= null and lgcsAreaCode!= ''">
+            AND a.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName!= null and lgcsAreaName!= ''">
+            AND a.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+        <if test="distributionType!= null and distributionType!= ''">
+            AND d.DISTRIBUTION_TYPE = #{distributionType}
+        </if>
+        <if test="distributionCode!= null and distributionCode!= ''">
+            AND d.DISTRIBUTION_CODE = #{distributionCode}
+        </if>
+        <if test="authorizedPartner!= null and authorizedPartner!= ''">
+            AND d.AUTHORIZED_PARTNER LIKE #{authorizedPartner}
+        </if>
+        <if test="distributionId!= null and distributionId!= ''">
+            AND d.DISTRIBUTION_ID= #{distributionId}
+        </if>
+
+    </select>
+
+
+
+    <select id="findMaxCode" parameterType="com.bms.region.bean.param.RegnLogDistributionPageParm" resultType="String">
+          select
+            lpad(max(CAST(DISTRIBUTION_CODE AS UNSIGNED))+1,2,'0') as maxCode
+          from REGN_LOGISTICS_DISTRIBUTION
+          where ZONE_ID = #{zoneId}
+	</select>
+
+
+    <select id="findOne" parameterType="com.bms.region.bean.param.RegnLogDistributionParam"
+            resultType="com.bms.region.bean.result.LogisticsDistributionRsResult">
+        SELECT
+        <include refid="selectColumns2"/>
+        FROM
+        REGN_LOGISTICS_DISTRIBUTION d
+        INNER JOIN REGN_LOGISTICS_ZONE c ON c.ZONE_ID = d.ZONE_ID AND c.DEL_FLG = d.DEL_FLG AND c.DISABLE_FLG
+        = d.DISABLE_FLG
+        INNER JOIN REGN_LOGISTICS_AREA a ON a.LGCS_AREA_ID = c.LGCS_AREA_ID AND c.DEL_FLG = a.DEL_FLG AND c.DISABLE_FLG
+        = a.DISABLE_FLG
+        WHERE d.DEL_FLG = FALSE
+        AND d.DISABLE_FLG = 1
+        AND d.DISTRIBUTION_ID= #{distributionId}
+    </select>
+</mapper>

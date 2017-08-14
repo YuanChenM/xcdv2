@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifButlerLevelStandardDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		LEVEL_ID AS levelId,
+		LEVEL_NAME AS levelName,
+		LEVEL_VALUE AS levelValue,
+		LGCS_AREA_ID AS lgcsAreaId,
+		LGCS_AREA_CODE AS lgcsAreaCode,
+		LGCS_AREA_NAME AS lgcsAreaName,
+		MONTH_AVERAGE_SALES AS monthAverageSales,
+		MONTH_AVERAGE_GROSS_PROFIT AS monthAverageGrossProfit,
+		MONTH_AVERAGE_NET_PROFIT AS monthAverageNetProfit
+	</sql>
+
+
+    <select id="findPageList" parameterType="com.bms.agif.bean.param.ButlerLevelStandardPageParam"
+            resultType="com.bms.agif.bean.param.ButlerLevelStandardPageParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_BUTLER_LEVEL_STANDARD
+        WHERE
+        DEL_FLG = FALSE
+        <if test="levelId!= null and levelId!= ''">
+            AND LEVEL_ID = #{levelId}
+        </if>
+        <if test="levelName != null and levelName!= ''">
+            AND LEVEL_NAME = #{levelName}
+        </if>
+        <if test="levelValue!= null and levelValue!= ''">
+            AND LEVEL_VALUE = #{levelValue}
+        </if>
+        <if test="lgcsAreaId!= null and lgcsAreaId!= ''">
+            AND LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="lgcsAreaCode!= null and lgcsAreaCode!= ''">
+            AND LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName!= null and lgcsAreaName!= ''">
+            AND LGCS_AREA_NAME = #{lgcsAreaName}
+        </if>
+        <if test="monthAverageSales!= null and monthAverageSales!= ''">
+            AND MONTH_AVERAGE_SALES = #{monthAverageSales}
+        </if>
+        <if test="monthAverageGrossProfit!= null and monthAverageGrossProfit!= ''">
+            AND MONTH_AVERAGE_GROSS_PROFIT = #{monthAverageGrossProfit}
+        </if>
+        <if test="monthAverageNetProfit!= null and monthAverageNetProfit!= ''">
+            AND MONTH_AVERAGE_NET_PROFIT = #{monthAverageNetProfit}
+        </if>
+
+    </select>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO AGIF_BUTLER_LEVEL_STANDARD (
+        LEVEL_ID,
+        LEVEL_NAME,
+        LEVEL_VALUE,
+        LGCS_AREA_ID,
+        LGCS_AREA_CODE,
+        LGCS_AREA_NAME,
+        MONTH_AVERAGE_SALES,
+        MONTH_AVERAGE_GROSS_PROFIT,
+        MONTH_AVERAGE_NET_PROFIT,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES (
+        <foreach collection="list" index="index" item="bean" separator=",">
+            #{bean.levelId},
+            #{bean.levelName},
+            #{bean.levelValue},
+            #{bean.lgcsAreaId},
+            #{bean.lgcsAreaCode},
+            #{bean.lgcsAreaName},
+            #{bean.monthAverageSales},
+            #{bean.monthAverageGrossProfit},
+            #{bean.monthAverageNetProfit},
+            #{bean.delFlg},
+            #{bean.crtId},
+            #{bean.crtTime},
+            #{bean.updId},
+            #{bean.updTime},
+            #{bean.version}
+        </foreach>
+        )
+    </insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.param.BaseBean">
+        UPDATE agif_butler_level_standard
+        SET
+        <if test="target.levelName !=null">
+            LEVEL_NAME = #{target.levelName},
+        </if>
+        <if test="target.levelValue !=null">
+            LEVEL_VALUE = #{target.levelValue},
+        </if>
+        <if test="target.lgcsAreaId !=null">
+            LGCS_AREA_ID = #{target.lgcsAreaId},
+        </if>
+        <if test="target.lgcsAreaCode !=null">
+            LGCS_AREA_CODE = #{target.lgcsAreaCode},
+        </if>
+        <if test="target.lgcsAreaName !=null">
+            LGCS_AREA_NAME = #{target.lgcsAreaName},
+        </if>
+        <if test="target.monthAverageSales !=null">
+            MONTH_AVERAGE_SALES = #{target.monthAverageSales},
+        </if>
+        <if test="target.monthAverageGrossProfit !=null">
+            MONTH_AVERAGE_GROSS_PROFIT = #{target.monthAverageGrossProfit},
+        </if>
+        <if test="target.monthAverageNetProfit !=null">
+            MONTH_AVERAGE_NET_PROFIT = #{target.monthAverageNetProfit},
+        </if>
+
+        <if test="target.delFlg !=null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+        UPD_ID=#{target.updId},
+        UPD_TIME=#{target.updTime}
+        WHERE
+        DEL_FLG = FALSE
+        AND LEVEL_ID = #{filter.levelId}
+    </update>
+
+</mapper>

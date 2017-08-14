@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifButlerBuyerRelationDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		RELATION_ID AS relationId,
+		AGENT_ID AS agentId,
+		BUTLER_ID AS butlerId,
+		BUYER_ID AS buyerId,
+		MEMBER_TYPE AS memberType,
+		BINGING_TYPE AS bingingType,
+		START_TIME AS startTime,
+		END_TIME AS endTime,
+		RELEASE_REASON AS releaseReason
+	</sql>
+
+    <sql id="selectButlerBuyerColumns">
+		agent.AGENT_ID AS agentId,
+		agent.AGENT_NAME AS agentName,
+		agent.AGENT_CODE AS agentCode,
+		butler.BUTLER_ID AS butlerId,
+		butler.BUTLER_NAME AS butlerName,
+		butler.BUTLER_CODE AS butlerCode,
+		account.ACCOUNT_NAME AS butlerAccount,
+		account.TEL_NO AS butlerTelNo,
+	    relation.MEMBER_TYPE AS memberType,
+		relation.BINGING_TYPE AS bingingType,
+	    relation.START_TIME AS startTime,
+		relation.END_TIME AS endTime,
+		relation.RELEASE_REASON AS releaseReason,
+		lgcs.lgcsAreaId AS lgcsAreaId,
+		lgcs.lgcsAreaCode AS lgcsAreaCode,
+		lgcs.lgcsAreaName AS lgcsAreaName
+	</sql>
+
+    <sql id="selectButlerBuyerRelationColumns">
+		relation.RELATION_ID AS relationId,
+        agent.AGENT_ID AS agentId,
+        agent.AGENT_NAME AS agentName,
+        agent.AGENT_CODE AS agentCode,
+        butler.BUTLER_ID AS butlerId,
+        butler.BUTLER_NAME AS butlerName,
+        butler.BUTLER_CODE AS butlerCode,
+        account.ACCOUNT_NAME AS butlerAccount,
+        account.TEL_NO AS butlerTelNo,
+        relation.BUYER_ID AS buyerId,
+    </sql>
+    <sql id="selectLgcsColumns">
+        adme.AGENT_ID,
+        adme.LGCS_AREA_ID AS lgcsAreaId,
+        adme.LGCS_AREA_CODE AS lgcsAreaCode,
+        adme.LGCS_AREA_NAME AS lgcsAreaName,
+        adme.ZONE_ID AS zoneId,
+        adme.ZONE_CODE AS zoneCode,
+        adme.ZONE_NAME AS zoneName,
+        adme.DISTRIBUTION_ID AS distributionId,
+        adme.DISTRIBUTION_CODE AS distributionCode,
+        adme.DISTRIBUTION_NAME AS distributionName,
+        adme.DEMESNE_ID AS demesneId,
+        adme.DEMESNE_CODE AS demesneCode,
+        adme.DEMESNE_NAME AS demesneName
+    </sql>
+    <sql id="selectAgentColumns">
+        butlerlgcs.lgcsAreaId AS butlerLgcsAreaId,
+        butlerlgcs.lgcsAreaCode AS butlerLgcsAreaCode,
+        butlerlgcs.lgcsAreaName AS butlerLgcsAreaName,
+        butlerlgcs.zoneId AS butlerZoneId,
+        butlerlgcs.zoneCode AS butlerZoneCode,
+        butlerlgcs.zoneName AS butlerZoneName,
+        agentlgcs.lgcsAreaId AS agentLgcsAreaId,
+        agentlgcs.lgcsAreaCode AS agentLgcsAreaCode,
+        agentlgcs.lgcsAreaName AS agentLgcsAreaName,
+        agentlgcs.zoneId AS agentZoneId,
+        agentlgcs.zoneCode AS agentZoneCode,
+        agentlgcs.zoneName AS agentZoneName,
+        agentlgcs.distributionId AS distributionId,
+        agentlgcs.distributionCode AS distributionCode,
+        agentlgcs.distributionName AS distributionName,
+        agentlgcs.demesneId AS demesneId,
+        agentlgcs.demesneCode AS demesneCode,
+        agentlgcs.demesneName AS demesneName
+    </sql>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO AGIF_BUTLER_BUYER_RELATION (
+        RELATION_ID,
+        AGENT_ID,
+        BUTLER_ID,
+        BUYER_ID,
+        MEMBER_TYPE,
+        BINGING_TYPE,
+        START_TIME,
+        END_TIME,
+        RELEASE_REASON,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="lg" index="index" separator=",">
+            (
+            #{lg.relationId},
+            #{lg.agentId},
+            #{lg.butlerId},
+            #{lg.buyerId},
+            #{lg.memberType},
+            #{lg.bingingType},
+            #{lg.startTime},
+            #{lg.endTime},
+            #{lg.releaseReason},
+            #{lg.delFlg},
+            #{lg.crtId},
+            #{lg.crtTime},
+            #{lg.updId},
+            #{lg.updTime},
+            #{lg.version}
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.entity.AgifButlerBuyerRelation">
+        UPDATE AGIF_BUTLER_BUYER_RELATION
+        SET
+        <if test="endTime != null">
+            END_TIME = #{endTime},
+        </if>
+        <if test="releaseReason != null">
+            RELEASE_REASON = #{releaseReason},
+        </if>
+
+        UPD_ID = #{updId},
+        UPD_TIME = #{updTime},
+        DEL_FLG = TRUE
+        WHERE
+        1=1
+        <if test="relationId != null and relationId != ''">
+            AND RELATION_ID = #{relationId}
+        </if>
+
+        <if test="buyerId != null and buyerId != ''">
+            AND BUYER_ID = #{buyerId}
+        </if>
+
+        <if test="agentId != null and agentId !=''">
+            AND AGENT_ID = #{agentId}
+        </if>
+
+        <if test="butlerId != null and butlerId !=''">
+            AND BUTLER_ID = #{butlerId}
+        </if>
+
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.agif.bean.entity.AgifButlerBuyerRelation">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_BUTLER_BUYER_RELATION
+        WHERE
+        RELATION_ID = #{relationId}
+    </select>
+
+    <select id="findAll" parameterType="com.bms.agif.bean.param.ButlerBuyerRelationRsParam"
+            resultType="com.bms.agif.bean.param.ButlerBuyerRelationRsParam">
+        SELECT
+        BUYER_ID AS buyerId,
+        AGENT_ID AS agentId,
+        BUTLER_ID AS butlerId
+        FROM
+        AGIF_BUTLER_BUYER_RELATION
+        WHERE
+        DEL_FLG = FALSE
+        AND BUYER_ID = #{buyerId}
+    </select>
+
+    <select id="count" parameterType="com.bms.agif.bean.param.ButlerBuyerRelationRsPageParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        AGIF_BUTLER_BUYER_RELATION
+        WHERE
+            DEL_FLG = FALSE
+            AND BUYER_ID = #{buyerId}
+            AND AGENT_ID = #{agentId}
+            AND BUTLER_ID = #{butlerId}
+    </select>
+
+    <select id="buyerCount" parameterType="com.bms.agif.bean.param.ButlerBuyerRelationRsPageParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        AGIF_BUTLER_BUYER_RELATION
+        WHERE
+        DEL_FLG = FALSE
+        AND BUYER_ID = #{buyerId}
+    </select>
+
+    <select id="findPageList" resultType="com.bms.agif.bean.param.ButlerBuyerRelationRsPageParam"
+            parameterType="com.bms.agif.bean.param.ButlerBuyerRelationRsPageParam">
+        SELECT
+        <include refid="selectButlerBuyerColumns"/>
+        FROM
+        agif_butler_buyer_relation relation
+        INNER JOIN agif_agent agent ON agent.AGENT_ID = relation.AGENT_ID
+        <if test="isIncludeHistory == false or isIncludeHistory == '' or isIncludeHistory == null">
+            AND agent.DEL_FLG = FALSE
+        </if>
+        INNER JOIN AGIF_BUTLER butler ON butler.BUTLER_ID = relation.BUTLER_ID
+        AND butler.AGENT_ID = relation.AGENT_ID
+        <if test="isIncludeHistory == false or isIncludeHistory == '' or isIncludeHistory == null">
+            AND butler.DEL_FLG = FALSE
+        </if>
+        LEFT JOIN agif_butler_account account ON account.BUTLER_ID = butler.BUTLER_ID
+        <if test="isIncludeHistory == false or isIncludeHistory == '' or isIncludeHistory == null">
+            AND account.DEL_FLG = FALSE
+        </if>
+        LEFT JOIN (select adme.AGENT_ID,
+        adme.LGCS_AREA_ID AS lgcsAreaId,
+        adme.LGCS_AREA_CODE AS lgcsAreaCode,
+        adme.LGCS_AREA_NAME AS lgcsAreaName
+        FROM agif_agent_demesne adme
+        WHERE adme.DEL_FLG = FALSE
+        GROUP BY adme.AGENT_ID) lgcs ON lgcs.AGENT_ID = relation.AGENT_ID
+        WHERE relation.BUYER_ID = #{buyerId}
+        <if test="isIncludeHistory == false or isIncludeHistory == '' or isIncludeHistory == null">
+            AND relation.DEL_FLG = FALSE
+        </if>
+        ORDER BY relation.RELATION_ID DESC
+    </select>
+
+    <select id="findRelationPageList" resultType="com.bms.agif.bean.param.ButlerBuyerRelationRsPageParam"
+            parameterType="com.bms.agif.bean.param.ButlerBuyerRelationRsPageParam">
+        SELECT
+        <include refid="selectButlerBuyerRelationColumns"/>
+        <include refid="selectAgentColumns"/>
+        FROM
+        agif_butler_buyer_relation relation
+        INNER JOIN agif_agent agent ON agent.AGENT_ID = relation.AGENT_ID
+        AND agent.DEL_FLG = FALSE
+        INNER JOIN AGIF_BUTLER butler ON butler.BUTLER_ID = relation.BUTLER_ID
+        AND butler.AGENT_ID = relation.AGENT_ID
+        AND butler.DEL_FLG = FALSE
+        LEFT JOIN (
+        SELECT
+        butlerDemesne.BUTLER_ID,
+        <include refid="selectLgcsColumns"/>
+        FROM
+        agif_agent_demesne adme
+        RIGHT JOIN AGIF_BUTLER_DEMESNE butlerDemesne ON butlerDemesne.AGENT_DEMESNE_ID = adme.AGENT_DEMESNE_ID
+        AND butlerDemesne.DEL_FLG = FALSE
+        WHERE adme.DEL_FLG = FALSE
+        GROUP BY butlerDemesne.BUTLER_ID) butlerlgcs ON butlerlgcs.BUTLER_ID = relation.BUTLER_ID
+        AND butlerlgcs.AGENT_ID = relation.AGENT_ID
+        LEFT JOIN (
+        select
+        <include refid="selectLgcsColumns"/>
+        FROM
+        agif_agent_demesne adme
+        WHERE adme.DEL_FLG = FALSE
+        GROUP BY adme.AGENT_ID) agentlgcs ON agentlgcs.AGENT_ID = relation.AGENT_ID
+        LEFT JOIN agif_butler_account account ON account.BUTLER_ID = butler.BUTLER_ID
+        AND account.DEL_FLG = FALSE
+        WHERE relation.DEL_FLG = FALSE
+        <if test="buyerId != null and buyerId !=''">
+            AND relation.BUYER_ID = #{buyerId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            AND relation.AGENT_ID = #{agentId}
+        </if>
+        <if test="butlerId != null and butlerId !=''">
+            AND relation.BUTLER_ID = #{butlerId}
+        </if>
+    </select>
+
+    <select id="findBuyerButlerAgentPageList" resultType="com.bms.agif.bean.result.BuyerButlerAgentRelationRsResult"
+            parameterType="com.bms.agif.bean.param.BuyerButlerAgentRelationRsPageParam">
+        SELECT
+        relation.RELATION_ID AS relationId,
+        relation.BUYER_ID AS buyerId,
+        agent.AGENT_ID AS agentId,
+        agent.AGENT_CODE AS agentCode,
+        agent.AGENT_NAME AS agentName,
+        agentAccount.ACCOUNT_NAME AS agentAccount,
+        agentAccount.TEL_NO AS agentTelNo,
+        butler.BUTLER_ID AS butlerId,
+        butler.BUTLER_NAME AS butlerName,
+        butler.BUTLER_CODE AS butlerCode,
+        butlerAccount.ACCOUNT_NAME AS butlerAccount,
+        butlerAccount.TEL_NO AS butlerTelNo
+        FROM
+        agif_butler_buyer_relation relation
+        INNER JOIN agif_agent agent ON agent.AGENT_ID = relation.AGENT_ID
+        AND agent.DEL_FLG = FALSE
+        LEFT JOIN agif_agent_account agentAccount ON agentAccount.AGENT_ID = agent.AGENT_ID
+        AND agentAccount.DEL_FLG = FALSE
+        INNER JOIN agif_butler butler ON butler.BUTLER_ID = relation.BUTLER_ID
+        AND butler.DEL_FLG = FALSE
+        LEFT JOIN agif_butler_account butlerAccount ON butlerAccount.BUTLER_ID = butler.BUTLER_ID
+        AND butlerAccount.DEL_FLG = FALSE
+        WHERE
+        relation.DEL_FLG = FALSE
+        <if test="buyerId != null and buyerId !=''">
+            AND relation.BUYER_ID = #{buyerId}
+        </if>
+        <if test="agentId != null and agentId !=''">
+            AND relation.AGENT_ID = #{agentId}
+        </if>
+        <if test="agentCode != null and agentCode !=''">
+            AND agent.AGENT_CODE LIKE #{agentCode}
+        </if>
+        <if test="agentName != null and agentName !=''">
+            AND agent.AGENT_NAME LIKE #{agentName}
+        </if>
+        <if test="agentAccount != null and agentAccount !=''">
+            AND agentAccount.ACCOUNT_NAME LIKE #{agentAccount}
+        </if>
+        <if test="agentTelNo != null and agentTelNo !=''">
+            AND agentAccount.TEL_NO LIKE #{agentTelNo}
+        </if>
+        <if test="butlerId != null and butlerId !=''">
+            AND relation.BUTLER_ID = #{butlerId}
+        </if>
+        <if test="butlerName != null and butlerName !=''">
+            AND butler.BUTLER_NAME LIKE #{butlerName}
+        </if>
+        <if test="butlerCode != null and butlerCode !=''">
+            AND butler.BUTLER_CODE LIKE #{butlerCode}
+        </if>
+        <if test="butlerAccount != null and butlerAccount !=''">
+            AND butlerAccount.ACCOUNT_NAME LIKE #{butlerAccount}
+        </if>
+        <if test="butlerTelNo != null and butlerTelNo !=''">
+            AND butlerAccount.TEL_NO LIKE #{butlerTelNo}
+        </if>
+    </select>
+</mapper>

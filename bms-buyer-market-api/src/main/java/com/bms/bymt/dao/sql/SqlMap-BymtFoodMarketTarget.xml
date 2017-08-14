@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bymt.dao.BymtFoodMarketTargetDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		TARGET_ID AS targetId,
+		FOOD_MARKET_ID AS foodMarketId,
+		BUYER_NAME AS buyerName,
+		PRO_NAME AS proName,
+		BUYER_NUM AS buyerNum,
+		TRADE_AMOUNT AS tradeAmount,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYMT_FOOD_MARKET_TARGET (
+        TARGET_ID,
+        FOOD_MARKET_ID,
+        BUYER_NAME,
+        PRO_NAME,
+        BUYER_NUM,
+        TRADE_AMOUNT,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" index="index" item="ls" separator=",">
+            (
+            #{ls.targetId},
+            #{ls.foodMarketId},
+            #{ls.buyerName},
+            #{ls.proName},
+            #{ls.buyerNum},
+            #{ls.tradeAmount},
+            FALSE,
+            #{ls.crtId},
+            #{ls.crtTime},
+            #{ls.updId},
+            #{ls.updTime},
+            1
+            )
+        </foreach>
+
+    </insert>
+
+    <update id="modify" parameterType="com.bms.bymt.bean.param.BaseBean">
+        UPDATE BYMT_FOOD_MARKET_TARGET
+        SET
+        <if test="target.foodMarketId != null and target.foodMarketId != ''">
+            FOOD_MARKET_ID = #{target.foodMarketId},
+        </if>
+        <if test="target.buyerName != null and target.buyerName != ''">
+            BUYER_NAME = #{target.buyerName},
+        </if>
+        <if test="target.proName != null and target.proName != ''">
+            PRO_NAME = #{target.proName},
+        </if>
+        <if test="target.buyerNum != null">
+            BUYER_NUM = #{target.buyerNum},
+        </if>
+        <if test="target.tradeAmount != null">
+            TRADE_AMOUNT = #{target.tradeAmount},
+        </if>
+        DEL_FLG = #{target.delFlg},
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        TARGET_ID = #{filter.targetId}
+        AND DEL_FLG = FALSE
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.bymt.bean.entity.BymtFoodMarketTarget">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYMT_FOOD_MARKET_TARGET
+        WHERE
+        TARGET_ID = #{targetId}
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.bymt.bean.entity.BymtFoodMarketTarget"
+            resultType="com.bms.bymt.bean.entity.BymtFoodMarketTarget">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYMT_FOOD_MARKET_TARGET
+        WHERE
+        DEL_FLG = FALSE
+        <if test="foodMarketId != null and foodMarketId != ''">
+            AND FOOD_MARKET_ID = #{foodMarketId}
+        </if>
+        <if test="buyerName != null and buyerName != ''">
+            AND BUYER_NAME LIKE #{buyerName}
+        </if>
+        <if test="proName != null and proName != ''">
+            AND PRO_NAME LIKE #{proName}
+        </if>
+        <!--ORDER BY-->
+        <!--<if test="descFlag = true">-->
+        <!--#{sortField} DESC-->
+        <!--</if>-->
+        <!--<if test="descFlag = false">-->
+        <!--#{sortField}-->
+        <!--</if>-->
+    </select>
+
+    <select id="findTotal" parameterType="com.bms.bymt.bean.param.FoodMarketTargetRsParam"
+            resultType="com.bms.bymt.bean.param.FoodMarketTargetRsParam">
+        SELECT
+        SUM(BUYER_NUM) AS buyerNumAllCount,
+        SUM(TRADE_AMOUNT) AS tradeAmountAllCount
+        FROM BYMT_FOOD_MARKET_TARGET
+        WHERE
+        DEL_FLG = FALSE
+        <if test="foodMarketId != null and foodMarketId != ''">
+            AND FOOD_MARKET_ID = #{foodMarketId}
+        </if>
+        <if test="buyerName != null and buyerName != ''">
+            AND BUYER_NAME LIKE #{buyerName}
+        </if>
+        <if test="proName != null and proName != ''">
+            AND PRO_NAME LIKE #{proName}
+        </if>
+    </select>
+
+    <select id="count" parameterType="com.bms.bymt.bean.param.FoodMarketTargetRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYMT_FOOD_MARKET_TARGET
+        WHERE
+        PRO_NAME = #{proName}
+        AND FOOD_MARKET_ID = #{foodMarketId}
+        AND DEL_FLG = FALSE
+    </select>
+</mapper>

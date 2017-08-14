@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifButlerExpEducationDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		EDUCATION_EXP_ID AS educationExpId,
+		BUTLER_ID AS butlerId,
+		EXP_START AS expStart,
+		EXP_END AS expEnd,
+		SCHOOL AS school,
+		EDUCATION AS education,
+		DEGREE AS degree
+	</sql>
+
+    <insert id="save" parameterType="com.bms.agif.bean.entity.AgifButlerExpEducation">
+		INSERT INTO AGIF_BUTLER_EXP_EDUCATION (
+			EDUCATION_EXP_ID,
+			BUTLER_ID,
+			EXP_START,
+			EXP_END,
+			SCHOOL,
+			EDUCATION,
+			DEGREE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{educationExpId},
+			#{butlerId},
+			#{expStart},
+			#{expEnd},
+			#{school},
+			#{education},
+			#{degree},
+
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.entity.AgifButlerExpEducation">
+        UPDATE AGIF_BUTLER_EXP_EDUCATION
+        SET
+        <if test="target.butlerId != null">
+            BUTLER_ID = #{target.butlerId},
+        </if>
+        <if test="target.expStart != null">
+            EXP_START = #{target.expStart},
+        </if>
+        <if test="target.expEnd != null">
+            EXP_END = #{target.expEnd},
+        </if>
+        <if test="target.school != null">
+            SCHOOL = #{target.school},
+        </if>
+        <if test="target.education != null">
+            EDUCATION = #{target.education},
+        </if>
+        <if test="target.degree != null">
+            DEGREE = #{target.degree},
+        </if>
+        <if test="target.delFlg !=null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+        <if test="target.version != null">
+            VERSION = #{target.version},
+        </if>
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        DEL_FLG = FALSE
+        AND EDUCATION_EXP_ID = #{filter.educationExpId}
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.agif.bean.entity.AgifButlerExpEducation">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_BUTLER_EXP_EDUCATION
+        WHERE
+        EDUCATION_EXP_ID = #{educationExpId}
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.agif.bean.param.ButlerExpEducationRsParam"
+            resultType="com.bms.agif.bean.param.ButlerExpEducationRsParam">
+        SELECT
+        edu.EDUCATION_EXP_ID AS educationExpId,
+        edu.BUTLER_ID AS butlerId,
+        edu.EXP_START AS expStart,
+        edu.EXP_END AS expEnd,
+        edu.SCHOOL AS school,
+        edu.EDUCATION AS education,
+        edu.DEGREE AS degree
+        FROM
+        AGIF_BUTLER_EXP_EDUCATION edu
+        LEFT JOIN AGIF_BUTLER butler ON  edu.DEL_FLG = butler.DEL_FLG AND edu.BUTLER_ID = butler.BUTLER_ID
+        WHERE
+        edu.DEL_FLG = FALSE
+        <if test="educationExpId != null and educationExpId != ''">
+            AND edu.EDUCATION_EXP_ID = #{educationExpId}
+        </if>
+        <if test="butlerId != null and butlerId != ''">
+            AND edu.BUTLER_ID = #{butlerId}
+        </if>
+        <if test="butlerCode != null and butlerCode != '' ">
+            AND butler.BUTLER_CODE = #{butlerCode}
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.bms.agif.bean.entity.AgifButlerExpEducation" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        AGIF_BUTLER_EXP_EDUCATION
+        WHERE
+        1 = 1
+        <if test="delFlg != null and delFlg != ''">
+            AND DEL_FLG = #{delFlg}
+        </if>
+    </select>
+
+</mapper>

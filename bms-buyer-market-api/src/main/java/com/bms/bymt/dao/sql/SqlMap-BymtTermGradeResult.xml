@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bymt.dao.BymtTermGradeResultDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		GRADE_RESULT_ID AS gradeResultId,
+		GRADE_INFO_ID AS gradeInfoId,
+		TERM_MARKET_LEVEL AS termMarketLevel,
+		MARKET_RANGE AS marketRange,
+		SERVE_TYPE AS serveType,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.bymt.bean.entity.BymtTermGradeResult">
+		INSERT INTO BYMT_TERM_GRADE_RESULT (
+			GRADE_RESULT_ID,
+			GRADE_INFO_ID,
+			TERM_MARKET_LEVEL,
+			MARKET_RANGE,
+			SERVE_TYPE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES (
+			#{gradeResultId},
+			#{gradeInfoId},
+			#{termMarketLevel},
+			#{marketRange},
+			#{serveType},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.bymt.bean.entity.BymtTermGradeResult">
+		UPDATE BYMT_TERM_GRADE_RESULT 
+		SET
+			<if test="delFlg != null and delFlg==false">
+				GRADE_INFO_ID = #{gradeInfoId},
+				TERM_MARKET_LEVEL = #{termMarketLevel},
+				MARKET_RANGE = #{marketRange},
+				SERVE_TYPE = #{serveType},
+				CRT_ID = #{crtId},
+				CRT_TIME = #{crtTime},
+				UPD_ID = #{updId},
+				UPD_TIME = #{updTime},
+				VERSION = #{version},
+			</if>
+			DEL_FLG = #{delFlg}
+		WHERE
+		DEL_FLG = FALSE
+		AND GRADE_INFO_ID = #{gradeInfoId}
+		<if test="gradeResultId != null and gradeResultId !=''">
+			AND GRADE_RESULT_ID = #{gradeResultId}
+		</if>
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.bymt.bean.param.TermGradeResultParam">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYMT_TERM_GRADE_RESULT
+		WHERE	
+			GRADE_RESULT_ID = #{gradeResultId}	
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.bymt.bean.param.TermGradeResultParam" resultType="com.bms.bymt.bean.param.TermGradeResultParam">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYMT_TERM_GRADE_RESULT
+		WHERE
+		DEL_FLG = FALSE
+	</select>
+	
+	<select id="countAll" parameterType="com.bms.bymt.bean.param.TermGradeResultParam" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			BYMT_TERM_GRADE_RESULT
+		WHERE
+		DEL_FLG = FALSE
+	</select>
+
+
+	<select id="count" parameterType="com.bms.bymt.bean.param.TermGradeResultParam" resultType="int">
+		SELECT
+		count(1)
+		FROM
+		BYMT_TERM_GRADE_RESULT
+		WHERE
+		DEL_FLG = FALSE
+		<if test="termMarketLevel != null and termMarketLevel != ''">
+			AND TERM_MARKET_LEVEL = #{termMarketLevel}
+		</if>
+	</select>
+</mapper>

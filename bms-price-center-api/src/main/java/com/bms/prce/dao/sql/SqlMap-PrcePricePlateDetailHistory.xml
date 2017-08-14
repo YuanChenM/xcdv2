@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.prce.dao.PrcePricePlateDetailHistoryDao">
+	<!--价盘刷新：插入履历数据-->
+	<insert id="save" parameterType="com.bms.prce.bean.param.PRCE0210IDealParam">
+		INSERT INTO PRCE_PRICE_PLATE_DETAIL_HISTORY (
+		PRICE_PLATE_DETAIL_ID,
+		PRICE_PLATE_ID,
+		WAY_CONFIG_ID,
+		WAY_TYPE_ID,
+		BALANCE_RATIO,
+		START_QTY,
+		END_QTY,
+		UOM,
+		SYSTEM_GENERATE_PRICE,
+		FACT_PRICE,
+		DEL_FLG,
+		CRT_Id,
+		CRT_TIME,
+		UPD_Id,
+		UPD_TIME,
+		VERSION
+		)SELECT
+		PRICE_PLATE_DETAIL_ID,
+		PPPD.PRICE_PLATE_ID,
+		WAY_CONFIG_ID,
+		WAY_TYPE_ID,
+		BALANCE_RATIO,
+		START_QTY,
+		END_QTY,
+		UOM,
+		SYSTEM_GENERATE_PRICE,
+		FACT_PRICE,
+		PPPD.DEL_FLG,
+		#{updId},
+		#{updTimeStr},
+		#{updId},
+		#{updTimeStr},
+		1
+		FROM
+		PRCE_PRICE_PLATE_DETAIL PPPD
+		LEFT JOIN PRCE_PRICE_PLATE PPP
+		ON PPP.PRICE_PLATE_ID = PPPD.PRICE_PLATE_ID
+		WHERE 1=1
+		<![CDATA[AND PPP.UPD_TIME >= '${updTimeStr}' ]]>
+		<![CDATA[AND PPPD.UPD_TIME >= '${updTimeStr}' ]]>
+	</insert>
+</mapper>

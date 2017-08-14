@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bymt.dao.BymtMarketPictureDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		PIC_ID AS picId,
+		MARKET_ID AS marketId,
+		CARD_ADDRESS AS cardAddress,
+		CARD_TYPE AS cardType,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+
+    <insert id="save" parameterType="com.bms.bymt.bean.entity.BymtMarketPicture">
+		INSERT INTO BYMT_MARKET_PICTURE (
+			PIC_ID,
+			MARKET_ID,
+			CARD_ADDRESS,
+			CARD_TYPE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES (
+			#{picId},
+			#{marketId},
+			#{cardAddress},
+			#{cardType},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYMT_MARKET_PICTURE (
+        PIC_ID,
+        MARKET_ID,
+        CARD_ADDRESS,
+        CARD_TYPE,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" index="index" item="param" separator=",">
+            (
+            #{param.picId},
+            #{param.marketId},
+            #{param.cardAddress},
+            #{param.cardType},
+            0,
+            #{param.crtId},
+            #{param.crtTime},
+            #{param.updId},
+            #{param.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+
+    <update id="modify" parameterType="com.bms.bymt.bean.param.BaseBean">
+        UPDATE BYMT_MARKET_PICTURE
+        SET
+        <if test="target.marketId!=null">
+            MARKET_ID = #{target.marketId},
+        </if>
+        <if test="target.cardAddress!=null">
+            CARD_ADDRESS = #{target.cardAddress},
+        </if>
+        <if test="target.cardType!=null">
+            CARD_TYPE = #{target.cardType},
+        </if>
+        <if test="target.delFlg!=null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+        <if test="target.crtId!=null">
+            CRT_ID = #{target.crtId},
+        </if>
+        <if test="target.crtTime!=null">
+            CRT_TIME = #{target.crtTime},
+        </if>
+
+        <if test="target.version!=null">
+            VERSION = #{target.version}
+        </if>
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        DEL_FLG = FALSE
+        AND PIC_ID = #{filter.picId}
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.bymt.bean.entity.BymtMarketPicture">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYMT_MARKET_PICTURE
+        WHERE
+        PIC_ID = #{picId}
+    </select>
+
+    <select id="findAll" parameterType="com.framework.base.rest.param.BaseRestParam"
+            resultType="com.bms.bymt.bean.entity.BymtMarketPicture">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYMT_MARKET_PICTURE
+        WHERE
+        DEL_FLG = FALSE
+        AND MARKET_ID = #{marketId}
+    </select>
+
+    <select id="countAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYMT_MARKET_PICTURE
+        WHERE
+        1 = 1
+        <if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND DEL_FLG = #{filterMap.delFlg}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.prce.dao.PrceMarketingStatusDao">
+
+	<!-- 查询字段 -->
+	<sql id="selectColumns">
+		MARKETING_STATUS_ID AS marketingStatusId,
+		MARKETING_STATUS_NAME AS marketingStatusName,
+		UOM AS uom,
+		OWNER_ID AS ownerId,
+		OWNER_TYPE AS ownerType,
+		OWNER_NAME AS ownerName,
+		VERSION AS version
+	</sql>
+
+	<!-- 营销状态查询 -->
+	<select id="findPageList" parameterType="com.bms.prce.bean.param.PRCE0203IParam" resultType="com.bms.prce.bean.result.PRCE0203IResult">
+		SELECT
+		<include refid="selectColumns" />
+		FROM
+		PRCE_MARKETING_STATUS
+		WHERE
+		DEL_FLG = 0
+		<if test="marketingStatusName != null and marketingStatusName != ''">
+			AND MARKETING_STATUS_NAME LIKE #{marketingStatusName}
+		</if>
+	</select>
+
+	<!-- 营销状态是否存在 -->
+	<select id="count" parameterType="com.bms.prce.bean.entity.PrceMarketingStatus" resultType="int">
+		SELECT
+		count(1)
+		FROM
+		PRCE_MARKETING_STATUS
+		WHERE
+		DEL_FLG = 0
+		<if test="marketingStatusId != null and marketingStatusId != ''">
+			AND MARKETING_STATUS_ID = #{marketingStatusId}
+		</if>
+		<if test="marketingStatusName != null and marketingStatusName != ''">
+			AND MARKETING_STATUS_NAME = #{marketingStatusName}
+		</if>
+	</select>
+
+	<!-- 营销状态新增 -->
+	<insert id="save" parameterType="com.bms.prce.bean.entity.PrceMarketingStatus">
+		INSERT INTO PRCE_MARKETING_STATUS (
+			MARKETING_STATUS_ID,
+			MARKETING_STATUS_NAME,
+			UOM,
+			OWNER_ID,
+			OWNER_TYPE,
+			OWNER_NAME,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			VERSION
+		)
+		VALUES (
+			#{marketingStatusId},
+			#{marketingStatusName},
+			#{uom},
+			#{ownerId},
+			#{ownerType},
+			#{ownerName},
+			0,
+			#{crtId},
+			#{crtTime},
+			1
+		)
+	</insert>
+
+	<!-- 营销状态更新 -->
+	<update id="modify" parameterType="com.bms.prce.bean.entity.PrceMarketingStatus">
+		UPDATE PRCE_MARKETING_STATUS 
+		SET
+		<if test="delFlg==true">
+			DEL_FLG = #{delFlg},
+		</if>
+		<if test="delFlg==false or delFlg==null">
+			MARKETING_STATUS_NAME = #{marketingStatusName},
+			UOM = #{uom},
+			OWNER_ID = #{ownerId},
+			OWNER_TYPE = #{ownerType},
+			OWNER_NAME = #{ownerName},
+		</if>
+		UPD_ID = #{updId},
+		UPD_TIME = #{updTime},
+		VERSION = VERSION + 1
+		WHERE
+			MARKETING_STATUS_ID = #{marketingStatusId}
+	    AND DEL_FLG = 0
+	</update>
+
+</mapper>

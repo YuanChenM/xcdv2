@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.issue.dao.ISSU0105IDao">
+
+    <select id="findPageList" parameterType="com.bms.issue.bean.param.ISSU0105IFilter" resultType="com.bms.issue.bean.result.ISSU0105IRestResult">
+      SELECT
+      ISSUE_ID AS issueId,
+      ISSUE_CODE AS issueCode,
+      ORDER_ID AS orderId,
+      ORDER_CODE AS orderCode,
+      ORDER_TYPE AS orderType,
+      LOGISTICS_ZONE_CODE AS logisticsZoneCode,
+      LOGISTICS_ZONE_NAME AS logisticsZoneName,
+      LOGISTICS_ZONE_ID AS logisticsZoneId,
+      BUYER_ID AS buyerId,
+      BUYER_CODE AS buyerCode,
+      BUYER_NAME AS buyerName,
+      INITIATOR_TYPE AS initiatorType,
+      INITIATOR_ID AS initiatorId,
+      INITIATOR_NAME AS initiatorName,
+      DATE_FORMAT(INITIATE_TIME,'%Y-%m-%d %T') AS initiateTime,
+      ISSUE_DESC AS issueDesc,
+      ISSUE_RESULT AS issueResult,
+      ISSUE_DECISION AS issueDecision,
+      CLOSE_UID AS closeUid,
+      CLOSE_UNAME AS closeUname,
+      DATE_FORMAT(CLOSE_TIME,'%Y-%m-%d %T') AS closeTime,
+      ISSUE_STATUS AS issueStatus,
+      DEL_FLG AS delFlg,
+      CRT_ID AS crtId,
+      DATE_FORMAT(CRT_TIME,'%Y-%m-%d %T') AS crtTime,
+      UPD_ID AS updId,
+      DATE_FORMAT(UPD_TIME,'%Y-%m-%d %T') AS updTime,
+      VERSION AS ver
+      FROM
+      ISSU_ISSUE
+      WHERE
+      DEL_FLG = 0
+      <if test="null != filter">
+        <if test="filter.issueId != null">
+            AND ISSUE_ID IN
+            <foreach collection="filter.issueId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.initiatorType != null">
+            AND INITIATOR_TYPE IN
+            <foreach collection="filter.initiatorType" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.initiatorType != null">
+            AND INITIATOR_TYPE IN
+            <foreach collection="filter.initiatorType" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.issueStatus != null">
+            AND ISSUE_STATUS IN
+            <foreach collection="filter.issueStatus" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.orderId != null">
+            AND ORDER_ID IN
+            <foreach collection="filter.orderId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.buyerId != null">
+            AND BUYER_ID IN
+            <foreach collection="filter.buyerId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.logisticsZoneId != null">
+            AND LOGISTICS_ZONE_ID IN
+            <foreach collection="filter.logisticsZoneId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.issueCode != null">
+            AND ISSUE_CODE = #{filter.issueCode}
+        </if>
+
+        <if test="filter.initiatorName != null">
+            AND INITIATOR_NAME LIKE #{filter.initiatorName}
+        </if>
+
+        <if test="filter.initiatorTimeFrom != null">
+            AND DATE_FORMAT(INITIATE_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{filter.initiatorTimeFrom},'%Y-%m-%d')
+        </if>
+
+        <if test="filter.initiatorTimeTo != null">
+            AND DATE_FORMAT(INITIATE_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{filter.initiatorTimeTo},'%Y-%m-%d')
+        </if>
+
+        <if test="filter.closeTimeFrom != null">
+            AND DATE_FORMAT(CLOSE_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{filter.closeTimeFrom},'%Y-%m-%d')
+        </if>
+
+        <if test="filter.closeTimeTo != null">
+            AND DATE_FORMAT(CLOSE_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{filter.closeTimeTo},'%Y-%m-%d')
+        </if>
+
+        <if test="filter.issueDesc != null">
+            AND ISSUE_DESC LIKE #{filter.issueDesc}
+        </if>
+
+        <if test="filter.orderCode != null">
+            AND ORDER_CODE LIKE #{filter.orderCode}
+        </if>
+
+        <if test="filter.buyerCode != null">
+            AND BUYER_CODE LIKE #{filter.buyerCode}
+        </if>
+
+        <if test="filter.buyerName != null">
+            AND BUYER_NAME = #{filter.buyerName}
+        </if>
+      </if>
+    </select>
+</mapper>

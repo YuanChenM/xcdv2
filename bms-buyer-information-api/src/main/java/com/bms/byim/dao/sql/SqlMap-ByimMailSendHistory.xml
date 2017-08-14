@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimMailSendHistoryDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		MAIL_SEND_HISTORY_ID AS mailSendHistoryId,
+		BUYER_ID AS buyerId,
+		EMAIL_TOPIC AS emailTopic,
+		EMAIL_CONTENT AS emailContent,
+		SEND_GROUP AS sendGroup,
+		IS_SUCCESS AS isSuccess,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		ACT_ID AS actId,
+		ACT_TIME AS actTime,
+		VER AS ver
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.byim.bean.entity.ByimMailSendHistory">
+		INSERT INTO BYIM_MAIL_SEND_HISTORY (
+			MAIL_SEND_HISTORY_ID,
+			BUYER_ID,
+			EMAIL_TOPIC,
+			EMAIL_CONTENT,
+			SEND_GROUP,
+			IS_SUCCESS,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{mailSendHistoryId},
+			#{buyerId},
+			#{emailTopic},
+			#{emailContent},
+			#{sendGroup},
+			#{isSuccess},
+			FALSE ,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.byim.bean.entity.ByimMailSendHistory">
+		UPDATE BYIM_MAIL_SEND_HISTORY 
+		SET 
+			BUYER_ID = #{buyerId},
+			EMAIL_TOPIC = #{emailTopic},
+			EMAIL_CONTENT = #{emailContent},
+			SEND_GROUP = #{sendGroup},
+			IS_SUCCESS = #{isSuccess},
+			DEL_FLG = #{delFlg},
+			CRT_ID = #{crtId},
+			CRT_TIME = #{crtTime},
+			UPD_ID = #{updId},
+			UPD_TIME = #{updTime},
+			ACT_ID = #{actId},
+			ACT_TIME = #{actTime},
+			VER = #{ver}
+		WHERE
+			MAIL_SEND_HISTORY_ID = #{mailSendHistoryId}		
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.byim.bean.entity.ByimMailSendHistory">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYIM_MAIL_SEND_HISTORY
+		WHERE	
+			MAIL_SEND_HISTORY_ID = #{mailSendHistoryId}	
+	</select>
+	
+
+	
+</mapper>

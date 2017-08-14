@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmLotNoLoadDao">
+
+    <select id="findPageList" parameterType="com.bms.linv.bean.param.LINV0111IParam"
+            resultType="com.bms.linv.bean.result.LINV0111IInvResult">
+		SELECT
+			F.L_A_ID AS logisticsId,
+			F.S_PLAT_CODE AS salePlatform,
+			F.OWNER_ID AS ownerId,
+			F.OWNER_CODE AS ownerCode,
+			F.OWNER_TYPE AS ownerType,
+			F.OWNER_D_TYPE AS ownerDType,
+			IPI.ITEM_ID AS partId,
+			IPI.BRAND_ID AS brandId,
+			SKU.PDRS_ID AS producerId,
+			SKU.PDRS_CODE AS producerCode,
+			SKU.PDRS_NAME AS producerName,
+			SKU.MFRS_ID AS manufacturerId,
+			SKU.MFRS_CODE AS manufacturerCode,
+			SKU.MFRS_NAME AS manufacturerName,
+			SKU.PD_ID AS productId,
+			F.SKU_CODE AS skuCode,
+			F.LOT_NO AS lotNo,
+			F.UOM AS uom,
+			F.SALE_STATUS_ID AS saleStatusId,
+			F.IV_TYPE AS ivType,
+			F.TOTAL_QTY AS totalQty,
+			F.BUFFER_QTY AS bufferQty,
+			F.ONHAND_QTY AS onhandQty,
+			F.ALOC_QTY AS allocatedQty,
+			F.AVAILABLE_QTY AS availableQty
+		FROM
+			(
+				SELECT
+					L_A_ID,
+					S_PLAT_CODE,
+					OWNER_ID,
+					OWNER_CODE,
+					OWNER_TYPE,
+					OWNER_D_TYPE,
+					SKU_CODE,
+					LOT_NO,
+					UOM,
+					SALE_STATUS_ID,
+					IV_TYPE,
+					(
+						SUM(T.BUFFER_QTY) + SUM(T.ONHAND_QTY)
+					) AS TOTAL_QTY,
+					SUM(T.BUFFER_QTY) AS BUFFER_QTY,
+					SUM(T.ONHAND_QTY) AS ONHAND_QTY,
+					0 AS ALOC_QTY,
+					(
+						SUM(T.BUFFER_QTY) + SUM(T.ONHAND_QTY) - 0
+					) AS AVAILABLE_QTY
+				FROM
+					(
+						SELECT
+							IL.L_A_ID,
+							IL.S_PLAT_CODE,
+							IL.OWNER_ID,
+							IL.OWNER_CODE,
+							IL.OWNER_TYPE,
+							IL.OWNER_D_TYPE,
+							IL.SKU_CODE,
+							IL.LOT_NO,
+							IL.UOM,
+							IL.SALE_STATUS_ID,
+							IL.IV_TYPE,
+							0 AS BUFFER_QTY,
+							IL.IV_QTY AS ONHAND_QTY,
+							0 AS ALOC_QTY,
+							0 AS AVAILABLE_QTY
+						FROM
+							invm_load IL
+					) T
+				GROUP BY
+					L_A_ID,
+					S_PLAT_CODE,
+					OWNER_ID,
+					OWNER_CODE,
+					OWNER_TYPE,
+					LOT_NO,
+					SKU_CODE,
+					UOM,
+					SALE_STATUS_ID,
+					IV_TYPE
+			) F
+		INNER JOIN invm_sku_info SKU ON F.SKU_CODE = SKU.SKU_CODE
+		INNER JOIN INVM_PRODUCT_INFO IPI ON IPI.PRODUCT_ID = SKU.PD_ID
+		AND IPI.PRODUCT_ID IN (
+		SELECT
+		PD_ID
+		FROM
+		INVM_COMM_INFO ICI
+		WHERE
+		1=1
+		<if test="commodityId != null">
+			AND ICI.COMMODITY_ID IN
+			<foreach collection="commodityId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		GROUP BY
+		PD_ID
+		)
+		WHERE
+		1=1
+		<if test="productId != null">
+			AND SKU.PD_ID IN
+			<foreach collection="productId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="producerId != null">
+			AND SKU.PDRS_ID IN
+			<foreach collection="producerId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="logisticsId != null">
+			AND F.L_A_ID IN
+			<foreach collection="logisticsId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="salePlatform != null">
+			AND F.S_PLAT_CODE IN
+			<foreach collection="salePlatform" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="ownerId != null">
+			AND F.OWNER_ID IN
+			<foreach collection="ownerId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="ownerType != null">
+			AND F.OWNER_TYPE IN
+			<foreach collection="ownerType" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="skuCode != null">
+			AND F.SKU_CODE IN
+			<foreach collection="skuCode" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="lotNo != null">
+			AND F.LOT_NO IN
+			<foreach collection="lotNo" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="saleStatusId != null">
+			AND F.SALE_STATUS_ID IN
+			<foreach collection="saleStatusId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="uom != null">
+			AND F.UOM IN
+			<foreach collection="uom" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="ivType != null">
+			AND F.IV_TYPE IN
+			<foreach collection="ivType" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+</mapper>

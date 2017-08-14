@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.prce.dao.PrceEffectiveWayConfigDao">
+
+	<!--价盘刷新：逻辑删除有效通道数据-->
+	<update id="modify" parameterType="com.bms.prce.bean.param.PRCE0210IDealParam">
+		UPDATE PRCE_EFFECTIVE_WAY_CONFIG 
+		SET DEL_FLG = 1,
+		UPD_ID = #{updId},
+		UPD_TIME = #{updTimeStr},
+		VERSION = VERSION + 1
+		WHERE DEL_FLG = 0
+		AND MARKETING_WAY_CONFIG_ID IN <foreach collection="marketingWayConfigIds" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+	</update>
+
+	<!--价盘刷新：查找待插入数据-->
+	<select id="findAll" parameterType="com.bms.prce.bean.param.PRCE0210IDealParam" resultType="com.bms.prce.bean.entity.PrceEffectiveWayConfig">
+		SELECT
+		WAY_CONFIG_ID AS wayConfigId,
+		MARKETING_WAY_CONFIG_ID AS marketingWayConfigId,
+		WAY_TYPE_ID AS wayTypeId,
+		BALANCE_RATIO AS balanceRatio,
+		PLAT_BALANCE_RATIO AS platBalanceRatio,
+		SA_BALANCE_RATIO AS saBalanceRatio,
+		SUM_BALANCE_RATIO AS sumBalanceRatio,
+		START_QTY AS startQty,
+		END_QTY AS endQty
+		FROM PRCE_WAY_CONFIG
+		WHERE DEL_FLG = 0
+		AND MARKETING_WAY_CONFIG_ID IN <foreach collection="marketingWayConfigIds" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+	</select>
+
+	<select id="count" parameterType="com.bms.prce.bean.param.EffectiveWayConfigParam" resultType="java.lang.Integer">
+		SELECT t1.count + t2.count
+		from (
+		SELECT count(1) as count
+		FROM PRCE_MARKETING_WAY_CONFIG PMWC
+		INNER JOIN PRCE_EFFECTIVE_WAY_CONFIG PEWC
+		ON PMWC.MARKETING_WAY_CONFIG_ID = PEWC.MARKETING_WAY_CONFIG_ID
+		AND PEWC.DEL_FLG = 0
+		WHERE PMWC.DEL_FLG = 0
+		<if test="marketingStatusId != null and marketingStatusId != ''">
+			AND PMWC.MARKETING_STATUS_ID = #{marketingStatusId}
+		</if>
+		<if test="wayTypeId != null and wayTypeId != ''">
+			AND PEWC.WAY_TYPE_ID = #{wayTypeId}
+		</if>
+		) t1,(
+		SELECT count(1) as count
+		FROM PRCE_MARKETING_WAY_CONFIG PMWC
+		INNER JOIN PRCE_WAY_CONFIG PWC
+		ON PMWC.MARKETING_WAY_CONFIG_ID = PWC.MARKETING_WAY_CONFIG_ID
+		AND PWC.DEL_FLG = 0
+		WHERE PMWC.DEL_FLG = 0
+		<if test="marketingStatusId != null and marketingStatusId != ''">
+			AND PMWC.MARKETING_STATUS_ID = #{marketingStatusId}
+		</if>
+		<if test="wayTypeId != null and wayTypeId != ''">
+			AND PWC.WAY_TYPE_ID = #{wayTypeId}
+		</if>
+		) t2
+	</select>
+
+	<!--价盘刷新：插入有效通道数据-->
+	<insert id="batchInsert" parameterType="List">
+		INSERT INTO PRCE_EFFECTIVE_WAY_CONFIG(
+		WAY_EFFECTIVE_CONFIG_ID,
+		WAY_CONFIG_ID,
+		MARKETING_WAY_CONFIG_ID,
+		WAY_TYPE_ID,
+		BALANCE_RATIO,
+		PLAT_BALANCE_RATIO,
+		SA_BALANCE_RATIO,
+		SUM_BALANCE_RATIO,
+		START_QTY,
+		END_QTY,
+		DEL_FLG,
+		CRT_Id,
+		CRT_TIME,
+		VERSION
+		)VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+			#{item.wayEffectiveConfigId},
+			#{item.wayConfigId},
+			#{item.marketingWayConfigId},
+			#{item.wayTypeId},
+			#{item.balanceRatio},
+			#{item.platBalanceRatio},
+			#{item.saBalanceRatio},
+			#{item.sumBalanceRatio},
+			#{item.startQty},
+			#{item.endQty},
+			0,
+			#{item.crtId},
+			#{item.crtTime},
+			1
+			)
+		</foreach>
+	</insert>
+</mapper>

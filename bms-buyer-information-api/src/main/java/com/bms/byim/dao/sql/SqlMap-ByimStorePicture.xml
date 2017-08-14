@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimStorePictureDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		PIC_ID AS picId,
+		BUYER_ID AS buyerId,
+		STORE_ID AS storeId,
+		LICENSE_TYPE AS licenseType,
+		LICENSE_PIC AS licensePic
+	</sql>
+
+    <insert id="save" parameterType="com.bms.byim.bean.entity.ByimStorePicture">
+		INSERT INTO BYIM_STORE_PICTURE (
+			PIC_ID,
+			BUYER_ID,
+			STORE_ID,
+			LICENSE_TYPE,
+			LICENSE_PIC			
+		)
+		VALUES (
+			#{picId},
+			#{buyerId},
+			#{storeId},
+			#{licenseType},
+			#{licensePic}
+		)
+	</insert>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYIM_STORE_PICTURE (
+        PIC_ID,
+        BUYER_ID,
+        STORE_ID,
+        LICENSE_TYPE,
+        LICENSE_PIC,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="storePicture" index="index" separator=",">
+            (
+            #{storePicture.picId},
+            #{storePicture.buyerId},
+            #{storePicture.storeId},
+            #{storePicture.licenseType},
+            #{storePicture.licensePic},
+            #{storePicture.delFlg},
+            #{storePicture.crtId},
+            #{storePicture.crtTime},
+            #{storePicture.updId},
+            #{storePicture.updTime},
+            #{storePicture.version}
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.byim.bean.entity.ByimStorePicture">
+        UPDATE BYIM_STORE_PICTURE
+        SET
+        <if test="target.licensePic != null">
+            LICENSE_PIC = #{target.licensePic},
+        </if>
+        <if test="target.updId != null">
+            UPD_ID = #{target.updId},
+        </if>
+        UPD_TIME = #{target.updTime},
+        DEL_FLG = ${target.delFlg}
+        WHERE
+        PIC_ID = #{filter.picId}
+        AND DEL_FLG = FALSE
+        <if test="filter.licenseType != null and filter.licenseType != ''">
+            AND LICENSE_TYPE = #{filter.licenseType}
+        </if>
+
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.byim.bean.entity.ByimStorePicture">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_STORE_PICTURE
+        WHERE
+        PIC_ID = #{picId}
+    </select>
+
+    <select id="findAll" parameterType="com.bms.byim.bean.param.StorePictureRsParam"
+            resultType="com.bms.byim.bean.entity.ByimStorePicture">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_STORE_PICTURE
+        WHERE
+        DEL_FLG = FALSE
+        <if test="buyerId != null and buyerId != ''">
+            AND BUYER_ID = #{buyerId}
+        </if>
+        <if test="storeId != null and storeId != ''">
+            AND STORE_ID = #{storeId}
+        </if>
+        <if test="licenseType != null and licenseType != ''">
+            AND LICENSE_TYPE = #{licenseType}
+        </if>
+    </select>
+
+    <select id="count" parameterType="com.bms.byim.bean.param.StorePictureRsParam" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			BYIM_STORE_PICTURE
+		WHERE
+		BUYER_ID = #{buyerId}
+		AND DEL_FLG = FALSE
+		AND LICENSE_TYPE = #{licenseType}
+
+	</select>
+
+    <update id="delete" parameterType="com.bms.byim.bean.entity.ByimStorePicture">
+		UPDATE BYIM_STORE_PICTURE
+		SET
+		UPD_ID = #{updId},
+		UPD_TIME = #{updTime},
+		DEL_FLG = TRUE
+		WHERE
+		BUYER_ID = #{buyerId}
+		AND LICENSE_TYPE = #{licenseType}
+		AND DEL_FLG = FALSE
+	</update>
+
+</mapper>

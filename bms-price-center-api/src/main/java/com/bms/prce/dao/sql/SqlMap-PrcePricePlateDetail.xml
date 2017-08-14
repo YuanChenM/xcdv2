@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.prce.dao.PrcePricePlateDetailDao">
+
+    <!--价盘详细查询：价盘详细Map-->
+    <resultMap id="plateMap" type="com.bms.prce.bean.result.PRCE0208IResult">
+        <id property="pricePlateId" column="PRICE_PLATE_ID"/>
+        <result property="goodId" column="GOOD_ID"/>
+        <result property="goodInfo" column="GOOD_INFO"/>
+        <result property="lgcsAreaCode" column="LGCS_AREA_CODE"/>
+        <result property="normPrice" column="NORM_PRICE"/>
+        <result property="marketingWayConfigId" column="MARKETING_WAY_CONFIG_ID"/>
+        <result property="marketingStatusId" column="MARKETING_STATUS_ID"/>
+        <result property="marketingStatusName" column="MARKETING_STATUS_NAME"/>
+        <result property="startTime" column="START_TIME"/>
+        <result property="endTime" column="END_TIME"/>
+        <result property="userType" column="USER_TYPE"/>
+        <result property="buyerLevel" column="BUYER_LEVEL"/>
+        <collection property="plateDetailList" ofType="com.bms.prce.bean.result.PRCE0208IPlateDetailResult">
+            <id property="pricePlateDetailId" column="PRICE_PLATE_DETAIL_ID"/>
+            <result property="wayConfigId" column="WAY_CONFIG_ID"/>
+            <result property="wayTypeId" column="WAY_TYPE_ID"/>
+            <result property="wayTypeName" column="WAY_TYPE_NAME"/>
+            <result property="wayDesc" column="WAY_TYPE_NAME"/>
+            <result property="startQty" column="START_QTY"/>
+            <result property="endQty" column="END_QTY"/>
+            <result property="balanceRatio" column="BALANCE_RATIO"/>
+            <result property="generatePrice" column="SYSTEM_GENERATE_PRICE"/>
+            <result property="factPrice" column="FACT_PRICE"/>
+            <result property="unitPrice" column="UNIT_PRICE"/>
+        </collection>
+    </resultMap>
+
+    <!--价盘详细查询：查询sql-->
+    <select id="findAll" parameterType="com.bms.prce.bean.param.PRCE0208IParam" resultMap="plateMap">
+        SELECT
+        PPP.PRICE_PLATE_ID,
+        PPP.GOOD_ID,
+        IFNULL(PPI.COMMODITY_NAME,'') AS GOOD_INFO,
+        PPP.LGCS_AREA_CODE,
+        PPP.NORM_PRICE,
+        PPP.MARKETING_WAY_CONFIG_ID,
+        PPP.MARKETING_STATUS_ID,
+        PMS.MARKETING_STATUS_NAME,
+        PPP.START_TIME,
+        PPP.END_TIME,
+        PPP.USER_TYPE,
+        PPP.BUYER_LEVEL,
+        PPPD.PRICE_PLATE_DETAIL_ID,
+        PPPD.WAY_CONFIG_ID,
+        PPPD.WAY_TYPE_ID,
+        PWT.WAY_TYPE_NAME,
+        PPPD.START_QTY,
+        PPPD.END_QTY,
+        PPPD.BALANCE_RATIO,
+        PPPD.SYSTEM_GENERATE_PRICE,
+        PPPD.FACT_PRICE,
+        ROUND(PPPD.FACT_PRICE * PPI.NET_WEIGHT,2) AS UNIT_PRICE
+        FROM
+        PRCE_PRICE_PLATE PPP
+        LEFT JOIN PRCE_PRICE_PLATE_DETAIL PPPD
+        ON PPP.PRICE_PLATE_ID = PPPD.PRICE_PLATE_ID
+        AND PPPD.DEL_FLG = 0
+        LEFT JOIN PRCE_PRODUCT_INFO PPI
+        ON PPP.GOOD_ID = PPI.GOOD_ID
+        AND PPP.LGCS_AREA_CODE = PPI.LGCS_AREA_CODE
+        AND PPI.DEL_FLG = 0
+        LEFT JOIN PRCE_MARKETING_STATUS PMS
+        ON PPP.MARKETING_STATUS_ID = PMS.MARKETING_STATUS_ID
+        LEFT JOIN PRCE_WAY_TYPE PWT
+        ON PPPD.WAY_TYPE_ID = PWT.WAY_TYPE_ID
+        WHERE PPP.DEL_FLG = 0
+        <if test="searchFlg==false">
+            <![CDATA[AND PPP.START_TIME <= '${searchTime}' ]]>
+            <![CDATA[AND (PPP.END_TIME > '${searchTime}' OR PPP.END_TIME IS NULL)]]>
+        </if>
+        <if test="searchFlg==true">
+            <![CDATA[AND PPP.START_TIME >= '${searchTime}' ]]>
+        </if>
+        <if test="goodId != null and goodId.length>0">
+            AND PPP.GOOD_ID IN
+            <foreach collection="goodId" item="item" index="index" open="(" separator="," close=")">#{item}
+            </foreach>
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND PPP.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="marketingStatusId != null and marketingStatusId != ''">
+            AND PPP.MARKETING_STATUS_ID = #{marketingStatusId}
+        </if>
+        <if test="userType != null and userType != ''">
+            AND PPP.USER_TYPE = #{userType}
+        </if>
+        <if test="buyerLevel != null and buyerLevel != ''">
+            AND PPP.BUYER_LEVEL = #{buyerLevel}
+        </if>
+        ORDER BY PPPD.START_QTY DESC
+    </select>
+
+    <!--价盘刷新：插入新价盘详细-->
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO PRCE_PRICE_PLATE_DETAIL (
+        PRICE_PLATE_ID,
+        WAY_CONFIG_ID,
+        WAY_TYPE_ID,
+        BALANCE_RATIO,
+        START_QTY,
+        END_QTY,
+        UOM,
+        SYSTEM_GENERATE_PRICE,
+        FACT_PRICE,
+        DEL_FLG,
+        CRT_Id,
+        CRT_TIME,
+        UPD_Id,
+        UPD_TIME,
+        VERSION
+        )VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.pricePlateId},
+            #{item.wayConfigId},
+            #{item.wayTypeId},
+            #{item.balanceRatio},
+            #{item.startQty},
+            #{item.endQty},
+            #{item.uom},
+            #{item.systemGeneratePrice},
+            #{item.factPrice},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.crtId},
+            #{item.crtTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!--价盘修改：删除盘详细-->
+    <update id="deleteModify" parameterType="com.bms.prce.bean.entity.PrcePricePlate">
+		UPDATE PRCE_PRICE_PLATE_DETAIL
+		SET DEL_FLG = 1,
+		UPD_ID = #{updId},
+		UPD_TIME = #{updTime},
+		VERSION = VERSION + 1
+		WHERE
+		PRICE_PLATE_ID = #{pricePlateId}
+		AND DEL_FLG = 0
+	</update>
+
+    <!--价盘修改：查询受影响价盘-->
+    <select id="findPlate" parameterType="com.bms.prce.bean.param.PRCE0209IParam"
+            resultType="com.bms.prce.bean.entity.PrcePricePlate">
+        SELECT
+        PRICE_PLATE_ID AS pricePlateId,
+        LGCS_AREA_CODE AS lgcsAreaCode,
+        GOOD_ID AS goodId,
+        MARKETING_WAY_CONFIG_ID AS marketingWayConfigId,
+        MARKETING_STATUS_ID AS marketingStatusId,
+        USER_TYPE AS userType,
+        BUYER_LEVEL AS buyerLevel,
+        START_TIME AS startTime,
+        END_TIME AS endTime,
+        NORM_PRICE AS normPrice,
+        OWNER_TYPE AS ownerType,
+        OWNER_ID AS ownerId,
+        OWNER_NAME AS ownerName
+        FROM
+        PRCE_PRICE_PLATE
+        WHERE DEL_FLG = 0
+        <![CDATA[AND (END_TIME > '${startTime}' OR END_TIME IS NULL)]]>
+        AND LGCS_AREA_CODE = #{lgcsAreaCode}
+        AND GOOD_ID = #{goodId}
+        AND USER_TYPE = #{userType}
+        <if test="buyerLevel != null and buyerLevel != ''">
+            AND BUYER_LEVEL = #{buyerLevel}
+        </if>
+        ORDER BY START_TIME
+    </select>
+
+    <!--价盘修改：目标价盘Map-->
+    <resultMap id="targetPlateMap" type="com.bms.prce.bean.result.PRCE0209IResult">
+        <result property="lgcsAreaCode" column="LGCS_AREA_CODE"/>
+        <result property="goodId" column="GOOD_ID"/>
+        <result property="marketingWayConfigId" column="MARKETING_WAY_CONFIG_ID"/>
+        <result property="marketingStatusId" column="MARKETING_STATUS_ID"/>
+        <result property="userType" column="USER_TYPE"/>
+        <result property="buyerLevel" column="BUYER_LEVEL"/>
+        <result property="startTime" column="START_TIME"/>
+        <result property="normPrice" column="NORM_PRICE"/>
+        <result property="ownerType" column="OWNER_TYPE"/>
+        <result property="ownerId" column="OWNER_ID"/>
+        <result property="ownerName" column="OWNER_NAME"/>
+        <collection property="plateDetailList" ofType="com.bms.prce.bean.entity.PrcePricePlateDetail">
+            <result property="wayConfigId" column="WAY_EFFECTIVE_CONFIG_ID"/>
+            <result property="wayTypeId" column="WAY_TYPE_ID"/>
+            <result property="balanceRatio" column="BALANCE_RATIO"/>
+            <result property="startQty" column="START_QTY"/>
+            <result property="endQty" column="END_QTY"/>
+            <result property="uom" column="UOM"/>
+            <result property="systemGeneratePrice" column="SYSTEM_GENERATE_PRICE"/>
+            <result property="factPrice" column="FACT_PRICE"/>
+        </collection>
+    </resultMap>
+
+    <!--价盘修改：获取目标价盘-->
+    <select id="findTargetPlate" parameterType="com.bms.prce.bean.param.PRCE0209IParam" resultMap="targetPlateMap">
+        SELECT
+        #{goodId} AS GOOD_ID,
+        #{lgcsAreaCode} AS LGCS_AREA_CODE,
+        PMS.MARKETING_STATUS_ID,
+        PMS.UOM,
+        PMS.OWNER_TYPE,
+        PMS.OWNER_ID,
+        PMS.OWNER_NAME,
+        PMWC.MARKETING_WAY_CONFIG_ID,
+        #{normPrice} AS NORM_PRICE,
+        #{startTime} AS START_TIME,
+        PMWC.USER_TYPE,
+        PMWC.BUYER_LEVEL,
+        PEWC.WAY_EFFECTIVE_CONFIG_ID,
+        PEWC.WAY_TYPE_ID,
+        PEWC.START_QTY,
+        PEWC.END_QTY,
+        CASE WHEN PMWC.USER_TYPE = 1 THEN PEWC.SUM_BALANCE_RATIO ELSE PEWC.BALANCE_RATIO END AS BALANCE_RATIO,
+        #{normPrice}/100 * CASE WHEN PMWC.USER_TYPE = 1 THEN PEWC.SUM_BALANCE_RATIO ELSE PEWC.BALANCE_RATIO END AS
+        SYSTEM_GENERATE_PRICE,
+        #{normPrice}/100 * CASE WHEN PMWC.USER_TYPE = 1 THEN PEWC.SUM_BALANCE_RATIO ELSE PEWC.BALANCE_RATIO END AS
+        FACT_PRICE
+        FROM PRCE_MARKETING_STATUS PMS
+        INNER JOIN PRCE_MARKETING_WAY_CONFIG PMWC
+        ON PMWC.DEL_FLG = 0
+        AND PMWC.MARKETING_STATUS_ID = #{marketingStatusId}
+        AND PMWC.USER_TYPE = #{userType}
+        <if test="buyerLevel != null and buyerLevel != ''">
+            AND PMWC.BUYER_LEVEL = #{buyerLevel}
+        </if>
+        INNER JOIN PRCE_EFFECTIVE_WAY_CONFIG PEWC
+        ON PEWC.DEL_FLG = 0
+        AND PEWC.MARKETING_WAY_CONFIG_ID= PMWC.MARKETING_WAY_CONFIG_ID
+        WHERE PMS.DEL_FLG = 0
+        AND PMS.MARKETING_STATUS_ID = #{marketingStatusId}
+    </select>
+
+
+
+
+
+
+
+    <update id="batchDelete" parameterType="com.bms.prce.bean.param.PRCE0210IDealParam">
+        UPDATE PRCE_PRICE_PLATE_DETAIL PPPD
+        INNER JOIN (
+        SELECT
+        PRICE_PLATE_ID
+        FROM
+        PRCE_PRICE_PLATE
+        WHERE DEL_FLG = 0
+        AND MARKETING_WAY_CONFIG_ID IN
+        <foreach collection="marketingWayConfigIds" item="item" index="index" open="(" separator="," close=")">#{item}
+        </foreach>
+        <![CDATA[AND START_TIME = '${updTimeStr}']]>
+        ) t1
+        ON t1.PRICE_PLATE_ID = PPPD.PRICE_PLATE_ID
+        SET PPPD.DEL_FLG = 1,
+        PPPD.UPD_ID = #{updId},
+        PPPD.UPD_TIME = #{updTimeStr},
+        PPPD.VERSION = PPPD.VERSION + 1
+        WHERE PPPD.DEL_FLG = 0
+    </update>
+
+    <insert id="save" parameterType="com.bms.prce.bean.param.PRCE0210IDealParam">
+        INSERT INTO PRCE_PRICE_PLATE_DETAIL (
+        PRICE_PLATE_ID,
+        WAY_CONFIG_ID,
+        WAY_TYPE_ID,
+        BALANCE_RATIO,
+        START_QTY,
+        END_QTY,
+        UOM,
+        SYSTEM_GENERATE_PRICE,
+        FACT_PRICE,
+        DEL_FLG,
+        CRT_Id,
+        CRT_TIME,
+        UPD_Id,
+        UPD_TIME,
+        VERSION
+        )SELECT
+        PPP.PRICE_PLATE_ID AS pricePlateId,
+        PEWC.WAY_EFFECTIVE_CONFIG_ID AS wayConfigId,
+        PEWC.WAY_TYPE_ID AS wayTypeId,
+        CASE WHEN PPP.USER_TYPE = 1 THEN PEWC.SUM_BALANCE_RATIO ELSE PEWC.BALANCE_RATIO END AS balanceRatio,
+        PEWC.START_QTY AS startQty,
+        PEWC.END_QTY AS endQty,
+        PMS.UOM AS uom,
+        CASE WHEN PPP.USER_TYPE = 1 THEN PPP.NORM_PRICE * PEWC.SUM_BALANCE_RATIO/100 ELSE PPP.NORM_PRICE *
+        PEWC.BALANCE_RATIO/100 END AS systemGeneratePrice,
+        CASE WHEN PPP.USER_TYPE = 1 THEN PPP.NORM_PRICE * PEWC.SUM_BALANCE_RATIO/100 ELSE PPP.NORM_PRICE *
+        PEWC.BALANCE_RATIO/100 END AS factPrice,
+        0,
+        #{updId},
+        #{updTimeStr},
+        #{updId},
+        #{updTimeStr},
+        1
+        FROM
+        (
+        SELECT
+        PRICE_PLATE_ID,USER_TYPE,NORM_PRICE,MARKETING_WAY_CONFIG_ID,MARKETING_STATUS_ID,DEL_FLG
+        FROM
+        PRCE_PRICE_PLATE
+        WHERE DEL_FLG = 0
+        <if test="searchFlg == 0">
+        AND MARKETING_WAY_CONFIG_ID IN
+        <foreach collection="marketingWayConfigIds" item="item" index="index" open="(" separator="," close=")">#{item}
+        </foreach>
+        <![CDATA[AND START_TIME = '${updTimeStr}']]>
+        </if>
+        <if test="searchFlg == 1">
+            <![CDATA[AND CRT_TIME = '${updTimeStr}']]>
+        </if>
+        ) PPP
+        INNER JOIN PRCE_EFFECTIVE_WAY_CONFIG PEWC
+        ON PPP.MARKETING_WAY_CONFIG_ID = PEWC.MARKETING_WAY_CONFIG_ID
+        AND PEWC.DEL_FLG = 0
+        INNER JOIN PRCE_MARKETING_STATUS PMS
+        ON PPP.MARKETING_STATUS_ID = PMS.MARKETING_STATUS_ID
+        AND PMS.DEL_FLG = 0
+        WHERE PPP.DEL_FLG = 0
+    </insert>
+</mapper>

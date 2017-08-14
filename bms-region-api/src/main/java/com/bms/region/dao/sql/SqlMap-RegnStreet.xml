@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.region.dao.RegnStreetDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		STREET_ID AS streetId,
+		DISTRICT_ID AS districtId,
+		STREET_CODE AS streetCode,
+		STREET_NAME AS streetName,
+		DIVISION_LEVEL AS divisionLevel,
+		DISABLE_FLG AS disableFlg
+	</sql>
+
+    <sql id="selectColumns2">
+		p.PROVINCE_ID AS provinceId,
+		p.PROVINCE_CODE AS provinceCode,
+		p.PROVINCE_NAME AS provinceName,
+		c.CITY_CODE AS cityCode,
+		c.CITY_NAME AS cityName,
+		d.DISTRICT_ID AS districtId,
+		d.CITY_ID AS cityId,
+		d.DISTRICT_CODE AS districtCode,
+		d.DISTRICT_NAME AS districtName,
+		s.STREET_ID AS streetId,
+		s.STREET_CODE AS streetCode,
+		s.STREET_NAME AS streetName,
+		d.DIVISION_LEVEL AS divisionLevel,
+		d.DISABLE_FLG AS disableFlg
+	</sql>
+
+    <insert id="save" parameterType="com.bms.region.bean.param.StreetRsParam">
+		INSERT INTO REGN_STREET (
+		STREET_ID,
+		DISTRICT_ID,
+		STREET_CODE,
+		STREET_NAME,
+		DIVISION_LEVEL,
+		DISABLE_FLG	,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		UPD_ID,
+		UPD_TIME,
+		VERSION
+		)
+		VALUES (
+		#{streetId},
+		#{districtId},
+		#{streetCode},
+		#{streetName},
+		#{divisionLevel},
+		1,
+		false,
+		#{crtId},
+		#{crtTime},
+		#{updId},
+		#{updTime},
+		1
+		)
+	</insert>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO REGN_STREET (
+        STREET_ID,
+        DISTRICT_ID,
+        STREET_CODE,
+        STREET_NAME,
+        DIVISION_LEVEL,
+        DISABLE_FLG ,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="param" index="index" separator=",">
+            (
+            #{param.streetId},
+            #{param.districtId},
+            #{param.streetCode},
+            #{param.streetName},
+            #{param.divisionLevel},
+            1,
+            false,
+            #{param.crtId},
+            #{param.crtTime},
+            #{param.updId},
+            #{param.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.region.bean.param.BaseBean">
+        UPDATE REGN_STREET
+        SET
+        <if test="target.districtId != null">
+            DISTRICT_ID = #{target.districtId},
+        </if>
+        <if test="target.streetCode != null">
+            STREET_CODE = #{target.streetCode},
+        </if>
+        <if test="target.streetName != null">
+            STREET_NAME = #{target.streetName},
+        </if>
+        <if test="target.divisionLevel != null">
+            DIVISION_LEVEL = #{target.divisionLevel},
+        </if>
+        <if test="target.disableFlg != null">
+            DISABLE_FLG = #{target.disableFlg},
+        </if>
+        <if test="target.delFlg != null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+        UPD_TIME = #{target.updTime},
+        UPD_ID = #{target.updId}
+        WHERE
+        STREET_ID = #{filter.streetId}
+        AND DEL_FLG = FALSE
+    </update>
+
+    <select id="findOne" parameterType="com.bms.region.bean.param.StreetRsParam"
+            resultType="com.bms.region.bean.entity.RegnStreet">
+        SELECT
+        STREET_ID AS streetId
+        FROM
+        REGN_STREET
+        WHERE
+        DEL_FLG = FALSE
+        AND DISABLE_FLG = 1
+        AND DISTRICT_ID = #{districtId}
+        AND STREET_CODE = #{streetCode}
+        <if test="streetId != null and streetId != ''">
+            AND STREET_ID &lt;&gt; #{streetId}
+        </if>
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.region.bean.param.StreetRsPageParam"
+            resultType="com.bms.region.bean.result.StreetRestResult">
+        SELECT
+        <include refid="selectColumns2"/>
+        FROM REGN_STREET s
+        INNER JOIN REGN_DISTRICT d ON d.DISTRICT_ID = s.DISTRICT_ID AND d.DEL_FLG = FALSE AND d.DISABLE_FLG = TRUE
+        INNER JOIN REGN_CITY c ON d.CITY_ID = c.CITY_ID AND c.DEL_FLG = FALSE AND c.DISABLE_FLG = TRUE
+        INNER JOIN REGN_PROVINCE p ON p.PROVINCE_ID = c.PROVINCE_ID AND p.DEL_FLG = FALSE AND p.DISABLE_FLG = TRUE
+        WHERE
+        s.DEL_FLG = FALSE
+        AND s.DISABLE_FLG = 1
+        <if test="cityId != null and cityId != ''">
+            AND c.CITY_ID = #{cityId}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND c.CITY_CODE = #{cityCode}
+        </if>
+        <if test="cityName != null and cityName != ''">
+            AND c.CITY_NAME LIKE #{cityName}
+        </if>
+        <if test="districtId != null and districtId != ''">
+            AND d.DISTRICT_ID = #{districtId}
+        </if>
+        <if test="districtCode != null and districtCode != ''">
+            AND d.DISTRICT_CODE = #{districtCode}
+        </if>
+        <if test="districtName != null and districtName != ''">
+            AND d.DISTRICT_NAME LIKE #{districtName}
+        </if>
+        <if test="streetCode != null and streetCode != ''">
+            AND s.STREET_CODE = #{streetCode}
+        </if>
+        <if test="streetName != null and streetName != ''">
+            AND s.STREET_NAME LIKE #{streetName}
+        </if>
+        <if test="streetId != null and streetId != ''">
+            AND s.STREET_ID = #{streetId}
+        </if>
+    </select>
+
+
+    <select id="findAll" parameterType="com.bms.region.bean.param.StreetRsParam"
+            resultType="com.bms.region.bean.result.StreetRestResult">
+        SELECT
+        <include refid="selectColumns2"/>
+        FROM REGN_STREET s
+        INNER JOIN REGN_DISTRICT d ON d.DISTRICT_ID = s.DISTRICT_ID AND d.DEL_FLG = FALSE AND d.DISABLE_FLG = TRUE
+        INNER JOIN REGN_CITY c ON d.CITY_ID = c.CITY_ID AND c.DEL_FLG = FALSE AND c.DISABLE_FLG = TRUE
+        INNER JOIN REGN_PROVINCE p ON p.PROVINCE_ID = c.PROVINCE_ID AND p.DEL_FLG = FALSE AND p.DISABLE_FLG = TRUE
+        WHERE
+        s.DEL_FLG = FALSE
+        AND s.DISABLE_FLG = 1
+        <if test="cityId != null and cityId != ''">
+            AND c.CITY_ID = #{cityId}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND c.CITY_CODE = #{cityCode}
+        </if>
+        <if test="cityName != null and cityName != ''">
+            AND c.CITY_NAME = #{cityName}
+        </if>
+        <if test="districtId != null and districtId != ''">
+            AND d.DISTRICT_ID = #{districtId}
+        </if>
+        <if test="streetCode != null and streetCode != ''">
+            AND s.STREET_CODE = #{streetCode}
+        </if>
+        <if test="streetName != null and streetName != ''">
+            AND s.STREET_NAME = #{streetName}
+        </if>
+        <if test="streetId != null and streetId != ''">
+            AND s.STREET_ID = #{streetId}
+        </if>
+        GROUP BY s.STREET_ID
+    </select>
+
+    <select id="count" parameterType="com.bms.region.bean.param.StreetRsParam" resultType="int">
+		SELECT
+		count(1)
+		FROM
+		REGN_STREET
+		WHERE
+		1 = 1
+		AND DEL_FLG = FALSE
+        AND DISABLE_FLG = 1
+		AND CONCAT(DISTRICT_ID,STREET_CODE) = #{idCode}
+	</select>
+
+</mapper>

@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bypo.dao.BypoStandardProductDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		STANDARD_PRODUCT_ID AS standardProductId,
+		BUYER_POOL_ID AS buyerPoolId,
+		CLASSES_ID AS classesId,
+		CLASSES_CODE AS classesCode,
+		CLASSES_NAME AS classesName,
+		MACHINING_ID AS machiningId,
+		MACHINING_CODE AS machiningCode,
+		MACHINING_NAME AS machiningName,
+		BREED_ID AS breedId,
+		BREED_CODE AS breedCode,
+		BREED_SALES_NAME AS breedSalesName,
+		BREED_SCIENTIFIC_NAME AS breedScientificName,
+		BREED_LOCAL_NAME AS breedLocalName,
+		FEATURE_ID AS featureId,
+		FEATURE_CODE AS featureCode,
+		FEATURE_NAME AS featureName,
+		BRAND_ID AS brandId,
+		BRAND_CODE AS brandCode,
+		BRAND_NAME AS brandName,
+		PRODUCER_ID AS producerId,
+		PRODUCER_CODE AS producerCode,
+		PRODUCER_NAME AS producerName,
+		DEMAND_LEVEL AS demandLevel
+	</sql>
+
+    <insert id="save" parameterType="com.bms.bypo.bean.entity.BypoStandardProduct">
+		INSERT INTO BYPO_STANDARD_PRODUCT (
+			STANDARD_PRODUCT_ID,
+			BUYER_POOL_ID,
+			CLASSES_ID,
+			CLASSES_CODE,
+			CLASSES_NAME,
+			MACHINING_ID,
+			MACHINING_CODE,
+			MACHINING_NAME,
+			BREED_ID,
+			BREED_CODE,
+			BREED_SALES_NAME,
+			BREED_SCIENTIFIC_NAME,
+			BREED_LOCAL_NAME,
+			FEATURE_ID,
+			FEATURE_CODE,
+			FEATURE_NAME,
+			BRAND_ID,
+			BRAND_CODE,
+			BRAND_NAME,
+			PRODUCER_ID,
+			PRODUCER_CODE,
+			PRODUCER_NAME,
+			DEMAND_LEVEL,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{standardProductId},
+			#{buyerPoolId},
+			#{classesId},
+			#{classesCode},
+			#{classesName},
+			#{machiningId},
+			#{machiningCode},
+			#{machiningName},
+			#{breedId},
+			#{breedCode},
+			#{breedSalesName},
+			#{breedScientificName},
+			#{breedLocalName},
+			#{featureId},
+			#{featureCode},
+			#{featureName},
+			#{brandId},
+			#{brandCode},
+			#{brandName},
+			#{producerId},
+			#{producerCode},
+			#{producerName},
+			#{demandLevel},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.bypo.bean.entity.BypoStandardProduct">
+        UPDATE BYPO_STANDARD_PRODUCT
+        SET
+        <if test="target.classesId != null">
+            CLASSES_ID = #{target.classesId},
+        </if>
+        <if test="target.classesCode != null">
+            CLASSES_CODE = #{target.classesCode},
+        </if>
+        <if test="target.classesName != null">
+            CLASSES_NAME = #{target.classesName},
+        </if>
+        <if test="target.machiningId != null">
+            MACHINING_ID = #{target.machiningId},
+        </if>
+        <if test="target.machiningCode != null">
+            MACHINING_CODE = #{target.machiningCode},
+        </if>
+        <if test="target.machiningName != null">
+            MACHINING_NAME = #{target.machiningName},
+        </if>
+        <if test="target.breedId != null">
+            BREED_ID = #{target.breedId},
+        </if>
+        <if test="target.breedCode != null">
+            BREED_CODE = #{target.breedCode},
+        </if>
+        <if test="target.breedSalesName != null">
+            BREED_SALES_NAME = #{target.breedSalesName},
+        </if>
+        <if test="target.breedScientificName != null">
+            BREED_SCIENTIFIC_NAME = #{target.breedScientificName},
+        </if>
+        <if test="target.breedLocalName != null">
+            BREED_LOCAL_NAME = #{target.breedLocalName},
+        </if>
+        <if test="target.featureId != null">
+            FEATURE_ID = #{target.featureId},
+        </if>
+        <if test="target.featureCode != null">
+            FEATURE_CODE = #{target.featureCode},
+        </if>
+        <if test="target.featureName != null">
+            FEATURE_NAME = #{target.featureName},
+        </if>
+        <!--<if test="target.brandId != null">
+            BRAND_ID = #{target.brandId},
+        </if>-->
+        <if test="target.brandCode != null">
+            BRAND_CODE = #{target.brandCode},
+        </if>
+        <if test="target.brandName != null">
+            BRAND_NAME = #{target.brandName},
+        </if>
+        <!--<if test="target.brandName != null">
+            PRODUCER_ID = #{target.producerId},
+        </if>-->
+        <if test="target.producerCode != null">
+            PRODUCER_CODE = #{target.producerCode},
+        </if>
+        <if test="target.producerName != null">
+            PRODUCER_NAME = #{target.producerName},
+        </if>
+        <if test="target.demandLevel != null">
+            DEMAND_LEVEL = #{target.demandLevel},
+        </if>
+        BRAND_ID = #{target.brandId},
+        PRODUCER_ID = #{target.producerId},
+        DEL_FLG = #{target.delFlg},
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        STANDARD_PRODUCT_ID = #{filter.standardProductId}
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.bypo.bean.entity.BypoStandardProduct">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYPO_STANDARD_PRODUCT
+        WHERE
+        STANDARD_PRODUCT_ID = #{standardProductId}
+    </select>
+
+    <select id="findAll" parameterType="com.framework.base.rest.param.BaseRestParam"
+            resultType="com.bms.bypo.bean.entity.BypoStandardProduct">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYPO_STANDARD_PRODUCT
+        WHERE
+        1 = 1
+        <if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND A.DEL_FLG = #{filterMap.delFlg}
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYPO_STANDARD_PRODUCT
+        WHERE
+        1 = 1
+        <if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND A.DEL_FLG = #{filterMap.delFlg}
+        </if>
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.bypo.bean.param.StandardProductRsParam"
+            resultType="com.bms.bypo.bean.entity.BypoStandardProduct">
+        SELECT
+        B.BUYER_POOL_ID AS buyerPoolId,
+        A.CLASSES_ID AS classesId,
+        A.MACHINING_ID AS machiningId,
+        A.BREED_ID AS breedId,
+        A.BRAND_ID AS brandId,
+        A.PRODUCER_ID AS producerId,
+        A.FEATURE_ID AS featureId,
+        A.STANDARD_PRODUCT_ID AS standardProductId
+        FROM
+        BYPO_STANDARD_PRODUCT A, BYPO_BUYER_POOL B
+        WHERE
+        1 = 1
+        AND A.DEL_FLG = false
+        AND B.DEL_FLG = false
+        AND A.BUYER_POOL_ID = B.BUYER_POOL_ID
+        <if test="buyerPoolId != null and buyerPoolId != ''">
+            AND A.BUYER_POOL_ID = #{buyerPoolId}
+        </if>
+        <if test="standardProductId !=null and standardProductId !=''">
+            AND A.STANDARD_PRODUCT_ID = #{standardProductId}
+        </if>
+        <if test="lgcsAreaCode !=null and lgcsAreaCode !=''">
+            AND B.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="buyerType !=null and buyerType !=''">
+            AND B.BUYER_TYPE = #{buyerType}
+        </if>
+        <if test="buyerTypeName !=null and buyerTypeName !=''">
+            AND B.BUYER_TYPE_NAME = #{buyerTypeName}
+        </if>
+        <if test="buyerFirstCategory !=null and buyerFirstCategory !=''">
+            AND B.BUYER_FIRST_CATEGORY = #{buyerFirstCategory}
+        </if>
+        <if test="buyerFirstCategoryName !=null and buyerFirstCategoryName !=''">
+            AND B.BUYER_FIRST_CATEGORY_NAME = #{buyerFirstCategoryName}
+        </if>
+        <if test="buyerSubCategory !=null and buyerSubCategory !=''">
+            AND B.BUYER_SUB_CATEGORY = #{buyerSubCategory}
+        </if>
+        <if test="buyerSubCategoryName !=null and buyerSubCategoryName !=''">
+            AND B.BUYER_SUB_CATEGORY_NAME = #{buyerSubCategoryName}
+        </if>
+        <if test="buyerPoolName !=null and buyerPoolName !=''">
+            AND B.BUYER_POOL_NAME = #{buyerPoolName}
+        </if>
+        <if test="buyerPoolCode !=null and buyerPoolCode !=''">
+            AND B.BUYER_POOL_CODE = #{buyerPoolCode}
+        </if>
+        <if test="demandLevel !=null and demandLevel !=''">
+            AND A.DEMAND_LEVEL = #{demandLevel}
+        </if>
+        <if test="breedCode !=null and breedCode !=''">
+            AND A.BREED_CODE = #{breedCode}
+        </if>
+        <if test="breedSalesName !=null and breedSalesName !=''">
+            AND A.BREED_SALES_NAME = #{breedSalesName}
+        </if>
+        <if test="featureCode !=null and featureCode !=''">
+            AND A.FEATURE_CODE = #{featureCode}
+        </if>
+        <if test="featureName !=null and featureName !=''">
+            AND A.FEATURE_NAME = #{featureName}
+        </if>
+        <if test="brandCode !=null and brandCode !=''">
+            AND A.BRAND_CODE = #{brandCode}
+        </if>
+        <if test="brandName !=null and brandName !=''">
+            AND A.BRAND_NAME = #{brandName}
+        </if>
+        <if test="producerCode !=null and producerCode !=''">
+            AND A.PRODUCER_CODE = #{producerCode}
+        </if>
+        <if test="producerName !=null and producerName !=''">
+            AND A.PRODUCER_NAME = #{producerName}
+        </if>
+        <if test="buyerPoolId !=null and buyerPoolId !=''">
+            AND A.BUYER_POOL_ID = #{buyerPoolId}
+        </if>
+        <if test="classesId !=null and classesId !=''">
+            AND A.CLASSES_ID = #{classesId}
+        </if>
+        <if test="machiningId !=null and machiningId !=''">
+            AND A.MACHINING_ID = #{machiningId}
+        </if>
+        <if test="breedId !=null and breedId !=''">
+            AND A.BREED_ID = #{breedId}
+        </if>
+        <if test="featureId !=null and featureId !=''">
+            AND A.FEATURE_ID = #{featureId}
+        </if>
+        <if test="brandId !=null and brandId !=''">
+            AND A.BRAND_ID = #{brandId}
+        </if>
+        <if test="producerId !=null and producerId !=''">
+            AND A.PRODUCER_ID = #{producerId}
+        </if>
+    </select>
+
+    <select id="findStandardProduct" resultType="com.bms.bypo.bean.param.StandardProductRsParam"
+            parameterType="com.bms.bypo.bean.param.StandardProductRsParam">
+        SELECT
+        B.BUYER_POOL_ID AS buyerPoolId,
+        A.CLASSES_ID AS classesId,
+        A.MACHINING_ID AS machiningId,
+        A.BREED_ID AS breedId,
+        A.BRAND_ID AS brandId,
+        A.PRODUCER_ID AS producerId,
+        A.FEATURE_ID AS featureId,
+        A.STANDARD_PRODUCT_ID AS standardProductId
+        FROM
+        BYPO_STANDARD_PRODUCT A, BYPO_BUYER_POOL B
+        WHERE
+        1 = 1
+        AND A.DEL_FLG = false
+        AND B.DEL_FLG = false
+        AND A.BUYER_POOL_ID = B.BUYER_POOL_ID
+        <if test="buyerPoolId != null and buyerPoolId != ''">
+            AND A.BUYER_POOL_ID = #{buyerPoolId}
+        </if>
+        <if test="standardProductId !=null and standardProductId !=''">
+            AND A.STANDARD_PRODUCT_ID = #{standardProductId}
+        </if>
+        <if test="lgcsAreaCode !=null and lgcsAreaCode !=''">
+            AND B.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="buyerType !=null and buyerType !=''">
+            AND B.BUYER_TYPE = #{buyerType}
+        </if>
+        <if test="buyerTypeName !=null and buyerTypeName !=''">
+            AND B.BUYER_TYPE_NAME = #{buyerTypeName}
+        </if>
+        <if test="buyerFirstCategory !=null and buyerFirstCategory !=''">
+            AND B.BUYER_FIRST_CATEGORY = #{buyerFirstCategory}
+        </if>
+        <if test="buyerFirstCategoryName !=null and buyerFirstCategoryName !=''">
+            AND B.BUYER_FIRST_CATEGORY_NAME = #{buyerFirstCategoryName}
+        </if>
+        <if test="buyerSubCategory !=null and buyerSubCategory !=''">
+            AND B.BUYER_SUB_CATEGORY = #{buyerSubCategory}
+        </if>
+        <if test="buyerSubCategoryName !=null and buyerSubCategoryName !=''">
+            AND B.BUYER_SUB_CATEGORY_NAME = #{buyerSubCategoryName}
+        </if>
+        <if test="buyerPoolName !=null and buyerPoolName !=''">
+            AND B.BUYER_POOL_NAME = #{buyerPoolName}
+        </if>
+        <if test="buyerPoolCode !=null and buyerPoolCode !=''">
+            AND B.BUYER_POOL_CODE = #{buyerPoolCode}
+        </if>
+        <if test="demandLevel !=null and demandLevel !=''">
+            AND A.DEMAND_LEVEL = #{demandLevel}
+        </if>
+        <if test="breedCode !=null and breedCode !=''">
+            AND A.BREED_CODE = #{breedCode}
+        </if>
+        <if test="breedSalesName !=null and breedSalesName !=''">
+            AND A.BREED_SALES_NAME = #{breedSalesName}
+        </if>
+        <if test="featureCode !=null and featureCode !=''">
+            AND A.FEATURE_CODE = #{featureCode}
+        </if>
+        <if test="featureName !=null and featureName !=''">
+            AND A.FEATURE_NAME = #{featureName}
+        </if>
+        <if test="brandCode !=null and brandCode !=''">
+            AND A.BRAND_CODE = #{brandCode}
+        </if>
+        <if test="brandName !=null and brandName !=''">
+            AND A.BRAND_NAME = #{brandName}
+        </if>
+        <if test="producerCode !=null and producerCode !=''">
+            AND A.PRODUCER_CODE = #{producerCode}
+        </if>
+        <if test="producerName !=null and producerName !=''">
+            AND A.PRODUCER_NAME = #{producerName}
+        </if>
+        <if test="buyerPoolId !=null and buyerPoolId !=''">
+            AND A.BUYER_POOL_ID = #{buyerPoolId}
+        </if>
+        <if test="classesId !=null and classesId !=''">
+            AND A.CLASSES_ID = #{classesId}
+        </if>
+        <if test="machiningId !=null and machiningId !=''">
+            AND A.MACHINING_ID = #{machiningId}
+        </if>
+        <if test="breedId !=null and breedId !=''">
+            AND A.BREED_ID = #{breedId}
+        </if>
+        <if test="featureId !=null and featureId !=''">
+            AND A.FEATURE_ID = #{featureId}
+        </if>
+        <if test="modifyFlg == 1">
+            AND A.BRAND_ID IS NULL
+            AND A.PRODUCER_ID IS NULL
+        </if>
+        <if test="modifyFlg == 2">
+            AND A.BRAND_ID = #{brandId}
+            AND A.PRODUCER_ID IS NULL
+        </if>
+        <if test="modifyFlg == 3">
+            AND A.BRAND_ID IS NULL
+            AND A.PRODUCER_ID = #{producerId}
+        </if>
+    </select>
+
+    <select id="standardProductIsExist" resultType="int" parameterType="com.bms.bypo.bean.param.StandardProductRsParam">
+        SELECT
+        COUNT(1)
+        FROM
+        bypo_standard_product
+        WHERE
+        DEL_FLG = FALSE
+        <if test="buyerPoolId != null and buyerPoolId != ''">
+            AND BUYER_POOL_ID = #{buyerPoolId}
+        </if>
+        <if test="classesId != null and classesId != ''">
+            AND CLASSES_ID = #{classesId}
+        </if>
+        <if test="machiningId != null and machiningId != ''">
+            AND MACHINING_ID = #{machiningId}
+        </if>
+        <if test="breedId != null and breedId != ''">
+            AND BREED_ID = #{breedId}
+        </if>
+        <if test="featureId != null and featureId != ''">
+            AND FEATURE_ID = #{featureId}
+        </if>
+        <if test="brandId != null and brandId != ''">
+            AND BRAND_ID = #{brandId}
+        </if>
+        <if test="brandId == null">
+            AND BRAND_ID IS NULL
+        </if>
+        <if test="producerId != null and producerId != ''">
+            AND PRODUCER_ID = #{producerId}
+        </if>
+        <if test="producerId == null">
+            AND PRODUCER_ID IS NULL
+        </if>
+        <if test="standardProductId != null and standardProductId != ''">
+            AND STANDARD_PRODUCT_ID != #{standardProductId}
+        </if>
+    </select>
+</mapper>

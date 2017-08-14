@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifPartnerDistributionDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		ID AS id,
+		PARTNER_ID AS partnerId,
+		LGCS_AREA_ID AS lgcsAreaId,
+		LGCS_AREA_CODE AS lgcsAreaCode,
+		LGCS_AREA_NAME AS lgcsAreaName,
+		ZONE_ID AS zoneId,
+		ZONE_CODE AS zoneCode,
+		ZONE_NAME AS zoneName,
+		DISTRIBUTION_ID AS distributionId,
+		DISTRIBUTION_TYPE AS distributionType,
+		DISTRIBUTION_NAME AS distributionName,
+		DISTRIBUTION_CODE AS distributionCode,
+		AUTHORIZED_PARTNER AS authorizedPartner
+	</sql>
+
+    <insert id="save" parameterType="com.bms.agif.bean.entity.AgifPartnerDistribution">
+		INSERT INTO AGIF_PARTNER_DISTRIBUTION (
+			ID,
+			PARTNER_ID,
+			LGCS_AREA_ID,
+			LGCS_AREA_CODE,
+			LGCS_AREA_NAME,
+			ZONE_ID,
+			ZONE_CODE,
+			ZONE_NAME,
+			DISTRIBUTION_ID,
+			DISTRIBUTION_TYPE,
+			DISTRIBUTION_NAME,
+			DISTRIBUTION_CODE,
+			AUTHORIZED_PARTNER,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{id},
+			#{partnerId},
+			#{lgcsAreaId},
+			#{lgcsAreaCode},
+			#{lgcsAreaName},
+			#{zoneId},
+			#{zoneCode},
+			#{zoneName},
+			#{distributionId},
+			#{distributionType},
+			#{distributionName},
+			#{distributionCode},
+			#{authorizedPartner},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO AGIF_PARTNER_DISTRIBUTION (
+        ID,
+        PARTNER_ID,
+        LGCS_AREA_ID,
+        LGCS_AREA_CODE,
+        LGCS_AREA_NAME,
+        ZONE_ID,
+        ZONE_CODE,
+        ZONE_NAME,
+        DISTRIBUTION_ID,
+        DISTRIBUTION_TYPE,
+        DISTRIBUTION_NAME,
+        DISTRIBUTION_CODE,
+        AUTHORIZED_PARTNER,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="param" index="index" separator=",">
+            (
+            #{param.id},
+            #{param.partnerId},
+            #{param.lgcsAreaId},
+            #{param.lgcsAreaCode},
+            #{param.lgcsAreaName},
+            #{param.zoneId},
+            #{param.zoneCode},
+            #{param.zoneName},
+            #{param.distributionId},
+            #{param.distributionType},
+            #{param.distributionName},
+            #{param.distributionCode},
+            #{param.authorizedPartner},
+            #{param.delFlg},
+            #{param.crtId},
+            #{param.crtTime},
+            #{param.updId},
+            #{param.updTime},
+            #{param.version}
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.entity.AgifPartnerDistribution">
+        UPDATE AGIF_PARTNER_DISTRIBUTION
+        SET
+        <if test="target.partnerId != null">
+            PARTNER_ID = #{target.partnerId},
+        </if>
+        <if test="target.lgcsAreaId != null">
+            LGCS_AREA_ID = #{target.lgcsAreaId},
+        </if>
+        <if test="target.lgcsAreaCode != null">
+            LGCS_AREA_CODE = #{target.lgcsAreaCode},
+        </if>
+        <if test="target.lgcsAreaName != null">
+            LGCS_AREA_NAME = #{target.lgcsAreaName},
+        </if>
+        <if test="target.zoneId != null">
+            ZONE_ID = #{target.zoneId},
+        </if>
+        <if test="target.zoneCode != null">
+            ZONE_CODE = #{target.zoneCode},
+        </if>
+        <if test="target.zoneName != null">
+            ZONE_NAME = #{target.zoneName},
+        </if>
+        <if test="target.distributionId != null">
+            DISTRIBUTION_ID = #{target.distributionId},
+        </if>
+        <if test="target.distributionType != null">
+            DISTRIBUTION_TYPE = #{target.distributionType},
+        </if>
+        <if test="target.distributionName != null">
+            DISTRIBUTION_NAME = #{target.distributionName},
+        </if>
+        <if test="target.distributionCode != null">
+            DISTRIBUTION_CODE = #{target.distributionCode},
+        </if>
+        <if test="target.authorizedPartner != null">
+            AUTHORIZED_PARTNER = #{target.authorizedPartner},
+        </if>
+        <if test="target.delFlg != null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        ID = #{filter.id}
+        AND DEL_FLG = FALSE
+    </update>
+
+    <delete id="remove" parameterType="com.bms.agif.bean.param.PartnerDistributionRsParam">
+        DELETE
+        FROM
+        AGIF_PARTNER_DISTRIBUTION
+        WHERE
+        DEL_FLG = FALSE
+        <!--<if test="partnerId != null and partnerId != ''">
+            AND PARTNER_ID = #{partnerId}
+        </if>-->
+        <if test="distributionId != null and distributionId != ''">
+            AND DISTRIBUTION_ID = #{distributionId}
+        </if>
+    </delete>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.agif.bean.entity.AgifPartnerDistribution">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_PARTNER_DISTRIBUTION
+        WHERE
+        ID = #{id}
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.agif.bean.param.PartnerDistributionRsParam"
+            resultType="com.bms.agif.bean.param.PartnerDistributionRsParam">
+        SELECT
+        dis.ID AS id,
+        dis.PARTNER_ID AS partnerId,
+        dis.LGCS_AREA_ID AS lgcsAreaId,
+        dis.LGCS_AREA_CODE AS lgcsAreaCode,
+        dis.LGCS_AREA_NAME AS lgcsAreaName,
+        dis.ZONE_ID AS zoneId,
+        dis.ZONE_CODE AS zoneCode,
+        dis.ZONE_NAME AS zoneName,
+        dis.DISTRIBUTION_ID AS distributionId,
+        dis.DISTRIBUTION_TYPE AS distributionType,
+        dis.DISTRIBUTION_NAME AS distributionName,
+        dis.DISTRIBUTION_CODE AS distributionCode,
+        dis.AUTHORIZED_PARTNER AS authorizedPartner
+        FROM
+        AGIF_PARTNER_DISTRIBUTION dis
+        LEFT JOIN agif_partner par ON dis.DEL_FLG = par.DEL_FLG AND dis.PARTNER_ID = par.PARTNER_ID
+        WHERE
+        dis.DEL_FLG = FALSE
+        <if test="id != null and id != ''">
+            AND dis.ID = #{id}
+        </if>
+        <if test="partnerId != null and partnerId != ''">
+            AND dis.PARTNER_ID = #{partnerId}
+        </if>
+        <if test="partnerCode != null and partnerCode != ''">
+            AND par.PARTNER_CODE = #{partnerCode}
+        </if>
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND dis.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND dis.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND dis.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+        <if test="zoneId != null and zoneId != ''">
+            AND dis.ZONE_ID = #{zoneId}
+        </if>
+        <if test="zoneCode != null and zoneCode != ''">
+            AND dis.ZONE_CODE = #{zoneCode}
+        </if>
+        <if test="zoneName != null and zoneName != ''">
+            AND dis.ZONE_NAME LIKE #{zoneName}
+        </if>
+        <if test="distributionId != null and distributionId != ''">
+            AND dis.DISTRIBUTION_ID = #{distributionId}
+        </if>
+        <if test="distributionType != null and distributionType != ''">
+            AND dis.DISTRIBUTION_TYPE = #{distributionType}
+        </if>
+        <if test="distributionName != null and distributionName != ''">
+            AND dis.DISTRIBUTION_NAME LIKE #{distributionName}
+        </if>
+        <if test="distributionCode != null and distributionCode != ''">
+            AND dis.DISTRIBUTION_CODE LIKE #{distributionCode}
+        </if>
+        <if test="authorizedPartner != null and authorizedPartner != ''">
+            AND dis.AUTHORIZED_PARTNER = #{authorizedPartner}
+        </if>
+    </select>
+
+    <select id="findLgcsAreaIsExist" parameterType="com.bms.agif.bean.param.PartnerDistributionRsParam"
+            resultType="int">
+        SELECT
+        count(1)
+        FROM
+        AGIF_PARTNER_DISTRIBUTION
+        WHERE
+        DEL_FLG = FALSE
+        AND LGCS_AREA_ID != #{lgcsAreaId}
+        AND PARTNER_ID = #{partnerId}
+    </select>
+
+    <select id="findDistributionIsExist" parameterType="com.bms.agif.bean.param.PartnerDistributionRsParam"
+            resultType="int">
+        SELECT
+        count(1)
+        FROM
+        AGIF_PARTNER_DISTRIBUTION
+        WHERE
+        DEL_FLG = FALSE
+        AND DISTRIBUTION_ID = #{distributionId}
+        AND PARTNER_ID = #{partnerId}
+    </select>
+</mapper>

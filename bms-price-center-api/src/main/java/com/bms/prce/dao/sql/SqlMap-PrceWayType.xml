@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.prce.dao.PrceWayTypeDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		WAY_TYPE_ID AS wayTypeId,
+		WAY_TYPE_NAME AS wayTypeName,
+		PRICE_MARGIN_PLATE_RATIO AS priceMarginPlateRatio,
+		PRICE_MARGIN_SA_RATIO AS priceMarginSaRatio,
+		VERSION AS version
+	</sql>
+
+    <!--价盘通道分类修改：新增-->
+    <insert id="save" parameterType="com.bms.prce.bean.entity.PrceWayType">
+		INSERT INTO PRCE_WAY_TYPE (
+		WAY_TYPE_ID,
+		WAY_TYPE_NAME,
+		PRICE_MARGIN_PLATE_RATIO,
+		PRICE_MARGIN_SA_RATIO,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		VERSION
+		)
+		VALUES (
+		#{wayTypeId},
+		#{wayTypeName},
+		#{priceMarginPlateRatio},
+		#{priceMarginSaRatio},
+		0,
+		#{crtId},
+		#{crtTime},
+		1
+		)
+	</insert>
+
+    <!--价盘通道分类修改：修改删除-->
+    <update id="modify" parameterType="com.bms.prce.bean.entity.PrceWayType">
+        UPDATE PRCE_WAY_TYPE
+        SET
+        <if test="delFlg==true">
+            DEL_FLG = #{delFlg},
+        </if>
+        <if test="delFlg==false or delFlg==null">
+            WAY_TYPE_NAME = #{wayTypeName},
+            PRICE_MARGIN_PLATE_RATIO = #{priceMarginPlateRatio},
+            PRICE_MARGIN_SA_RATIO = #{priceMarginSaRatio},
+        </if>
+        UPD_ID = #{updId},
+        UPD_TIME = #{updTime}
+        WHERE
+        WAY_TYPE_ID = #{wayTypeId}
+        AND DEL_FLG = 0
+    </update>
+
+    <!--价盘通道分类修改：验证通道分类名称、排序不重复-->
+    <select id="count" parameterType="com.bms.prce.bean.entity.PrceWayType" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        PRCE_WAY_TYPE
+        WHERE
+        DEL_FLG = 0
+        <if test="wayTypeName != null and wayTypeName != ''">
+            AND WAY_TYPE_NAME = #{wayTypeName}
+        </if>
+        <if test="wayTypeId != null and wayTypeId != ''">
+            AND WAY_TYPE_ID != #{wayTypeId}
+        </if>
+    </select>
+
+    <!--价盘通道分类查询：分页查询-->
+    <select id="findPageList" parameterType="com.bms.prce.bean.param.PRCE0201IParam"
+            resultType="com.bms.prce.bean.result.PRCE0201IResult">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        PRCE_WAY_TYPE
+        WHERE
+        DEL_FLG = 0
+        <if test="wayTypeName != null and wayTypeName != ''">
+            AND WAY_TYPE_NAME LIKE #{wayTypeName}
+        </if>
+    </select>
+</mapper>

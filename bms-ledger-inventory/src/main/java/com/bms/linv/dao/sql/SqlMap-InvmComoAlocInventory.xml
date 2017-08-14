@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmComoAlocInventoryDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		ALOC_NO AS alocNo,
+		L_A_ID AS laId,
+		S_PLAT_CODE AS splatCode,
+		OWNER_ID AS ownerId,
+		OWNER_CODE AS ownerCode,
+		OWNER_TYPE AS ownerType,
+		COMMODITY_ID AS commodityId,
+		UOM AS uom,
+		BIZ_TYPE AS bizType,
+		IV_TYPE AS ivType,
+		COMO_IV_TYPE AS comoIvType,
+		ALOC_QTY AS alocQty,
+		TGT_ID AS tgtId,
+		TGT_CODE AS tgtCode,
+		TGT_TYPE AS tgtType
+	</sql>
+	
+	<!--条件-->
+	<sql id="whereCondition">
+		<where>
+			1=1
+			<if test="alocNo !=null and alocNo !=''">
+				AND ALOC_NO = #{alocNo}
+			</if>
+			<if test="laId !=null and laId !=''">
+				AND L_A_ID = #{laId}
+			</if>
+			<if test="ownerId !=null and ownerId !=''">
+				AND OWNER_ID = #{ownerId}
+			</if>
+			<if test="ownerCode !=null and ownerCode !=''">
+				AND OWNER_CODE = #{ownerCode}
+			</if>
+			<if test="ownerType !=null and ownerType !=''">
+				AND OWNER_TYPE = #{ownerType}
+			</if>
+			<if test="splatCode !=null and splatCode !=''">
+				AND S_PLAT_CODE = #{splatCode}
+			</if>
+			<if test="tgtId !=null and tgtId !=''">
+				AND TGT_ID=#{tgtId}
+			</if>
+			<if test="tgtCode !=null and tgtCode !=''">
+				AND TGT_CODE=#{tgtCode}
+			</if>
+			<if test="tgtType !=null and tgtType !=''">
+				AND TGT_TYPE = #{tgtType}
+			</if>
+			<if test="bizType !=null and bizType !=''">
+				AND BIZ_TYPE =#{bizType}
+			</if>
+			<if test="ivType !=null and ivType !=''">
+				AND IV_TYPE = #{ivType}
+			</if>
+			<if test="commodityId !=null and commodityId !=''">
+				AND COMMODITY_ID = #{commodityId}
+			</if>
+			<if test="uom !=null and uom !=''">
+				AND UOM = #{uom}
+			</if>
+		<if test="comoIvType !=null and comoIvType !=''">
+				AND COMO_IV_TYPE = #{comoIvType}
+			</if>
+		</where>
+	</sql>
+
+    <insert id="save" parameterType="com.bms.linv.bean.entity.InvmComoAlocInventory">
+		INSERT INTO invm_como_aloc_inventory (
+			ALOC_NO,
+			L_A_ID,
+			S_PLAT_CODE,
+			OWNER_ID,
+			OWNER_CODE,
+			OWNER_TYPE,
+			COMMODITY_ID,
+			UOM,
+			BIZ_TYPE,
+			IV_TYPE,
+			COMO_IV_TYPE,
+			ALOC_QTY,
+			TGT_ID,
+			TGT_CODE,
+			TGT_TYPE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			VERSION
+		)
+		VALUES (
+			#{alocNo},
+			#{laId},
+			#{splatCode},
+			#{ownerId},
+			#{ownerCode},
+			#{ownerType},
+			#{commodityId},
+			#{uom},
+			#{bizType},
+			#{ivType},
+			#{comoIvType},
+			#{alocQty},
+			#{tgtId},
+			#{tgtCode},
+			#{tgtType},
+			0,
+			#{crtId},
+			#{crtTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.linv.bean.entity.InvmComoAlocInventory">
+		UPDATE invm_como_aloc_inventory 
+		SET 
+			ALOC_QTY =ALOC_QTY+ #{alocQty},
+			UPD_ID = #{updId},
+			UPD_TIME = #{updTime},
+		    VERSION = VERSION+1
+		WHERE ALOC_NO = #{alocNo}
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.linv.bean.entity.InvmComoAlocInventory">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_aloc_inventory
+		<include refid="whereCondition"/>
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.linv.bean.entity.InvmComoAlocInventory"             resultType="com.bms.linv.bean.entity.InvmComoAlocInventory">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_aloc_inventory
+		WHERE	
+			<include refid="whereCondition"/>
+	</select>
+	
+	<select id="countAll" parameterType="com.bms.linv.bean.entity.InvmComoAlocInventory" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			invm_como_aloc_inventory
+			<include refid="whereCondition"/>
+	</select>
+	
+</mapper>

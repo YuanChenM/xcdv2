@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimGradeDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		GRADE_ID AS gradeId,
+		BUYER_ID AS buyerId,
+		GRADE AS grade,
+		SINGEL_AMOUNT AS singelAmount,
+		ALL_AMOUNT AS allAmount,
+		CRT_TIME AS crtTime
+	</sql>
+
+    <insert id="save" parameterType="com.bms.byim.bean.entity.ByimGrade">
+		INSERT INTO byim_grade (
+			GRADE_ID,
+			BUYER_ID,
+			GRADE,
+			SINGEL_AMOUNT,
+			ALL_AMOUNT,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{gradeId},
+			#{buyerId},
+			#{grade},
+			#{singelAmount},
+			#{allAmount},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.byim.bean.entity.ByimGrade">
+		UPDATE byim_grade 
+		SET 
+			GRADE = #{grade},
+			SINGEL_AMOUNT = #{singelAmount},
+			ALL_AMOUNT = #{allAmount}
+		WHERE
+			GRADE_ID = #{gradeId}
+		AND BUYER_ID = #{buyerId}		
+	</update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.byim.bean.entity.ByimGrade">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        byim_grade
+        WHERE
+        GRADE_ID = #{gradeId}
+        AND BUYER_ID = #{buyerId}
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.byim.bean.param.GradeRsParam"
+            resultType="com.bms.byim.bean.param.GradeRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        byim_grade
+        WHERE
+        DEL_FLG = FALSE
+        <if test="buyerId != null and buyerId != ''">
+            AND BUYER_ID = #{buyerId}
+        </if>
+        <if test="grade != null and grade != ''">
+            AND GRADE LIKE #{grade}
+        </if>
+    </select>
+
+</mapper>

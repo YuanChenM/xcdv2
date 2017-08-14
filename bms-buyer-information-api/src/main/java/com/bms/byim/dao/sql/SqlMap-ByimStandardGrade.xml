@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimStandardGradeDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		GRADE_STANDARD_ID AS gradeStandardId,
+		GRADE_STANDARD AS gradeStandard,
+		SINGEL_AMOUNT AS singelAmount,
+		ALL_AMOUNT AS allAmount,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+
+    <insert id="save" parameterType="com.bms.byim.bean.entity.ByimStandardGrade">
+		INSERT INTO BYIM_STANDARD_GRADE (
+			GRADE_STANDARD_ID,
+			GRADE_STANDARD,
+			SINGEL_AMOUNT,
+			ALL_AMOUNT,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES (
+			#{gradeStandardId},
+			#{gradeStandard},
+			#{singelAmount},
+			#{allAmount},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYIM_STANDARD_GRADE
+        (GRADE_STANDARD_ID,
+        GRADE_STANDARD,
+        SINGEL_AMOUNT,
+        ALL_AMOUNT,
+
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" index="index" item="param" separator=",">
+            (
+            #{param.gradeStandardId},
+            #{param.gradeStandard},
+            #{param.singelAmount},
+            #{param.allAmount},
+
+            #{param.delFlg},
+            #{param.crtId},
+            #{param.crtTime},
+            #{param.updId},
+            #{param.updTime},
+            #{param.version}
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.byim.bean.entity.ByimStandardGrade">
+        UPDATE BYIM_STANDARD_GRADE
+        SET
+        <if test="target.gradeStandard !=null">
+            GRADE_STANDARD = #{target.gradeStandard},
+        </if>
+        SINGEL_AMOUNT = #{target.singelAmount},
+        ALL_AMOUNT = #{target.allAmount},
+        <if test="target.version !=null">
+            VERSION = #{target.version},
+        </if>
+        DEL_FLG = #{target.delFlg},
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        DEL_FLG=false
+        AND GRADE_STANDARD_ID = #{filter.gradeStandardId}
+    </update>
+
+    <select id="findOne" parameterType="com.bms.byim.bean.param.StandardGradeRsParam"
+            resultType="com.bms.byim.bean.param.StandardGradeRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_STANDARD_GRADE
+        WHERE
+        DEL_FLG=false
+        AND GRADE_STANDARD = #{gradeStandard}
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.byim.bean.param.StandardGradeRsParam"
+            resultType="com.bms.byim.bean.param.StandardGradeRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_STANDARD_GRADE
+        WHERE
+        DEL_FLG = FALSE
+        <if test="gradeStandardId !=null">
+            AND GRADE_STANDARD_ID =#{gradeStandardId}
+        </if>
+        <if test="gradeStandard !=null">
+            AND GRADE_STANDARD =#{gradeStandard}
+        </if>
+    </select>
+
+    <select id="findAll" parameterType="com.bms.byim.bean.param.StandardGradeRsParam"
+            resultType="com.bms.byim.bean.param.StandardGradeRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_STANDARD_GRADE
+        WHERE 1=1
+        AND DEL_FLG = FALSE
+
+        <if test="deliveryAreaId !=null">
+            AND DELIVERY_AREA_CODE != #{deliveryAreaCode}
+        </if>
+
+    </select>
+
+    <select id="count" parameterType="com.bms.byim.bean.param.StandardGradeRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYIM_STANDARD_GRADE
+        WHERE
+        DEL_FLG = FALSE
+        <if test="gradeStandardId !=null">
+            AND GRADE_STANDARD_ID =#{gradeStandardId}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimMarketingStatusDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		MARKETING_STATUS_ID AS marketingStatusId,
+		PARENT_ID AS parentId,
+		NODE_PATH AS nodePath,
+		MARKETING_STATUS_NAME AS marketingStatusName,
+		MARKETING_STATUS_CODE AS marketingStatusCode
+	</sql>
+
+	<insert id="save" parameterType="com.bms.byim.bean.entity.ByimMarketingStatus">
+		INSERT INTO BYIM_MARKETING_STATUS (
+			MARKETING_STATUS_ID,
+			PARENT_ID,
+			NODE_PATH,
+			MARKETING_STATUS_NAME,
+			MARKETING_STATUS_CODE			
+		)
+		VALUES (
+			#{marketingStatusId},
+			#{parentId},
+			#{nodePath},
+			#{marketingStatusName},
+			#{marketingStatusCode}
+		)
+	</insert>
+
+	<insert id="batchInsert" parameterType="List">
+		INSERT INTO BYIM_MARKETING_STATUS (
+		MARKETING_STATUS_ID,
+		PARENT_ID,
+		NODE_PATH,
+		MARKETING_STATUS_NAME,
+		MARKETING_STATUS_CODE,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		UPD_ID,
+		UPD_TIME,
+		VERSION
+		)
+		VALUES
+		<foreach collection="list" item="param" index="index" separator=",">
+			(
+			#{param.marketingStatusId},
+			#{param.parentId},
+			#{param.nodePath},
+			#{param.marketingStatusName},
+			#{param.marketingStatusCode},
+			#{param.delFlg},
+			#{param.crtId},
+			#{param.crtTime},
+			#{param.updId},
+			#{param.updTime},
+			#{param.version}
+			)
+		</foreach>
+	</insert>
+
+	<update id="modify" parameterType="com.bms.byim.bean.entity.ByimMarketingStatus">
+		UPDATE BYIM_MARKETING_STATUS
+		SET
+			<if test="target.parentId != null">
+				PARENT_ID = #{target.parentId},
+			</if>
+			<if test="target.nodePath != null">
+				NODE_PATH = #{target.nodePath},
+			</if>
+			<if test="target.marketingStatusName != null">
+				MARKETING_STATUS_NAME = #{target.marketingStatusName},
+			</if>
+			<if test="target.marketingStatusCode != null">
+				MARKETING_STATUS_CODE = #{target.marketingStatusCode},
+			</if>
+			<if test="target.updId != null">
+				UPD_ID = #{target.updId},
+			</if>
+			<if test="target.delFlg != null">
+				DEL_FLG = #{target.delFlg},
+			</if>
+			UPD_TIME = #{target.updTime}
+		WHERE
+			MARKETING_STATUS_ID = #{filter.marketingStatusId}
+			AND DEL_FLG = FALSE
+	</update>
+
+	<update id="deleteMarketingStatus" parameterType="List">
+        UPDATE BYIM_MARKETING_STATUS
+        SET
+          DEL_FLG = TRUE
+        WHERE DEL_FLG = FALSE
+        AND MARKETING_STATUS_ID in
+        <foreach collection="list" item="item" index="index" open="("
+                 separator="," close=")">
+            #{item.marketingStatusId}
+        </foreach>
+    </update>
+
+	<select id="findNodePath" resultType="com.bms.byim.bean.entity.ByimMarketingStatus" parameterType="com.bms.byim.bean.entity.ByimMarketingStatus">
+		SELECT
+		NODE_PATH AS nodePath
+		FROM
+		BYIM_MARKETING_STATUS
+        WHERE DEL_FLG = FALSE
+		AND MARKETING_STATUS_ID = #{marketingStatusId}
+	</select>
+
+    <select id="findMarketingStatusIds" resultType="com.bms.byim.bean.entity.ByimMarketingStatus" parameterType="com.bms.byim.bean.entity.ByimMarketingStatus">
+        SELECT
+        MARKETING_STATUS_ID AS marketingStatusId,
+        MARKETING_STATUS_CODE AS marketingStatusCode
+        FROM
+        BYIM_MARKETING_STATUS
+        WHERE NODE_PATH LIKE CONCAT(#{nodePath},',%')
+        UNION ALL
+		SELECT
+			MARKETING_STATUS_ID AS marketingStatusId,
+			MARKETING_STATUS_CODE AS marketingStatusCode
+		FROM
+			BYIM_MARKETING_STATUS
+		WHERE
+			NODE_PATH = #{nodePath}
+    </select>
+
+	<select id="findOne" parameterType="com.bms.byim.bean.entity.ByimMarketingStatus" resultType="com.bms.byim.bean.entity.ByimMarketingStatus">
+		SELECT
+			<include refid="selectColumns" />
+		FROM
+			BYIM_MARKETING_STATUS
+		WHERE
+			MARKETING_STATUS_ID = #{parentId}
+			AND DEL_FLG = FALSE
+	</select>
+
+	<select id="findMarketingStatusListByParentId" parameterType="com.bms.byim.bean.entity.ByimMarketingStatus" resultType="com.bms.byim.bean.entity.ByimMarketingStatus">
+		SELECT
+		<include refid="selectColumns" />
+		FROM
+		BYIM_MARKETING_STATUS
+		WHERE
+		PARENT_ID = #{parentId}
+		AND DEL_FLG = FALSE
+	</select>
+
+	<select id="findMarketingStatusById" parameterType="com.bms.byim.bean.param.MarketingStatusRsParam" resultType="com.bms.byim.bean.entity.ByimMarketingStatus">
+		SELECT
+		<include refid="selectColumns" />
+		FROM
+		BYIM_MARKETING_STATUS
+		WHERE
+		MARKETING_STATUS_ID = #{marketingStatusId}
+		AND DEL_FLG = FALSE
+	</select>
+
+	<select id="findItemList" parameterType="com.bms.byim.bean.param.MarketingStatusRsParam" resultType="com.bms.byim.bean.param.MarketingStatusRsParam">
+		SELECT
+		<include refid="selectColumns" />
+		FROM
+		BYIM_MARKETING_STATUS
+		WHERE DEL_FLG = FALSE
+		<if test="marketingStatusId != null">
+			AND MARKETING_STATUS_ID = #{marketingStatusId}
+		</if>
+		<if test="parentId != null">
+			AND PARENT_ID = #{parentId}
+		</if>
+		<if test="nodePath !=null and nodePath !=''">
+			AND NODE_PATH LIKE #{nodePath}
+		</if>
+		<if test="marketingStatusCode !=null and marketingStatusCode !=''">
+			AND MARKETING_STATUS_CODE LIKE #{marketingStatusCode}
+		</if>
+		<if test="marketingStatusName !=null and marketingStatusName !=''">
+			AND MARKETING_STATUS_NAME LIKE #{marketingStatusName}
+		</if>
+		ORDER BY NODE_PATH
+	</select>
+
+	<select id="findParentList" resultType="com.bms.byim.bean.param.MarketingStatusRsParam">
+		SELECT
+		PARENT_ID AS parentId
+		FROM
+		BYIM_MARKETING_STATUS
+        WHERE DEL_FLG = FALSE
+        GROUP BY PARENT_ID
+	</select>
+
+	<select id="count" parameterType="com.bms.byim.bean.param.MarketingStatusRsParam" resultType="int">
+		SELECT
+			count(1)
+		FROM
+			BYIM_MARKETING_STATUS
+		WHERE
+			1 = 1
+			AND DEL_FLG = FALSE
+			<if test="parentIdCodeList.size > 0">
+				AND CONCAT(PARENT_ID,MARKETING_STATUS_CODE) IN
+				<foreach collection="parentIdCodeList" item="parentIdCode" open="(" separator="," close=")">
+					#{parentIdCode}
+				</foreach>
+			</if>
+	</select>
+
+	<select id="findMarketingStatus" resultType="int" parameterType="com.bms.byim.bean.param.MarketingStatusRsParam">
+		SELECT
+            COUNT(1)
+        FROM
+            BYIM_BUYER
+        WHERE DEL_FLG = FALSE
+        AND MARKETING_FIRST_STATUS = #{filter.marketingStatusCode}
+        AND MARKETING_FIRST_STATUS_NAME = #{filter.marketingStatusName}
+	</select>
+
+	<select id="findMarketingStatusUse" resultType="int" parameterType="List">
+		SELECT
+		COUNT(1)
+		FROM
+		BYIM_BUYER
+		WHERE DEL_FLG = FALSE
+		AND MARKETING_FIRST_STATUS IN
+		<foreach collection="list" item="item" index="index" open="("
+				 separator="," close=")">
+			#{item.marketingStatusCode}
+		</foreach>
+	</select>
+</mapper>

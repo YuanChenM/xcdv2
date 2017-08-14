@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmComoBalanceDealDetailDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		DETAIL_ID AS detailId,
+		STORE_DEAL_ID AS storeDealId,
+		OWNER_ID AS ownerId,
+		SRC_TRANSACTION_ID AS srcTransactionId,
+		SRC_TRANSACTION_DETAIL_ID AS srcTransactionDetailId,
+		DEAL_QTY AS dealQty
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.linv.bean.entity.InvmComoBalanceDealDetail">
+		INSERT INTO invm_como_balance_deal_detail (
+			DETAIL_ID,
+			STORE_DEAL_ID,
+			OWNER_ID,
+			BALANCE_INV_ID,
+			SRC_TRANSACTION_ID,
+			SRC_TRANSACTION_NO,
+			SRC_TRANSACTION_DETAIL_ID,
+			DEAL_QTY,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{detailId},
+			#{storeDealId},
+			#{ownerId},
+			#{balanceInvId},
+			#{srcTransactionId},
+			#{srcTransactionNo},
+			#{srcTransactionDetailId},
+			#{dealQty},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.linv.bean.entity.InvmComoBalanceDealDetail">
+		UPDATE invm_como_balance_deal_detail 
+		SET 
+			STORE_DEAL_ID = #{storeDealId},
+			OWNER_ID = #{ownerId},
+			SRC_TRANSACTION_ID = #{srcTransactionId},
+			SRC_TRANSACTION_DETAIL_ID = #{srcTransactionDetailId},
+			DEAL_QTY = #{dealQty}
+		WHERE
+			DETAIL_ID = #{detailId}		
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.linv.bean.entity.InvmComoBalanceDealDetail">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_balance_deal_detail
+		WHERE	
+			DETAIL_ID = #{detailId}	
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.linv.bean.entity.InvmComoBalanceDealDetail" resultType="com.bms.linv.bean.entity.InvmComoBalanceDealDetail">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_balance_deal_detail
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>		
+	</select>
+	
+	<select id="countAll" parameterType="com.bms.linv.bean.entity.InvmComoBalanceDealDetail" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			invm_como_balance_deal_detail
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>				
+	</select>
+	
+    <select id="findOutBoundInfo" parameterType="com.bms.linv.bean.param.LINV0116IParam"
+            resultType="com.bms.linv.bean.result.LINV0116ISrcListResult">
+		SELECT
+		T.OWNER_ID AS srcOwnerId,
+		T.OWNER_CODE AS srcOwnerCode,
+		T.COMMODITY_ID AS srcCommodityId,
+		T.UOM AS srcUom,
+		T.IV_TYPE AS srcIvType,
+		T.COMO_IV_TYPE AS srcComoInvType,
+		T.SRC_TRANSACTION_ID AS srcTransactionId,
+		T.SRC_TRANSACTION_NO AS srcTransactionNo,
+		T.SRC_TRANSACTION_DETAIL_ID AS srcTransactionDetailId,
+		T.DEAL_PRICE AS srcDealPrice,
+		T.DEAL_QTY AS srcDealQty
+		FROM
+		(
+		SELECT
+		ICI.L_A_ID,
+		ICI.OWNER_ID,
+		ICI.OWNER_CODE,
+		ICI.OWNER_TYPE,
+		ICDD.TGT_ID,
+		ICDD.TGT_CODE,
+		ICDD.TGT_TYPE,
+		ICDD.BIZ_TYPE,
+		ICDD.TRANSACTION_ID,
+		ICDD.TRANSACTION_NO,
+		ICDD.TRANSACTION_SOURCE,
+		ICDD.TRANSACTION_DETAIL_ID,
+		ICI.COMMODITY_ID,
+		ICI.UOM,
+		ICI.IV_TYPE,
+		ICI.COMO_IV_TYPE,
+		ICBDD.SRC_TRANSACTION_ID,
+		ICBDD.SRC_TRANSACTION_NO,
+		ICBDD.SRC_TRANSACTION_DETAIL_ID,
+		A.DEAL_PRICE,
+		(0-ICBDD.DEAL_QTY) AS DEAL_QTY
+		FROM
+		invm_como_deal_detail ICDD
+		INNER JOIN invm_como_balance_deal_detail ICBDD ON ICDD.STORE_DEAL_ID = ICBDD.STORE_DEAL_ID
+		INNER JOIN invm_como_deal_detail A ON A.TRANSACTION_ID = ICBDD.SRC_TRANSACTION_ID
+		AND A.TRANSACTION_NO = ICBDD.SRC_TRANSACTION_NO
+		AND A.TRANSACTION_DETAIL_ID = ICBDD.SRC_TRANSACTION_DETAIL_ID
+		INNER JOIN invm_como_inventory ICI ON ICI.OWNER_ID = ICBDD.OWNER_ID AND ICI.COMO_IV_TYPE='001'
+		AND ICI.STORE_NO = A.STORE_NO
+		) T
+        WHERE
+        1=1
+		<if test="logisticsId != null and logisticsId !=''">
+			AND T.L_A_ID = #{logisticsId}
+		</if>
+		<if test="ownerId != null and ownerId !=''">
+			AND T.OWNER_ID = #{ownerId}
+		</if>
+		<if test="ownerCode != null and ownerCode !=''">
+			AND T.OWNER_CODE = #{ownerCode}
+		</if>
+		<if test="ownerType != null and ownerType !=''">
+			AND T.OWNER_TYPE = #{ownerType}
+		</if>
+		<if test="targetId != null and targetId !=''">
+			AND T.TGT_ID = #{targetId}
+		</if>
+		<if test="targetCode != null and targetCode !=''">
+			AND T.TGT_CODE = #{targetCode}
+		</if>
+		<if test="targetType != null and targetType !=''">
+			AND T.TGT_TYPE = #{targetType}
+		</if>
+		<if test="bizType != null and bizType !=''">
+			AND T.BIZ_TYPE = #{bizType}
+		</if>
+		<if test="transactionId != null">
+			AND T.TRANSACTION_ID = #{transactionId}
+		</if>
+		<if test="transactionNo != null and transactionNo !=''">
+			AND T.TRANSACTION_NO = #{transactionNo}
+		</if>
+		<if test="transactionSource != null and transactionSource !=''">
+			AND T.TRANSACTION_SOURCE = #{transactionSource}
+		</if>
+		<if test="transactionDetailId != null">
+			AND T.TRANSACTION_DETAIL_ID = #{transactionDetailId}
+		</if>
+		<if test="commodityId != null and commodityId !=''">
+			AND T.COMMODITY_ID = #{commodityId}
+		</if>
+		<if test="uom != null and uom !=''">
+			AND T.UOM = #{uom}
+		</if>
+    </select>
+</mapper>

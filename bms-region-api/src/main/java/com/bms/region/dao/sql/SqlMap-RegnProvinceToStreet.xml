@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.region.dao.RegnProvinceToStreetDao">
+
+    <select id="findPageList" parameterType="com.bms.region.bean.param.RegnRelationParam" resultType="com.bms.region.bean.result.RegnRelationResult">
+        SELECT
+        p.PROVINCE_ID AS provinceId,
+        p.PROVINCE_CODE AS provinceCode,
+        p.PROVINCE_NAME AS provinceName,
+        c.CITY_ID AS cityId,
+        c.CITY_CODE AS cityCode,
+        c.CITY_NAME AS cityName,
+        d.DISTRICT_ID AS districtId,
+        d.DISTRICT_CODE AS districtCode,
+        d.DISTRICT_NAME AS districtName
+        FROM
+        REGN_PROVINCE p
+        INNER JOIN REGN_CITY c ON p.PROVINCE_ID = c.PROVINCE_ID  AND p.DEL_FLG = c.DEL_FLG AND p.DISABLE_FLG = c.DISABLE_FLG
+        <if test="cityCode != null and cityCode != ''">
+            AND c.CITY_CODE LIKE #{cityCode}
+        </if>
+        <if test="cityName != null and cityName != ''">
+            AND c.CITY_NAME LIKE #{cityName}
+        </if>
+        INNER JOIN REGN_DISTRICT d ON d.city_id = c.city_id  AND d.DEL_FLG = c.DEL_FLG AND d.DISABLE_FLG = c.DISABLE_FLG
+        <if test="districtCode != null and districtCode != ''">
+            AND d.DISTRICT_CODE LIKE #{districtCode}
+        </if>
+        <if test="districtName != null and districtName != ''">
+            AND d.DISTRICT_NAME LIKE #{districtName}
+        </if>
+        WHERE
+        p.DEL_FLG = FALSE
+        AND p.DISABLE_FLG = 1
+        <if test="provinceCode != null and provinceCode != ''">
+            AND p.PROVINCE_CODE LIKE #{provinceCode}
+        </if>
+        <if test="provinceName != null and provinceName != ''">
+            AND p.PROVINCE_NAME LIKE #{provinceName}
+        </if>
+    </select>
+
+    <select id="countProvinceAll" parameterType="com.bms.region.bean.param.RegnRelationParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        REGN_PROVINCE p
+        INNER JOIN REGN_CITY c ON p.PROVINCE_ID = c.PROVINCE_ID AND p.DEL_FLG = c.DEL_FLG AND p.DISABLE_FLG = c.DISABLE_FLG
+        <if test="cityCode != null and cityCode != ''">
+            AND c.CITY_CODE = #{cityCode}
+        </if>
+        <if test="cityName != null and cityName != ''">
+            AND c.CITY_NAME = #{cityName}
+        </if>
+        INNER JOIN REGN_DISTRICT d ON d.city_id = c.city_id AND d.DEL_FLG = c.DEL_FLG AND d.DISABLE_FLG = c.DISABLE_FLG
+        <if test="districtCode != null and districtCode != ''">
+            AND d.DISTRICT_CODE = #{districtCode}
+        </if>
+        <if test="districtName != null and districtName != ''">
+            AND d.DISTRICT_NAME = #{districtName}
+        </if>
+        WHERE
+        p.DEL_FLG = FALSE
+        AND p.DISABLE_FLG = 1
+        <if test="provinceCode != null and provinceCode != ''">
+            AND p.PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="provinceName != null and provinceName != ''">
+            AND p.PROVINCE_NAME = #{provinceName}
+        </if>
+    </select>
+
+</mapper>

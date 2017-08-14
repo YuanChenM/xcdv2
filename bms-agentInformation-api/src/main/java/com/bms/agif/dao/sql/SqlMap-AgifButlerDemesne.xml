@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifButlerDemesneDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		bdme.BUTLER_DEMESNE_ID AS butlerDemesneId,
+		bdme.BUTLER_ID AS butlerId,
+		bdme.AGENT_DEMESNE_ID AS agentDemesneId,
+	</sql>
+    <sql id="agentColumns">
+        adme.AGENT_ID AS agentId,
+        adme.LGCS_AREA_ID AS lgcsAreaId,
+        adme.LGCS_AREA_CODE AS lgcsAreaCode,
+        adme.LGCS_AREA_NAME AS lgcsAreaName,
+        adme.ZONE_ID AS zoneId,
+        adme.ZONE_CODE AS zoneCode,
+        adme.ZONE_NAME AS zoneName,
+        adme.DISTRIBUTION_ID AS distributionId,
+        adme.DISTRIBUTION_TYPE AS distributionType,
+        adme.DISTRIBUTION_NAME AS distributionName,
+        adme.DISTRIBUTION_CODE AS distributionCode,
+        adme.AUTHORIZED_PARTNER AS authorizedPartner,
+        adme.DEMESNE_ID AS demesneId,
+        adme.DEMESNE_TYPE AS demesneType,
+        adme.DEMESNE_NAME AS demesneName,
+        adme.DEMESNE_CODE AS demesneCode,
+        adme.AUTHORIZED_AGENT AS authorizedAgent
+    </sql>
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO agif_butler_demesne (
+        BUTLER_DEMESNE_ID,
+        BUTLER_ID,
+        AGENT_DEMESNE_ID,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="lg" index="index" separator=",">
+            (
+            #{lg.butlerDemesneId},
+            #{lg.butlerId},
+            #{lg.agentDemesneId},
+            #{lg.delFlg},
+            #{lg.crtId},
+            #{lg.crtTime},
+            #{lg.updId},
+            #{lg.updTime},
+            #{lg.version}
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.entity.AgifButlerDemesne">
+		UPDATE agif_butler_demesne 
+		SET 
+          DEL_FLG = #{delFlg}
+		WHERE
+			BUTLER_DEMESNE_ID = #{butlerDemesneId}
+	</update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.agif.bean.entity.AgifButlerDemesne">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        agif_butler_demesne
+        WHERE
+        BUTLER_DEMESNE_ID = #{butlerDemesneId}
+        AND BUTLER_ID = #{butlerId}
+        AND AGENT_DEMESNE_ID = #{agentDemesneId}
+    </select>
+
+    <select id="findAll" parameterType="com.bms.agif.bean.param.ButlerDemesneParam"
+            resultType="com.bms.agif.bean.param.ButlerDemesneParam">
+        SELECT
+        deme.BUTLER_DEMESNE_ID AS butlerDemesneId,
+        deme.BUTLER_ID AS butlerId,
+        deme.AGENT_DEMESNE_ID AS agentDemesneId
+        FROM
+        AGIF_BUTLER_DEMESNE deme
+        LEFT JOIN AGIF_BUTLER butler ON  deme.DEL_FLG = butler.DEL_FLG AND deme.BUTLER_ID = butler.BUTLER_ID
+        WHERE
+        deme.DEL_FLG = false
+        <if test="butlerDemesneId != null and butlerDemesneId != ''">
+            AND deme.BUTLER_DEMESNE_ID = #{butlerDemesneId}
+        </if>
+        <if test="butlerId != null and butlerId != ''">
+            AND deme.BUTLER_ID = #{butlerId}
+        </if>
+        <if test="agentDemesneId != null and agentDemesneId != ''">
+            AND deme.AGENT_DEMESNE_ID = #{agentDemesneId}
+        </if>
+        <if test="butlerCode != null and butlerCode != '' ">
+            AND butler.BUTLER_CODE = #{butlerCode}
+        </if>
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.agif.bean.param.ButlerDemesneRsParam"
+            resultType="com.bms.agif.bean.param.ButlerDemesneRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        <include refid="agentColumns"/>
+        FROM
+        agif_butler bas
+        INNER JOIN agif_butler_demesne bdme ON bas.BUTLER_ID = bdme.BUTLER_ID
+        AND bas.DEL_FLG = bdme.DEL_FLG
+        INNER JOIN agif_agent_demesne adme ON bdme.AGENT_DEMESNE_ID = adme.AGENT_DEMESNE_ID
+        AND bdme.DEL_FLG = adme.DEL_FLG
+        WHERE bas.DEL_FLG = FALSE
+        <if test="agentId != null and agentId != ''">
+            AND adme.AGENT_ID = #{agentId}
+        </if>
+        <if test="authorizedAgent != null and authorizedAgent != ''">
+            AND adme.AUTHORIZED_AGENT = #{authorizedAgent}
+        </if>
+        <if test="authorizedPartner != null and authorizedPartner != ''">
+            AND adme.AUTHORIZED_PARTNER LIKE #{authorizedPartner}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND adme.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND adme.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND adme.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="zoneId != null and zoneId != ''">
+            AND adme.ZONE_ID = #{zoneId}
+        </if>
+        <if test="zoneCode != null and zoneCode != ''">
+            AND adme.ZONE_CODE = #{zoneCode}
+        </if>
+        <if test="zoneName != null and zoneName != ''">
+            AND adme.ZONE_NAME LIKE #{zoneName}
+        </if>
+        <if test="distributionId != null and distributionId != ''">
+            AND adme.DISTRIBUTION_ID = #{distributionId}
+        </if>
+        <if test="distributionName != null and distributionName != ''">
+            AND adme.DISTRIBUTION_NAME LIKE #{distributionName}
+        </if>
+        <if test="distributionCode != null and distributionCode != ''">
+            AND adme.DISTRIBUTION_CODE LIKE #{distributionCode}
+        </if>
+        <if test="distributionType != null and distributionType != ''">
+            AND adme.DISTRIBUTION_TYPE = #{distributionType}
+        </if>
+        <if test="demesneId != null and demesneId != ''">
+            AND adme.DEMESNE_ID = #{demesneId}
+        </if>
+        <if test="demesneName != null and demesneName != ''">
+            AND adme.DEMESNE_NAME LIKE #{demesneName}
+        </if>
+        <if test="demesneCode != null and demesneCode != ''">
+            AND adme.DEMESNE_CODE LIKE #{demesneCode}
+        </if>
+        <if test="demesneType != null and demesneType != ''">
+            AND adme.DEMESNE_TYPE = #{demesneType}
+        </if>
+        <if test="butlerDemesneId!= null and butlerDemesneId!= ''">
+            AND bdme.BUTLER_DEMESNE_ID = #{butlerDemesneId}
+        </if>
+        <if test="butlerId!= null and butlerId!= ''">
+            AND bdme.BUTLER_ID = #{butlerId}
+        </if>
+        <if test="agentDemesneId!= null and agentDemesneId!= ''">
+            AND bdme.AGENT_DEMESNE_ID = #{agentDemesneId}
+        </if>
+        <if test="butlerCode != null and butlerCode != '' ">
+            AND bas.BUTLER_CODE = #{butlerCode}
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        agif_butler_demesne
+        WHERE
+        1=1
+        <if test="filterMap.BUTLER_DEMESNE_ID!= null and filterMap.BUTLER_DEMESNE_ID!= ''">
+            AND A.BUTLER_DEMESNE_ID = #{filterMap.BUTLER_DEMESNE_ID}
+        </if>
+        <if test="filterMap.BUTLER_ID!= null and filterMap.BUTLER_ID!= ''">
+            AND A.BUTLER_ID = #{filterMap.BUTLER_ID}
+        </if>
+        <if test="filterMap.AGENT_DEMESNE_ID!= null and filterMap.AGENT_DEMESNE_ID!= ''">
+            AND A.AGENT_DEMESNE_ID = #{filterMap.AGENT_DEMESNE_ID}
+        </if>
+
+        <if test="filterMap.DEL_FLG != null and filterMap.DEL_FLG != ''">
+            AND A.DEL_FLG = #{filterMap.DEL_FLG}
+        </if>
+    </select>
+
+    <delete id="remove" parameterType="List">
+        DELETE FROM AGIF_BUTLER_DEMESNE
+        WHERE BUTLER_DEMESNE_ID IN
+        <foreach item="item" index="index" collection="list" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

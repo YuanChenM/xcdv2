@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmLoadDealDetailDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		LOAD_DEAL_ID AS loadDealId,
+		LOAD_NO AS loadNo,
+		TRANSACTION_ID AS transactionId,
+		TRANSACTION_NO AS transactionNo,
+		TRANSACTION_DETAIL_ID AS transactionDetailId,
+		TRANSACTION_SEQUENCE AS transactionSequence,
+		TRANSACTION_SOURCE AS transactionSource,
+		TRANSACTION_TYPE AS transactionType,
+		TRANSACTION_TIME AS transactionTime,
+		REF_NO AS refNo,
+		BIZ_TYPE AS bizType,
+		SP_ID AS spId,
+		SKU_CODE AS skuCode,
+		LOT_NO AS lotNo,
+		SALE_STATUS_ID AS saleStatusId,
+		DEAL_QTY AS dealQty,
+		DEAL_PRICE AS dealPrice,
+		TGT_ID AS tgtId,
+		TGT_CODE AS tgtCode,
+		TGT_TYPE AS tgtType
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.linv.bean.entity.InvmLoadDealDetail">
+		INSERT INTO invm_load_deal_detail (
+			LOAD_DEAL_ID,
+			LOAD_NO,
+			TRANSACTION_ID,
+			TRANSACTION_NO,
+			TRANSACTION_DETAIL_ID,
+			TRANSACTION_SEQUENCE,
+			TRANSACTION_SOURCE,
+			TRANSACTION_TYPE,
+			TRANSACTION_TIME,
+			REF_NO,
+			BIZ_TYPE,
+			SP_ID,
+			SKU_CODE,
+			LOT_NO,
+			SALE_STATUS_ID,
+			DEAL_QTY,
+			DEAL_PRICE,
+			TGT_ID,
+			TGT_CODE,
+			TGT_TYPE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{loadDealId},
+			#{loadNo},
+			#{transactionId},
+			#{transactionNo},
+			#{transactionDetailId},
+			#{transactionSequence},
+			#{transactionSource},
+			#{transactionType},
+			#{transactionTime},
+			#{refNo},
+			#{bizType},
+			#{spId},
+			#{skuCode},
+			#{lotNo},
+			#{saleStatusId},
+			#{dealQty},
+			#{dealPrice},
+			#{tgtId},
+			#{tgtCode},
+			#{tgtType},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.linv.bean.entity.InvmLoadDealDetail">
+		UPDATE invm_load_deal_detail 
+		SET 
+			LOAD_NO = #{loadNo},
+			TRANSACTION_ID = #{transactionId},
+			TRANSACTION_NO = #{transactionNo},
+			TRANSACTION_DETAIL_ID = #{transactionDetailId},
+			TRANSACTION_SEQUENCE = #{transactionSequence},
+			TRANSACTION_SOURCE = #{transactionSource},
+			TRANSACTION_TYPE = #{transactionType},
+			TRANSACTION_TIME = #{transactionTime},
+			REF_NO = #{refNo},
+			BIZ_TYPE = #{bizType},
+			SP_ID = #{spId},
+			SKU_CODE = #{skuCode},
+			LOT_NO = #{lotNo},
+			SALE_STATUS_ID = #{saleStatusId},
+			DEAL_QTY = #{dealQty},
+			DEAL_PRICE = #{dealPrice},
+			TGT_ID = #{tgtId},
+			TGT_CODE = #{tgtCode},
+			TGT_TYPE = #{tgtType}
+		WHERE
+			LOAD_DEAL_ID = #{loadDealId}		
+	</update>
+	
+	<select id="findOne" parameterType="com.bms.linv.bean.entity.InvmLoadDealDetail" resultType="com.bms.linv.bean.entity.InvmLoadDealDetail">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_load_deal_detail
+		WHERE
+		    DEL_FLG = FALSE
+			<if test="loadDealId != null and loadDealId != ''">
+				AND LOAD_DEAL_ID = #{loadDealId}
+			</if>
+			<if test="transactionId != null and transactionId != ''">
+				AND TRANSACTION_ID = #{transactionId}
+			</if>
+			<if test="transactionNo != null and transactionNo != ''">
+				AND TRANSACTION_NO = #{transactionNo}
+			</if>
+			<if test="transactionSource != null and transactionSource != ''">
+				AND TRANSACTION_SOURCE = #{transactionSource}
+			</if>
+			<if test="transactionDetailId != null and transactionDetailId != ''">
+				AND TRANSACTION_DETAIL_ID = #{transactionDetailId}
+			</if>
+			<if test="bizType != null and bizType != ''">
+				AND BIZ_TYPE = #{bizType}
+			</if>
+			<if test="transactionSequence != null and transactionSequence != ''">
+				AND TRANSACTION_SEQUENCE = #{transactionSequence}
+			</if>
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.linv.bean.entity.InvmLoadDealDetail" resultType="com.bms.linv.bean.entity.InvmLoadDealDetail">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_load_deal_detail
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>		
+	</select>
+	
+	<select id="count" parameterType="com.bms.linv.bean.entity.InvmLoadDealDetail" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			invm_load_deal_detail
+		WHERE	
+			1 = 1
+			<if test="transactionId != null and transactionId !=''">
+			AND TRANSACTION_ID = #{transactionId}
+		</if>
+		<if test="transactionNo != null and transactionNo != ''">
+			AND TRANSACTION_NO = #{transactionNo}
+		</if>
+		<if test="transactionSource != null and transactionSource != ''">
+			AND TRANSACTION_SOURCE = #{transactionSource}
+		</if>
+		<if test="transactionDetailId != null and transactionDetailId !=''">
+			AND TRANSACTION_DETAIL_ID = #{transactionDetailId}
+		</if>
+		<if test="bizType != null and bizType != ''">
+			AND BIZ_TYPE = #{bizType}
+		</if>
+		<if test="transactionSequence != null and transactionSequence !=''">
+			AND TRANSACTION_SEQUENCE = #{transactionSequence}
+			</if>				
+	</select>
+</mapper>

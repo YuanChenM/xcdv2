@@ -1,0 +1,794 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.batch.linv.dao.LinvSynInvDao">
+
+	<insert id="saveCommInfo" parameterType="com.batch.linv.bean.entity.LinvCommInfo">
+		REPLACE INTO LINV_COMM_INFO (
+		COMMODITY_ID,
+		SKU_CODE,
+		P_ID,
+		P_CODE,
+		OWNER_ID,
+		OWNER_CODE,
+		OWNER_TYPE,
+		OWNER_D_TYPE,
+		BR_ID,
+		BR_CODE,
+		P_BR_CODE,
+		PD_ID,
+		IS_DEFAULT,
+		LEVEL,
+		NET_WEIGHT,
+		PDRS_ID,
+		PDRS_CODE,
+		P_BR_PDRS_CODE,
+		P_BR_PDRS_SP_CODE,
+		LOT_NO,
+		MFRS_ID,
+		MFRS_CODE,
+		SALES_LABEL,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		VERSION
+		)
+		VALUES (
+		#{commodityId},
+		#{skuCode},
+		#{pid},
+		#{pcode},
+		#{ownerId},
+		#{ownerCode},
+		#{ownerType},
+		#{ownerDType},
+		#{brId},
+		#{brCode},
+		#{pbrCode},
+		#{pdId},
+		#{isDefault}
+		#{level},
+		#{netWeight},
+		#{pdrsId},
+		#{pdrsCode},
+		#{pbrPdrsCode},
+		#{pbrPdrsSpCode},
+		#{lotNo},
+		#{mfrsId},
+		#{mfrsCode},
+		#{salesLabel},
+		#{delFlg},
+		#{crtId},
+		#{crtTime},
+		1
+		)
+	</insert>
+
+	<insert id="saveNameInfo" parameterType="com.batch.linv.bean.entity.LinvNameInfo">
+		REPLACE INTO LINV_NAME_INFO (
+		TYPE,
+		CODE,
+		NAME,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		VERSION
+		)
+		VALUES (
+		#{type},
+		#{code},
+		#{name},
+		0,
+		"SYSTEM",
+		DATE("2017-01-01"),
+		1
+		)
+	</insert>
+
+	<insert id="saveSkuInfo" parameterType="com.batch.linv.bean.entity.LinvSkuInfo">
+		REPLACE INTO LINV_SKU_INFO (
+		SKU_CODE,
+		P_ID,
+		P_CODE,
+		CLASSES_CODE,
+		MACHINING_CODE,
+		BREED_CODE,
+		FEATURE_CODE,
+		P_DESC,
+		BR_ID,
+		BR_CODE,
+		P_BR_CODE,
+		PD_ID,
+		LEVEL,
+		NET_WEIGHT,
+		PDRS_ID,
+		PDRS_CODE,
+		P_BR_PDRS_CODE,
+		P_BR_PDRS_SP_CODE,
+		MFRS_ID,
+		MFRS_CODE,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		UPD_ID,
+		UPD_TIME,
+		VERSION
+		)
+		VALUES (
+		#{skuCode},
+		#{pid},
+		#{pcode},
+		#{classesCode},
+		#{machiningCode},
+		#{breedCode},
+		#{featureCode},
+		#{pdesc},
+		#{brId},
+		#{brCode},
+		#{pbrCode},
+		#{pdId},
+		#{level},
+		#{netWeight},
+		#{pdrsId},
+		#{pdrsCode},
+		#{pbrPdrsCode},
+		#{pbrPdrsSpCode},
+		#{mfrsId},
+		#{mfrsCode},
+		#{delFlg},
+		#{crtId},
+		#{crtTime},
+		#{updId},
+		#{updTime},
+		1
+		)
+	</insert>
+
+
+	<insert id="synLotFromLoadByTran" >
+		REPLACE INTO LINV_OW_LOT_INVENTORY (
+	L_A_ID,
+	L_A_CODE,
+	S_PLAT_CODE,
+	OWNER_ID,
+	OWNER_CODE,
+	OWNER_TYPE,
+	OWNER_D_TYPE,
+	P_ID,
+	P_CODE,
+	BR_ID,
+	BR_CODE,
+	P_BR_CODE,
+	PD_ID,
+	LEVEL,
+	NET_WEIGHT,
+	PDRS_ID,
+	PDRS_CODE,
+	P_BR_PDRS_CODE,
+	SP_ID,
+	SP_CODE,
+	P_BR_PDRS_SP_CODE,
+	COMMODITY_ID,
+	SKU_CODE,
+	UOM,
+	LOT_NO,
+	TOTAL_QTY,
+	ONHAND_QTY,
+	BUFFER_QTY,
+	IV_TYPE,
+	SALES_LABEL,
+	MFRS_ID,
+	MFRS_CODE,
+	DEL_FLG,
+	CRT_ID,
+	CRT_TIME,
+	VERSION
+)(
+	SELECT
+		t.L_A_ID,
+		t.L_A_CODE,
+		t.S_PLAT_CODE,
+		t.OWNER_ID,
+		t.OWNER_CODE,
+		t.OWNER_TYPE,
+		t.OWNER_D_TYPE,
+		t.P_ID,
+		t.P_CODE,
+		t.BR_ID,
+		t.BR_CODE,
+		t.P_BR_CODE,
+		t.PD_ID,
+		t. LEVEL,
+		t.NET_WEIGHT,
+		t.PDRS_ID,
+		t.PDRS_CODE,
+		t.P_BR_PDRS_CODE,
+		t.SP_ID,
+		t.SP_CODE,
+		t.P_BR_PDRS_SP_CODE,
+		comm.COMMODITY_ID,
+		t.SKU_CODE,
+		t.UOM,
+		t.LOT_NO,
+		t.TOTAL_QTY,
+		t.ONHAND_QTY,
+		t.BUFFER_QTY,
+		t.IV_TYPE,
+		t.SALES_LABEL,
+		t.MFRS_ID,
+		t.MFRS_CODE,
+		t.DEL_FLG,
+		t.CRT_ID,
+		t.CRT_TIME,
+		t.VERSION
+	FROM
+		(
+			SELECT
+				LL.L_A_ID,
+				LL.L_A_CODE,
+				LL.S_PLAT_CODE,
+				LL.OWNER_ID,
+				LL.OWNER_CODE,
+				LL.OWNER_TYPE,
+				LL.OWNER_D_TYPE,
+				LCI.P_ID,
+				LCI.P_CODE,
+				LCI.BR_ID,
+				LCI.BR_CODE,
+				LCI.P_BR_CODE,
+				LCI.PD_ID,
+				LCI. LEVEL,
+				LCI.NET_WEIGHT,
+				LCI.PDRS_ID,
+				LCI.PDRS_CODE,
+				LCI.P_BR_PDRS_CODE,
+				LL.SP_ID,
+				LL.SP_CODE,
+				LCI.P_BR_PDRS_SP_CODE,
+				LL.SKU_CODE,
+				LL.UOM,
+				LL.LOT_NO,
+				SUM(LL.QTY) AS TOTAL_QTY,
+				SUM(LL.QTY) AS ONHAND_QTY,
+				0 AS BUFFER_QTY,
+				LL.IV_TYPE,
+				LL.SALES_LABEL,
+				LCI.MFRS_ID,
+				LCI.MFRS_CODE,
+				0 AS DEL_FLG,
+				LL.CRT_ID AS CRT_ID,
+				LL.CRT_TIME AS CRT_TIME,
+				1 AS VERSION
+			FROM
+				LINV_LOAD LL
+			INNER JOIN LINV_SKU_INFO LCI ON LL.SKU_CODE = LCI.SKU_CODE
+			GROUP BY
+				LL.L_A_ID,
+				LL.L_A_CODE,
+				LL.S_PLAT_CODE,
+				LL.OWNER_ID,
+				LL.OWNER_CODE,
+				LL.OWNER_TYPE,
+				LL.OWNER_D_TYPE,
+				LCI.P_ID,
+				LCI.P_CODE,
+				LCI.BR_ID,
+				LCI.BR_CODE,
+				LCI.P_BR_CODE,
+				LCI.PD_ID,
+				LCI. LEVEL,
+				LCI.NET_WEIGHT,
+				LCI.PDRS_ID,
+				LCI.PDRS_CODE,
+				LCI.P_BR_PDRS_CODE,
+				LL.SP_ID,
+				LL.SP_CODE,
+				LCI.P_BR_PDRS_SP_CODE,
+				LL.SKU_CODE,
+				LL.UOM,
+				LL.LOT_NO,
+				LL.IV_TYPE,
+				LL.SALES_LABEL,
+				LCI.MFRS_ID,
+				LCI.MFRS_CODE
+			ORDER BY
+				LL.L_A_ID,
+				LL.S_PLAT_CODE,
+				LL.OWNER_ID,
+				LCI.P_ID,
+				LCI.BR_ID,
+				LCI.PD_ID,
+				LCI.PDRS_ID,
+				LL.SP_ID,
+				LL.UOM,
+				LL.LOT_NO,
+				LL.IV_TYPE,
+				LCI.MFRS_ID
+		) t
+		INNER JOIN linv_comm_info comm ON t.PD_ID = comm.PD_ID and comm.IS_DEFAULT = true
+		-- AND t.SALES_LABEL = comm.SALES_LABEL
+)
+	</insert>
+
+	<insert id="synSpFromLoadByTran" >
+		REPLACE INTO LINV_OW_SP_INVENTORY (
+		OWNER_ID,
+		OWNER_CODE,
+		OWNER_TYPE,
+		OWNER_D_TYPE,
+		L_A_ID,
+		L_A_CODE,
+		S_PLAT_CODE,
+		P_ID,
+		P_CODE,
+		BR_ID,
+		BR_CODE,
+		P_BR_CODE,
+		PD_ID,
+		LEVEL,
+		NET_WEIGHT,
+		PDRS_ID,
+		PDRS_CODE,
+		P_BR_PDRS_CODE,
+		SP_ID,
+		SP_CODE,
+		P_BR_PDRS_SP_CODE,
+		TOTAL_QTY,
+		ONHAND_QTY,
+		BUFFER_QTY,
+		COMMODITY_ID,
+		SKU_CODE,
+		UOM,
+		IV_TYPE,
+		SALES_LABEL,
+		MFRS_ID,
+		MFRS_CODE,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		VERSION
+		)(
+		SELECT
+		t.OWNER_ID,
+		t.OWNER_CODE,
+		t.OWNER_TYPE,
+		t.OWNER_D_TYPE,
+		t.L_A_ID,
+		t.L_A_CODE,
+		t.S_PLAT_CODE,
+		t.P_ID,
+		t.P_CODE,
+		t.BR_ID,
+		t.BR_CODE,
+		t.P_BR_CODE,
+		t.PD_ID,
+		t. LEVEL,
+		t.NET_WEIGHT,
+		t.PDRS_ID,
+		t.PDRS_CODE,
+		t.P_BR_PDRS_CODE,
+		t.SP_ID,
+		t.SP_CODE,
+		t.P_BR_PDRS_SP_CODE,
+		t.TOTAL_QTY,
+		t.ONHANG_QTY,
+		t.BUFFER_QTY,
+		comm.COMMODITY_ID,
+		t.SKU_CODE,
+		t.UOM,
+		t.IV_TYPE,
+		t.SALES_LABEL,
+		t.MFRS_ID,
+		t.MFRS_CODE,
+		t.DEL_FLG,
+		t.CRT_ID,
+		t.CRT_TIME,
+		t.VERSION
+		FROM
+		(
+		SELECT
+		LL.OWNER_ID,
+		LL.OWNER_CODE,
+		LL.OWNER_TYPE,
+		LL.OWNER_D_TYPE,
+		LL.L_A_ID,
+		LL.L_A_CODE,
+		LL.S_PLAT_CODE,
+		LCI.P_ID,
+		LCI.P_CODE,
+		LCI.BR_ID,
+		LCI.BR_CODE,
+		LCI.P_BR_CODE,
+		LCI.PD_ID,
+		LCI. LEVEL,
+		LCI.NET_WEIGHT,
+		LCI.PDRS_ID,
+		LCI.PDRS_CODE,
+		LCI.P_BR_PDRS_CODE,
+		LL.SP_ID,
+		LL.SP_CODE,
+		LCI.P_BR_PDRS_SP_CODE,
+		SUM(LL.QTY) AS TOTAL_QTY,
+		SUM(LL.QTY) AS ONHANG_QTY,
+		0 AS BUFFER_QTY,
+		LL.SKU_CODE,
+		LL.UOM,
+		LL.IV_TYPE,
+		LL.SALES_LABEL,
+		LCI.MFRS_ID,
+		LCI.MFRS_CODE,
+		0 AS DEL_FLG,
+		LL.CRT_ID AS CRT_ID,
+		LL.CRT_TIME AS CRT_TIME,
+		1 AS VERSION
+		FROM
+		LINV_LOAD LL
+		INNER JOIN LINV_SKU_INFO LCI ON LL.SKU_CODE = LCI.SKU_CODE
+		GROUP BY
+		LL.OWNER_ID,
+		LL.OWNER_CODE,
+		LL.OWNER_TYPE,
+		LL.OWNER_D_TYPE,
+		LL.L_A_ID,
+		LL.L_A_CODE,
+		LL.S_PLAT_CODE,
+		LCI.P_ID,
+		LCI.P_CODE,
+		LCI.BR_ID,
+		LCI.BR_CODE,
+		LCI.P_BR_CODE,
+		LCI.PD_ID,
+		LCI. LEVEL,
+		LCI.NET_WEIGHT,
+		LCI.PDRS_ID,
+		LCI.PDRS_CODE,
+		LCI.P_BR_PDRS_CODE,
+		LL.SP_ID,
+		LL.SP_CODE,
+		LCI.P_BR_PDRS_SP_CODE,
+		LL.SKU_CODE,
+		LL.UOM,
+		LL.IV_TYPE,
+		LL.SALES_LABEL,
+		LCI.MFRS_ID,
+		LCI.MFRS_CODE
+		ORDER BY
+		LL.OWNER_ID,
+		LL.L_A_ID,
+		LL.S_PLAT_CODE,
+		LCI.P_ID,
+		LCI.BR_ID,
+		LCI.PD_ID,
+		LCI.PDRS_ID,
+		LL.SP_ID,
+		LL.UOM,
+		LL.IV_TYPE,
+		LL.SALES_LABEL,
+		LCI.MFRS_ID
+		) t
+		LEFT JOIN LINV_COMM_INFO comm ON t.PD_ID = comm.PD_ID  and comm.IS_DEFAULT = true
+		-- AND t.SALES_LABEL = comm.SALES_LABEL
+		)
+	</insert>
+
+	<insert id="synSpecFromLoadByTran" >
+		REPLACE INTO LINV_OW_SPEC_INVENTORY (
+		L_A_ID,
+		L_A_CODE,
+		S_PLAT_CODE,
+		OWNER_ID,
+		OWNER_CODE,
+		OWNER_TYPE,
+		OWNER_D_TYPE,
+		P_ID,
+		P_CODE,
+		BR_ID,
+		BR_CODE,
+		P_BR_CODE,
+		PD_ID,
+		LEVEL,
+		UOM,
+		NET_WEIGHT,
+		COMMODITY_ID,
+		TOTAL_QTY,
+		ONHAND_QTY,
+		BUFFER_QTY,
+		IV_TYPE,
+		SALES_LABEL,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		VERSION
+		)(
+			SELECT
+				L_A_ID,
+				L_A_CODE,
+				S_PLAT_CODE,
+				OWNER_ID,
+				OWNER_CODE,
+				OWNER_TYPE,
+				OWNER_D_TYPE,
+				P_ID,
+				P_CODE,
+				BR_ID,
+				BR_CODE,
+				P_BR_CODE,
+				PD_ID,
+				LEVEL,
+				UOM,
+				NET_WEIGHT,
+				COMMODITY_ID,
+				SUM(TOTAL_QTY) AS TOTAL_QTY,
+				SUM(ONHAND_QTY) AS ONHAND_QTY,
+				SUM(BUFFER_QTY) AS BUFFER_QTY,
+				IV_TYPE,
+				SALES_LABEL,
+				DEL_FLG,
+				CRT_ID,
+				CRT_TIME,
+				VERSION
+			FROM
+				LINV_OW_SP_INVENTORY
+			GROUP BY
+				L_A_ID,
+				L_A_CODE,
+				S_PLAT_CODE,
+				OWNER_ID,
+				OWNER_CODE,
+				OWNER_TYPE,
+				OWNER_D_TYPE,
+				P_ID,
+				P_CODE,
+				BR_ID,
+				BR_CODE,
+				P_BR_CODE,
+				PD_ID,
+				LEVEL,
+				UOM,
+				NET_WEIGHT,
+				COMMODITY_ID,
+				IV_TYPE,
+				SALES_LABEL
+			ORDER BY
+				L_A_ID,
+				S_PLAT_CODE,
+				OWNER_ID,
+				P_ID,
+				BR_ID,
+				PD_ID,
+				UOM,
+				COMMODITY_ID,
+				IV_TYPE
+		)
+	</insert>
+
+	<insert id="synPlatFromLoadByTran" >
+		REPLACE INTO LINV_PLAT_COMM_INVENTORY (
+		L_A_ID,
+		L_A_CODE,
+		S_PLAT_CODE,
+		COMMODITY_ID,
+		UOM,
+		TOTAL_QTY,
+		ONHAND_QTY,
+		BUFFER_QTY,
+		IV_TYPE,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		VERSION
+		)(
+			SELECT
+				L_A_ID,
+				L_A_CODE,
+				S_PLAT_CODE,
+				COMMODITY_ID,
+				UOM,
+				SUM(TOTAL_QTY) AS TOTAL_QTY,
+				SUM(ONHAND_QTY) AS ONHAND_QTY,
+				0 AS BUFFER_QTY,
+				IV_TYPE,
+				0 AS DEL_FLG,
+				CRT_ID AS CRT_ID,
+				CRT_TIME AS CRT_TIME,
+				1 AS VERSION
+			FROM
+				LINV_OW_SP_INVENTORY
+			GROUP BY
+				L_A_ID,
+				L_A_CODE,
+				S_PLAT_CODE,
+				COMMODITY_ID,
+				UOM,
+				IV_TYPE
+			ORDER BY
+				L_A_ID,
+				S_PLAT_CODE,
+				COMMODITY_ID,
+				UOM,
+				IV_TYPE
+		)
+	</insert>
+
+	<select id="countSku"  resultType="int">
+		select count(1) as num from
+		(
+		SELECT L_A_CODE as laCode,SKU_CODE as skuCode FROM invm_load
+				group by L_A_CODE,SKU_CODE
+		) a
+	</select>
+
+	<select id="findAllSkuCode" parameterType="com.batch.linv.bean.entity.InvmPage" resultType="com.batch.linv.bean.entity.InvmLoad">
+		SELECT L_A_CODE as laCode,SKU_CODE as skuCode FROM invm_load
+		group by L_A_CODE,SKU_CODE
+		limit #{startNum},#{endNum}
+	</select>
+
+	<insert id="saveLoadSync" parameterType="com.batch.linv.bean.entity.LINV0117IResultParam">
+		INSERT INTO invm_load_sync (
+		SYNC_ID,
+		SYNC_TIME,
+		LGCS_CODE,
+		SKU_CODE,
+		SKU_NAME,
+		LOT_NO,
+		UOM,
+		SKU_QTY,
+		INV_STU,
+		SALE_STATUS,
+		OWNER_CODE,
+		WH_CODE,
+		WH_NAME,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		VERSION
+		)
+		VALUES
+		(
+		#{syncId},
+		#{syncTime},
+		#{laCode},
+		#{skuCode},
+		#{skuName},
+		#{lotNo},
+		#{unit},
+		#{inboundQty},
+		#{status},
+		#{salesLabel},
+		#{consignee},
+		#{whCode},
+		#{whName},
+		0,
+		#{crtId},
+		#{crtTime},
+		1
+		)
+	</insert>
+
+
+	<update id="setLoadSyncDelFlag">
+		UPDATE invm_load_sync set DEL_FLG='1'
+		where DEL_FLG='0'
+	</update>
+
+	<update id="cleanLoadLogData">
+		DELETE from invm_load_log where DATE_FORMAT(LOG_TIME, '%y-%m-%d') &lt; date_sub(now() ,interval 3 day)
+	</update>
+
+	<update id="setLoadLogDelFlag">
+		UPDATE invm_load_log set DEL_FLG='1'
+		where DEL_FLG='0'
+	</update>
+
+	<update id="cleanCommoLogData">
+		DELETE from invm_como_inventory_log where DATE_FORMAT(LOG_TIME, '%y-%m-%d')  &lt; date_sub(now() ,interval 3 day)
+	</update>
+
+	<update id="setCommoLogDelFlag">
+		UPDATE invm_como_inventory_log set DEL_FLG='1'
+		where DEL_FLG='0'
+	</update>
+
+	<insert id="backUpData">
+		INSERT INTO invm_load_log (
+		LOG_TIME,
+		LOAD_NO,
+		L_A_ID,
+		L_A_CODE,
+		S_PLAT_CODE,
+		OWNER_ID,
+		OWNER_CODE,
+		OWNER_TYPE,
+		OWNER_D_TYPE,
+		WH_ID,
+		WH_CODE,
+		SP_ID,
+		SP_CODE,
+		SKU_CODE,
+		LOT_NO,
+		UOM,
+		IV_QTY,
+		IV_TYPE,
+		SALE_STATUS_ID,
+		SALE_STATUS_CODE,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		VERSION
+	)
+	(SELECT
+		NOW() AS LOG_TIME,
+		LOAD_NO,
+		L_A_ID,
+		L_A_CODE,
+		S_PLAT_CODE,
+		OWNER_ID,
+		OWNER_CODE,
+		OWNER_TYPE,
+		OWNER_D_TYPE,
+		WH_ID,
+		WH_CODE,
+		SP_ID,
+		SP_CODE,
+		SKU_CODE,
+		LOT_NO,
+		UOM,
+		IV_QTY,
+		IV_TYPE,
+		SALE_STATUS_ID,
+		SALE_STATUS_CODE,
+		0 AS DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		1 AS VERSION
+	FROM
+		invm_load
+	)
+	</insert>
+
+	<insert id="backUpCommoData">
+		INSERT INTO invm_como_inventory_log (
+		LOG_TIME,
+		STORE_NO,
+		L_A_ID,
+		L_A_CODE,
+		S_PLAT_CODE,
+		OWNER_ID,
+		OWNER_CODE,
+		OWNER_TYPE,
+		OWNER_D_TYPE,
+		COMMODITY_ID,
+		UOM,
+		IV_QTY,
+		IV_TYPE,
+		COMO_IV_TYPE,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		VERSION
+	)
+	(SELECT
+		NOW() AS LOG_TIME,
+		STORE_NO,
+		L_A_ID,
+		L_A_CODE,
+		S_PLAT_CODE,
+		OWNER_ID,
+		OWNER_CODE,
+		OWNER_TYPE,
+		OWNER_D_TYPE,
+		COMMODITY_ID,
+		UOM,
+		IV_QTY,
+		IV_TYPE,
+		COMO_IV_TYPE,
+		0 AS DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		1 AS VERSION
+	FROM
+		invm_como_inventory
+	)
+	</insert>
+
+</mapper>

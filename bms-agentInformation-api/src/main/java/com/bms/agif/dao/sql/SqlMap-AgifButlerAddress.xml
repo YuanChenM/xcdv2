@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifButlerAddressDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		ADDR_ID AS addrId,
+		BUTLER_ID AS butlerId,
+		ADDR_TYPE AS addrType,
+		ADDR_TYPE_NAME AS addrTypeName,
+		PROVINCE_ID AS provinceId,
+		PROVINCE_CODE AS provinceCode,
+		PROVINCE_NAME AS provinceName,
+		CITY_ID AS cityId,
+		CITY_CODE AS cityCode,
+		CITY_NAME AS cityName,
+		DISTRICT_ID AS districtId,
+		DISTRICT_CODE AS districtCode,
+		DISTRICT_NAME AS districtName,
+		STREET_ID AS streetId,
+		STREET_CODE AS streetCode,
+		STREET_NAME AS streetName,
+		ADDR_DETAIL AS addrDetail
+	</sql>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO AGIF_BUTLER_ADDRESS (
+        ADDR_ID,
+        BUTLER_ID,
+        ADDR_TYPE,
+        ADDR_TYPE_NAME,
+        PROVINCE_ID,
+        PROVINCE_CODE,
+        PROVINCE_NAME,
+        CITY_ID,
+        CITY_CODE,
+        CITY_NAME,
+        DISTRICT_ID,
+        DISTRICT_CODE,
+        DISTRICT_NAME,
+        STREET_ID,
+        STREET_CODE,
+        STREET_NAME,
+        ADDR_DETAIL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="lg" index="index" separator=",">
+            (
+            #{lg.addrId},
+            #{lg.butlerId},
+            #{lg.addrType},
+            #{lg.addrTypeName},
+            #{lg.provinceId},
+            #{lg.provinceCode},
+            #{lg.provinceName},
+            #{lg.cityId},
+            #{lg.cityCode},
+            #{lg.cityName},
+            #{lg.districtId},
+            #{lg.districtCode},
+            #{lg.districtName},
+            #{lg.streetId},
+            #{lg.streetCode},
+            #{lg.streetName},
+            #{lg.addrDetail},
+            #{lg.delFlg},
+            #{lg.crtId},
+            #{lg.crtTime},
+            #{lg.updId},
+            #{lg.updTime},
+            #{lg.version}
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.param.BaseBean">
+        UPDATE AGIF_BUTLER_ADDRESS
+        SET
+        <if test="target.provinceId != null">
+            PROVINCE_ID = #{target.provinceId},
+        </if>
+        <if test="target.provinceCode != null">
+            PROVINCE_CODE = #{target.provinceCode},
+        </if>
+        <if test="target.provinceName != null">
+            PROVINCE_NAME = #{target.provinceName},
+        </if>
+        <if test="target.cityId != null">
+            CITY_ID = #{target.cityId},
+        </if>
+        <if test="target.cityCode != null">
+            CITY_CODE = #{target.cityCode},
+        </if>
+        <if test="target.cityName != null">
+            CITY_NAME = #{target.cityName},
+        </if>
+        <if test="target.districtId != null">
+            DISTRICT_ID = #{target.districtId},
+        </if>
+        <if test="target.districtCode != null">
+            DISTRICT_CODE = #{target.districtCode},
+        </if>
+        <if test="target.districtName != null">
+            DISTRICT_NAME = #{target.districtName},
+        </if>
+        <if test="target.streetId != null">
+            STREET_ID = #{target.streetId},
+        </if>
+        <if test="target.streetCode != null">
+            STREET_CODE = #{target.streetCode},
+        </if>
+        <if test="target.streetName != null">
+            STREET_NAME = #{target.streetName},
+        </if>
+        <if test="target.addrDetail != null">
+            ADDR_DETAIL = #{target.addrDetail},
+        </if>
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime},
+        DEL_FLG = #{target.delFlg}
+        WHERE
+        ADDR_ID = #{filter.addrId}
+        <if test="filter.addrType != '' and filter.addrType != null">
+            AND ADDR_TYPE = #{filter.addrType}
+        </if>
+        <if test="filter.butlerId != '' and filter.butlerId != null">
+            AND BUTLER_ID = #{filter.butlerId}
+        </if>
+        AND DEL_FLG = FALSE
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.agif.bean.entity.AgifButlerAddress">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_BUTLER_ADDRESS
+        WHERE
+        ADDR_ID = #{addrId}
+    </select>
+
+    <select id="findAll" parameterType="com.bms.agif.bean.param.ButlerAddressRsParam"
+            resultType="com.bms.agif.bean.param.ButlerAddressRsParam">
+        SELECT
+        addr.ADDR_ID AS addrId,
+        addr.BUTLER_ID AS butlerId,
+        addr.ADDR_TYPE AS addrType,
+        addr.ADDR_TYPE_NAME AS addrTypeName,
+        addr.PROVINCE_ID AS provinceId,
+        addr.PROVINCE_CODE AS provinceCode,
+        addr.PROVINCE_NAME AS provinceName,
+        addr.CITY_ID AS cityId,
+        addr.CITY_CODE AS cityCode,
+        addr.CITY_NAME AS cityName,
+        addr.DISTRICT_ID AS districtId,
+        addr.DISTRICT_CODE AS districtCode,
+        addr.DISTRICT_NAME AS districtName,
+        addr.STREET_ID AS streetId,
+        addr.STREET_CODE AS streetCode,
+        addr.STREET_NAME AS streetName,
+        addr.ADDR_DETAIL AS addrDetail
+        FROM
+        AGIF_BUTLER_ADDRESS addr
+        LEFT JOIN AGIF_BUTLER butler ON  addr.DEL_FLG = butler.DEL_FLG AND addr.BUTLER_ID = butler.BUTLER_ID
+        WHERE
+        addr.DEL_FLG = FALSE
+        <if test="butlerId != null and butlerId != '' ">
+            AND addr.BUTLER_ID = #{butlerId}
+        </if>
+        <if test="butlerCode != null and butlerCode != '' ">
+            AND butler.BUTLER_CODE = #{butlerCode}
+        </if>
+
+    </select>
+
+    <select id="count" parameterType="com.bms.agif.bean.param.ButlerAddressRsParam" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			AGIF_BUTLER_ADDRESS
+		WHERE
+			DEL_FLG = FALSE
+			AND ADDR_TYPE = #{addrType}
+			AND BUTLER_ID = #{butlerId}
+	</select>
+
+</mapper>

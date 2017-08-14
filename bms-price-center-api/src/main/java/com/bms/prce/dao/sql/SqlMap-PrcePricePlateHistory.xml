@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.prce.dao.PrcePricePlateHistoryDao">
+	<insert id="save" parameterType="com.bms.prce.bean.param.PRCE0210IDealParam">
+		INSERT INTO
+		PRCE_PRICE_PLATE_HISTORY (
+		PRICE_PLATE_ID,
+		LGCS_AREA_CODE,
+		GOOD_ID,
+		MARKETING_WAY_CONFIG_ID,
+		MARKETING_STATUS_ID,
+		USER_TYPE,
+		BUYER_LEVEL,
+		START_TIME,
+		END_TIME,
+		NORM_PRICE,
+		OWNER_TYPE,
+		OWNER_ID,
+		OWNER_NAME,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		UPD_Id,
+		UPD_TIME,
+		VERSION
+		) SELECT
+		PRICE_PLATE_ID,
+		LGCS_AREA_CODE,
+		GOOD_ID,
+		MARKETING_WAY_CONFIG_ID,
+		MARKETING_STATUS_ID,
+		USER_TYPE,
+		BUYER_LEVEL,
+		START_TIME,
+		END_TIME,
+		NORM_PRICE,
+		OWNER_TYPE,
+		OWNER_ID,
+		OWNER_NAME,
+		DEL_FLG,
+		#{updId},
+		#{updTimeStr},
+		#{updId},
+		#{updTimeStr},
+		1
+		FROM
+		PRCE_PRICE_PLATE
+		WHERE 1=1
+		<![CDATA[AND UPD_TIME >= '${updTimeStr}' ]]>
+	</insert>
+</mapper>

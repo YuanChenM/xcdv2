@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifAgentLevelDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+        ID AS id,
+        AGENT_ID AS agentId,
+        FREQUENTER_AGENT_F AS frequenterAgentF,
+        FREQUENTER_AGENT_A AS frequenterAgentA,
+        LEVEL_TIME AS levelTime,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS version
+	</sql>
+
+    <insert id="save" parameterType="com.bms.agif.bean.entity.AgifAgentLevel">
+		INSERT INTO AGIF_AGENT_LEVEL (
+			ID,
+			AGENT_ID,
+			FREQUENTER_AGENT_F,
+			FREQUENTER_AGENT_A,
+			LEVEL_TIME,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{id},
+			#{agentId},
+			#{frequenterAgentF},
+			#{frequenterAgentA},
+			#{levelTime},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.param.BaseBean">
+        UPDATE AGIF_AGENT_LEVEL
+        SET
+        <if test="target.frequenterAgentF != null">
+            FREQUENTER_AGENT_F = #{target.frequenterAgentF},
+        </if>
+        <if test="target.frequenterAgentA != null">
+            FREQUENTER_AGENT_A = #{target.frequenterAgentA},
+        </if>
+        <if test="target.levelTime != null">
+            LEVEL_TIME = #{target.levelTime},
+        </if>
+        <if test="target.version != null">
+            LEVEL_TIME = #{target.version},
+        </if>
+        UPD_ID=#{target.updId},
+        UPD_TIME=#{target.updTime}
+        WHERE
+        DEL_FLG = FALSE
+        <if test="filter.id != null and filter.id != ''">
+            AND ID = #{filter.id}
+        </if>
+        <if test="filter.agentId != null and filter.agentId != ''">
+            AND AGENT_ID = #{filter.agentId}
+        </if>
+    </update>
+
+    <select id="findPageList" parameterType="com.bms.agif.bean.param.AgentLevelRsParam"
+            resultType="com.bms.agif.bean.result.AgentLevelRsResult">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_AGENT_LEVEL
+        WHERE
+        DEL_FLG = FALSE
+        <if test="id != null and id != ''">
+            AND ID = #{id}
+        </if>
+        <if test="agentId != null and agentId != ''">
+            AND AGENT_ID = #{agentId}
+        </if>
+        <if test="frequenterAgentF != null and frequenterAgentF != ''">
+            AND FREQUENTER_AGENT_F LIKE #{frequenterAgentF}
+        </if>
+        <if test="frequenterAgentA != null and frequenterAgentA != ''">
+            AND FREQUENTER_AGENT_A LIKE #{frequenterAgentA}
+        </if>
+        ORDER BY LEVEL_TIME DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.batch.prce.dao.PRCE0101BDao">
+    <!-- 查询商品表字段 -->
+    <sql id="selectColumns">
+            GOOD_ID AS goodId,
+			COMMODITY_CODE AS commodityCode,
+			COMMODITY_NAME AS commodityName,
+			LGCS_AREA_CODE AS lgcsAreaCode,
+			LGCS_AREA_NAME AS lgcsAreaName,
+			SALE_STATUS_ID AS saleStatusId,
+			SALE_STATUS_CODE AS saleStatusCode,
+			SALE_STATUS_NAME AS saleStatusName,
+			PRODUCT_ID AS productId,
+			CLASSES_CODE AS classesCode,
+			CLASSES_NAME AS classesName,
+			MACHINING_CODE AS machiningCode,
+			MACHINING_NAME AS machiningName,
+			BREED_CODE AS breedCode,
+			BREED_NAME AS breedName,
+			ITEM_CODE AS itemCode,
+			ITEM_NAME AS itemName,
+			BRAND_CODE AS brandCode,
+			BRAND_NAME AS brandName,
+			QUALITY_GRADE_TYPE_CODE AS qualityGradeTypeCode,
+			QUALITY_GRADE_TYPE_NAME AS qualityGradeTypeName,
+			GROSS_WEIGHT AS grossWeight,
+			NET_WEIGHT AS netWeight,
+			PACKAGE_SPECIFICATION AS packageSpecification,
+			PACKAGE_QUANTITY AS packageQuantity,
+			CARTON_DIMENSION AS cartonDimension,
+			BRAND_ITEM_PROPERTY_SKU AS brandItemPropertySku,
+			SHELF_STU AS shelfStu
+    </sql>
+
+    <!-- 查询商品数据 -->
+    <select id="findAll" resultType="com.batch.prce.bean.entity.PrceProductInfo">
+        SELECT <include refid="selectColumns" />
+        FROM PRCE_PRODUCT_INFO
+    </select>
+
+    <!-- 删除商品数据 -->
+    <delete id="remove" parameterType="com.batch.prce.bean.param.BaseRestParam">
+        DELETE FROM PRCE_PRODUCT_INFO
+    </delete>
+
+    <!-- 插入商品数据 -->
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO PRCE_PRODUCT_INFO (
+        GOOD_ID,
+        COMMODITY_CODE,
+        COMMODITY_NAME,
+        LGCS_AREA_CODE,
+        LGCS_AREA_NAME,
+        SALE_STATUS_ID,
+        SALE_STATUS_CODE,
+        SALE_STATUS_NAME,
+        PRODUCT_ID,
+        CLASSES_CODE,
+        CLASSES_NAME,
+        MACHINING_CODE,
+        MACHINING_NAME,
+        BREED_CODE,
+        BREED_NAME,
+        ITEM_CODE,
+        ITEM_NAME,
+        BRAND_CODE,
+        BRAND_NAME,
+        QUALITY_GRADE_TYPE_CODE,
+        QUALITY_GRADE_TYPE_NAME,
+        GROSS_WEIGHT,
+        NET_WEIGHT,
+        PACKAGE_SPECIFICATION,
+        PACKAGE_QUANTITY,
+        CARTON_DIMENSION,
+        BRAND_ITEM_PROPERTY_SKU,
+        SHELF_STU,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        VERSION
+        )VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.goodId},
+            #{item.commodityCode},
+            #{item.commodityName},
+            #{item.lgcsAreaCode},
+            #{item.lgcsAreaName},
+            #{item.saleStatusId},
+            #{item.saleStatusCode},
+            #{item.saleStatusName},
+            #{item.productId},
+            #{item.classesCode},
+            #{item.classesName},
+            #{item.machiningCode},
+            #{item.machiningName},
+            #{item.breedCode},
+            #{item.breedName},
+            #{item.itemCode},
+            #{item.itemName},
+            #{item.brandCode},
+            #{item.brandName},
+            #{item.qualityGradeTypeCode},
+            #{item.qualityGradeTypeName},
+            #{item.grossWeight},
+            #{item.netWeight},
+            #{item.packageSpecification},
+            #{item.packageQuantity},
+            #{item.cartonDimension},
+            #{item.brandItemPropertySku},
+            #{item.shelfStu},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!--插入履历数据-->
+    <insert id="batchInsertHis" parameterType="List">
+        INSERT INTO PRCE_PRODUCT_INFO_HISTORY (
+        GOOD_ID,
+        COMMODITY_CODE,
+        COMMODITY_NAME,
+        LGCS_AREA_CODE,
+        LGCS_AREA_NAME,
+        SALE_STATUS_ID,
+        SALE_STATUS_CODE,
+        SALE_STATUS_NAME,
+        PRODUCT_ID,
+        CLASSES_CODE,
+        CLASSES_NAME,
+        MACHINING_CODE,
+        MACHINING_NAME,
+        BREED_CODE,
+        BREED_NAME,
+        ITEM_CODE,
+        ITEM_NAME,
+        BRAND_CODE,
+        BRAND_NAME,
+        QUALITY_GRADE_TYPE_CODE,
+        QUALITY_GRADE_TYPE_NAME,
+        GROSS_WEIGHT,
+        NET_WEIGHT,
+        PACKAGE_SPECIFICATION,
+        PACKAGE_QUANTITY,
+        CARTON_DIMENSION,
+        BRAND_ITEM_PROPERTY_SKU,
+        SHELF_STU,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        VERSION
+        )VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.goodId},
+            #{item.commodityCode},
+            #{item.commodityName},
+            #{item.lgcsAreaCode},
+            #{item.lgcsAreaName},
+            #{item.saleStatusId},
+            #{item.saleStatusCode},
+            #{item.saleStatusName},
+            #{item.productId},
+            #{item.classesCode},
+            #{item.classesName},
+            #{item.machiningCode},
+            #{item.machiningName},
+            #{item.breedCode},
+            #{item.breedName},
+            #{item.itemCode},
+            #{item.itemName},
+            #{item.brandCode},
+            #{item.brandName},
+            #{item.qualityGradeTypeCode},
+            #{item.qualityGradeTypeName},
+            #{item.grossWeight},
+            #{item.netWeight},
+            #{item.packageSpecification},
+            #{item.packageQuantity},
+            #{item.cartonDimension},
+            #{item.brandItemPropertySku},
+            #{item.shelfStu},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            1
+            )
+        </foreach>
+    </insert>
+</mapper>

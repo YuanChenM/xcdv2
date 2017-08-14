@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bymt.dao.BymtTerminalMarketBasicDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		B.TERM_MARKET_ID AS termMarketId,
+		B.TERM_MARKET_CODE AS termMarketCode,
+		B.TERM_MARKET_NAME AS termMarketName,
+		B.TERM_MARKET_ADDRESS AS termMarketAddress,
+		B.TERM_MARKET_LEVEL AS termMarketLevel,
+		B.LGCS_AREA_ID AS lgcsAreaId,
+		B.LGCS_AREA_CODE AS lgcsAreaCode,
+		B.LGCS_AREA_NAME AS lgcsAreaName,
+		B.ZONE_ID AS zoneId,
+		B.ZONE_CODE AS zoneCode,
+		B.ZONE_NAME AS zoneName,
+		B.COVER_AREA AS coverArea,
+		B.DEL_FLG AS delFlg,
+		B.CRT_ID AS crtId,
+		B.CRT_TIME AS crtTime,
+		B.UPD_ID AS updId,
+		B.UPD_TIME AS updTime,
+		B.VERSION AS version
+	</sql>
+
+    <insert id="save" parameterType="com.bms.bymt.bean.entity.BymtTerminalMarketBasic">
+		INSERT INTO BYMT_TERMINAL_MARKET_BASIC (
+			TERM_MARKET_ID,
+			TERM_MARKET_CODE,
+			TERM_MARKET_NAME,
+			TERM_MARKET_ADDRESS,
+			TERM_MARKET_LEVEL,
+            LGCS_AREA_ID,
+            LGCS_AREA_CODE,
+            LGCS_AREA_NAME,
+            ZONE_ID,
+			ZONE_CODE,
+			ZONE_NAME,
+			COVER_AREA,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES (
+			#{termMarketId},
+			#{termMarketCode},
+			#{termMarketName},
+			#{termMarketAddress},
+			#{termMarketLevel},
+            #{lgcsAreaId},
+			#{lgcsAreaCode},
+			#{lgcsAreaName},
+            #{zoneId},
+			#{zoneCode},
+			#{zoneName},
+			#{coverArea},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYMT_TERMINAL_MARKET_BASIC (
+        TERM_MARKET_ID,
+        TERM_MARKET_CODE,
+        TERM_MARKET_NAME,
+        TERM_MARKET_ADDRESS,
+        TERM_MARKET_LEVEL,
+        LGCS_AREA_ID,
+        LGCS_AREA_CODE,
+        LGCS_AREA_NAME,
+        ZONE_ID,
+        ZONE_CODE,
+        ZONE_NAME,
+        COVER_AREA,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" index="index" item="param" separator=",">
+            (
+            #{param.termMarketId},
+            #{param.termMarketCode},
+            #{param.termMarketName},
+            #{param.termMarketAddress},
+            #{param.termMarketLevel},
+            #{param.lgcsAreaId},
+            #{param.lgcsAreaCode},
+            #{param.lgcsAreaName},
+            #{param.zoneId},
+            #{param.zoneCode},
+            #{param.zoneName},
+            #{param.coverArea},
+            0,
+            #{param.crtId},
+            #{param.crtTime},
+            #{param.updId},
+            #{param.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+
+    <update id="modify" parameterType="com.bms.bymt.bean.param.BaseBean">
+        UPDATE BYMT_TERMINAL_MARKET_BASIC
+        SET
+        <if test="target.termMarketCode!=null">
+            TERM_MARKET_CODE = #{target.termMarketCode},
+        </if>
+        <if test="target.termMarketName!=null">
+            TERM_MARKET_NAME = #{target.termMarketName},
+        </if>
+        <if test="target.termMarketAddress!=null">
+            TERM_MARKET_ADDRESS = #{target.termMarketAddress},
+        </if>
+        <if test="target.termMarketLevel !=null">
+            TERM_MARKET_LEVEL = #{target.termMarketLevel},
+        </if>
+        <if test="target.lgcsAreaId !=null">
+            LGCS_AREA_ID = #{target.lgcsAreaId},
+        </if>
+        <if test="target.lgcsAreaCode !=null">
+            LGCS_AREA_CODE = #{target.lgcsAreaCode},
+        </if>
+        <if test="target.lgcsAreaName !=null">
+            LGCS_AREA_NAME = #{target.lgcsAreaName},
+        </if>
+        <if test="target.zoneId !=null">
+            ZONE_ID = #{target.zoneId},
+        </if>
+        <if test="target.zoneCode !=null">
+            ZONE_CODE = #{target.zoneCode},
+        </if>
+        <if test="target.zoneName !=null">
+            ZONE_NAME = #{target.zoneName},
+        </if>
+        <if test="target.coverArea !=null">
+            COVER_AREA = #{target.coverArea},
+        </if>
+        <if test="target.delFlg !=null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+        <if test="target.version!=null">
+            VERSION = #{target.version},
+        </if>
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        TERM_MARKET_ID = #{filter.termMarketId}
+        AND DEL_FLG = FALSE
+    </update>
+
+    <select id="findOne" parameterType="com.bms.bymt.bean.param.TerminalMarketBasicRsParam"
+            resultType="com.bms.bymt.bean.entity.BymtTerminalMarketBasic">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYMT_TERMINAL_MARKET_BASIC B
+        WHERE
+        B.DEL_FLG = FALSE
+        AND B.TERM_MARKET_ID = #{termMarketId}
+    </select>
+
+    <select id="findAll" parameterType="com.framework.base.rest.param.BaseRestParam"
+            resultType="com.framework.base.rest.param.BaseRestParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYMT_TERMINAL_MARKET_BASIC B
+        WHERE
+        B.DEL_FLG = FALSE
+        <if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND B.DEL_FLG = #{filterMap.delFlg}
+        </if>
+    </select>
+
+    <!--新增时候参数验证-->
+    <select id="count" parameterType="com.bms.bymt.bean.param.TerminalMarketBasicRsParam" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			BYMT_TERMINAL_MARKET_BASIC
+		WHERE DEL_FLG = FALSE
+		AND  TERM_MARKET_CODE= #{termMarketCode}
+		AND  TERM_MARKET_ADDRESS= #{termMarketAddress}
+		AND  TERM_MARKET_LEVEL = #{termMarketLevel}
+		AND  LGCS_AREA_CODE= #{lgcsAreaCode}
+		AND  ZONE_CODE= #{zoneCode}
+	</select>
+    <!--分页查询数据-->
+    <select id="findPageList" parameterType="com.bms.bymt.bean.param.TerminalMarketBasicRsParam"
+            resultType="com.bms.bymt.bean.param.TerminalMarketBasicRsParam">
+        SELECT
+        L.STANDARD_LEVEL AS termMarketLevelName,
+        <include refid="selectColumns"/>
+        FROM
+        BYMT_TERMINAL_MARKET_BASIC B
+        LEFT JOIN BYMT_LEVEL_STANDARD L ON B.TERM_MARKET_LEVEL = L.STANDARD_CODE AND L.DEL_FLG = FALSE
+        WHERE
+        B.DEL_FLG = FALSE
+        <if test="termMarketId != null and termMarketId != ''">
+            AND B.TERM_MARKET_ID = #{termMarketId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND B.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND B.LGCS_AREA_NAME = #{lgcsAreaName}
+        </if>
+        <if test="termMarketLevel != null and termMarketLevel != ''">
+            AND B.TERM_MARKET_LEVEL = #{termMarketLevel}
+        </if>
+        <if test="termMarketName != null and termMarketName != ''">
+            AND B.TERM_MARKET_NAME LIKE #{termMarketName}
+        </if>
+        <if test="termMarketCode != null and termMarketCode != ''">
+            AND B.TERM_MARKET_CODE LIKE #{termMarketCode}
+        </if>
+        <if test="zoneCode != null and zoneCode != ''">
+            AND B.ZONE_CODE = #{zoneCode}
+        </if>
+        <if test="zoneName != null and zoneName != ''">
+            AND B.ZONE_NAME = #{zoneName}
+        </if>
+    </select>
+
+    <select id="findMaxMarketCode" parameterType="com.bms.bymt.bean.entity.BymtTerminalMarketBasic"
+            resultType="String">
+        SELECT
+         CONCAT('01','${lgcsAreaCode}','${zoneCode}','${termMarketLevel}',LPAD(IFNULL(MAX(CAST(RIGHT(TERM_MARKET_CODE,2) AS SIGNED)),0)+1,2,0)) AS marketCode
+         FROM
+        BYMT_TERMINAL_MARKET_BASIC
+        WHERE
+        LGCS_AREA_CODE = #{lgcsAreaCode}
+        AND ZONE_CODE = #{zoneCode}
+    </select>
+
+</mapper>

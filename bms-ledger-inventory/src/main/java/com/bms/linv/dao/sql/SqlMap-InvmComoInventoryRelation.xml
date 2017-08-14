@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmComoInventoryRelationDao">
+
+    <sql id="whereCondition">
+        <if test="logisticsId != null and logisticsId !=''">
+            AND L_A_ID IN
+            <foreach collection="logisticsId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="salePlatform != null and salePlatform !=''">
+            AND S_PLAT_CODE IN
+            <foreach collection="salePlatform" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="commodityId != null and  commodityId!=''">
+            AND COMMODITY_ID IN
+            <foreach collection="commodityId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="uom != null and  uom!=''">
+            AND UOM IN
+            <foreach collection="uom" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="ivType != null and  ivType!=''">
+            AND IV_TYPE IN
+            <foreach collection="ivType" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </sql>
+
+    <select id="findAll" parameterType="com.bms.linv.bean.param.LINV0112IInvParam"
+            resultType="com.bms.linv.bean.result.LINV0112IInvResult">
+    SELECT
+	b1.logisticsId AS logisticsId,
+	b1.salePlatform AS salePlatform,
+	b1.commodityId AS commodityId,
+	b1.uom AS uom,
+        b1.ivType AS ivType,
+	b1.totalQty AS totalQty,
+	b1.onhandQty AS onhandQty,
+	b1.bufferQty AS bufferQty,
+	b1.allocatedQty AS allocatedQty,
+	b1.availableQty AS availableQty
+FROM
+	(
+		SELECT
+			T.COMMODITY_ID AS commodityId,
+			max(T.AVAILABLE_QTY) AS availableQty
+		FROM
+			(
+				SELECT
+					'001' AS ROLE,
+					A.L_A_ID,
+					A.S_PLAT_CODE,
+					A.COMMODITY_ID,
+					A.UOM,
+					A.IV_TYPE,
+					SUM(A.TOTAL_QTY) AS TOTAL_QTY,
+					SUM(A.TOTAL_QTY) AS ONHAND_QTY,
+					0 AS BUFFER_QTY,
+					SUM(A.ALOC_QTY) AS ALOC_QTY,
+					(
+						SUM(A.TOTAL_QTY) - SUM(A.ALOC_QTY)
+					) AS AVAILABLE_QTY
+				FROM
+					(
+						SELECT
+							L_A_ID,
+							S_PLAT_CODE,
+							COMMODITY_ID,
+							UOM,
+							IV_TYPE,
+							IV_QTY AS TOTAL_QTY,
+							0 AS ALOC_QTY
+						FROM
+							invm_como_inventory
+						WHERE
+							OWNER_CODE = '00000001'
+						AND OWNER_TYPE = '001'
+						<include refid="whereCondition"/>
+						UNION ALL
+							SELECT
+								L_A_ID,
+								S_PLAT_CODE,
+								COMMODITY_ID,
+								UOM,
+								IV_TYPE,
+								0 AS TOTAL_QTY,
+								SUM(ALOC_QTY) AS ALOC_QTY
+							FROM
+								invm_como_aloc_inventory
+							WHERE
+								OWNER_CODE = '00000001'
+							AND OWNER_TYPE = '001'
+		                  <include refid="whereCondition"/>
+							GROUP BY
+								L_A_ID,
+								S_PLAT_CODE,
+								COMMODITY_ID,
+								UOM,
+								IV_TYPE
+					) A
+				GROUP BY
+					A.L_A_ID,
+					A.S_PLAT_CODE,
+					A.COMMODITY_ID,
+					A.UOM,
+					A.IV_TYPE
+				UNION ALL
+					SELECT
+						'002' AS ROLE,
+						B.L_A_ID,
+						B.S_PLAT_CODE,
+						B.COMMODITY_ID,
+						B.UOM,
+						B.IV_TYPE,
+						SUM(B.TOTAL_QTY) AS TOTAL_QTY,
+						SUM(B.TOTAL_QTY) AS ONHAND_QTY,
+						0 AS BUFFER_QTY,
+						SUM(B.ALOC_QTY) AS ALOC_QTY,
+						(
+							SUM(B.TOTAL_QTY) - SUM(B.ALOC_QTY)
+						) AS AVAILABLE_QTY
+					FROM
+						(
+							SELECT
+								L_A_ID,
+								S_PLAT_CODE,
+								OWNER_ID,
+								COMMODITY_ID,
+								UOM,
+								IV_TYPE,
+								IV_QTY AS TOTAL_QTY,
+								0 AS ALOC_QTY
+							FROM
+								invm_como_inventory
+							WHERE
+								OWNER_TYPE = '002'
+							<if test="saleId != null">
+								AND OWNER_ID IN
+								<foreach collection="saleId" item="item" open="(" separator="," close=")">
+									#{item}
+								</foreach>
+							</if>
+							<if test="saleId == null">
+								AND OWNER_ID = ''
+							</if>
+							<include refid="whereCondition"/>
+							UNION ALL
+								SELECT
+									L_A_ID,
+									S_PLAT_CODE,
+									OWNER_ID,
+									COMMODITY_ID,
+									UOM,
+									IV_TYPE,
+									0 AS TOTAL_QTY,
+									SUM(ALOC_QTY) AS ALOC_QTY
+								FROM
+									invm_como_aloc_inventory
+								WHERE
+									OWNER_TYPE = '002'
+								<if test="saleId != null">
+									AND OWNER_ID IN
+									<foreach collection="saleId" item="item" open="(" separator="," close=")">
+										#{item}
+									</foreach>
+								</if>
+								<if test="saleId == null">
+									AND OWNER_ID = ''
+								</if>
+								<include refid="whereCondition"/>
+								GROUP BY
+									L_A_ID,
+									S_PLAT_CODE,
+									OWNER_ID,
+									COMMODITY_ID,
+									UOM,
+									IV_TYPE
+						) B
+					GROUP BY
+						B.L_A_ID,
+						B.S_PLAT_CODE,
+						B.OWNER_ID,
+						B.COMMODITY_ID,
+						B.UOM,
+						B.IV_TYPE
+			) T
+		GROUP BY
+			T.COMMODITY_ID
+	) a1,
+	(
+		SELECT
+			T.ROLE,
+			T.L_A_ID AS logisticsId,
+			T.S_PLAT_CODE AS salePlatform,
+			T.COMMODITY_ID AS commodityId,
+			T.UOM AS uom,
+        T.IV_TYPE AS ivType,
+			T.TOTAL_QTY AS totalQty,
+			T.ONHAND_QTY AS onhandQty,
+			T.BUFFER_QTY AS bufferQty,
+			T.ALOC_QTY AS allocatedQty,
+			T.AVAILABLE_QTY AS availableQty
+		FROM
+			(
+				SELECT
+					'001' AS ROLE,
+					A.L_A_ID,
+					A.S_PLAT_CODE,
+					A.COMMODITY_ID,
+					A.UOM,
+					A.IV_TYPE,
+					SUM(A.TOTAL_QTY) AS TOTAL_QTY,
+					SUM(A.TOTAL_QTY) AS ONHAND_QTY,
+					0 AS BUFFER_QTY,
+					SUM(A.ALOC_QTY) AS ALOC_QTY,
+					(
+						SUM(A.TOTAL_QTY) - SUM(A.ALOC_QTY)
+					) AS AVAILABLE_QTY
+				FROM
+					(
+						SELECT
+							L_A_ID,
+							S_PLAT_CODE,
+							COMMODITY_ID,
+							UOM,
+							IV_TYPE,
+							IV_QTY AS TOTAL_QTY,
+							0 AS ALOC_QTY
+						FROM
+							invm_como_inventory
+						WHERE
+							OWNER_CODE = '00000001'
+						AND OWNER_TYPE = '001'
+						<include refid="whereCondition"/>
+						UNION ALL
+							SELECT
+								L_A_ID,
+								S_PLAT_CODE,
+								COMMODITY_ID,
+								UOM,
+								IV_TYPE,
+								0 AS TOTAL_QTY,
+								SUM(ALOC_QTY) AS ALOC_QTY
+							FROM
+								invm_como_aloc_inventory
+							WHERE
+								OWNER_CODE = '00000001'
+							AND OWNER_TYPE = '001'
+							<include refid="whereCondition"/>
+							GROUP BY
+								L_A_ID,
+								S_PLAT_CODE,
+								COMMODITY_ID,
+								UOM,
+								IV_TYPE
+					) A
+				GROUP BY
+					A.L_A_ID,
+					A.S_PLAT_CODE,
+					A.COMMODITY_ID,
+					A.UOM,
+					A.IV_TYPE
+				UNION ALL
+					SELECT
+						'002' AS ROLE,
+						B.L_A_ID,
+						B.S_PLAT_CODE,
+						B.COMMODITY_ID,
+						B.UOM,
+						B.IV_TYPE,
+						SUM(B.TOTAL_QTY) AS TOTAL_QTY,
+						SUM(B.TOTAL_QTY) AS ONHAND_QTY,
+						0 AS BUFFER_QTY,
+						SUM(B.ALOC_QTY) AS ALOC_QTY,
+						(
+							SUM(B.TOTAL_QTY) - SUM(B.ALOC_QTY)
+						) AS AVAILABLE_QTY
+					FROM
+						(
+							SELECT
+								L_A_ID,
+								S_PLAT_CODE,
+								OWNER_ID,
+								COMMODITY_ID,
+								UOM,
+								IV_TYPE,
+								IV_QTY AS TOTAL_QTY,
+								0 AS ALOC_QTY
+							FROM
+								invm_como_inventory
+							WHERE
+								OWNER_TYPE = '002'
+								<if test="saleId != null">
+									AND OWNER_ID IN
+									<foreach collection="saleId" item="item" open="(" separator="," close=")">
+										#{item}
+									</foreach>
+								</if>
+								<if test="saleId == null">
+									AND OWNER_ID = ''
+								</if>
+								<include refid="whereCondition"/>
+							UNION ALL
+								SELECT
+									L_A_ID,
+									S_PLAT_CODE,
+									OWNER_ID,
+									COMMODITY_ID,
+									UOM,
+									IV_TYPE,
+									0 AS TOTAL_QTY,
+									SUM(ALOC_QTY) AS ALOC_QTY
+								FROM
+									invm_como_aloc_inventory
+								WHERE
+									OWNER_TYPE = '002'
+								<if test="saleId != null">
+									AND OWNER_ID IN
+									<foreach collection="saleId" item="item" open="(" separator="," close=")">
+										#{item}
+									</foreach>
+								</if>
+								<if test="saleId == null">
+									AND OWNER_ID = ''
+								</if>
+								<include refid="whereCondition"/>
+								GROUP BY
+									L_A_ID,
+									S_PLAT_CODE,
+									OWNER_ID,
+									COMMODITY_ID,
+									UOM,
+									IV_TYPE
+						) B
+					GROUP BY
+						B.L_A_ID,
+						B.S_PLAT_CODE,
+						B.OWNER_ID,
+						B.COMMODITY_ID,
+						B.UOM,
+						B.IV_TYPE
+			) T
+	) b1
+WHERE
+	a1.commodityId = b1.commodityId
+AND a1.availableQty = b1.availableQty
+    </select>
+
+    <select id="findProductMaxQty" parameterType="com.bms.linv.bean.result.LINV0112IInvResult"
+            resultType="com.bms.linv.bean.result.LINV0112IInvResult">
+            SELECT
+                TOTAL_QTY AS totalQty,
+                ONHAND_QTY AS onhandQty ,
+                ALOC_QTY AS allocatedQty,
+                AVAILABLE_QTY AS availableQty
+            FROM
+                (
+                    SELECT
+                        SKU_CODE,
+                        SALE_STATUS_ID,
+                        (
+                            SUM(T.BUFFER_QTY) + SUM(T.ONHAND_QTY)
+                        ) AS TOTAL_QTY,
+                        SUM(T.ONHAND_QTY) AS ONHAND_QTY,
+                        SUM(T.ALOC_QTY) AS ALOC_QTY,
+                        (
+                            SUM(T.BUFFER_QTY) + SUM(T.ONHAND_QTY) - SUM(T.ALOC_QTY)
+                        ) AS AVAILABLE_QTY
+                    FROM
+                        (
+                            SELECT
+                                IL.L_A_ID,
+                                IL.S_PLAT_CODE,
+                                IL.OWNER_ID,
+                                IL.OWNER_CODE,
+                                IL.OWNER_TYPE,
+                                IL.OWNER_D_TYPE,
+                                IL.SKU_CODE,
+                                IL.LOT_NO,
+                                IL.UOM,
+                                IL.SALE_STATUS_ID,
+                                IL.IV_TYPE,
+                                0 AS BUFFER_QTY,
+                                IL.IV_QTY AS ONHAND_QTY,
+                                0 AS ALOC_QTY,
+                                0 AS AVAILABLE_QTY
+                            FROM
+                                invm_load IL
+                            WHERE IL.IV_TYPE=#{ivType}
+                            UNION ALL
+                                SELECT
+                                    ILAI.L_A_ID,
+                                    ILAI.S_PLAT_CODE,
+                                    ILAI.OWNER_ID,
+                                    ILAI.OWNER_CODE,
+                                    ILAI.OWNER_TYPE,
+                                    NULL AS OWNER_D_TYPE,
+                                    ILAI.SKU_CODE,
+                                    ILAI.LOT_NO,
+                                    ILAI.UOM,
+                                    ILAI.SALE_STATUS_ID,
+                                    ILAI.IV_TYPE,
+                                    0 AS BUFFER_QTY,
+                                    0 AS ONHAND_QTY,
+                                    SUM(ILAI.ALOC_QTY) AS ALOC_QTY,
+                                    0 AS AVAILABLE_QTY
+                                FROM
+                                    invm_load_aloc_inventory ILAI
+                                WHERE ILAI.IV_TYPE=#{ivType}
+                                GROUP BY
+                                    ILAI.L_A_ID,
+                                    ILAI.S_PLAT_CODE,
+                                    ILAI.OWNER_ID,
+                                    ILAI.OWNER_CODE,
+                                    ILAI.OWNER_TYPE,
+                                    ILAI.SKU_CODE,
+                                    ILAI.LOT_NO,
+                                    ILAI.UOM,
+                                    ILAI.SALE_STATUS_ID,
+                                    ILAI.IV_TYPE
+                        ) T
+                    GROUP BY
+                        L_A_ID,
+                        S_PLAT_CODE,
+                        OWNER_ID,
+                        OWNER_CODE,
+                        OWNER_TYPE,
+                        SKU_CODE,
+                        UOM,
+                        SALE_STATUS_ID,
+                        IV_TYPE
+                ) t
+            WHERE
+                t.SKU_CODE IN (
+                    SELECT
+                        sku_code
+                    FROM
+                        invm_sku_info
+                    WHERE
+                        PD_ID IN (
+                            SELECT
+                                PD_ID
+                            FROM
+                                invm_comm_info
+                            WHERE
+                                COMMODITY_ID = #{commodityId}
+                        )
+                )
+            AND t.SALE_STATUS_ID IN (
+                SELECT
+                                    SALE_STATUS_ID
+                                FROM
+                                    invm_comm_info
+                                WHERE
+                                    COMMODITY_ID = #{commodityId})
+                ORDER BY
+                    AVAILABLE_QTY DESC
+                LIMIT 1
+    </select>
+</mapper>

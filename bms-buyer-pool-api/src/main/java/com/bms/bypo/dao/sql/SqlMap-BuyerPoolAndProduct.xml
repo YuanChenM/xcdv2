@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bypo.dao.BuyerPoolAndProductDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		pool.BUYER_POOL_ID AS buyerPoolId,
+		pool.LGCS_AREA_ID AS lgcsAreaId,
+		pool.LGCS_AREA_CODE AS lgcsAreaCode,
+		pool.LGCS_AREA_NAME AS lgcsAreaName,
+		pool.ZONE_ID AS zoneId,
+		pool.ZONE_CODE AS zoneCode,
+		pool.ZONE_NAME AS zoneName,
+		pool.DISTRIBUTION_ID AS distributionId,
+		pool.DISTRIBUTION_NAME AS distributionName,
+		pool.DISTRIBUTION_CODE AS distributionCode,
+		pool.DEMESNE_ID AS demesneId,
+		pool.DEMESNE_NAME AS demesneName,
+		pool.DEMESNE_CODE AS demesneCode,
+		pool.BUYER_TYPE AS buyerType,
+		pool.BUYER_TYPE_NAME AS buyerTypeName,
+		pool.BUYER_FIRST_CATEGORY AS buyerFirstCategory,
+		pool.BUYER_FIRST_CATEGORY_NAME AS buyerFirstCategoryName,
+		pool.BUYER_SUB_CATEGORY AS buyerSubCategory,
+		pool.BUYER_SUB_CATEGORY_NAME AS buyerSubCategoryName,
+		pool.BUYER_POOL_NAME AS buyerPoolName,
+		pool.BUYER_POOL_CODE AS buyerPoolCode
+	</sql>
+    <sql id="product">
+        product.STANDARD_PRODUCT_ID AS standardProductId,
+		product.BUYER_POOL_ID AS buyerPoolId,
+		product.CLASSES_ID AS classesId,
+		product.CLASSES_CODE AS classesCode,
+		product.CLASSES_NAME AS classesName,
+		product.MACHINING_ID AS machiningId,
+		product.MACHINING_CODE AS machiningCode,
+		product.MACHINING_NAME AS machiningName,
+		product.BREED_ID AS breedId,
+		product.BREED_CODE AS breedCode,
+		product.BREED_SALES_NAME AS breedSalesName,
+		product.BREED_SCIENTIFIC_NAME AS breedScientificName,
+		product.BREED_LOCAL_NAME AS breedLocalName,
+		product.FEATURE_ID AS featureId,
+		product.FEATURE_CODE AS featureCode,
+		product.FEATURE_NAME AS featureName,
+		product.BRAND_ID AS brandId,
+		product.BRAND_CODE AS brandCode,
+		product.BRAND_NAME AS brandName,
+		product.PRODUCER_ID AS producerId,
+		product.PRODUCER_CODE AS producerCode,
+		product.PRODUCER_NAME AS producerName,
+		product.DEMAND_LEVEL AS demandLevel
+    </sql>
+
+    <select id="findPageList" parameterType="com.bms.bypo.bean.param.BuyerPoolAndProductRsParam"
+            resultType="com.bms.bypo.bean.param.BuyerPoolAndProductRsParam">
+        SELECT
+        <include refid="selectColumns"/>,
+        <include refid="product"/>
+        FROM
+        BYPO_BUYER_POOL pool
+        LEFT JOIN BYPO_STANDARD_PRODUCT product ON pool.DEL_FLG = product.DEL_FLG AND pool.BUYER_POOL_ID =
+        product.BUYER_POOL_ID
+        WHERE
+        pool.DEL_FLG = FALSE
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND pool.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="zoneId != null and zoneId != ''">
+            AND pool.ZONE_ID = #{zoneId}
+        </if>
+        <if test="buyerType != null and buyerType != ''">
+            AND pool.BUYER_TYPE = #{buyerType}
+        </if>
+        <if test="buyerFirstCategory != null and buyerFirstCategory != ''">
+            AND pool.BUYER_FIRST_CATEGORY = #{buyerFirstCategory}
+        </if>
+        <if test="classesId != null and classesId != ''">
+            AND product.CLASSES_ID = #{classesId}
+        </if>
+        <if test="machiningId != null and machiningId != ''">
+            AND product.MACHINING_ID = #{machiningId}
+        </if>
+        <if test="breedId != null and breedId != ''">
+            AND product.BREED_ID = #{breedId}
+        </if>
+        <if test="featureId != null and featureId != ''">
+            AND product.FEATURE_ID = #{featureId}
+        </if>
+        <if test="modifyFlg == 1">
+            AND product.BRAND_ID = #{brandId}
+        </if>
+        <if test="modifyFlg == 2">
+            AND product.BRAND_ID IS NULL
+        </if>
+        <!--<if test="modifyFlg == 3">
+            AND product.BRAND_ID IS NULL
+            AND product.PRODUCER_ID = #{producerId}
+        </if>
+        <if test="modifyFlg == 4">
+            AND product.BRAND_ID IS NULL
+            AND product.PRODUCER_ID IS NULL
+        </if>-->
+    </select>
+</mapper>

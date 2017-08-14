@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.prce.dao.PrceWayConfigDao">
+
+    <!--价盘营销状态通道修改：验证通道数量正确性查询-->
+    <select id="findAll" parameterType="com.bms.prce.bean.entity.PrceWayConfig"
+            resultType="com.bms.prce.bean.result.PRCE0205IWayConfigResult">
+        SELECT
+        PWC.START_QTY AS startQty,
+        PWC.END_QTY AS endQty
+        FROM
+        PRCE_WAY_CONFIG PWC
+        LEFT JOIN PRCE_WAY_TYPE PWT
+        ON PWT.WAY_TYPE_ID = PWC.WAY_TYPE_ID
+        WHERE
+        PWC.DEL_FLG = 0
+        <if test="marketingWayConfigId != null and marketingWayConfigId != ''">
+            AND MARKETING_WAY_CONFIG_ID = #{marketingWayConfigId}
+        </if>
+        ORDER BY START_QTY DESC
+    </select>
+
+    <!--价盘营销状态通道修改：修改通道配置-->
+    <update id="modify" parameterType="com.bms.prce.bean.entity.PrceWayConfig">
+        UPDATE PRCE_WAY_CONFIG
+        SET
+        <if test="delFlg==true">
+            DEL_FLG = #{delFlg},
+        </if>
+        <if test="delFlg==false or delFlg==null">
+            MARKETING_WAY_CONFIG_ID = #{marketingWayConfigId},
+            WAY_TYPE_ID = #{wayTypeId},
+            BALANCE_RATIO = #{balanceRatio},
+            PLAT_BALANCE_RATIO = #{platBalanceRatio},
+            SA_BALANCE_RATIO = #{saBalanceRatio},
+            SUM_BALANCE_RATIO = #{sumBalanceRatio},
+            START_QTY = #{startQty},
+            END_QTY = #{endQty},
+        </if>
+        UPD_ID = #{updId},
+        UPD_TIME = #{updTime}
+        WHERE
+        WAY_CONFIG_ID = #{wayConfigId}
+        AND DEL_FLG = 0
+    </update>
+
+    <!--价盘营销状态通道修改：新增通道配置-->
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO PRCE_WAY_CONFIG(
+        WAY_CONFIG_ID,
+        MARKETING_WAY_CONFIG_ID,
+        WAY_TYPE_ID,
+        BALANCE_RATIO,
+        PLAT_BALANCE_RATIO,
+        SA_BALANCE_RATIO,
+        SUM_BALANCE_RATIO,
+        START_QTY,
+        END_QTY,
+        DEL_FLG,
+        CRT_Id,
+        CRT_TIME,
+        VERSION
+        )VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.wayConfigId},
+            #{item.marketingWayConfigId},
+            #{item.wayTypeId},
+            #{item.balanceRatio},
+            #{item.platBalanceRatio},
+            #{item.saBalanceRatio},
+            #{item.sumBalanceRatio},
+            #{item.startQty},
+            #{item.endQty},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <update id="deleteModify" parameterType="com.bms.prce.bean.entity.PrceWayConfig">
+		UPDATE PRCE_WAY_CONFIG
+		SET
+		DEL_FLG = 1,
+		UPD_ID = #{updId},
+		UPD_TIME = #{updTime},
+		VERSION = VERSION + 1
+		WHERE
+		MARKETING_WAY_CONFIG_ID = #{marketingWayConfigId}
+		AND DEL_FLG = 0
+	</update>
+</mapper>

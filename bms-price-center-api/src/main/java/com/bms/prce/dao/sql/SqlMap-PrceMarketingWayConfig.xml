@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bms.prce.dao.PrceMarketingWayConfigDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		MARKETING_WAY_CONFIG_ID AS marketingWayConfigId,
+		MARKETING_STATUS_ID AS marketingStatusId,
+		USER_TYPE AS userType,
+		BUYER_LEVEL AS buyerLevel
+	</sql>
+	
+	<!--价盘营销状态通道查询：resultMap-->
+	<resultMap id="wayConfigMap" type="com.bms.prce.bean.result.PRCE0205IResult">
+		<id property="marketingWayConfigId" column="MARKETING_WAY_CONFIG_ID"/>
+		<result property="marketingStatusId" column="MARKETING_STATUS_ID"/>
+		<result property="marketingStatusName" column="MARKETING_STATUS_NAME"/>
+		<result property="userType" column="USER_TYPE"/>
+		<result property="buyerLevel" column="BUYER_LEVEL"/>
+		<collection property="wayConfigList" ofType="com.bms.prce.bean.result.PRCE0205IWayConfigResult">
+			<id property="wayConfigId" column="WAY_CONFIG_ID"/>
+			<result property="wayTypeId" column="WAY_TYPE_ID"/>
+			<result property="uom" column="UOM"/>
+			<result property="balanceRatio" column="BALANCE_RATIO"/>
+			<result property="platBalanceRatio" column="PLAT_BALANCE_RATIO"/>
+			<result property="saBalanceRatio" column="SA_BALANCE_RATIO"/>
+			<result property="sumBalanceRatio" column="SUM_BALANCE_RATIO"/>
+			<result property="startQty" column="START_QTY"/>
+			<result property="endQty" column="END_QTY"/>
+			<result property="wayDesc" column="WAY_TYPE_NAME"/>
+			<result property="version" column="VERSION"/>
+		</collection>
+	</resultMap>
+
+	<!--价盘营销状态通道查询：查询sql-->
+	<select id="findAll" parameterType="com.bms.prce.bean.param.PRCE0205IParam" resultMap="wayConfigMap">
+		SELECT
+		PMWC.MARKETING_WAY_CONFIG_ID,
+		PMWC.MARKETING_STATUS_ID,
+		PMWC.USER_TYPE,
+		PMWC.BUYER_LEVEL,
+		PMS.MARKETING_STATUS_NAME,
+		<if test="effectiveFlg==true">
+		PWC.WAY_EFFECTIVE_CONFIG_ID AS WAY_CONFIG_ID,
+		</if>
+		<if test="effectiveFlg==false">
+		PWC.WAY_CONFIG_ID,
+		</if>
+		PMS.UOM,
+		PWC.WAY_TYPE_ID,
+		PWC.BALANCE_RATIO,
+		PWC.PLAT_BALANCE_RATIO,
+		PWC.SA_BALANCE_RATIO,
+		PWC.SUM_BALANCE_RATIO,
+		PWC.START_QTY,
+		PWC.END_QTY,
+		PWT.WAY_TYPE_NAME,
+		PWC.VERSION
+		FROM
+		PRCE_MARKETING_WAY_CONFIG PMWC
+		INNER JOIN PRCE_MARKETING_STATUS PMS
+		ON PMWC.MARKETING_STATUS_ID = PMS.MARKETING_STATUS_ID
+		AND PMS.DEL_FLG = 0
+		<if test="effectiveFlg==true">
+			INNER JOIN PRCE_EFFECTIVE_WAY_CONFIG PWC
+			ON PMWC.MARKETING_WAY_CONFIG_ID = PWC.MARKETING_WAY_CONFIG_ID
+			AND PWC.DEL_FLG = 0
+		</if>
+		<if test="effectiveFlg==false">
+			INNER JOIN PRCE_WAY_CONFIG PWC
+			ON PMWC.MARKETING_WAY_CONFIG_ID = PWC.MARKETING_WAY_CONFIG_ID
+			AND PWC.DEL_FLG = 0
+		</if>
+		LEFT JOIN PRCE_WAY_TYPE PWT
+		ON PWC.WAY_TYPE_ID = PWT.WAY_TYPE_ID
+		WHERE PMWC.DEL_FLG = 0
+		<if test="marketingStatusId != null and marketingStatusId.length>0">
+			AND PMWC.MARKETING_STATUS_ID IN <foreach collection="marketingStatusId" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+		<if test="userType != null and userType != ''">
+			AND PMWC.USER_TYPE = #{userType}
+		</if>
+		<if test="buyerLevel != null and buyerLevel != ''">
+			AND PMWC.BUYER_LEVEL = #{buyerLevel}
+		</if>
+		ORDER BY PWC.START_QTY DESC
+	</select>
+
+	<!--价盘营销状态通道修改：获取营销通道ID-->
+	<select id="findOne" parameterType="com.bms.prce.bean.param.PRCE0206IParam" resultType="com.bms.prce.bean.entity.PrceMarketingWayConfig">
+		SELECT
+		<include refid="selectColumns" />
+		FROM
+		PRCE_MARKETING_WAY_CONFIG
+		WHERE
+		DEL_FLG = 0
+		<if test="marketingStatusId != null and marketingStatusId != ''">
+			AND MARKETING_STATUS_ID = #{marketingStatusId}
+		</if>
+		<if test="userType != null and userType != ''">
+			AND USER_TYPE = #{userType}
+		</if>
+		<if test="buyerLevel != null and buyerLevel != ''">
+			AND BUYER_LEVEL = #{buyerLevel}
+		</if>
+	</select>
+
+	<!--价盘营销状态通道修改：新增营销通道配置-->
+	<insert id="save" parameterType="com.bms.prce.bean.entity.PrceMarketingWayConfig">
+		INSERT INTO PRCE_MARKETING_WAY_CONFIG (
+		MARKETING_WAY_CONFIG_ID,
+		MARKETING_STATUS_ID,
+		USER_TYPE,
+		BUYER_LEVEL,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		VERSION
+		)
+		VALUES (
+		#{marketingWayConfigId},
+		#{marketingStatusId},
+		#{userType},
+		#{buyerLevel},
+		0,
+		#{crtId},
+		#{crtTime},
+		1
+		)
+	</insert>
+</mapper>

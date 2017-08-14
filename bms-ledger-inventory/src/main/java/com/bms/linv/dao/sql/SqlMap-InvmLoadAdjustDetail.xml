@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmLoadAdjustDetailDao">
+
+
+    <insert id="save" parameterType="com.bms.linv.bean.entity.InvmLoadAdjustDetail">
+        INSERT INTO invm_load_adjust_detail
+        (
+        DETAIL_ID,
+        LOAD_ADJUST_ID,
+        L_A_ID,
+        L_A_CODE,
+        OWNER_ID,
+        OWNER_CODE,
+        OWNER_TYPE,
+        WH_ID,
+        WH_CODE,
+        WH_NAME,
+        SKU_CODE,
+        LOT_NO,
+        UOM,
+        SALE_STATUS_ID,
+        SALE_STATUS_CODE,
+        IV_TYPE_FROM,
+        IV_TYPE_TO,
+        ADJUST_QTY,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        VERSION
+        )
+        VALUES
+        (
+        #{detailId},
+        #{loadAdjustId},
+        #{logicId},
+        #{logicCode},
+        #{ownerId},
+        #{ownerCode},
+        #{ownerType},
+        #{whId},
+        #{whCode},
+        #{whName},
+        #{skuCode},
+        #{lotNo},
+        #{uom},
+        #{saleStatusId},
+        #{saleStatusCode},
+        #{ivTypeFrom},
+        #{ivTypeTo},
+        #{adjustQty},
+        0,
+        #{crtId},
+        #{crtTime},
+        1
+        )
+    </insert>
+
+</mapper>

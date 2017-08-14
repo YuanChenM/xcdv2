@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.TreeSampleDao">
+    <select id="findItemList" parameterType="com.bms.byim.bean.entity.Tree" resultType="com.bms.byim.bean.entity.Tree">
+        SELECT
+            ITEM_ID AS itemId,
+            PARENT_ID AS parentId,
+            NODE_PATH AS nodePath,
+            ITEM_CODE AS itemCode,
+            ITEM_NAME AS itemName
+        FROM
+            TREE
+        WHERE DEL_FLG = FALSE
+        <if test="itemId != null">
+            AND ITEM_ID = #{itemId}
+        </if>
+        <if test="parentId != null">
+            AND PARENT_ID = #{parentId}
+        </if>
+        <if test="nodePath !=null and nodePath !=''">
+            AND NODE_PATH LIKE #{nodePath}
+        </if>
+        <if test="itemCode !=null and itemCode !=''">
+            AND ITEM_CODE LIKE #{itemCode}
+        </if>
+        <if test="itemName !=null and itemName !=''">
+            AND ITEM_NAME LIKE #{itemName}
+        </if>
+        ORDER BY nodePath
+    </select>
+    <select id="findParentList" resultType="com.bms.byim.bean.entity.Tree">
+        SELECT
+          AS parentId
+        FROM
+        TREE
+        WHERE DEL_FLG = FALSE
+        GROUP BY PARENT_ID
+    </select>
+</mapper>

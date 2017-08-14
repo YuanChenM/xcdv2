@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.batch.order.dao.ORDR0101BDao">
+    <select id = "getConfirmOrder" resultType = "com.batch.order.bean.result.ORDR0101BOrderResult">
+        SELECT
+        batchDetail.BUYER_ORDER_ID as buyerOrderId,
+		batchDetail.BUYER_BATCH_ORDER_DETAIL_ID as buyerBatchOrderDetailId,
+		100000 as sellerId,
+		'00000001' as sellerCode,
+		'001' as sellSideType,
+		'100000' as sellSideId,
+		batchDetail.GOODS_ID as allocateGoodsId,
+		'001' as comoIvType,
+		batchDetail.GOODS_QUANTITY as sellQty
+	FROM
+		ordr_buyer_batch_order_detail batchDetail
+	INNER JOIN ordr_buyer_batch_order batch ON batch.BUYER_BATCH_ORDER_ID = batchDetail.BUYER_BATCH_ORDER_ID
+	INNER JOIN ordr_buyer_order ordr ON ordr.BUYER_ORDER_ID = batch.BUYER_ORDER_ID
+	WHERE
+		1 = 1
+	AND ordr.BUYER_ORDER_STU = '001'
+    </select>
+
+    <insert id="batchInsert" parameterType="list">
+        INSERT INTO
+        ordr_buyer_seller_detail
+        (
+        SELLER_DETAIL_ID
+        ,BUYER_BATCH_ORDER_DETAIL_ID
+        ,SELLER_ID
+        ,SELLER_CODE
+        ,SELL_SIDE_TYPE
+        ,SELL_SIDE_ID
+        ,ALLOCATE_GOODS_ID
+        ,COMO_IV_TYPE
+        ,SELL_QTY
+        ,DEL_FLG
+        ,CRT_ID
+        ,CRT_TIME
+        ,UPD_ID
+        ,UPD_TIME
+        ,VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.sellerDetailId}
+            , #{item.buyerBatchOrderDetailId}
+            , #{item.sellerId}
+            , #{item.sellerCode}
+            , #{item.sellSideType}
+            , #{item.sellSideId}
+            , #{item.allocateGoodsId}
+            , #{item.comoIvType}
+            , #{item.sellQty}
+            , #{item.delFlg}
+            , #{item.crtId}
+            , #{item.crtTime}
+            , #{item.updId}
+            , #{item.updTime}
+            , #{item.version}
+            )
+        </foreach>
+    </insert>
+</mapper>

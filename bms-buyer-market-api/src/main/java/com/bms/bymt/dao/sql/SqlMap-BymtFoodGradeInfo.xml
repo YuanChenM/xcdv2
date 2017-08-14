@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bymt.dao.BymtFoodGradeInfoDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		GRADE_INFO_ID AS gradeInfoId,
+		FOOD_MARKET_ID AS foodMarketId,
+		LARGEST_MARKET_PRO AS largestMarketPro,
+		LARGEST_MARLET_NUM AS largestMarletNum,
+		LARGEST_MARKET_STANDARD AS largestMarketStandard,
+		MARKET_COVER_AREA AS marketCoverArea,
+		MARKET_COVER_AREA_STANDARD AS marketCoverAreaStandard,
+		AVERAGE_PRICE AS averagePrice,
+		STANDARD_PRICE AS standardPrice,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+
+    <sql id="selectBeanColumns">
+        foodInfo.GRADE_INFO_ID AS gradeInfoId,
+		foodInfo.FOOD_MARKET_ID AS foodMarketId,
+		foodInfo.LARGEST_MARKET_PRO AS largestMarketPro,
+		foodInfo.LARGEST_MARLET_NUM AS largestMarletNum,
+		foodInfo.LARGEST_MARKET_STANDARD AS largestMarketStandard,
+		foodInfo.MARKET_COVER_AREA AS marketCoverArea,
+		foodInfo.MARKET_COVER_AREA_STANDARD AS marketCoverAreaStandard,
+		foodInfo.AVERAGE_PRICE AS averagePrice,
+		foodInfo.STANDARD_PRICE AS standardPrice,
+		foodResult.GRADE_RESULT_ID AS gradeResultId,
+		foodResult.BUYER_LARGEST_PRO AS buyerLargestPro,
+		foodResult.BUYER_LARGEST_NUM AS buyerLargestNum,
+		foodResult.AVERAGE_PRICE AS averagePriceResult,
+		foodResult.FOOD_MARKET_LEVEL AS foodMarketLevel,
+		foodResult.MARKET_RANGE AS marketRange
+    </sql>
+
+    <insert id="save" parameterType="com.bms.bymt.bean.entity.BymtFoodGradeInfo">
+		INSERT INTO BYMT_FOOD_GRADE_INFO (
+			GRADE_INFO_ID,
+			FOOD_MARKET_ID,
+			LARGEST_MARKET_PRO,
+			LARGEST_MARLET_NUM,
+			LARGEST_MARKET_STANDARD,
+			MARKET_COVER_AREA,
+			MARKET_COVER_AREA_STANDARD,
+			AVERAGE_PRICE,
+			STANDARD_PRICE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES (
+			#{gradeInfoId},
+			#{foodMarketId},
+			#{largestMarketPro},
+			#{largestMarletNum},
+			#{largestMarketStandard},
+			#{marketCoverArea},
+			#{marketCoverAreaStandard},
+			#{averagePrice},
+			#{standardPrice},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.bymt.bean.entity.BymtFoodGradeInfo">
+        UPDATE BYMT_FOOD_GRADE_INFO
+        SET
+        <if test="delFlg != null and delFlg==false">
+            FOOD_MARKET_ID = #{foodMarketId},
+            LARGEST_MARKET_PRO = #{largestMarketPro},
+            LARGEST_MARLET_NUM = #{largestMarletNum},
+            LARGEST_MARKET_STANDARD = #{largestMarketStandard},
+            MARKET_COVER_AREA = #{marketCoverArea},
+            MARKET_COVER_AREA_STANDARD = #{marketCoverAreaStandard},
+            AVERAGE_PRICE = #{averagePrice},
+            STANDARD_PRICE = #{standardPrice},
+            CRT_ID = #{crtId},
+            CRT_TIME = #{crtTime},
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime},
+            VERSION = #{version},
+        </if>
+        DEL_FLG = #{delFlg}
+        WHERE
+        FOOD_MARKET_ID = #{foodMarketId}
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.bymt.bean.entity.BymtFoodGradeInfo">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYMT_FOOD_GRADE_INFO
+        WHERE
+        GRADE_INFO_ID = #{gradeInfoId}
+        AND DEL_FLG = FALSE
+    </select>
+
+    <select id="findAll" parameterType="com.framework.base.rest.param.BaseRestParam"
+            resultType="com.bms.bymt.bean.entity.BymtFoodGradeInfo">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYMT_FOOD_GRADE_INFO
+        WHERE
+        1 = 1
+        <if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND DEL_FLG = #{filterMap.delFlg}
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYMT_FOOD_GRADE_INFO
+        WHERE
+        1 = 1
+        <if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND DEL_FLG = #{filterMap.delFlg}
+        </if>
+    </select>
+
+    <select id="findBuyerMarketFoodDefineGrade" parameterType="com.bms.bymt.bean.param.FoodGradeInfoParam" resultType="com.bms.bymt.bean.result.FoodGradeRsResult">
+        SELECT
+        <include refid="selectBeanColumns"/>
+        FROM
+            BYMT_FOOD_GRADE_INFO foodInfo
+        LEFT JOIN BYMT_FOOD_GRADE_RESULT foodResult ON foodResult.GRADE_INFO_ID = foodInfo.GRADE_INFO_ID
+        AND foodResult.DEL_FLG = FALSE
+        WHERE
+            foodInfo.DEL_FLG = FALSE
+        AND foodInfo.FOOD_MARKET_ID = #{foodMarketId}
+    </select>
+
+</mapper>

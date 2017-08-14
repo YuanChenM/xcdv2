@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmProductInfoDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		PRODUCT_PID AS productPid,
+		PRODUCT_ID AS productId,
+		CLASSES_ID AS classesId,
+		CLASSES_CODE AS classesCode,
+		CLASSES_NAME AS classesName,
+		MACHINING_ID AS machiningId,
+		MACHINING_CODE AS machiningCode,
+		MACHINING_NAME AS machiningName,
+		BREED_ID AS breedId,
+		BREED_CODE AS breedCode,
+		BREED_SALES_NAME AS breedSalesName,
+		ITEM_ID AS itemId,
+		ITEM_CODE AS itemCode,
+		ITEM_SKU AS itemSku,
+		ITEM_NAME AS itemName,
+		BRAND_ID AS brandId,
+		BRAND_CODE AS brandCode,
+		BRAND_NAME AS brandName,
+		QUALITY_GRADE_TYPE_CODE AS qualityGradeTypeCode,
+		QUALITY_GRADE_TYPE AS qualityGradeType,
+		GROSS_WEIGHT AS grossWeight,
+		NET_WEIGHT_CODE AS netWeightCode,
+		NET_WEIGHT AS netWeight,
+		PACKAGE_SPECIFICATION AS packageSpecification,
+		PACKAGE_QUANTITY AS packageQuantity,
+		CARTON_DIMENSION AS cartonDimension,
+		PALLET_STACKING_LIMIT AS palletStackingLimit,
+		BRAND_ITEM_PROPERTY_SKU AS brandItemPropertySku,
+		ITEM_PROPERTY_CODE AS itemPropertyCode
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.linv.bean.entity.InvmProductInfo">
+		INSERT INTO invm_product_info (
+			PRODUCT_PID,
+			PRODUCT_ID,
+			CLASSES_ID,
+			CLASSES_CODE,
+			CLASSES_NAME,
+			MACHINING_ID,
+			MACHINING_CODE,
+			MACHINING_NAME,
+			BREED_ID,
+			BREED_CODE,
+			BREED_SALES_NAME,
+			ITEM_ID,
+			ITEM_CODE,
+			ITEM_SKU,
+			ITEM_NAME,
+			BRAND_ID,
+			BRAND_CODE,
+			BRAND_NAME,
+			QUALITY_GRADE_TYPE_CODE,
+			QUALITY_GRADE_TYPE,
+			GROSS_WEIGHT,
+			NET_WEIGHT_CODE,
+			NET_WEIGHT,
+			PACKAGE_SPECIFICATION,
+			PACKAGE_QUANTITY,
+			CARTON_DIMENSION,
+			PALLET_STACKING_LIMIT,
+			BRAND_ITEM_PROPERTY_SKU,
+			ITEM_PROPERTY_CODE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{productPid},
+			#{productId},
+			#{classesId},
+			#{classesCode},
+			#{classesName},
+			#{machiningId},
+			#{machiningCode},
+			#{machiningName},
+			#{breedId},
+			#{breedCode},
+			#{breedSalesName},
+			#{itemId},
+			#{itemCode},
+			#{itemSku},
+			#{itemName},
+			#{brandId},
+			#{brandCode},
+			#{brandName},
+			#{qualityGradeTypeCode},
+			#{qualityGradeType},
+			#{grossWeight},
+			#{netWeightCode},
+			#{netWeight},
+			#{packageSpecification},
+			#{packageQuantity},
+			#{cartonDimension},
+			#{palletStackingLimit},
+			#{brandItemPropertySku},
+			#{itemPropertyCode},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.linv.bean.entity.InvmProductInfo">
+		UPDATE invm_product_info 
+		SET 
+			PRODUCT_ID = #{productId},
+			CLASSES_ID = #{classesId},
+			CLASSES_CODE = #{classesCode},
+			CLASSES_NAME = #{classesName},
+			MACHINING_ID = #{machiningId},
+			MACHINING_CODE = #{machiningCode},
+			MACHINING_NAME = #{machiningName},
+			BREED_ID = #{breedId},
+			BREED_CODE = #{breedCode},
+			BREED_SALES_NAME = #{breedSalesName},
+			ITEM_ID = #{itemId},
+			ITEM_CODE = #{itemCode},
+			ITEM_SKU = #{itemSku},
+			ITEM_NAME = #{itemName},
+			BRAND_ID = #{brandId},
+			BRAND_CODE = #{brandCode},
+			BRAND_NAME = #{brandName},
+			QUALITY_GRADE_TYPE_CODE = #{qualityGradeTypeCode},
+			QUALITY_GRADE_TYPE = #{qualityGradeType},
+			GROSS_WEIGHT = #{grossWeight},
+			NET_WEIGHT_CODE = #{netWeightCode},
+			NET_WEIGHT = #{netWeight},
+			PACKAGE_SPECIFICATION = #{packageSpecification},
+			PACKAGE_QUANTITY = #{packageQuantity},
+			CARTON_DIMENSION = #{cartonDimension},
+			PALLET_STACKING_LIMIT = #{palletStackingLimit},
+			BRAND_ITEM_PROPERTY_SKU = #{brandItemPropertySku},
+			ITEM_PROPERTY_CODE = #{itemPropertyCode}
+		WHERE
+			PRODUCT_PID = #{productPid}		
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.linv.bean.entity.InvmProductInfo">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_product_info
+		WHERE	
+			PRODUCT_PID = #{productPid}	
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.linv.bean.entity.InvmProductInfo" resultType="com.bms.linv.bean.entity.InvmProductInfo">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_product_info
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>		
+	</select>
+	
+	<select id="countAll" parameterType="com.bms.linv.bean.entity.InvmProductInfo" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			invm_product_info
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>				
+	</select>
+	
+</mapper>

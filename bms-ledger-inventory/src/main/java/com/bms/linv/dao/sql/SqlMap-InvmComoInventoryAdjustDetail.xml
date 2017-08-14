@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmComoInventoryAdjustDetailDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		DETAIL_ID AS detailId,
+		COMO_ADJUST_ID AS comoAdjustId,
+		STORE_NO_FROM AS storeNoFrom,
+		STORE_NO_TO AS storeNoTo,
+		ADJUST_QTY AS adjustQty,
+	</sql>
+
+    <insert id="save" parameterType="com.bms.linv.bean.entity.InvmComoInventoryAdjustDetail">
+		INSERT INTO invm_como_inventory_adjust_detail (
+			DETAIL_ID,
+			COMO_ADJUST_ID,
+			STORE_NO_FROM,
+			STORE_NO_TO,
+			ADJUST_QTY,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{detailId},
+			#{comoAdjustId},
+			#{storeNoFrom},
+			#{storeNoTo},
+			#{adjustQty},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+</mapper>

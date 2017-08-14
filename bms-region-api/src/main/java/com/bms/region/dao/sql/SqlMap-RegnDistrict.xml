@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.region.dao.RegnDistrictDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		DISTRICT_ID AS districtId,
+		CITY_ID AS cityId,
+		DISTRICT_CODE AS districtCode,
+		DISTRICT_NAME AS districtName,
+		DIVISION_LEVEL AS divisionLevel,
+		DISABLE_FLG AS disableFlg
+	</sql>
+
+    <sql id="selectColumns2">
+        p.PROVINCE_ID AS provinceId,
+        p.PROVINCE_CODE AS provinceCode,
+        p.PROVINCE_NAME AS provinceName,
+        c.CITY_CODE AS cityCode,
+        c.CITY_NAME AS cityName,
+        d.DISTRICT_ID AS districtId,
+        d.CITY_ID AS cityId,
+        d.DISTRICT_CODE AS districtCode,
+        d.DISTRICT_NAME AS districtName,
+        d.DIVISION_LEVEL AS divisionLevel,
+        d.DISABLE_FLG AS disableFlg
+    </sql>
+
+    <insert id="save" parameterType="com.bms.region.bean.entity.RegnDistrict">
+		INSERT INTO REGN_DISTRICT (
+		DISTRICT_ID,
+		CITY_ID,
+		DISTRICT_CODE,
+		DISTRICT_NAME,
+		DIVISION_LEVEL,
+		DISABLE_FLG,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		UPD_ID,
+		UPD_TIME,
+		VERSION
+		)
+		VALUES (
+		#{districtId},
+		#{cityId},
+		#{districtCode},
+		#{districtName},
+		#{divisionLevel},
+		'1',
+		false,
+		#{crtId},
+		#{crtTime},
+		#{updId},
+		#{updTime},
+		1
+		)
+	</insert>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO REGN_DISTRICT (
+        DISTRICT_ID,
+        CITY_ID,
+        DISTRICT_CODE,
+        DISTRICT_NAME,
+        DIVISION_LEVEL,
+        DISABLE_FLG,
+        DEL_FLG,
+
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" index="index" item="param" separator=",">
+            (
+            #{param.districtId},
+            #{param.cityId},
+            #{param.districtCode},
+            #{param.districtName},
+            #{param.divisionLevel},
+            '1',
+            false,
+            #{param.crtId},
+            #{param.crtTime},
+            #{param.updId},
+            #{param.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.region.bean.param.BaseBean">
+        UPDATE REGN_DISTRICT
+        SET
+        <if test="target.cityId !=null">
+            CITY_ID = #{target.cityId},
+        </if>
+        <if test="target.districtCode !=null">
+            DISTRICT_CODE = #{target.districtCode},
+        </if>
+        <if test="target.districtName !=null">
+            DISTRICT_NAME = #{target.districtName},
+        </if>
+        <if test="target.divisionLevel !=null">
+            DIVISION_LEVEL = #{target.divisionLevel},
+        </if>
+        <if test="target.disableFlg !=null">
+            DISABLE_FLG = #{target.disableFlg},
+        </if>
+        <if test="target.delFlg !=null">
+            DEL_FLG=#{target.delFlg},
+        </if>
+        <if test="target.version !=null">
+            VERSION=#{target.version},
+        </if>
+        UPD_ID=#{target.updId},
+        UPD_TIME=#{target.updTime}
+        WHERE
+        DEL_FLG=false
+        AND DISTRICT_ID = #{filter.districtId}
+    </update>
+
+    <select id="findOne" parameterType="com.bms.region.bean.param.DistrictRsParam"
+            resultType="com.bms.region.bean.entity.RegnDistrict">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        REGN_DISTRICT
+        WHERE
+        DEL_FLG=false
+        AND DISABLE_FLG = 1
+        AND CITY_ID = #{cityId}
+        AND DISTRICT_CODE = #{districtCode}
+        <if test="districtId != null and districtId != ''">
+            AND DISTRICT_ID &lt;&gt; #{districtId}
+        </if>
+
+
+    </select>
+
+    <select id="findAll" parameterType="com.bms.region.bean.param.DistrictRsParam"
+            resultType="com.bms.region.bean.result.DistrictRestResult">
+        SELECT
+        <include refid="selectColumns2"/>
+        FROM REGN_DISTRICT d
+        INNER JOIN REGN_CITY c ON d.CITY_ID = c.CITY_ID AND c.DEL_FLG = FALSE AND c.DISABLE_FLG = TRUE
+        INNER JOIN REGN_PROVINCE p ON p.PROVINCE_ID = c.PROVINCE_ID AND p.DEL_FLG = FALSE AND p.DISABLE_FLG = TRUE
+        WHERE
+        d.DEL_FLG = FALSE
+        AND d.DISABLE_FLG = 1
+        <if test="cityId != null and cityId != ''">
+            AND c.CITY_ID = #{cityId}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND c.CITY_CODE = #{cityCode}
+        </if>
+        <if test="cityName != null and cityName != ''">
+            AND c.CITY_NAME LIKE #{cityName}
+        </if>
+        <if test="districtCode != null and districtCode != ''">
+            AND d.DISTRICT_CODE = #{districtCode}
+        </if>
+        <if test="districtName != null and districtName != ''">
+            AND d.DISTRICT_NAME LIKE #{districtName}
+        </if>
+        <if test="districtId != null and districtId != ''">
+            AND d.DISTRICT_ID = #{districtId}
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.bms.region.bean.param.DistrictRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        REGN_DISTRICT
+        WHERE
+        DEL_FLG = FALSE
+        AND DISABLE_FLG = 1
+        <if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND DEL_FLG = #{filterMap.delFlg}
+        </if>
+    </select>
+
+    <select id="findLogDistrictList" parameterType="com.bms.region.bean.param.CityLogRsParam"
+            resultType="com.bms.region.bean.param.CityLogRsParam">
+        SELECT
+            a.LGCS_AREA_ID AS lgcsAreaId,
+            a.LGCS_AREA_CODE AS lgcsAreaCode,
+            a.LGCS_AREA_NAME AS lgcsAreaName,
+            c.ZONE_ID AS zoneId,
+            c.ZONE_CODE AS zoneCode,
+            c.ZONE_NAME AS zoneName,
+            rc.CITY_ID AS cityId,
+            rc.CITY_CODE AS cityCode,
+            rc.CITY_NAME AS cityName,
+            d.DISTRICT_ID AS districtId,
+            d.DISTRICT_CODE AS districtCode,
+            d.DISTRICT_NAME AS districtName
+		FROM
+            REGN_RELATION r
+        INNER JOIN REGN_CITY rc ON r.REGN_KEY = rc.CITY_ID AND rc.DISABLE_FLG = '1' AND rc.DEL_FLG = FALSE
+        INNER JOIN REGN_LOGISTICS_ZONE c ON c.ZONE_ID = r.LGCS_KEY AND c.DEL_FLG = FALSE AND c.DISABLE_FLG = '1'
+        INNER JOIN REGN_LOGISTICS_AREA a ON a.LGCS_AREA_ID = c.LGCS_AREA_ID AND a.DEL_FLG = FALSE AND a.DISABLE_FLG = '1'
+        LEFT JOIN REGN_DISTRICT d ON rc.CITY_ID = d.CITY_ID AND d.DEL_FLG = false AND d.DISABLE_FLG = 1
+        WHERE  r.RELA_TYPE = '1' AND r.DEL_FLG = FALSE
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND a.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND a.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND a.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+        <if test="zoneId != null and zoneId != ''">
+            AND c.ZONE_ID = #{zoneId}
+        </if>
+        <if test="zoneCode != null and zoneCode != ''">
+            AND c.ZONE_CODE = #{zoneCode}
+        </if>
+        <if test="zoneName != null and zoneName != ''">
+            AND c.ZONE_NAME LIKE #{zoneName}
+        </if>
+        <if test="districtCode != null and districtCode != ''">
+            AND d.DISTRICT_CODE = #{districtCode}
+        </if>
+        <if test="districtName != null and districtName != ''">
+            AND d.DISTRICT_NAME LIKE #{districtName}
+        </if>
+        <if test="districtId != null and districtId != ''">
+            AND d.DISTRICT_ID = #{districtId}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            AND rc.CITY_ID = #{cityId}
+        </if>
+        <if test="cityName != null and cityName != ''">
+            AND rc.CITY_NAME LIKE #{cityName}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND rc.CITY_CODE = #{cityCode}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmComoInvReturnCompleteDao">
+
+
+	
+<!-- 查询占用交易明细 -->
+	<select id="findComoAlocInv" parameterType="com.bms.linv.bean.param.LINV0106ISourceParam" resultType="com.bms.linv.bean.entity.InvmComoAlocInventory">
+		SELECT
+		ALOC_NO AS alocNo,
+		L_A_ID AS laId,
+		S_PLAT_CODE AS splatCode,
+		OWNER_ID AS ownerId,
+		OWNER_CODE AS ownerCode,
+		OWNER_TYPE AS ownerType,
+		COMMODITY_ID AS commodityId,
+		UOM AS uom,
+		BIZ_TYPE AS bizType,
+		IV_TYPE AS ivType,
+		ALOC_QTY AS alocQty,
+		TGT_ID AS tgtId,
+		TGT_CODE AS tgtCode,
+		TGT_TYPE AS tgtType
+		FROM
+			INVM_COMO_ALOC_INVENTORY
+		WHERE	
+			DEL_FLG = 0
+		<if test="logicAreaId != null and logicAreaId != ''">
+			AND L_A_ID = #{logicAreaId}
+		</if>
+		<if test="salePlatform != null and salePlatform != ''">
+			AND S_PLAT_CODE = #{salePlatform}
+		</if>
+		<if test="ownerId != null and ownerId != ''">
+			AND OWNER_ID = #{ownerId}
+		</if>
+		<if test="ownerCode != null and ownerCode != ''">
+			AND OWNER_CODE = #{ownerCode}
+		</if>
+		<if test="ownerType != null and ownerType != ''">
+			AND OWNER_TYPE = #{ownerType}
+		</if>
+		<if test="commodityId != null and commodityId != ''">
+			AND COMMODITY_ID = #{commodityId}
+		</if>
+		<if test="ivType != null and ivType != ''">
+			AND IV_TYPE = #{ivType}
+		</if>
+		<if test="uom != null and uom != ''">
+			AND UOM = #{uom}
+		</if>
+	</select>
+
+	<!-- 释放货权人商品占用 -->
+	<update id="modifyComoAlocInv" parameterType="com.bms.linv.bean.entity.InvmComoAlocInventory">
+		UPDATE invm_como_aloc_inventory
+		SET
+		ALOC_QTY = #{alocQty},
+		UPD_ID = #{updId},
+		UPD_TIME = #{updTime},
+		VERSION = VERSION+1
+		WHERE
+		ALOC_NO = #{alocNo}
+	</update>
+
+
+	<!-- 查询货权人商品库存余量 -->
+	<select id="findComoBalanceInv" parameterType="com.bms.linv.bean.param.LINV0106IDealParam" resultType="com.bms.linv.bean.entity.InvmComoBalanceInventory">
+		SELECT
+		INV_ID AS invId,
+		STORE_DEAL_ID AS storeDealId,
+		STORE_NO AS storeNo,
+		TRANSACTION_ID AS transactionId,
+		TRANSACTION_NO AS transactionNo,
+		TRANSACTION_DETAIL_ID AS transactionDetailId,
+		TRANSACTION_SOURCE AS transactionSource,
+		TRANSACTION_TYPE AS transactionType,
+		TRANSACTION_TIME AS transactionTime,
+		REF_NO AS refNo,
+		BIZ_TYPE AS bizType,
+		DEAL_PRICE AS dealPrice,
+		INBOUND_QTY AS inboundQty,
+		OUTBOUND_QTY AS outboundQty,
+		SRC_ID AS srcId,
+		SRC_CODE AS srcCode,
+		SRC_TYPE AS srcType
+		FROM
+		INVM_COMO_BALANCE_INVENTORY
+		WHERE
+		DEL_FLG = 0
+		<if test="srcTransactionId != null and srcTransactionId != ''">
+			AND TRANSACTION_ID = #{srcTransactionId}
+		</if>
+		<if test="srcTransactionDetailId != null and srcTransactionDetailId != ''">
+			AND TRANSACTION_DETAIL_ID = #{srcTransactionDetailId}
+		</if>
+		ORDER BY INV_ID DESC
+	</select>
+
+
+
+	<!-- 查询货权人商品库存 -->
+	<select id="findComoInv" parameterType="com.bms.linv.bean.param.LINV0106ISourceParam" resultType="com.bms.linv.bean.entity.InvmComoInventory">
+		SELECT
+		STORE_NO AS storeNo,
+		L_A_ID AS laId,
+		L_A_CODE AS laCode,
+		S_PLAT_CODE AS splatCode,
+		OWNER_ID AS ownerId,
+		OWNER_CODE AS ownerCode,
+		OWNER_TYPE AS ownerType,
+		OWNER_D_TYPE AS ownerDType,
+		COMMODITY_ID AS commodityId,
+		UOM AS uom,
+		IV_QTY AS ivQty,
+		IV_TYPE AS ivType
+		FROM
+		INVM_COMO_INVENTORY
+		WHERE DEL_FLG = 0
+		<if test="logicAreaId != null and logicAreaId != ''">
+			AND L_A_ID = #{logicAreaId}
+		</if>
+		<if test="salePlatform != null and salePlatform != ''">
+			AND S_PLAT_CODE = #{salePlatform}
+		</if>
+		<if test="ownerId != null and ownerId != ''">
+			AND OWNER_ID = #{ownerId}
+		</if>
+		<if test="ownerCode != null and ownerCode != ''">
+			AND OWNER_CODE = #{ownerCode}
+		</if>
+		<if test="ownerType != null and ownerType != ''">
+			AND OWNER_TYPE = #{ownerType}
+		</if>
+		<if test="comoIvType != null and comoIvType != ''">
+			AND COMO_IV_TYPE = #{comoIvType}
+		</if>
+		<if test="commodityId != null and commodityId != ''">
+			AND COMMODITY_ID = #{commodityId}
+		</if>
+		<if test="ivType != null and ivType != ''">
+			AND IV_TYPE = #{ivType}
+		</if>
+		<if test="uom != null and uom != ''">
+			AND UOM = #{uom}
+		</if>
+	</select>
+
+
+<!-- 退货方商品库存减少 -->
+	<update id="modifyComoInv" parameterType="com.bms.linv.bean.entity.InvmComoInventory">
+		UPDATE INVM_COMO_INVENTORY
+		SET
+		IV_QTY =IV_QTY+ #{ivQty},
+		UPD_ID = #{updId},
+		UPD_TIME = #{updTime},
+		VERSION = VERSION+1
+		WHERE
+		DEL_FLG = 0
+		AND STORE_NO = #{storeNo}
+	</update>
+
+	<!-- 查询货权人商品库存余量 -->
+	<select id="findComoBalanceInvRetrun" parameterType="java.util.Map" resultType="com.bms.linv.bean.entity.InvmComoBalanceInventory">
+		SELECT
+		INV_ID AS invId,
+		STORE_NO AS storeNo,
+		TRANSACTION_ID AS transactionId,
+		TRANSACTION_NO AS transactionNo,
+		TRANSACTION_DETAIL_ID AS transactionDetailId,
+		TRANSACTION_SOURCE AS transactionSource,
+		TRANSACTION_TYPE AS transactionType,
+		TRANSACTION_TIME AS transactionTime,
+		REF_NO AS refNo,
+		BIZ_TYPE AS bizType,
+		DEAL_PRICE AS dealPrice,
+		INBOUND_QTY AS inboundQty,
+		OUTBOUND_QTY AS outboundQty,
+		SRC_ID AS srcId,
+		SRC_CODE AS srcCode,
+		SRC_TYPE AS srcType
+		FROM
+		INVM_COMO_BALANCE_INVENTORY
+		WHERE
+		DEL_FLG = 0
+		ORDER BY INV_ID DESC
+		limit #{startPage},1
+	</select>
+</mapper>

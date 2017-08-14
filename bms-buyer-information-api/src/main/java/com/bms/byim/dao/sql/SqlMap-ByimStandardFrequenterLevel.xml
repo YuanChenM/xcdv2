@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimStandardFrequenterLevelDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		LEVEL_STANDARD_ID AS levelStandardId,
+		LEVEL_STANDARD AS levelStandard,
+		MIN_FREQUENCY AS minFrequency,
+		MAX_FREQUENCY AS maxFrequency,
+		MIN_AMOUNT AS minAmount,
+		MAX_AMOUNT AS maxAmount,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+
+    <insert id="save" parameterType="com.bms.byim.bean.entity.ByimStandardFrequenterLevel">
+		INSERT INTO BYIM_STANDARD_FREQUENTER_LEVEL (
+			LEVEL_STANDARD_ID,
+			LEVEL_STANDARD,
+			MIN_FREQUENCY,
+			MAX_FREQUENCY,
+			MIN_AMOUNT,
+			MAX_AMOUNT,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES (
+			#{levelStandardId},
+			#{levelStandard},
+			#{minFrequency},
+			#{maxFrequency},
+			#{minAmount},
+			#{maxAmount},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYIM_STANDARD_FREQUENTER_LEVEL (
+        LEVEL_STANDARD_ID,
+        LEVEL_STANDARD,
+        MIN_FREQUENCY,
+        MAX_FREQUENCY,
+        MIN_AMOUNT,
+        MAX_AMOUNT,
+
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" index="index" item="param" separator=",">
+            (
+            #{param.levelStandardId},
+            #{param.levelStandard},
+            #{param.minFrequency},
+            #{param.maxFrequency},
+            #{param.minAmount},
+            #{param.maxAmount},
+
+            #{param.delFlg},
+            #{param.crtId},
+            #{param.crtTime},
+            #{param.updId},
+            #{param.updTime},
+            #{param.version}
+            )
+        </foreach>
+    </insert>
+
+
+    <update id="modify" parameterType="com.bms.byim.bean.param.BaseBean">
+        UPDATE BYIM_STANDARD_FREQUENTER_LEVEL
+        SET
+        <if test="target.levelStandard !=null">
+            LEVEL_STANDARD = #{target.levelStandard},
+        </if>
+        MIN_FREQUENCY = #{target.minFrequency},
+        MAX_FREQUENCY = #{target.maxFrequency},
+        MIN_AMOUNT = #{target.minAmount},
+        MAX_AMOUNT = #{target.maxAmount},
+        <if test="target.version !=null">
+            VERSION = #{target.version},
+        </if>
+        DEL_FLG = #{target.delFlg},
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+
+        WHERE
+        DEL_FLG=false
+        AND LEVEL_STANDARD_ID = #{filter.levelStandardId}
+    </update>
+
+    <select id="findOne" parameterType="com.bms.byim.bean.param.StandardFrequenterLevelRsParam"
+            resultType="com.bms.byim.bean.param.StandardFrequenterLevelRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_STANDARD_FREQUENTER_LEVEL
+        WHERE
+        DEL_FLG=false
+        AND LEVEL_STANDARD = #{levelStandard}
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.byim.bean.param.StandardFrequenterLevelRsParam"
+            resultType="com.bms.byim.bean.param.StandardFrequenterLevelRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_STANDARD_FREQUENTER_LEVEL
+        WHERE
+        DEL_FLG =FALSE
+        <if test="levelStandardId !=null">
+            AND LEVEL_STANDARD_ID =#{levelStandardId}
+        </if>
+        <if test="levelStandard !=null">
+            AND LEVEL_STANDARD =#{levelStandard}
+        </if>
+
+    </select>
+
+    <select id="count" parameterType="com.bms.byim.bean.param.StandardFrequenterLevelRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYIM_STANDARD_FREQUENTER_LEVEL
+        WHERE
+        DEL_FLG = FALSE
+        <if test="levelStandardId !=null">
+            AND LEVEL_STANDARD_ID =#{levelStandardId}
+        </if>
+
+    </select>
+
+    <select id="findLevelStandards" resultType="com.bms.byim.bean.param.StandardFrequenterLevelRsParam"
+            parameterType="com.bms.byim.bean.param.StandardFrequenterLevelRsParam">
+        SELECT
+            LEVEL_STANDARD_ID AS levelStandArdId,
+            LEVEL_STANDARD AS levelStandard
+        FROM
+            byim_standard_frequenter_level
+        WHERE
+            DEL_FLG = FALSE
+        ORDER BY MIN_FREQUENCY DESC,
+        MIN_AMOUNT DESC
+        LIMIT 0,3
+    </select>
+
+</mapper>

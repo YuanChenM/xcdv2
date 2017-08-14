@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.issue.dao.ISSU0212IDao">
+
+    <select id="findPageList" parameterType="com.bms.issue.bean.param.ISSU0212IFilter" resultType="com.bms.issue.bean.result.ISSU0212IRestResult">
+        SELECT
+        HANDLING_ID AS handlingId,
+        QUESTION_ID AS questionId,
+        HANDLING_TYPE AS handlingType,
+        HANDLING_CONTENT AS handlingContent,
+        DATE_FORMAT(HANDLING_TIME,'%Y-%m-%d %T') AS handlingTime,
+        HANDLING_UID AS handlingUid,
+        HANDLING_UNAME AS handlingUname,
+        HANDLING_RESULT AS handlingResult,
+        HANDLING_RESULT_REASON AS handlingResultReason,
+        DEL_FLG AS delFlg,
+        CRT_ID AS crtId,
+        DATE_FORMAT(CRT_TIME,'%Y-%m-%d %T') AS crtTime,
+        UPD_ID AS updId,
+        DATE_FORMAT(UPD_TIME,'%Y-%m-%d %T') AS updTime,
+        VERSION AS ver
+        FROM
+        ISSU_QUESTION_HANDLING
+        WHERE
+        DEL_FLG = 0
+        <if test="null != filter">
+        <if test="filter.questionId != null">
+            AND QUESTION_ID IN
+            <foreach collection="filter.questionId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.handlingId != null">
+            AND HANDLING_ID IN
+            <foreach collection="filter.handlingId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.handlingType != null">
+            AND HANDLING_TYPE IN
+            <foreach collection="filter.handlingType" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.handlingUid != null">
+            AND HANDLING_UID IN
+            <foreach collection="filter.handlingUid" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.handlingContent != null">
+            AND HANDLING_CONTENT LIKE #{filter.handlingContent}
+        </if>
+
+        <if test="filter.handlingUname != null">
+            AND HANDLING_UNAME LIKE #{filter.handlingUname}
+        </if>
+
+        <if test="filter.handlingResult != null">
+            AND HANDLING_RESULT LIKE #{filter.handlingResult}
+        </if>
+
+        <if test="filter.handlingResultReason != null">
+            AND HANDLING_RESULT_REASON LIKE #{filter.handlingResultReason}
+        </if>
+
+        <if test="filter.handlingTimeFrom != null">
+            AND DATE_FORMAT(HANDLING_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{filter.handlingTimeFrom},'%Y-%m-%d')
+        </if>
+
+        <if test="filter.handlingTimeTo != null">
+            AND DATE_FORMAT(HANDLING_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{filter.handlingTimeTo},'%Y-%m-%d')
+        </if>
+        </if>
+    </select>
+</mapper>

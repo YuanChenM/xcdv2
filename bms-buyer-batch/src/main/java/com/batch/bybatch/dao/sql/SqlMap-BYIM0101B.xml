@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.batch.bybatch.dao.BYIM0101BDao">
+
+    <select id="findByimBasicList" resultType = "com.batch.bybatch.bean.result.ByimBuyerResult">
+        SELECT
+        BUYER_ID AS buyerId,
+        BUYER_CODE AS buyerCode,
+        BUYER_TYPE AS buyerType,
+        BUYER_TYPE_NAME AS buyerTypeName
+        FROM
+        BYIM_BUYER
+        WHERE
+        DEL_FLG = FALSE
+    </select>
+
+    <select id="findStandardLevelList" resultType = "com.batch.bybatch.bean.result.StandardFrequenterLevelResult">
+        SELECT
+           LEVEL_STANDARD_ID AS levelStandardId,
+           LEVEL_STANDARD AS levelStandard,
+           MIN_FREQUENCY AS minFrequency,
+           MAX_FREQUENCY AS maxFrequency,
+           MIN_AMOUNT AS minAmount,
+           MAX_AMOUNT AS maxAmount
+        FROM
+          BYIM_STANDARD_FREQUENTER_LEVEL
+        WHERE DEL_FLG = FALSE
+    </select>
+
+    <select id="findStandardGradeList" resultType = "com.batch.bybatch.bean.result.StandardGradeResult">
+        SELECT
+            GRADE_STANDARD_ID AS gradeStandardId,
+            GRADE_STANDARD AS gradeStandard,
+            SINGEL_AMOUNT AS singelAmount,
+            ALL_AMOUNT AS allAmount
+        FROM
+            BYIM_STANDARD_GRADE
+        WHERE
+            DEL_FLG = FALSE
+    </select>
+
+    <update id="updateStandard" parameterType="com.batch.bybatch.bean.entity.ByimBuyer">
+        UPDATE BYIM_BUYER
+        SET
+          FREQUENTER_LEVEL_F = #{frequenterLevelF},
+          FREQUENTER_LEVEL_A = #{frequenterLevelA},
+          FREQUENTER_LEVEL_CODE = #{frequenterLevelCode},
+          GRADE = #{grade},
+          UPD_TIME = #{updTime},
+          UPD_ID = #{updId}
+        WHERE
+          BUYER_ID = #{buyerId}
+          AND DEL_FLG = FALSE
+    </update>
+
+    <insert id="saveFrequenterLevel" parameterType="com.batch.bybatch.bean.entity.ByimFrequenterLevel">
+        INSERT INTO byim_frequenter_level (
+        LEVEL_ID,
+        BUYER_ID,
+        FREQUENTER_LEVEL_CODE,
+        FREQUENTER_LEVEL_F,
+        FREQUENTER_LEVEL_A,
+        FREQUENCY,
+        AMOUNT,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES (
+        #{levelId},
+        #{buyerId},
+        #{frequenterLevelCode},
+        #{frequenterLevelF},
+        #{frequenterLevelA},
+        #{frequency},
+        #{amount},
+        FALSE,
+        #{crtId},
+        #{crtTime},
+        #{updId},
+        #{updTime},
+        1
+        )
+    </insert>
+
+    <insert id="saveGrade" parameterType="com.batch.bybatch.bean.entity.ByimGrade">
+        INSERT INTO byim_grade (
+        GRADE_ID,
+        BUYER_ID,
+        GRADE,
+        SINGEL_AMOUNT,
+        ALL_AMOUNT,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES (
+        #{gradeId},
+        #{buyerId},
+        #{grade},
+        #{singelAmount},
+        #{allAmount},
+        FALSE,
+        #{crtId},
+        #{crtTime},
+        #{updId},
+        #{updTime},
+        1
+        )
+    </insert>
+</mapper>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimCategoryDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		CATEGORY_ID AS categoryId,
+		PARENT_ID AS parentId,
+		NODE_PATH AS nodePath,
+		CATEGORY_NAME AS categoryName,
+		CATEGORY_CODE AS categoryCode
+	</sql>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYIM_CATEGORY (
+        CATEGORY_ID,
+        PARENT_ID,
+        NODE_PATH,
+        CATEGORY_NAME,
+        CATEGORY_CODE,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="lg" index="index" separator=",">
+            (
+            #{lg.categoryId},
+            #{lg.parentId},
+            #{lg.nodePath},
+            #{lg.categoryName},
+            #{lg.categoryCode},
+            false,
+            #{lg.crtId},
+            #{lg.crtTime},
+            #{lg.updId},
+            #{lg.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.byim.bean.param.BaseBean">
+        UPDATE BYIM_CATEGORY
+        SET
+        <if test="target.categoryName != null">
+            CATEGORY_NAME = #{target.categoryName},
+        </if>
+        <if test="target.categoryCode != null">
+            CATEGORY_CODE = #{target.categoryCode},
+        </if>
+        DEL_FLG = #{target.delFlg},
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        CATEGORY_ID = #{filter.categoryId}
+        AND DEL_FLG = FALSE
+    </update>
+
+    <select id="findOne" parameterType="com.bms.byim.bean.entity.ByimCategory"
+            resultType="com.bms.byim.bean.entity.ByimCategory">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_CATEGORY
+        WHERE
+        DEL_FLG = FALSE
+        AND CATEGORY_ID = #{categoryId}
+    </select>
+
+    <select id="findByByimCategoryCode" parameterType="com.bms.byim.bean.entity.ByimCategory"
+            resultType="com.bms.byim.bean.entity.ByimCategory">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_CATEGORY
+        WHERE
+        DEL_FLG = FALSE
+        AND CATEGORY_CODE = #{categoryCode}
+        AND PARENT_ID = #{parentId}
+    </select>
+
+    <select id="findAll" parameterType="com.bms.byim.bean.param.CategoryRsParam"
+            resultType="com.bms.byim.bean.param.CategoryRsParam">
+
+        <if test="nodePath != '' and nodePath != null">
+            SELECT
+            <include refid="selectColumns"/>
+            FROM
+            BYIM_CATEGORY
+            WHERE
+            DEL_FLG = FALSE
+            AND NODE_PATH = #{nodePath}
+
+            UNION ALL
+        </if>
+
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_CATEGORY
+        WHERE
+        DEL_FLG = FALSE
+        AND NODE_PATH LIKE #{nodePathLike}
+    </select>
+
+    <select id="count" parameterType="com.bms.byim.bean.param.CategoryRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYIM_CATEGORY
+        WHERE
+        DEL_FLG = FALSE
+		AND CATEGORY_CODE = #{categoryCode}
+        AND PARENT_ID = #{parentId}
+    </select>
+
+
+    <select id="nameCount" parameterType="com.bms.byim.bean.param.CategoryRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYIM_CATEGORY
+        WHERE
+        DEL_FLG = FALSE
+        AND CATEGORY_NAME = #{categoryName}
+        AND PARENT_ID = #{parentId}
+    </select>
+
+    <select id="checkedCategoryId" parameterType="com.bms.byim.bean.param.CategoryRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYIM_CATEGORY
+        WHERE
+        DEL_FLG = FALSE
+        AND CATEGORY_ID = #{categoryId}
+    </select>
+
+    <select id="findListInfo" parameterType="com.bms.byim.bean.param.CategoryRsParam"
+            resultType="com.bms.byim.bean.param.CategoryRsParam">
+        SELECT
+        A.CATEGORY_ID AS categoryId,
+        A.PARENT_ID AS parentId,
+        A.NODE_PATH AS nodePath,
+        A.CATEGORY_NAME AS categoryName,
+        A.CATEGORY_CODE AS categoryCode,
+        COUNT(B.CATEGORY_ID) AS childCount
+        FROM
+        BYIM_CATEGORY A LEFT JOIN BYIM_CATEGORY B
+        ON B.PARENT_ID = A.CATEGORY_ID AND A.DEL_FLG = B.DEL_FLG
+        WHERE
+        A.DEL_FLG = FALSE
+        <if test="parentId !=null">
+            AND A.PARENT_ID = #{parentId}
+        </if>
+        <if test="categoryId != null and categoryId != ''">
+            AND A.CATEGORY_ID = #{categoryId}
+        </if>
+        <if test="categoryName != null and categoryName != ''">
+            AND A.CATEGORY_NAME LIKE #{categoryName}
+        </if>
+        <if test="categoryCode != null and categoryCode != ''">
+            AND A.CATEGORY_CODE LIKE #{categoryCode}
+        </if>
+        GROUP BY
+        A.CATEGORY_ID
+    </select>
+
+
+    <update id="modifyDelFag" parameterType="com.bms.byim.bean.param.CategoryRsParam">
+        UPDATE BYIM_CATEGORY
+        SET DEL_FLG = TRUE
+        WHERE NODE_PATH = #{nodePath}
+        AND DEL_FLG = FALSE
+    </update>
+    <update id="modifyLikeDelFag" parameterType="com.bms.byim.bean.param.CategoryRsParam">
+      UPDATE BYIM_CATEGORY
+      SET DEL_FLG = TRUE
+      WHERE NODE_PATH LIKE #{nodePathLike}
+      AND  DEL_FLG = FALSE
+    </update>
+
+
+    <select id="selectCode"  resultType="String">
+        SELECT
+        MAX(CATEGORY_CODE)
+        FROM
+        BYIM_CATEGORY
+        WHERE
+        DEL_FLG = FALSE
+        AND PARENT_ID = 0
+    </select>
+
+</mapper>

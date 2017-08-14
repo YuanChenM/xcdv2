@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.issue.dao.QuestionHandlingDao">
+<insert id="save" parameterType="com.bms.issue.bean.entity.QuestionHandlingEntity">
+INSERT INTO
+ISSU_QUESTION_HANDLING
+(
+HANDLING_ID
+, QUESTION_ID
+, HANDLING_TYPE
+, HANDLING_CONTENT
+, HANDLING_TIME
+, HANDLING_UID
+, HANDLING_UNAME
+, HANDLING_RESULT
+, HANDLING_RESULT_REASON
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{handlingId}
+, #{questionId}
+, #{handlingType}
+, #{handlingContent}
+, #{handlingTime}
+, #{handlingUid}
+, #{handlingUname}
+, #{handlingResult}
+, #{handlingResultReason}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ISSU_QUESTION_HANDLING
+(
+HANDLING_ID
+, QUESTION_ID
+, HANDLING_TYPE
+, HANDLING_CONTENT
+, HANDLING_TIME
+, HANDLING_UID
+, HANDLING_UNAME
+, HANDLING_RESULT
+, HANDLING_RESULT_REASON
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.handlingId}
+, #{entity.questionId}
+, #{entity.handlingType}
+, #{entity.handlingContent}
+, #{entity.handlingTime}
+, #{entity.handlingUid}
+, #{entity.handlingUname}
+, #{entity.handlingResult}
+, #{entity.handlingResultReason}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.issue.bean.entity.QuestionHandlingEntity">
+UPDATE ISSU_QUESTION_HANDLING
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+HANDLING_ID = #{handlingId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ISSU_QUESTION_HANDLING
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+HANDLING_ID = #{entity.handlingId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.issue.bean.entity.QuestionHandlingEntity">
+UPDATE ISSU_QUESTION_HANDLING
+SET
+HANDLING_ID = #{handlingId}
+, QUESTION_ID = #{questionId}
+, HANDLING_TYPE = #{handlingType}
+, HANDLING_CONTENT = #{handlingContent}
+, HANDLING_TIME = #{handlingTime}
+, HANDLING_UID = #{handlingUid}
+, HANDLING_UNAME = #{handlingUname}
+, HANDLING_RESULT = #{handlingResult}
+, HANDLING_RESULT_REASON = #{handlingResultReason}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+HANDLING_ID = #{handlingId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ISSU_QUESTION_HANDLING
+SET
+HANDLING_ID = #{entity.handlingId}
+, QUESTION_ID = #{entity.questionId}
+, HANDLING_TYPE = #{entity.handlingType}
+, HANDLING_CONTENT = #{entity.handlingContent}
+, HANDLING_TIME = #{entity.handlingTime}
+, HANDLING_UID = #{entity.handlingUid}
+, HANDLING_UNAME = #{entity.handlingUname}
+, HANDLING_RESULT = #{entity.handlingResult}
+, HANDLING_RESULT_REASON = #{entity.handlingResultReason}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+HANDLING_ID = #{entity.handlingId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.issue.bean.entity.QuestionHandlingEntity" resultType="com.bms.issue.bean.entity.QuestionHandlingEntity">
+SELECT
+HANDLING_ID AS handlingId
+, QUESTION_ID AS questionId
+, HANDLING_TYPE AS handlingType
+, HANDLING_CONTENT AS handlingContent
+, HANDLING_TIME AS handlingTime
+, HANDLING_UID AS handlingUid
+, HANDLING_UNAME AS handlingUname
+, HANDLING_RESULT AS handlingResult
+, HANDLING_RESULT_REASON AS handlingResultReason
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ISSU_QUESTION_HANDLING
+<where>
+<if test="handlingId!=null">
+AND HANDLING_ID = #{handlingId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.issue.bean.entity.QuestionHandlingEntity">
+SELECT
+HANDLING_ID AS handlingId
+, QUESTION_ID AS questionId
+, HANDLING_TYPE AS handlingType
+, HANDLING_CONTENT AS handlingContent
+, HANDLING_TIME AS handlingTime
+, HANDLING_UID AS handlingUid
+, HANDLING_UNAME AS handlingUname
+, HANDLING_RESULT AS handlingResult
+, HANDLING_RESULT_REASON AS handlingResultReason
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ISSU_QUESTION_HANDLING
+<where>
+<if test="ids!=null">
+AND HANDLING_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="questions!=null">
+AND QUESTION_ID IN (<foreach item="item" collection="questions" separator=",">#{item.entity.questionId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+</mapper>

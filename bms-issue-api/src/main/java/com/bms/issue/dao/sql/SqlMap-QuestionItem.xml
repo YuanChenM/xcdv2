@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.issue.dao.QuestionItemDao">
+<insert id="save" parameterType="com.bms.issue.bean.entity.QuestionItemEntity">
+INSERT INTO
+ISSU_QUESTION_ITEM
+(
+ITEM_ID
+, QUESTION_ID
+, ITEM_DESC
+, ITEM_SOLUTION
+, ITEM_EXCUTOR
+, ITEM_START_TIME
+, ITEM_END_TIME
+, ITEM_RESULT
+, ITEM_FEEDBACK
+, ITEM_CLOSER
+, ITEM_CLOSE_TIME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{itemId}
+, #{questionId}
+, #{itemDesc}
+, #{itemSolution}
+, #{itemExcutor}
+, #{itemStartTime}
+, #{itemEndTime}
+, #{itemResult}
+, #{itemFeedback}
+, #{itemCloser}
+, #{itemCloseTime}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ISSU_QUESTION_ITEM
+(
+ITEM_ID
+, QUESTION_ID
+, ITEM_DESC
+, ITEM_SOLUTION
+, ITEM_EXCUTOR
+, ITEM_START_TIME
+, ITEM_END_TIME
+, ITEM_RESULT
+, ITEM_FEEDBACK
+, ITEM_CLOSER
+, ITEM_CLOSE_TIME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.itemId}
+, #{entity.questionId}
+, #{entity.itemDesc}
+, #{entity.itemSolution}
+, #{entity.itemExcutor}
+, #{entity.itemStartTime}
+, #{entity.itemEndTime}
+, #{entity.itemResult}
+, #{entity.itemFeedback}
+, #{entity.itemCloser}
+, #{entity.itemCloseTime}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.issue.bean.entity.QuestionItemEntity">
+UPDATE ISSU_QUESTION_ITEM
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+ITEM_ID = #{itemId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ISSU_QUESTION_ITEM
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+ITEM_ID = #{entity.itemId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.issue.bean.entity.QuestionItemEntity">
+UPDATE ISSU_QUESTION_ITEM
+SET
+ITEM_ID = #{itemId}
+, QUESTION_ID = #{questionId}
+, ITEM_DESC = #{itemDesc}
+, ITEM_SOLUTION = #{itemSolution}
+, ITEM_EXCUTOR = #{itemExcutor}
+, ITEM_START_TIME = #{itemStartTime}
+, ITEM_END_TIME = #{itemEndTime}
+, ITEM_RESULT = #{itemResult}
+, ITEM_FEEDBACK = #{itemFeedback}
+, ITEM_CLOSER = #{itemCloser}
+, ITEM_CLOSE_TIME = #{itemCloseTime}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+ITEM_ID = #{itemId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ISSU_QUESTION_ITEM
+SET
+ITEM_ID = #{entity.itemId}
+, QUESTION_ID = #{entity.questionId}
+, ITEM_DESC = #{entity.itemDesc}
+, ITEM_SOLUTION = #{entity.itemSolution}
+, ITEM_EXCUTOR = #{entity.itemExcutor}
+, ITEM_START_TIME = #{entity.itemStartTime}
+, ITEM_END_TIME = #{entity.itemEndTime}
+, ITEM_RESULT = #{entity.itemResult}
+, ITEM_FEEDBACK = #{entity.itemFeedback}
+, ITEM_CLOSER = #{entity.itemCloser}
+, ITEM_CLOSE_TIME = #{entity.itemCloseTime}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+ITEM_ID = #{entity.itemId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.issue.bean.entity.QuestionItemEntity" resultType="com.bms.issue.bean.entity.QuestionItemEntity">
+SELECT
+ITEM_ID AS itemId
+, QUESTION_ID AS questionId
+, ITEM_DESC AS itemDesc
+, ITEM_SOLUTION AS itemSolution
+, ITEM_EXCUTOR AS itemExcutor
+, ITEM_START_TIME AS itemStartTime
+, ITEM_END_TIME AS itemEndTime
+, ITEM_RESULT AS itemResult
+, ITEM_FEEDBACK AS itemFeedback
+, ITEM_CLOSER AS itemCloser
+, ITEM_CLOSE_TIME AS itemCloseTime
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ISSU_QUESTION_ITEM
+<where>
+<if test="itemId!=null">
+AND ITEM_ID = #{itemId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.issue.bean.entity.QuestionItemEntity">
+SELECT
+ITEM_ID AS itemId
+, QUESTION_ID AS questionId
+, ITEM_DESC AS itemDesc
+, ITEM_SOLUTION AS itemSolution
+, ITEM_EXCUTOR AS itemExcutor
+, ITEM_START_TIME AS itemStartTime
+, ITEM_END_TIME AS itemEndTime
+, ITEM_RESULT AS itemResult
+, ITEM_FEEDBACK AS itemFeedback
+, ITEM_CLOSER AS itemCloser
+, ITEM_CLOSE_TIME AS itemCloseTime
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ISSU_QUESTION_ITEM
+<where>
+<if test="ids!=null">
+AND ITEM_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="questions!=null">
+AND QUESTION_ID IN (<foreach item="item" collection="questions" separator=",">#{item.entity.questionId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+</mapper>

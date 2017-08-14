@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifPartnerAgentDao">
+    <!-- 查询字段 -->
+    <select id="findPageList" parameterType="com.bms.agif.bean.param.AgentAndPartnerPageParam"
+            resultType="com.bms.agif.bean.result.AgentAndPartnerResult">
+        SELECT
+        <include refid="selectColumns_agent"/>
+        FROM
+        AGIF_AGENT g
+        LEFT JOIN agif_agent_account c on c.AGENT_ID = g.AGENT_ID AND c.DEL_FLG = FALSE
+        INNER JOIN agif_agent_demesne d on d.AGENT_ID = g.AGENT_ID AND d.DEL_FLG = FALSE
+        <where>
+            <include refid="Where_agent"/>
+        </where>
+        GROUP BY d.LGCS_AREA_CODE,g.AGENT_ID
+        UNION
+        SELECT
+        <include refid="selectColumns_partner"/>
+        FROM
+        AGIF_PARTNER p
+        LEFT JOIN agif_partner_account t on p.PARTNER_ID = t.PARTNER_ID AND t.DEL_FLG = FALSE
+        INNER JOIN agif_partner_distribution d on d.PARTNER_ID = p.PARTNER_ID AND d.DEL_FLG = FALSE
+        <where>
+            <include refid="Where_partner"/>
+        </where>
+        GROUP BY d.LGCS_AREA_CODE,p.PARTNER_ID
+    </select>
+
+    <sql id="selectColumns_agent">
+        c.ACCOUNT_ID AS accountId,
+        c.ACCOUNT_NAME AS accountName,
+        c.TEL_NO AS telNo,
+        c.MAIL_ADDR mailAddr,
+        g.AGENT_ID AS agentId,
+        g.AGENT_NAME AS agentName,
+        g.AGENT_CODE AS agentCode,
+        g.CATEGORY_CODE AS categoryCode,
+        g.CATEGORY_NAME AS categoryName,
+        g.IS_CREDIT_TERM_AGENT AS isCreditTermAgent,
+        g.AGENT_SEX AS agentSex,
+        g.AGENT_PIC AS agentPic,
+        g.AGENT_CARD_ID AS agentCardId,
+        g.PROVINCE_ID AS provinceId,
+        g.PROVINCE_CODE AS provinceCode,
+        g.PROVINCE_NAME AS provinceName,
+        g.CITY_ID AS cityId,
+        g.CITY_CODE AS cityCode,
+        g.CITY_NAME AS cityName,
+        g.DISTRICT_ID AS districtId,
+        g.DISTRICT_CODE AS districtCode,
+        g.DISTRICT_NAME AS districtName,
+        g.STREET_ID AS streetId,
+        g.STREET_CODE AS streetCode,
+        g.STREET_NAME AS streetName,
+        g.AGENT_ADDR AS agentAddr,
+        g.AGENT_WECHAT AS agentWechat,
+        g.AGENT_QQ AS agentQq,
+        g.AGENT_BANK_NAME AS agentBankName,
+        g.AGENT_BANK_ACCOUNT_NAME AS agentBankAccountName,
+        g.AGENT_BANK_ACCOUNT AS agentBankAccount,
+        d.LGCS_AREA_ID AS lgcsAreaId,
+        d.LGCS_AREA_CODE AS lgcsAreaCode,
+        d.LGCS_AREA_NAME AS lgcsAreaName,
+        1 AS agentType
+    </sql>
+    <sql id="selectColumns_partner">
+        t.ACCOUNT_ID AS accountId,
+        t.ACCOUNT_NAME AS accountName,
+        t.TEL_NO AS telNo,
+        t.MAIL_ADDR AS mailAddr,
+        p.PARTNER_ID AS agentId,
+        p.PARTNER_NAME AS agentName,
+        p.PARTNER_CODE AS agentCode,
+        p.CATEGORY_CODE AS categoryCode,
+        p.CATEGORY_NAME AS categoryName,
+        "0" AS isCreditTermAgent,
+        p.PARTNER_SEX AS agentSex,
+        p.PARTNER_PIC AS agentPic,
+        p.PARTNER_CARD_ID AS agentCardId,
+        p.PROVINCE_ID AS provinceId,
+        p.PROVINCE_CODE AS provinceCode,
+        p.PROVINCE_NAME AS provinceName,
+        p.CITY_ID AS cityId,
+        p.CITY_CODE AS cityCode,
+        p.CITY_NAME AS cityName,
+        p.DISTRICT_ID AS districtId,
+        p.DISTRICT_CODE AS districtCode,
+        p.DISTRICT_NAME AS districtName,
+        p.STREET_ID AS streetId,
+        p.STREET_CODE AS streetCode,
+        p.STREET_NAME AS streetName,
+        p.PARTNER_ADDR AS agentAddr,
+        p.PARTNER_WECHAT AS agentWechat,
+        p.PARTNER_QQ AS agentQq,
+        p.PARTNER_BANK_NAME AS agentBankName,
+        p.PARTNER_BANK_ACCOUNT_NAME AS agentBankAccountName,
+        p.PARTNER_BANK_ACCOUNT AS agentBankAccount,
+        d.LGCS_AREA_ID AS lgcsAreaId,
+        d.LGCS_AREA_CODE AS lgcsAreaCode,
+        d.LGCS_AREA_NAME AS lgcsAreaName,
+        2 AS agentType
+    </sql>
+    <sql id="Where_agent">
+        g.DEL_FLG = FALSE
+        <if test="agentType != null and agentType != ''">
+            AND #{agentType} = 1
+        </if>
+        <if test="agentId != null and agentId != ''">
+            AND g.AGENT_ID = #{agentId}
+        </if>
+        <if test="agentCode != null and agentCode != ''">
+            AND g.AGENT_CODE = #{agentCode}
+        </if>
+        <if test="agentName != null and agentName != ''">
+            AND g.AGENT_NAME LIKE #{agentName}
+        </if>
+        <if test="categoryName != null and categoryName != ''">
+            AND g.CATEGORY_NAME LIKE #{categoryName}
+        </if>
+        <if test="categoryCode != null and categoryCode != ''">
+            AND g.CATEGORY_CODE = #{categoryCode}
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            AND g.PROVINCE_ID = #{provinceId}
+        </if>
+        <if test="provinceCode != null and provinceCode != ''">
+            AND g.PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="provinceName != null and provinceName != ''">
+            AND g.PROVINCE_NAME LIKE #{provinceName}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            AND g.CITY_ID = #{cityId}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND g.CITY_CODE = #{cityCode}
+        </if>
+        <if test="cityName != null and cityName != ''">
+            AND g.CITY_NAME LIKE #{cityName}
+        </if>
+        <if test="districtId != null and districtId != ''">
+            AND g.DISTRICT_ID = #{districtId}
+        </if>
+        <if test="districtCode != null and districtCode != ''">
+            AND g.DISTRICT_CODE = #{districtCode}
+        </if>
+        <if test="districtName != null and districtName != ''">
+            AND g.DISTRICT_NAME LIKE #{districtName}
+        </if>
+        <if test="streetId != null and streetId != ''">
+            AND g.STREET_ID = #{streetId}
+        </if>
+        <if test="streetCode != null and streetCode != ''">
+            AND g.STREET_CODE = #{streetCode}
+        </if>
+        <if test="streetName != null and streetName != ''">
+            AND g.STREET_NAME LIKE #{streetName}
+        </if>
+        <if test="agentWechat != null and agentWechat != ''">
+            AND g.AGENT_WECHAT LIKE #{agentWechat}
+        </if>
+        <if test="agentQq != null and agentQq != ''">
+            AND g.AGENT_QQ LIKE #{agentQq}
+        </if>
+        <if test="agentBankName != null and agentBankName != ''">
+            AND g.AGENT_BANK_NAME LIKE #{agentBankName}
+        </if>
+        <if test="agentBankAccountName != null and agentBankAccountName != ''">
+            AND g.AGENT_BANK_ACCOUNT_NAME LIKE #{agentBankAccountName}
+        </if>
+        <if test="telNo != null and telNo != ''">
+            AND c.TEL_NO LIKE #{telNo}
+        </if>
+        <if test="accountName != null and accountName != ''">
+            AND c.ACCOUNT_NAME LIKE #{accountName}
+        </if>
+        <if test="accountId != null and accountId != ''">
+            AND c.ACCOUNT_ID = #{accountId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND d.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND d.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND d.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <!--<if test="zoneId != null and zoneId != ''">-->
+            <!--AND d.ZONE_ID = #{zoneId}-->
+        <!--</if>-->
+        <!--<if test="zoneCode != null and zoneCode != ''">-->
+            <!--AND d.ZONE_CODE = #{zoneCode}-->
+        <!--</if>-->
+        <!--<if test="zoneName != null and zoneName != ''">-->
+            <!--AND d.ZONE_NAME LIKE #{zoneName}-->
+        <!--</if>-->
+        <!--<if test="distributionId != null and distributionId != ''">-->
+            <!--AND d.DISTRIBUTION_ID = #{distributionId}-->
+        <!--</if>-->
+        <!--<if test="distributionName != null and distributionName != ''">-->
+            <!--AND d.DISTRIBUTION_NAME LIKE #{distributionName}-->
+        <!--</if>-->
+        <!--<if test="distributionType != null and distributionType != ''">-->
+            <!--AND d.DISTRIBUTION_TYPE = #{distributionType}-->
+        <!--</if>-->
+        <!--<if test="distributionCode != null and distributionCode != ''">-->
+            <!--AND d.DISTRIBUTION_CODE = #{distributionCode}-->
+        <!--</if>-->
+        <!--<if test="demesneId != null and demesneId != ''">-->
+            <!--AND d.DEMESNE_ID = #{demesneId}-->
+        <!--</if>-->
+        <!--<if test="demesneName != null and demesneName != ''">-->
+            <!--AND d.DEMESNE_NAME LIKE #{demesneName}-->
+        <!--</if>-->
+        <!--<if test="demesneCode != null and demesneCode != ''">-->
+            <!--AND d.DEMESNE_CODE = #{demesneCode}-->
+        <!--</if>-->
+    </sql>
+    <sql id="Where_partner">
+        p.DEL_FLG = FALSE
+        <if test="agentType != null and agentType != ''">
+            AND #{agentType} = 2
+        </if>
+        <if test="agentId != null and agentId != ''">
+            AND p.PARTNER_ID = #{agentId}
+        </if>
+        <if test="agentCode != null and agentCode != ''">
+            AND p.PARTNER_CODE = #{agentCode}
+        </if>
+        <if test="agentName != null and agentName != ''">
+            AND p.PARTNER_NAME LIKE #{agentName}
+        </if>
+        <if test="categoryName != null and categoryName != ''">
+            AND p.CATEGORY_NAME LIKE #{categoryName}
+        </if>
+        <if test="categoryCode != null and categoryCode != ''">
+            AND p.CATEGORY_CODE = #{categoryCode}
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            AND p.PROVINCE_ID = #{provinceId}
+        </if>
+        <if test="provinceCode != null and provinceCode != ''">
+            AND p.PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="provinceName != null and provinceName != ''">
+            AND p.PROVINCE_NAME LIKE #{provinceName}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            AND p.CITY_ID = #{cityId}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND p.CITY_CODE = #{cityCode}
+        </if>
+        <if test="cityName != null and cityName != ''">
+            AND p.CITY_NAME LIKE #{cityName}
+        </if>
+        <if test="districtId != null and districtId != ''">
+            AND p.DISTRICT_ID = #{districtId}
+        </if>
+        <if test="districtCode != null and districtCode != ''">
+            AND p.DISTRICT_CODE = #{districtCode}
+        </if>
+        <if test="districtName != null and districtName != ''">
+            AND p.DISTRICT_NAME LIKE #{districtName}
+        </if>
+        <if test="streetId != null and streetId != ''">
+            AND p.STREET_ID = #{streetId}
+        </if>
+        <if test="streetCode != null and streetCode != ''">
+            AND p.STREET_CODE = #{streetCode}
+        </if>
+        <if test="streetName != null and streetName != ''">
+            AND p.STREET_NAME LIKE #{streetName}
+        </if>
+        <if test="agentWechat != null and agentWechat != ''">
+            AND p.PARTNER_WECHAT LIKE #{agentWechat}
+        </if>
+        <if test="agentQq != null and agentQq != ''">
+            AND p.PARTNER_QQ LIKE #{agentQq}
+        </if>
+        <if test="agentBankName != null and agentBankName != ''">
+            AND p.PARTNER_BANK_NAME LIKE #{agentBankName}
+        </if>
+        <if test="agentBankAccountName != null and agentBankAccountName != ''">
+            AND p.PARTNER_BANK_ACCOUNT_NAME LIKE #{agentBankAccountName}
+        </if>
+        <if test="telNo != null and telNo != ''">
+            AND t.TEL_NO LIKE #{telNo}
+        </if>
+        <if test="accountName != null and accountName != ''">
+            AND t.ACCOUNT_NAME LIKE #{accountName}
+        </if>
+        <if test="accountId != null and accountId != ''">
+            AND t.ACCOUNT_ID = #{accountId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND d.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND d.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND d.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <!--<if test="zoneId != null and zoneId != ''">-->
+            <!--AND d.ZONE_ID = #{zoneId}-->
+        <!--</if>-->
+        <!--<if test="zoneCode != null and zoneCode != ''">-->
+            <!--AND d.ZONE_CODE = #{zoneCode}-->
+        <!--</if>-->
+        <!--<if test="zoneName != null and zoneName != ''">-->
+            <!--AND d.ZONE_NAME LIKE #{zoneName}-->
+        <!--</if>-->
+        <!--<if test="distributionId != null and distributionId != ''">-->
+            <!--AND d.DISTRIBUTION_ID = #{distributionId}-->
+        <!--</if>-->
+        <!--<if test="distributionName != null and distributionName != ''">-->
+            <!--AND d.DISTRIBUTION_NAME LIKE #{distributionName}-->
+        <!--</if>-->
+        <!--<if test="distributionType != null and distributionType != ''">-->
+            <!--AND d.DISTRIBUTION_TYPE = #{distributionType}-->
+        <!--</if>-->
+        <!--<if test="distributionCode != null and distributionCode != ''">-->
+            <!--AND d.DISTRIBUTION_CODE = #{distributionCode}-->
+        <!--</if>-->
+    </sql>
+
+</mapper>

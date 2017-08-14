@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bypo.dao.BypoProductSaleDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		PRODUCT_SALE_ID AS productSaleId,
+		RESEARCH_PRODUCT_ID AS researchProductId,
+		SALE_DATE AS saleDate,
+		SALE_AMOUNT AS saleAmount,
+		PRICE AS price,
+		PRICE_CHANNEL AS priceChannel,
+		CUSTOMER AS customer
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.bypo.bean.entity.BypoProductSale">
+		INSERT INTO BYPO_PRODUCT_SALE (
+			PRODUCT_SALE_ID,
+			RESEARCH_PRODUCT_ID,
+			SALE_DATE,
+			SALE_AMOUNT,
+			PRICE,
+			PRICE_CHANNEL,
+			CUSTOMER,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{productSaleId},
+			#{researchProductId},
+			#{saleDate},
+			#{saleAmount},
+			#{price},
+			#{priceChannel},
+			#{customer},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.bypo.bean.entity.BypoProductSale">
+		UPDATE BYPO_PRODUCT_SALE 
+		SET
+		<if test="target.saleDate != null">
+			SALE_DATE = #{target.saleDate},
+		</if>
+		<if test="target.saleAmount != null">
+			SALE_AMOUNT = #{target.saleAmount},
+		</if>
+		<if test="target.price != null">
+			PRICE = #{target.price},
+		</if>
+		<if test="target.priceChannel != null">
+			PRICE_CHANNEL = #{target.priceChannel},
+		</if>
+		<if test="target.customer != null">
+			CUSTOMER = #{target.customer},
+		</if>
+		DEL_FLG = #{target.delFlg},
+		UPD_ID = #{target.updId},
+		UPD_TIME = #{target.updTime}
+		WHERE
+			PRODUCT_SALE_ID = #{filter.productSaleId}
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.bypo.bean.entity.BypoProductSale">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYPO_PRODUCT_SALE
+		WHERE	
+			PRODUCT_SALE_ID = #{productSaleId}	
+	</select>
+	
+	<select id="findAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="com.bms.bypo.bean.entity.BypoProductSale">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYPO_PRODUCT_SALE
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>		
+	</select>
+	
+	<select id="countAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			BYPO_PRODUCT_SALE
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>				
+	</select>
+
+	<select id="findPageList" parameterType="com.bms.bypo.bean.param.ProductSaleRsParam"
+			resultType="com.bms.bypo.bean.entity.BypoProductSale">
+		SELECT
+			<include refid="selectColumns" />
+		FROM
+		BYPO_PRODUCT_SALE
+		WHERE
+		1 = 1
+		AND DEL_FLG = false
+		AND RESEARCH_PRODUCT_ID = #{researchProductId}
+		<if test="productSaleId !=null and productSaleId !=''">
+			AND PRODUCT_SALE_ID = #{productSaleId}
+		</if>
+		<if test="saleDate !=null and saleDate !=''">
+			AND SALE_DATE = #{saleDate}
+		</if>
+		<if test="saleAmount !=null and saleAmount !=''">
+			AND SALE_AMOUNT = #{saleAmount}
+		</if>
+		<if test="price !=null and price !=''">
+			AND PRICE = #{price}
+		</if>
+		<if test="priceChannel !=null and priceChannel !=''">
+			AND PRICE_CHANNEL = #{priceChannel}
+		</if>
+		<if test="customer !=null and customer !=''">
+			AND CUSTOMER = #{customer}
+		</if>
+
+	</select>
+
+</mapper>

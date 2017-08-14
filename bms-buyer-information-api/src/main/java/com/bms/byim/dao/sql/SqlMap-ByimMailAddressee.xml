@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimMailAddresseeDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		MAIL_ADDRESSEE_ID AS mailAddresseeId,
+		ADDRESSEE_NAME AS addresseeName,
+		ADDRESSEE_EMAIL AS addresseeEmail,
+		SEND_TYPE AS sendType,
+		SEND_GROUP AS sendGroup,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS ver
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.byim.bean.entity.ByimMailAddressee">
+		INSERT INTO BYIM_MAIL_ADDRESSEE (
+			MAIL_ADDRESSEE_ID,
+			ADDRESSEE_NAME,
+			ADDRESSEE_EMAIL,
+			SEND_TYPE,
+			SEND_GROUP,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VER			
+		)
+		VALUES (
+			#{mailAddresseeId},
+			#{addresseeName},
+			#{addresseeEmail},
+			#{sendType},
+			#{sendGroup},
+			FALSE ,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.byim.bean.entity.ByimMailAddressee">
+		UPDATE BYIM_MAIL_ADDRESSEE 
+		SET 
+			ADDRESSEE_NAME = #{addresseeName},
+			ADDRESSEE_EMAIL = #{addresseeEmail},
+			SEND_TYPE = #{sendType},
+			SEND_GROUP = #{sendGroup},
+			DEL_FLG = #{delFlg},
+			CRT_ID = #{crtId},
+			CRT_TIME = #{crtTime},
+			UPD_ID = #{updId},
+			UPD_TIME = #{updTime},
+			ACT_ID = #{actId},
+			ACT_TIME = #{actTime},
+			VER = #{ver}
+		WHERE
+			MAIL_ADDRESSEE_ID = #{mailAddresseeId}		
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.byim.bean.entity.ByimMailAddressee">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYIM_MAIL_ADDRESSEE
+		WHERE	
+			MAIL_ADDRESSEE_ID = #{mailAddresseeId}	
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.byim.bean.param.MailAddresseeRsParam" resultType="com.bms.byim.bean.param.MailAddresseeRsParam">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYIM_MAIL_ADDRESSEE
+		WHERE	
+			1 = 1
+				AND DEL_FLG = FALSE
+	</select>
+	
+	<select id="countAll" parameterType="com.bms.byim.bean.param.MailAddresseeRsParam" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			BYIM_MAIL_ADDRESSEE
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>				
+	</select>
+	
+</mapper>

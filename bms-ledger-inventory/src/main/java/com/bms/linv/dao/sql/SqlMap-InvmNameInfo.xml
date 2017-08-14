@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmNameInfoDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		TYPE AS type,
+		CODE AS code,
+		NAME AS name
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.linv.bean.entity.InvmNameInfo">
+		REPLACE INTO invm_name_info (
+			TYPE,
+			CODE,
+			NAME,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{type},
+			#{code},
+			#{name},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.linv.bean.entity.InvmNameInfo">
+		UPDATE invm_name_info 
+		SET 
+			NAME = #{name}
+		WHERE
+			TYPE = #{type}
+		AND CODE = #{code}		
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.linv.bean.entity.InvmNameInfo">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_name_info
+		WHERE	
+			TYPE = #{type}
+		AND CODE = #{code}	
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.linv.bean.entity.InvmNameInfo" resultType="com.bms.linv.bean.entity.InvmNameInfo">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_name_info
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>		
+	</select>
+	
+	<select id="countAll" parameterType="com.bms.linv.bean.entity.InvmNameInfo" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			invm_name_info
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>				
+	</select>
+	
+</mapper>

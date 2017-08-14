@@ -1,0 +1,978 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.batch.order.dao.ORDR0201BDao">
+
+    <select id = "getOrderResults" resultType = "com.batch.order.bean.result.ORDR0201BOrderResult">
+        SELECT
+          DISTINCT
+          obo.BUYER_ORDER_ID AS buyerOrderId,
+          obo.BUYER_ORDER_CODE AS buyerOrderCode,
+          obo.BUYER_ID AS buyerId,
+          obo.BUYER_TYPE AS buyerType,
+          obo.BS_ID AS bsId,
+          obo.BS_TYPE AS bsType,
+          obo.LOGISTICS_ZONE_ID AS logisticsZoneId,
+          obo.NET_BUYER_FLG AS netBuyerFlg,
+          oboa.BUYER_CODE AS buyerCode,
+          oboa.LOGISTICS_ZONE_CODE AS logisticsZoneCode
+        FROM
+          ORDR_BUYER_ORDER obo
+          INNER JOIN ORDR_BUYER_ORDER_ATTACHED oboa
+            ON obo.BUYER_ORDER_ID = oboa.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+            ON obo.BUYER_ORDER_ID = obbo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+            ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+            AND obbo.BUYER_BATCH_ORDER_ID = obbod.BUYER_BATCH_ORDER_ID
+        WHERE (
+            obo.BUYER_ORDER_STU = "002"
+            OR obo.BUYER_ORDER_STU = "003")
+          AND IFNULL(obo.RECEIVE_AMOUNT,0) <![CDATA[ >= ]]> IFNULL(obo.ADVANCE_PAYMENT_AMOUNT,0) + IFNULL(obo.EARNEST_AMOUNT,0)
+          AND obbo.BUYER_BATCH_ORDER_STU IN ("001", "002","098")
+          AND obbod.SPLIT_FLG = 0
+          AND obo.DEL_FLG = 0
+          AND obbo.DEL_FLG = 0
+          AND obbod.DEL_FLG = 0
+          AND obbod.MANUAL_SPLIT_FLG = FALSE
+    </select>
+
+    <select id = "getOrderGoodsResults" resultType = "com.batch.order.bean.result.ORDR0201BOrderGoodsResult" parameterType = "com.batch.order.bean.result.ORDR0201BOrderResult">
+        SELECT
+          obo.BUYER_ORDER_ID AS buyerOrderId,
+          obo.BUYER_ID AS buyerId,
+          obo.BUYER_TYPE AS buyerType,
+          obo.BS_ID AS bsId,
+          obo.BS_TYPE AS bsType,
+          obo.ORDER_PLACE_DATETIME AS orderPlaceDatetime,
+          obo.NET_BUYER_FLG AS netBuyerFlg,
+          obbod.GOODS_ID AS goodsId,
+          obo.LOGISTICS_ZONE_ID AS logisticsZoneId,
+          obbod.MANUFACTURER_ID AS manufacturerId,
+          obbod.SALE_LABEL_ID AS saleLabelId,
+          obboda.BATCH_CODE AS batchCode,
+          obsd.SELLER_ID AS sellerId,
+          obsd.SELLER_CODE AS sellerCode,
+          obsd.SELL_SIDE_ID AS ownerId,
+          obsd.SELL_SIDE_TYPE AS ownerType,
+          SUM(
+            IFNULL(obbod.GOODS_QUANTITY, 0) - IFNULL(obbod.CANCEL_QUANTITY, 0)
+          ) AS goodsQuantity
+        FROM
+          ORDR_BUYER_ORDER obo
+          INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+            ON obo.BUYER_ORDER_ID = obbo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+            ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+            AND obbo.BUYER_BATCH_ORDER_ID = obbod.BUYER_BATCH_ORDER_ID
+          INNER JOIN ordr_buyer_batch_order_detail_attached obboda
+            ON obboda.BUYER_BATCH_ORDER_DETAIL_ID = obbod.BUYER_BATCH_ORDER_DETAIL_ID
+          INNER JOIN ordr_buyer_seller_detail obsd
+            ON obsd.BUYER_BATCH_ORDER_DETAIL_ID = obbod.BUYER_BATCH_ORDER_DETAIL_ID
+        WHERE (
+            obo.BUYER_ORDER_STU = "002"
+            OR obo.BUYER_ORDER_STU = "003")
+          AND IFNULL(obo.RECEIVE_AMOUNT,0) <![CDATA[ >= ]]> IFNULL(obo.ADVANCE_PAYMENT_AMOUNT,0) + IFNULL(obo.EARNEST_AMOUNT,0)
+          AND obbo.BUYER_BATCH_ORDER_STU IN ("001", "002","098")
+          AND obbod.SPLIT_FLG = 0
+          AND obo.DEL_FLG = 0
+          AND obbo.DEL_FLG = 0
+          AND obbod.DEL_FLG = 0
+          AND obboda.DEL_FLG = 0
+          AND obsd.DEL_FLG = 0
+          AND obo.BUYER_ORDER_ID = #{buyerOrderId}
+          AND obbod.MANUAL_SPLIT_FLG = FALSE
+        GROUP BY obo.BUYER_ORDER_ID ASC,
+          obbod.GOODS_ID
+    </select>
+
+    <select id = "getOrderBatchResults" resultType = "com.batch.order.bean.result.ORDR0201BOrderBatchResult" parameterType = "com.batch.order.bean.result.ORDR0201BOrderGoodsResult">
+        SELECT
+          DISTINCT
+          obo.BUYER_ORDER_ID AS buyerOrderId,
+          obo.BUYER_ID AS buyerId,
+          obo.BUYER_TYPE AS buyerType,
+          obo.BS_ID AS bsId,
+          obo.BS_TYPE AS bsType,
+          obo.LOGISTICS_ZONE_ID AS logisticsZoneId,
+          obbo.BUYER_BATCH_ORDER_ID AS buyerBatchOrderId,
+          TRUE AS buyerBatchOrderFlg,
+          '0' AS buyerBatchOrderSplitFlg
+        FROM
+          ORDR_BUYER_ORDER obo
+          INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+            ON obo.BUYER_ORDER_ID = obbo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+            ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+            AND obbo.BUYER_BATCH_ORDER_ID = obbod.BUYER_BATCH_ORDER_ID
+        WHERE (
+            obo.BUYER_ORDER_STU = "002"
+            OR obo.BUYER_ORDER_STU = "003")
+          AND IFNULL(obo.RECEIVE_AMOUNT,0) <![CDATA[ >= ]]> IFNULL(obo.ADVANCE_PAYMENT_AMOUNT,0) + IFNULL(obo.EARNEST_AMOUNT,0)
+          AND obbo.BUYER_BATCH_ORDER_STU IN ("001", "002","098")
+          AND obbod.SPLIT_FLG = 0
+          AND obo.DEL_FLG = 0
+          AND obbo.DEL_FLG = 0
+          AND obbod.DEL_FLG = 0
+          AND obo.BUYER_ORDER_ID = #{buyerOrderId}
+          AND obbod.GOODS_ID = #{goodsId}
+          AND obbod.MANUAL_SPLIT_FLG = FALSE
+    </select>
+
+    <select id = "getNewOrderBatchResults" resultType = "com.batch.order.bean.result.ORDR0201BOrderBatchResult" parameterType = "com.batch.order.bean.result.ORDR0201BOrderGoodsResult">
+        SELECT
+          DISTINCT
+          obo.BUYER_ORDER_ID AS buyerOrderId,
+          obo.BUYER_ID AS buyerId,
+          obo.BUYER_TYPE AS buyerType,
+          obo.BS_ID AS bsId,
+          obo.BS_TYPE AS bsType,
+          obo.LOGISTICS_ZONE_ID AS logisticsZoneId,
+          obbo.BUYER_BATCH_ORDER_ID AS buyerBatchOrderId,
+          TRUE AS buyerBatchOrderFlg
+        FROM
+          ORDR_BUYER_ORDER obo
+          INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+            ON obo.BUYER_ORDER_ID = obbo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+            ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+            AND obbo.BUYER_BATCH_ORDER_ID = obbod.BUYER_BATCH_ORDER_ID
+        WHERE (
+            obo.BUYER_ORDER_STU = "002"
+            OR obo.BUYER_ORDER_STU = "003")
+          AND IFNULL(obo.RECEIVE_AMOUNT,0) <![CDATA[ >= ]]> IFNULL(obo.ADVANCE_PAYMENT_AMOUNT,0) + IFNULL(obo.EARNEST_AMOUNT,0)
+          AND obbo.BUYER_BATCH_ORDER_STU IN ("001", "002","098")
+          AND obbod.SPLIT_FLG = 0
+          AND obo.DEL_FLG = 0
+          AND obbo.DEL_FLG = 0
+          AND obbod.DEL_FLG = 0
+          AND obo.BUYER_ORDER_ID = #{buyerOrderId}
+          AND obbod.MANUAL_SPLIT_FLG = FALSE
+          AND obbod.GOODS_ID = #{goodsId}
+    </select>
+
+    <select id="getNewOrderBatchResult" resultType = "com.batch.order.bean.result.ORDR0201BOrderBatchResult" parameterType = "com.batch.order.bean.result.ORDR0201BOrderGoodsResult">
+        SELECT
+          DISTINCT
+          obo.BUYER_ORDER_ID AS buyerOrderId,
+          obo.BUYER_ID AS buyerId,
+          obo.BUYER_TYPE AS buyerType,
+          obo.BS_ID AS bsId,
+          obo.BS_TYPE AS bsType,
+          obo.LOGISTICS_ZONE_ID AS logisticsZoneId,
+          obbo.BUYER_BATCH_ORDER_ID AS buyerBatchOrderId,
+          TRUE AS buyerBatchOrderFlg
+        FROM
+          ORDR_BUYER_ORDER obo
+          INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+            ON obo.BUYER_ORDER_ID = obbo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+            ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+            AND obbo.BUYER_BATCH_ORDER_ID = obbod.BUYER_BATCH_ORDER_ID
+        WHERE (
+            obo.BUYER_ORDER_STU = "002"
+            OR obo.BUYER_ORDER_STU = "003")
+          AND IFNULL(obo.RECEIVE_AMOUNT,0) <![CDATA[ >= ]]> IFNULL(obo.ADVANCE_PAYMENT_AMOUNT,0) + IFNULL(obo.EARNEST_AMOUNT,0)
+          AND obbo.BUYER_BATCH_ORDER_STU IN ("001", "002","098")
+          AND obo.DEL_FLG = 0
+          AND obbo.DEL_FLG = 0
+          AND obbod.DEL_FLG = 0
+          AND obo.BUYER_ORDER_ID = #{buyerOrderId}
+          AND obbod.MANUAL_SPLIT_FLG = FALSE
+          AND obbod.GOODS_ID = #{goodsId}
+    </select>
+
+    <select id = "getOrderBatchDetails" resultType = "com.batch.order.bean.result.ORDR0201BOrderBatchDetailResult" parameterType = "com.batch.order.bean.result.ORDR0201BOrderGoodsResult">
+        SELECT
+          DISTINCT
+          obo.BUYER_ORDER_ID AS buyerOrderId,
+          obo.BUYER_ID AS buyerId,
+          obo.BUYER_TYPE AS buyerType,
+          obo.BS_ID AS bsId,
+          obo.BS_TYPE AS bsType,
+          obo.LOGISTICS_ZONE_ID AS logisticsZoneId,
+          oboa.REGIONAL_BS_ID AS regionalBsId,
+          oboa.REGIONAL_BS_CODE AS regionalBsCode,
+          oboa.REGIONAL_BS_NAME AS regionalBsName,
+          oboa.NON_REGIONAL_BS_ID AS nonRegionalBsId,
+          oboa.NON_REGIONAL_BS_CODE AS nonRegionalBsCode,
+          oboa.NON_REGIONAL_BS_NAME AS nonRegionalBsName,
+          oboa.REGIONAL_DISTRIBUTION_BS_ID AS regionalDistributionBsId,
+          oboa.REGIONAL_DISTRIBUTION_BS_CODE AS regionalDistributionBsCode,
+          oboa.REGIONAL_DISTRIBUTION_BS_NAME AS regionalDistributionBsName,
+          oboa.NET_USER_BS_ID AS netUserBsId,
+          oboa.NET_USER_BS_CODE AS netUserBsCode,
+          oboa.NET_USER_BS_NAME AS netUserBsName,
+          obbo.BUYER_BATCH_ORDER_ID AS buyerBatchOrderId,
+          obbod.GOODS_ID AS goodsId,
+          obbod.PRODUCT_ID AS productId,
+          obbod.BATCH_ID AS batchId,
+          obbod.SALE_LABEL_ID AS saleLabelId,
+          obboda.ITEM_CODE AS itemCode,
+          obboda.ITEM_NAME AS itemName,
+          obboda.BRAND_CODE AS brandCode,
+          obboda.BRAND_NAME AS brandName,
+          obboda.BATCH_CODE AS batchCode,
+          obboda.SALE_LABEL_CODE AS saleLabelCode,
+          obboda.SALE_LABEL_NAME AS saleLabelName,
+          obboda.SMALL_PACKAGE_FEATURE AS smallPackageFeature,
+          obboda.QUANTITY_PER_PACKAGE AS quantityPerPackage,
+          obboda.NET_WEIGHT AS netWeight,
+          obboda.GROSS_WEIGHT AS grossWeight,
+          obboda.CARTON_SIZE AS cartonSize,
+          obboda.PRODUCT_LEVEL AS productLevel,
+          IFNULL(obboda.PALLET_STANDARD_STACK_QUANTITY,0) AS palletStandardStackQuantity,
+          obbod.BUYER_BATCH_ORDER_DETAIL_ID AS buyerBatchOrderDetailId,
+          TRUE AS buyerBatchOrderFlg,
+          obbod.SPLIT_FLG AS splitFlg,
+          IFNULL(obbod.GOODS_QUANTITY, 0) - IFNULL(obbod.CANCEL_QUANTITY, 0) AS goodsQuantity,
+          obboda.GOODS_CODE AS goodsCode,
+          obboda.GOODS_NAME AS goodsName,
+          obsd.SELL_SIDE_ID AS sellSideId,
+          obsd.SELL_SIDE_TYPE AS sellSideType,
+          obsd.SELLER_ID AS sellerId,
+          obsd.SELLER_CODE AS sellerCode
+        FROM
+          ORDR_BUYER_ORDER obo
+          INNER JOIN ORDR_BUYER_ORDER_ATTACHED oboa
+            ON oboa.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+            ON obo.BUYER_ORDER_ID = obbo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+            ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+            AND obbo.BUYER_BATCH_ORDER_ID = obbod.BUYER_BATCH_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL_ATTACHED obboda
+            ON obboda.BUYER_BATCH_ORDER_DETAIL_ID = obbod.BUYER_BATCH_ORDER_DETAIL_ID
+          INNER JOIN ordr_buyer_seller_detail obsd
+            ON obsd.BUYER_BATCH_ORDER_DETAIL_ID = obbod.BUYER_BATCH_ORDER_DETAIL_ID
+        WHERE (
+            obo.BUYER_ORDER_STU = "002"
+            OR obo.BUYER_ORDER_STU = "003")
+          AND IFNULL(obo.RECEIVE_AMOUNT,0) <![CDATA[ >= ]]> IFNULL(obo.ADVANCE_PAYMENT_AMOUNT,0) + IFNULL(obo.EARNEST_AMOUNT,0)
+          AND obbo.BUYER_BATCH_ORDER_STU IN ("001", "002","098")
+          AND obbod.SPLIT_FLG = 0
+          AND obo.DEL_FLG = 0
+          AND obbo.DEL_FLG = 0
+          AND obbod.DEL_FLG = 0
+          AND obboda.DEL_FLG = 0
+          AND oboa.DEL_FLG = 0
+          AND obsd.DEL_FLG = 0
+          AND obo.BUYER_ORDER_ID = #{buyerOrderId}
+          AND obbod.GOODS_ID = #{goodsId}
+          AND obbod.MANUAL_SPLIT_FLG = FALSE
+    </select>
+
+    <select id = "getOrderManufacturer" resultType = "com.batch.order.bean.result.ORDR0201BManufacturerResult" parameterType = "com.batch.order.bean.result.ORDR0201BOrderGoodsResult">
+        SELECT
+        DISTINCT
+          obfdd.MANUFACTURER_ID AS manufacturerId,
+          obfdda.MANUFACTURER_CODE AS manufacturerCode,
+          obfdda.MANUFACTURER_NAME AS manufacturerName
+        FROM
+          ORDR_BUYER_ORDER obo
+          INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+            ON obo.BUYER_ORDER_ID = obbo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+            ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL obfdd
+            ON obfdd.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+          INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED obfdda
+            ON obfdda.BUYER_FORCAST_DELIVER_DETAIL_ID = obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID
+        WHERE obo.BUYER_ORDER_ID <![CDATA[ <> ]]> #{buyerOrderId}
+        AND obo.BUYER_ID = #{buyerId}
+        AND obbod.MANUAL_SPLIT_FLG = FALSE
+        AND IFNULL(obfdd.REJECT_QUANTITY,0) = 0
+        AND IFNULL(obfdd.DELAY_QUANTITY,0) = 0
+        AND IFNULL(obfdd.RETURN_QUANTITY,0) = 0
+        AND obo.DEL_FLG = 0
+        AND obbo.DEL_FLG = 0
+        AND obbod.DEL_FLG = 0
+        AND obfdd.DEL_FLG = 0
+        AND obfdda.DEL_FLG = 0
+        GROUP BY obfdd.MANUFACTURER_ID
+        ORDER BY sum(ifnull(obfdd.PLAN_SEND_QUANTITY,0)) desc
+    </select>
+
+    <select id = "getOtherOrderCount" resultType = "Integer" parameterType = "com.batch.order.bean.result.ORDR0201BOrderResult">
+       SELECT table1.count + table2.count
+       FROM
+       (
+       -- 订单中有超过限制的数量
+       SELECT count(1) as count
+        FROM
+        (
+        SELECT
+        obbod.GOODS_ID,
+        sum(ifnull(obbod.GOODS_QUANTITY,0) - ifnull(CANCEL_QUANTITY,0)) AS qty
+        FROM ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+        INNER JOIN ORDR_BUYER_ORDER obo
+        ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+        WHERE obo.BUYER_ORDER_ID = #{buyerOrderId}
+        AND obo.DEL_FLG = 0
+        AND obbod.DEL_FLG = 0
+        GROUP BY obbod.GOODS_ID
+        ) t1
+        INNER JOIN ORDR_CONSTANT oc
+        ON oc.CONSTANT_TYPE = 'PackageQty'
+        AND oc.DEL_FLG = 0
+        AND oc.CONSTANT_VALUE is not null
+        WHERE  t1.qty > oc.CONSTANT_VALUE
+       ) table1,
+        (-- 第一次购买
+        SELECT count(1) as count
+        FROM
+        (
+        SELECT obbod.GOODS_ID
+        FROM ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+        INNER JOIN ORDR_BUYER_ORDER obo
+        ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+        WHERE obo.BUYER_ORDER_ID = #{buyerOrderId}
+        AND obo.DEL_FLG = 0
+        AND obbod.DEL_FLG = 0
+        GROUP BY obbod.GOODS_ID
+        ) t1
+        WHERE t1.GOODS_ID NOT IN (
+        SELECT obbod.GOODS_ID
+        FROM ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+        INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+        ON obbo.BUYER_BATCH_ORDER_ID = obbod.BUYER_BATCH_ORDER_ID
+        AND obbo.DEL_FLG = 0
+        INNER JOIN ORDR_BUYER_ORDER obo
+        ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+        AND obo.DEL_FLG = 0
+        WHERE obo.BUYER_ORDER_ID <![CDATA[ <> ]]> #{buyerOrderId}
+        AND obo.BUYER_ID = #{buyerId}
+        AND obbo.BUYER_BATCH_ORDER_STU NOT IN ('001','002','099')
+        AND obbod.DEL_FLG = 0
+        GROUP BY obbod.GOODS_ID
+        )
+        )table2
+    </select>
+
+    <insert id="saveBuyerForcastDeliverDetail" parameterType="com.batch.order.bean.entity.BuyerForcastDeliverDetailEntity">
+        INSERT INTO
+        ORDR_BUYER_FORCAST_DELIVER_DETAIL
+        (
+        BUYER_FORCAST_DELIVER_DETAIL_ID
+        , BUYER_BATCH_ORDER_ID
+        , BUYER_BATCH_ORDER_DETAIL_ID
+        , FORCAST_TYPE
+        , SELL_SIDE_TYPE
+        , SELL_SIDE_ID
+        , GOODS_ID
+        , PRODUCT_ID
+        , MANUFACTURER_ID
+        , SELLER_ID
+        , SKU
+        , BATCH_ID
+        , SALE_LABEL_ID
+        , PLAN_SEND_QUANTITY
+        , REAL_SEND_QUANTITY
+        , RECEIVE_QUANTITY
+        , REJECT_QUANTITY
+        , DELAY_QUANTITY
+        , REDISTRIBUTION_DATE
+        , RETURN_QUANTITY
+        , DEL_FLG
+        , CRT_ID
+        , CRT_TIME
+        , UPD_ID
+        , UPD_TIME
+        , VERSION
+        )
+        VALUES
+        (
+        #{buyerForcastDeliverDetailId}
+        , #{buyerBatchOrderId}
+        , #{buyerBatchOrderDetailId}
+        , #{forcastType}
+        , #{sellSideType}
+        , #{sellSideId}
+        , #{goodsId}
+        , #{productId}
+        , #{manufacturerId}
+        , #{sellerId}
+        , #{sku}
+        , #{batchId}
+        , #{saleLabelId}
+        , #{planSendQuantity}
+        , #{realSendQuantity}
+        , #{receiveQuantity}
+        , #{rejectQuantity}
+        , #{delayQuantity}
+        , #{redistributionDate}
+        , #{returnQuantity}
+        , #{delFlg}
+        , #{crtId}
+        , #{crtTime}
+        , #{updId}
+        , #{updTime}
+        , #{version}
+        )
+    </insert>
+
+    <insert id="saveBuyerForcastDeliverDetailAttached" parameterType="com.batch.order.bean.entity.BuyerForcastDeliverDetailAttachedEntity">
+        INSERT INTO
+        ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED
+        (
+        BUYER_FORCAST_DELIVER_DETAIL_ID
+        , SELL_SIDE_CODE
+        , SELL_SIDE_NAME
+        , ITEM_CODE
+        , ITEM_NAME
+        , BRAND_CODE
+        , BRAND_NAME
+        , ITEM_BRAND_CODE
+        , MANUFACTURER_CODE
+        , MANUFACTURER_NAME
+        , SELLER_CODE
+        , SELLER_NAME
+        , BATCH_CODE
+        , SALE_LABEL_CODE
+        , SALE_LABEL_NAME
+        , SMALL_PACKAGE_FEATURE
+        , QUANTITY_PER_PACKAGE
+        , NET_WEIGHT
+        , GROSS_WEIGHT
+        , CARTON_SIZE
+        , PRODUCT_LEVEL
+        , PALLET_STANDARD_STACK_QUANTITY
+        , DEL_FLG
+        , CRT_ID
+        , CRT_TIME
+        , UPD_ID
+        , UPD_TIME
+        , VERSION
+        , GOODS_CODE
+        , GOODS_NAME
+        )
+        VALUES
+        (
+        #{buyerForcastDeliverDetailId}
+        , #{sellSideCode}
+        , #{sellSideName}
+        , #{itemCode}
+        , #{itemName}
+        , #{brandCode}
+        , #{brandName}
+        , #{itemBrandCode}
+        , #{manufacturerCode}
+        , #{manufacturerName}
+        , #{sellerCode}
+        , #{sellerName}
+        , #{batchCode}
+        , #{saleLabelCode}
+        , #{saleLabelName}
+        , #{smallPackageFeature}
+        , #{quantityPerPackage}
+        , #{netWeight}
+        , #{grossWeight}
+        , #{cartonSize}
+        , #{productLevel}
+        , #{palletStandardStackQuantity}
+        , #{delFlg}
+        , #{crtId}
+        , #{crtTime}
+        , #{updId}
+        , #{updTime}
+        , #{version}
+        , #{goodsCode}
+        , #{goodsName}
+        )
+    </insert>
+
+    <update id="modifyBatchOrderStu" parameterType = "com.batch.order.bean.result.ORDR0201BOrderBatchResult">
+      UPDATE
+        ORDR_BUYER_BATCH_ORDER
+      SET
+        BUYER_BATCH_ORDER_STU = #{buyerBatchOrderStu},
+        VERSION = VERSION + 1,
+        UPD_TIME = NOW(),
+        UPD_ID = 'ORDR0201B'
+      WHERE BUYER_BATCH_ORDER_ID = #{buyerBatchOrderId}
+    </update>
+
+    <update id="modifyBuyerOrderStu" parameterType = "com.batch.order.bean.result.ORDR0201BOrderResult">
+        UPDATE
+        ORDR_BUYER_ORDER
+        SET
+        BUYER_ORDER_STU = #{buyerOrderStu},
+        VERSION = VERSION + 1,
+        UPD_TIME = NOW(),
+        UPD_ID = 'ORDR0201B'
+        WHERE BUYER_ORDER_ID = #{buyerOrderId}
+    </update>
+
+    <update id="modifyBatchOrderDetail" parameterType = "com.batch.order.bean.result.ORDR0201BOrderBatchDetailResult">
+        UPDATE
+        ORDR_BUYER_BATCH_ORDER_DETAIL
+        SET
+        SPLIT_FLG = TRUE ,
+        VERSION = VERSION + 1,
+        UPD_TIME = NOW(),
+        UPD_ID = 'ORDR0201B'
+        WHERE BUYER_BATCH_ORDER_DETAIL_ID = #{buyerBatchOrderDetailId}
+    </update>
+
+    <select id="getNoSplitCount" resultType="Integer" parameterType = "com.batch.order.bean.result.ORDR0201BOrderResult">
+        SELECT
+          COUNT(1)
+        FROM
+          ORDR_BUYER_BATCH_ORDER_DETAIL
+        WHERE SPLIT_FLG = FALSE
+          AND BUYER_BATCH_ORDER_ID = #{buyerBatchOrderId}
+    </select>
+
+    <select id="getBuyerBatchOrderHistory" parameterType="com.batch.order.bean.result.ORDR0201BOrderBatchResult" resultType="com.batch.order.bean.entity.BuyerBatchOrderHistoryEntity">
+        SELECT
+        BUYER_BATCH_ORDER_ID AS buyerBatchOrderId
+        , BUYER_BATCH_ORDER_CODE AS buyerBatchOrderCode
+        , BUYER_ORDER_ID AS buyerOrderId
+        , REQUIRED_DISTRIBUTION_DATE AS requiredDistributionDate
+        , EXPECTED_SEND_DATETIME AS expectedSendDatetime
+        , EXPECTED_ARRIVAL_DATETIME AS expectedArrivalDatetime
+        , ORDER_AMOUNT AS orderAmount
+        , FREIGHT AS freight
+        , PREFERENTIAL_AMOUNT AS preferentialAmount
+        , RECEIVE_AMOUNT AS receiveAmount
+        , EARNEST_PERCENT AS earnestPercent
+        , EARNEST_AMOUNT AS earnestAmount
+        , ADVANCE_PAYMENT_PERCENT AS advancePaymentPercent
+        , ADVANCE_PAYMENT_AMOUNT AS advancePaymentAmount
+        , BUYER_BATCH_ORDER_STU AS buyerBatchOrderStu
+        , DEL_FLG AS delFlg
+        , CRT_ID AS crtId
+        , CRT_TIME AS crtTime
+        , UPD_ID AS updId
+        , UPD_TIME AS updTime
+        , VERSION AS version
+        FROM
+        ORDR_BUYER_BATCH_ORDER
+        WHERE BUYER_BATCH_ORDER_ID = #{buyerBatchOrderId}
+         AND DEL_FLG = 0
+    </select>
+
+    <select id="getBuyerOrderHistory" parameterType="com.batch.order.bean.result.ORDR0201BOrderResult" resultType="com.batch.order.bean.entity.BuyerOrderHistoryEntity">
+        SELECT
+        BUYER_ORDER_ID AS buyerOrderId
+        , BUYER_ORDER_CODE AS buyerOrderCode
+        , ORDER_TYPE AS orderType
+        , SALE_PLATFORM_TYPE AS salePlatformType
+        , ORDER_SOURCE_TYPE AS orderSourceType
+        , BATCH_FLG AS batchFlg
+        , ORDER_SPLIT_TYPE AS orderSplitType
+        , ORDER_PLACER_ID AS orderPlacerId
+        , ORDER_PLACER_TYPE AS orderPlacerType
+        , ORDER_PLACE_DATETIME AS orderPlaceDatetime
+        , ORDER_PLACE_TYPE AS orderPlaceType
+        , LOGISTICS_ZONE_ID AS logisticsZoneId
+        , BUYER_TYPE AS buyerType
+        , BUYER_ID AS buyerId
+        , BS_TYPE AS bsType
+        , BS_ID AS bsId
+        , INVOICE_FLG AS invoiceFlg
+        , NET_BUYER_FLG AS netBuyerFlg
+        , USE_NET_FLG AS useNetFlg
+        , PAYMENT_TYPE AS paymentType
+        , PAYMENT_STU AS paymentStu
+        , ORDER_AMOUNT AS orderAmount
+        , FREIGHT AS freight
+        , PREFERENTIAL_AMOUNT AS preferentialAmount
+        , RECEIVE_AMOUNT AS receiveAmount
+        , EARNEST_PERCENT AS earnestPercent
+        , EARNEST_AMOUNT AS earnestAmount
+        , ADVANCE_PAYMENT_PERCENT AS advancePaymentPercent
+        , ADVANCE_PAYMENT_AMOUNT AS advancePaymentAmount
+        , BUYER_ORDER_STU AS buyerOrderStu
+        , DEL_FLG AS delFlg
+        , CRT_ID AS crtId
+        , CRT_TIME AS crtTime
+        , UPD_ID AS updId
+        , UPD_TIME AS updTime
+        , VERSION AS version
+        FROM
+        ORDR_BUYER_ORDER
+        WHERE  BUYER_ORDER_ID = #{buyerOrderId}
+          AND DEL_FLG = 0
+    </select>
+
+    <insert id="saveBuyerBatchOrderHistory" parameterType="com.batch.order.bean.entity.BuyerBatchOrderHistoryEntity">
+        INSERT INTO
+        ORDR_BUYER_BATCH_ORDER_HISTORY
+        (
+        HISTORY_ID
+        , BUYER_BATCH_ORDER_ID
+        , BUYER_BATCH_ORDER_CODE
+        , BUYER_ORDER_ID
+        , REQUIRED_DISTRIBUTION_DATE
+        , EXPECTED_SEND_DATETIME
+        , EXPECTED_ARRIVAL_DATETIME
+        , ORDER_AMOUNT
+        , FREIGHT
+        , PREFERENTIAL_AMOUNT
+        , RECEIVE_AMOUNT
+        , EARNEST_PERCENT
+        , EARNEST_AMOUNT
+        , ADVANCE_PAYMENT_PERCENT
+        , ADVANCE_PAYMENT_AMOUNT
+        , BUYER_BATCH_ORDER_STU
+        , DEL_FLG
+        , CRT_ID
+        , CRT_TIME
+        , UPD_ID
+        , UPD_TIME
+        , VERSION
+        )
+        VALUES
+        (
+        #{historyId}
+        , #{buyerBatchOrderId}
+        , #{buyerBatchOrderCode}
+        , #{buyerOrderId}
+        , #{requiredDistributionDate}
+        , #{expectedSendDatetime}
+        , #{expectedArrivalDatetime}
+        , #{orderAmount}
+        , #{freight}
+        , #{preferentialAmount}
+        , #{receiveAmount}
+        , #{earnestPercent}
+        , #{earnestAmount}
+        , #{advancePaymentPercent}
+        , #{advancePaymentAmount}
+        , #{buyerBatchOrderStu}
+        , #{delFlg}
+        , #{crtId}
+        , #{crtTime}
+        , #{updId}
+        , #{updTime}
+        , #{version}
+        )
+    </insert>
+
+    <insert id="saveBuyerOrderHistory" parameterType="com.batch.order.bean.entity.BuyerOrderHistoryEntity">
+        INSERT INTO
+        ORDR_BUYER_ORDER_HISTORY
+        (
+          HISTORY_ID
+        , BUYER_ORDER_ID
+        , BUYER_ORDER_CODE
+        , ORDER_TYPE
+        , SALE_PLATFORM_TYPE
+        , ORDER_SOURCE_TYPE
+        , BATCH_FLG
+        , ORDER_SPLIT_TYPE
+        , ORDER_PLACER_ID
+        , ORDER_PLACER_TYPE
+        , ORDER_PLACE_DATETIME
+        , ORDER_PLACE_TYPE
+        , LOGISTICS_ZONE_ID
+        , BUYER_TYPE
+        , BUYER_ID
+        , BS_TYPE
+        , BS_ID
+        , INVOICE_FLG
+        , NET_BUYER_FLG
+        , USE_NET_FLG
+        , PAYMENT_TYPE
+        , PAYMENT_STU
+        , ORDER_AMOUNT
+        , FREIGHT
+        , PREFERENTIAL_AMOUNT
+        , RECEIVE_AMOUNT
+        , EARNEST_PERCENT
+        , EARNEST_AMOUNT
+        , ADVANCE_PAYMENT_PERCENT
+        , ADVANCE_PAYMENT_AMOUNT
+        , BUYER_ORDER_STU
+        , DEL_FLG
+        , CRT_ID
+        , CRT_TIME
+        , UPD_ID
+        , UPD_TIME
+        , VERSION
+        )
+        VALUES
+        (
+          #{historyId}
+        , #{buyerOrderId}
+        , #{buyerOrderCode}
+        , #{orderType}
+        , #{salePlatformType}
+        , #{orderSourceType}
+        , #{batchFlg}
+        , #{orderSplitType}
+        , #{orderPlacerId}
+        , #{orderPlacerType}
+        , #{orderPlaceDatetime}
+        , #{orderPlaceType}
+        , #{logisticsZoneId}
+        , #{buyerType}
+        , #{buyerId}
+        , #{bsType}
+        , #{bsId}
+        , #{invoiceFlg}
+        , #{netBuyerFlg}
+        , #{useNetFlg}
+        , #{paymentType}
+        , #{paymentStu}
+        , #{orderAmount}
+        , #{freight}
+        , #{preferentialAmount}
+        , #{receiveAmount}
+        , #{earnestPercent}
+        , #{earnestAmount}
+        , #{advancePaymentPercent}
+        , #{advancePaymentAmount}
+        , #{buyerOrderStu}
+        , #{delFlg}
+        , #{crtId}
+        , #{crtTime}
+        , #{updId}
+        , #{updTime}
+        , #{version}
+        )
+    </insert>
+
+    <select id="getReturnCount" resultType="Integer" parameterType="com.batch.order.bean.result.ORDR0201BOrderGoodsResult">
+        SELECT
+            COUNT(1)
+        FROM
+            ORDR_BUYER_RETURN obr
+        INNER JOIN ORDR_BUYER_RETURN_DETAIL obrd ON obrd.RETURN_ID = obr.RETURN_ID
+        WHERE
+            obr.BUYER_RETURN_STATUS NOT IN ('001', '099')
+        AND obr.BUYER_ID = #{buyerOrderId}
+        AND obrd.GOODS_ID = #{goodsId}
+        AND obr.DEL_FLG = 0
+        AND obrd.DEL_FLG = 0
+    </select>
+
+    <select id="getBsStockpilingOrder" parameterType="com.batch.order.bean.result.ORDR0201BOrderGoodsResult" resultType="com.batch.order.bean.result.BsStockpileSaleDetailResult">
+        SELECT
+            obssd.BS_STOCKPILE_SPLIT_DETAIL_ID AS bsStockpileSplitDetailId,
+            IFNULL(obssd.GOODS_QUANTITY, 0) - IFNULL(obssd.RETURN_QUANTITY, 0) - IFNULL(a.num, 0) AS saleQuantity
+        FROM
+            ORDR_BS_STOCKPILE_SPLIT_DETAIL obssd
+        INNER JOIN ORDR_BS_ORDER_DETAIL obod ON obod.BS_ORDER_DETAIL_ID = obssd.BS_ORDER_DETAIL_ID
+        INNER JOIN ORDR_BS_ORDER obo ON obo.BS_ORDER_ID = obod.BS_ORDER_ID
+        LEFT JOIN (
+            SELECT
+                obs.BS_STOCKPILE_SPLIT_DETAIL_ID,
+                SUM(obs.SALE_QUANTITY) AS num
+            FROM
+                ORDR_BS_STOCKPILE_SALE_DETAIL obs
+            WHERE
+                obs.DEL_FLG = 0
+            GROUP BY
+                obs.BS_STOCKPILE_SPLIT_DETAIL_ID
+        ) a ON a.BS_STOCKPILE_SPLIT_DETAIL_ID = obssd.BS_STOCKPILE_SPLIT_DETAIL_ID
+        WHERE
+            obod.GOODS_ID = #{goodsId}
+        AND obssd.GOODS_ID = #{goodsId}
+        AND obo.DEL_FLG = 0
+        AND obod.DEL_FLG = 0
+        AND obssd.DEL_FLG = 0
+        AND obo.BS_ORDER_STU IN ('003')
+        AND obo.BS_ID = #{ownerId}
+        AND IFNULL(obssd.GOODS_QUANTITY, 0) - IFNULL(obssd.RETURN_QUANTITY, 0) - IFNULL(a.num, 0) > 0
+        ORDER BY obssd.CRT_TIME
+    </select>
+
+    <insert id="saveBsStockpileSaleDetail" parameterType="com.batch.order.bean.entity.BsStockpileSaleDetailEntity">
+        INSERT INTO ORDR_BS_STOCKPILE_SALE_DETAIL (
+            STOCKPILE_SALE_DETAIL_ID,
+            BS_STOCKPILE_SPLIT_DETAIL_ID,
+            BUYER_FORCAST_DELIVER_DETAIL_ID,
+            SALE_QUANTITY,
+            DEL_FLG,
+            CRT_ID,
+            CRT_TIME,
+            UPD_ID,
+            UPD_TIME,
+            VERSION
+        )
+        VALUES
+        (
+            #{stockpileSaleDetailId},
+            #{bsStockpileSplitDetailId},
+            #{buyerForcastDeliverDetailId},
+            #{saleQuantity},
+            #{delFlg},
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            #{version}
+        )
+    </insert>
+
+    <select id="findEmailAddress" resultType="String">
+        SELECT
+        CONSTANT_VALUE AS emailAddress
+        FROM ORDR_CONSTANT
+        WHERE CONSTANT_TYPE = 'EmailAddress'
+        AND DEL_FLG = 0
+    </select>
+
+    <insert id="batchInsert" parameterType="list">
+        INSERT INTO
+        ORDR_BUYER_ORDER_HISTORY
+        (
+        HISTORY_ID
+        , BUYER_ORDER_ID
+        , BUYER_ORDER_CODE
+        , ORDER_TYPE
+        , SALE_PLATFORM_TYPE
+        , ORDER_SOURCE_TYPE
+        , BATCH_FLG
+        , ORDER_SPLIT_TYPE
+        , ORDER_PLACER_ID
+        , ORDER_PLACER_TYPE
+        , ORDER_PLACE_DATETIME
+        , ORDER_PLACE_TYPE
+        , LOGISTICS_ZONE_ID
+        , BUYER_TYPE
+        , BUYER_ID
+        , BS_TYPE
+        , BS_ID
+        , INVOICE_FLG
+        , NET_BUYER_FLG
+        , USE_NET_FLG
+        , PAYMENT_TYPE
+        , PAYMENT_STU
+        , ORDER_AMOUNT
+        , FREIGHT
+        , PREFERENTIAL_AMOUNT
+        , RECEIVE_AMOUNT
+        , EARNEST_PERCENT
+        , EARNEST_AMOUNT
+        , ADVANCE_PAYMENT_PERCENT
+        , ADVANCE_PAYMENT_AMOUNT
+        , BUYER_ORDER_STU
+        , MAILED_FLG
+        , DEL_FLG
+        , CRT_ID
+        , CRT_TIME
+        , UPD_ID
+        , UPD_TIME
+        , VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.historyId}
+            , #{item.buyerOrderId}
+            , #{item.buyerOrderCode}
+            , #{item.orderType}
+            , #{item.salePlatformType}
+            , #{item.orderSourceType}
+            , #{item.batchFlg}
+            , #{item.orderSplitType}
+            , #{item.orderPlacerId}
+            , #{item.orderPlacerType}
+            , #{item.orderPlaceDatetime}
+            , #{item.orderPlaceType}
+            , #{item.logisticsZoneId}
+            , #{item.buyerType}
+            , #{item.buyerId}
+            , #{item.bsType}
+            , #{item.bsId}
+            , #{item.invoiceFlg}
+            , #{item.netBuyerFlg}
+            , #{item.useNetFlg}
+            , #{item.paymentType}
+            , #{item.paymentStu}
+            , #{item.orderAmount}
+            , #{item.freight}
+            , #{item.preferentialAmount}
+            , #{item.receiveAmount}
+            , #{item.earnestPercent}
+            , #{item.earnestAmount}
+            , #{item.advancePaymentPercent}
+            , #{item.advancePaymentAmount}
+            , #{item.buyerOrderStu}
+            , #{item.mailedFlg}
+            , #{item.delFlg}
+            , #{item.crtId}
+            , #{item.crtTime}
+            , #{item.updId}
+            , #{item.updTime}
+            , #{item.version}
+            )
+        </foreach>
+    </insert>
+
+    <select id="getOrderEmialResults" resultType="com.batch.order.bean.entity.BuyerOrderHistoryEntity">
+        SELECT DISTINCT
+        OBO.BUYER_ORDER_ID AS buyerOrderId
+        , OBO.BUYER_ORDER_CODE AS buyerOrderCode
+        , OBO.ORDER_TYPE AS orderType
+        , OBO.SALE_PLATFORM_TYPE AS salePlatformType
+        , OBO.ORDER_SOURCE_TYPE AS orderSourceType
+        , OBO.BATCH_FLG AS batchFlg
+        , OBO.ORDER_SPLIT_TYPE AS orderSplitType
+        , OBO.ORDER_PLACER_ID AS orderPlacerId
+        , OBO.ORDER_PLACER_TYPE AS orderPlacerType
+        , OBO.ORDER_PLACE_DATETIME AS orderPlaceDatetime
+        , OBO.ORDER_PLACE_TYPE AS orderPlaceType
+        , OBO.LOGISTICS_ZONE_ID AS logisticsZoneId
+        , OBO.BUYER_TYPE AS buyerType
+        , OBO.BUYER_ID AS buyerId
+        , OBO.BS_TYPE AS bsType
+        , OBO.BS_ID AS bsId
+        , OBO.INVOICE_FLG AS invoiceFlg
+        , OBO.NET_BUYER_FLG AS netBuyerFlg
+        , OBO.USE_NET_FLG AS useNetFlg
+        , OBO.PAYMENT_TYPE AS paymentType
+        , OBO.PAYMENT_STU AS paymentStu
+        , OBO.ORDER_AMOUNT AS orderAmount
+        , OBO.FREIGHT AS freight
+        , OBO.PREFERENTIAL_AMOUNT AS preferentialAmount
+        , OBO.RECEIVE_AMOUNT AS receiveAmount
+        , OBO.EARNEST_PERCENT AS earnestPercent
+        , OBO.EARNEST_AMOUNT AS earnestAmount
+        , OBO.ADVANCE_PAYMENT_PERCENT AS advancePaymentPercent
+        , OBO.ADVANCE_PAYMENT_AMOUNT AS advancePaymentAmount
+        , OBO.BUYER_ORDER_STU AS buyerOrderStu
+        , OBO.MAILED_FLG AS mailedFlg
+        , OBO.DEL_FLG AS delFlg
+        , OBO.CRT_ID AS crtId
+        , OBO.CRT_TIME AS crtTime
+        , OBO.UPD_ID AS updId
+        , OBO.UPD_TIME AS updTime
+        , OBO.VERSION AS version
+        FROM
+        ORDR_BUYER_ORDER OBO
+        INNER JOIN ORDR_BUYER_BATCH_ORDER OBBO
+        ON OBO.BUYER_ORDER_ID = OBBO.BUYER_ORDER_ID
+		AND OBBO.DEL_FLG = 0
+		AND OBBO.BUYER_BATCH_ORDER_STU = '002'
+		WHERE (OBO.MAILED_FLG = 0 OR OBO.MAILED_FLG IS NULL )
+		AND OBO.DEL_FLG = 0
+    </select>
+
+    <update id="modifyMailedFlg" parameterType="list">
+        UPDATE
+        ORDR_BUYER_ORDER
+        SET
+        MAILED_FLG = 1,
+        VERSION = VERSION + 1,
+        UPD_TIME = NOW(),
+        UPD_ID = 'ORDR0201B'
+        WHERE BUYER_ORDER_ID IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">#{item.buyerOrderId}</foreach>
+    </update>
+
+    <select id="getSplitFailedResults" resultType="com.batch.order.bean.entity.BuyerOrderEntity">
+        SELECT DISTINCT
+        OBO.BUYER_ORDER_ID AS buyerOrderId
+        , OBO.BUYER_ORDER_CODE AS buyerOrderCode
+        FROM
+        ORDR_BUYER_ORDER OBO
+        INNER JOIN ORDR_BUYER_BATCH_ORDER OBBO
+        ON OBO.BUYER_ORDER_ID = OBBO.BUYER_ORDER_ID
+        AND OBBO.DEL_FLG = 0
+        AND OBBO.BUYER_BATCH_ORDER_STU = '098'
+        WHERE OBO.DEL_FLG = 0
+    </select>
+</mapper>

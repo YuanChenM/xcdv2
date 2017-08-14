@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.issue.dao.IssueDao">
+<insert id="save" parameterType="com.bms.issue.bean.entity.IssueEntity">
+INSERT INTO
+ISSU_ISSUE
+(
+ISSUE_ID
+, ISSUE_CODE
+, ORDER_ID
+, ORDER_CODE
+, ORDER_TYPE
+, LOGISTICS_ZONE_CODE
+, LOGISTICS_ZONE_NAME
+, LOGISTICS_ZONE_ID
+, BUYER_ID
+, BUYER_CODE
+, BUYER_NAME
+, INITIATOR_TYPE
+, INITIATOR_ID
+, INITIATOR_NAME
+, INITIATE_TIME
+, ISSUE_DESC
+, ISSUE_RESULT
+, ISSUE_DECISION
+, CLOSE_UID
+, CLOSE_UNAME
+, CLOSE_TIME
+, ISSUE_STATUS
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{issueId}
+, #{issueCode}
+, #{orderId}
+, #{orderCode}
+, #{orderType}
+, #{logisticsZoneCode}
+, #{logisticsZoneName}
+, #{logisticsZoneId}
+, #{buyerId}
+, #{buyerCode}
+, #{buyerName}
+, #{initiatorType}
+, #{initiatorId}
+, #{initiatorName}
+, #{initiateTime}
+, #{issueDesc}
+, #{issueResult}
+, #{issueDecision}
+, #{closeUid}
+, #{closeUname}
+, #{closeTime}
+, #{issueStatus}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ISSU_ISSUE
+(
+ISSUE_ID
+, ISSUE_CODE
+, ORDER_ID
+, ORDER_CODE
+, ORDER_TYPE
+, LOGISTICS_ZONE_CODE
+, LOGISTICS_ZONE_NAME
+, LOGISTICS_ZONE_ID
+, BUYER_ID
+, BUYER_CODE
+, BUYER_NAME
+, INITIATOR_TYPE
+, INITIATOR_ID
+, INITIATOR_NAME
+, INITIATE_TIME
+, ISSUE_DESC
+, ISSUE_RESULT
+, ISSUE_DECISION
+, CLOSE_UID
+, CLOSE_UNAME
+, CLOSE_TIME
+, ISSUE_STATUS
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.issueId}
+, #{entity.issueCode}
+, #{entity.orderId}
+, #{entity.orderCode}
+, #{entity.orderType}
+, #{entity.logisticsZoneCode}
+, #{entity.logisticsZoneName}
+, #{entity.logisticsZoneId}
+, #{entity.buyerId}
+, #{entity.buyerCode}
+, #{entity.buyerName}
+, #{entity.initiatorType}
+, #{entity.initiatorId}
+, #{entity.initiatorName}
+, #{entity.initiateTime}
+, #{entity.issueDesc}
+, #{entity.issueResult}
+, #{entity.issueDecision}
+, #{entity.closeUid}
+, #{entity.closeUname}
+, #{entity.closeTime}
+, #{entity.issueStatus}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.issue.bean.entity.IssueEntity">
+UPDATE ISSU_ISSUE
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+ISSUE_ID = #{issueId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ISSU_ISSUE
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+ISSUE_ID = #{entity.issueId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.issue.bean.entity.IssueEntity">
+UPDATE ISSU_ISSUE
+SET
+ISSUE_ID = #{issueId}
+, ISSUE_CODE = #{issueCode}
+, ORDER_ID = #{orderId}
+, ORDER_CODE = #{orderCode}
+, ORDER_TYPE = #{orderType}
+, LOGISTICS_ZONE_CODE = #{logisticsZoneCode}
+, LOGISTICS_ZONE_NAME = #{logisticsZoneName}
+, LOGISTICS_ZONE_ID = #{logisticsZoneId}
+, BUYER_ID = #{buyerId}
+, BUYER_CODE = #{buyerCode}
+, BUYER_NAME = #{buyerName}
+, INITIATOR_TYPE = #{initiatorType}
+, INITIATOR_ID = #{initiatorId}
+, INITIATOR_NAME = #{initiatorName}
+, INITIATE_TIME = #{initiateTime}
+, ISSUE_DESC = #{issueDesc}
+, ISSUE_RESULT = #{issueResult}
+, ISSUE_DECISION = #{issueDecision}
+, CLOSE_UID = #{closeUid}
+, CLOSE_UNAME = #{closeUname}
+, CLOSE_TIME = #{closeTime}
+, ISSUE_STATUS = #{issueStatus}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+ISSUE_ID = #{issueId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ISSU_ISSUE
+SET
+ISSUE_ID = #{entity.issueId}
+, ISSUE_CODE = #{entity.issueCode}
+, ORDER_ID = #{entity.orderId}
+, ORDER_CODE = #{entity.orderCode}
+, ORDER_TYPE = #{entity.orderType}
+, LOGISTICS_ZONE_CODE = #{entity.logisticsZoneCode}
+, LOGISTICS_ZONE_NAME = #{entity.logisticsZoneName}
+, LOGISTICS_ZONE_ID = #{entity.logisticsZoneId}
+, BUYER_ID = #{entity.buyerId}
+, BUYER_CODE = #{entity.buyerCode}
+, BUYER_NAME = #{entity.buyerName}
+, INITIATOR_TYPE = #{entity.initiatorType}
+, INITIATOR_ID = #{entity.initiatorId}
+, INITIATOR_NAME = #{entity.initiatorName}
+, INITIATE_TIME = #{entity.initiateTime}
+, ISSUE_DESC = #{entity.issueDesc}
+, ISSUE_RESULT = #{entity.issueResult}
+, ISSUE_DECISION = #{entity.issueDecision}
+, CLOSE_UID = #{entity.closeUid}
+, CLOSE_UNAME = #{entity.closeUname}
+, CLOSE_TIME = #{entity.closeTime}
+, ISSUE_STATUS = #{entity.issueStatus}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+ISSUE_ID = #{entity.issueId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.issue.bean.entity.IssueEntity" resultType="com.bms.issue.bean.entity.IssueEntity">
+SELECT
+ISSUE_ID AS issueId
+, ISSUE_CODE AS issueCode
+, ORDER_ID AS orderId
+, ORDER_CODE AS orderCode
+, ORDER_TYPE AS orderType
+, LOGISTICS_ZONE_CODE AS logisticsZoneCode
+, LOGISTICS_ZONE_NAME AS logisticsZoneName
+, LOGISTICS_ZONE_ID AS logisticsZoneId
+, BUYER_ID AS buyerId
+, BUYER_CODE AS buyerCode
+, BUYER_NAME AS buyerName
+, INITIATOR_TYPE AS initiatorType
+, INITIATOR_ID AS initiatorId
+, INITIATOR_NAME AS initiatorName
+, INITIATE_TIME AS initiateTime
+, ISSUE_DESC AS issueDesc
+, ISSUE_RESULT AS issueResult
+, ISSUE_DECISION AS issueDecision
+, CLOSE_UID AS closeUid
+, CLOSE_UNAME AS closeUname
+, CLOSE_TIME AS closeTime
+, ISSUE_STATUS AS issueStatus
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ISSU_ISSUE
+<where>
+<if test="issueId!=null">
+AND ISSUE_ID = #{issueId}
+</if>
+<if test="issueCode!=null">
+AND ISSUE_CODE = #{issueCode}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.issue.bean.entity.IssueEntity">
+SELECT
+ISSUE_ID AS issueId
+, ISSUE_CODE AS issueCode
+, ORDER_ID AS orderId
+, ORDER_CODE AS orderCode
+, ORDER_TYPE AS orderType
+, LOGISTICS_ZONE_CODE AS logisticsZoneCode
+, LOGISTICS_ZONE_NAME AS logisticsZoneName
+, LOGISTICS_ZONE_ID AS logisticsZoneId
+, BUYER_ID AS buyerId
+, BUYER_CODE AS buyerCode
+, BUYER_NAME AS buyerName
+, INITIATOR_TYPE AS initiatorType
+, INITIATOR_ID AS initiatorId
+, INITIATOR_NAME AS initiatorName
+, INITIATE_TIME AS initiateTime
+, ISSUE_DESC AS issueDesc
+, ISSUE_RESULT AS issueResult
+, ISSUE_DECISION AS issueDecision
+, CLOSE_UID AS closeUid
+, CLOSE_UNAME AS closeUname
+, CLOSE_TIME AS closeTime
+, ISSUE_STATUS AS issueStatus
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ISSU_ISSUE
+<where>
+<if test="ids!=null">
+AND ISSUE_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="codes!=null">
+AND ISSUE_CODE IN (<foreach collection="codes" item="code" separator=",">#{code}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+</mapper>

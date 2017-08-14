@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bypo.dao.BypoProductSaleResearchDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		RESEARCH_ID AS researchId,
+		BUYER_POOL_ID AS buyerPoolId,
+		LGCS_AREA_CODE AS lgcsAreaCode,
+		LGCS_AREA_NAME AS lgcsAreaName,
+		BUYER_TYPE AS buyerType,
+		BUYER_TYPE_NAME AS buyerTypeName,
+		BUYER_FIRST_CATEGORY AS buyerFirstCategory,
+		BUYER_FIRST_CATEGORY_NAME AS buyerFirstCategoryName,
+		BUYER_SUB_CATEGORY AS buyerSubCategory,
+		BUYER_SUB_CATEGORY_NAME AS buyerSubCategoryName,
+		BUYER_POOL_NAME AS buyerPoolName,
+		BUYER_POOL_CODE AS buyerPoolCode,
+		BUYER_ID AS buyerId,
+		BUYER_NAME AS buyerName,
+		BUYER_CODE AS buyerCode,
+		PRICE_PLATE_START AS pricePlateStart,
+		PRICE_PLATE_END AS pricePlateEnd,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYPO_PRODUCT_SALE_RESEARCH (
+        RESEARCH_ID,
+        BUYER_POOL_ID,
+        LGCS_AREA_CODE,
+        LGCS_AREA_NAME,
+        BUYER_TYPE,
+        BUYER_TYPE_NAME,
+        BUYER_FIRST_CATEGORY,
+        BUYER_FIRST_CATEGORY_NAME,
+        BUYER_SUB_CATEGORY,
+        BUYER_SUB_CATEGORY_NAME,
+        BUYER_POOL_NAME,
+        BUYER_POOL_CODE,
+        BUYER_ID,
+        BUYER_NAME,
+        BUYER_CODE,
+        PRICE_PLATE_START,
+        PRICE_PLATE_END,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" index="index" item="ls" separator=",">
+            (
+            #{ls.researchId},
+            #{ls.buyerPoolId},
+            #{ls.lgcsAreaCode},
+            #{ls.lgcsAreaName},
+            #{ls.buyerType},
+            #{ls.buyerTypeName},
+            #{ls.buyerFirstCategory},
+            #{ls.buyerFirstCategoryName},
+            #{ls.buyerSubCategory},
+            #{ls.buyerSubCategoryName},
+            #{ls.buyerPoolName},
+            #{ls.buyerPoolCode},
+            #{ls.buyerId},
+            #{ls.buyerName},
+            #{ls.buyerCode},
+            #{ls.pricePlateStart},
+            #{ls.pricePlateEnd},
+            #{ls.delFlg},
+            #{ls.crtId},
+            #{ls.crtTime},
+            #{ls.updId},
+            #{ls.updTime},
+            #{ls.version}
+            )
+        </foreach>
+
+    </insert>
+
+    <insert id="save" parameterType="com.bms.bypo.bean.entity.BypoProductSaleResearch">
+		INSERT INTO BYPO_PRODUCT_SALE_RESEARCH (
+			RESEARCH_ID,
+			BUYER_POOL_ID,
+			LGCS_AREA_CODE,
+			LGCS_AREA_NAME,
+			BUYER_TYPE,
+			BUYER_TYPE_NAME,
+			BUYER_FIRST_CATEGORY,
+			BUYER_FIRST_CATEGORY_NAME,
+			BUYER_SUB_CATEGORY,
+			BUYER_SUB_CATEGORY_NAME,
+			BUYER_POOL_NAME,
+			BUYER_POOL_CODE,
+			BUYER_ID,
+			BUYER_NAME,
+			BUYER_CODE,
+			PRICE_PLATE_START,
+			PRICE_PLATE_END,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES (
+			#{researchId},
+			#{buyerPoolId},
+			#{lgcsAreaCode},
+			#{lgcsAreaName},
+			#{buyerType},
+			#{buyerTypeName},
+			#{buyerFirstCategory},
+			#{buyerFirstCategoryName},
+			#{buyerSubCategory},
+			#{buyerSubCategoryName},
+			#{buyerPoolName},
+			#{buyerPoolCode},
+			#{buyerId},
+			#{buyerName},
+			#{buyerCode},
+			#{pricePlateStart},
+			#{pricePlateEnd},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.bypo.bean.entity.BypoProductSaleResearch">
+        UPDATE BYPO_PRODUCT_SALE_RESEARCH
+        SET
+        <if test="target.lgcsAreaCode != null">
+            LGCS_AREA_CODE = #{target.lgcsAreaCode},
+        </if>
+        <if test="target.lgcsAreaName != null">
+            LGCS_AREA_NAME = #{target.lgcsAreaName},
+        </if>
+        <if test="target.buyerType != null">
+            BUYER_TYPE = #{target.buyerType},
+        </if>
+        <if test="target.buyerTypeName != null">
+            BUYER_TYPE_NAME = #{target.buyerTypeName},
+        </if>
+        <if test="target.buyerFirstCategory != null">
+            BUYER_FIRST_CATEGORY = #{target.buyerFirstCategory},
+        </if>
+        <if test="target.buyerFirstCategoryName != null">
+            BUYER_FIRST_CATEGORY_NAME = #{target.buyerFirstCategoryName},
+        </if>
+        <if test="target.buyerSubCategory != null">
+            BUYER_SUB_CATEGORY = #{target.buyerSubCategory},
+        </if>
+        <if test="target.buyerSubCategoryName != null">
+            BUYER_SUB_CATEGORY_NAME = #{target.buyerSubCategoryName},
+        </if>
+        <if test="target.buyerPoolName != null">
+            BUYER_POOL_NAME = #{target.buyerPoolName},
+        </if>
+        <if test="target.buyerPoolCode != null">
+            BUYER_POOL_CODE = #{target.buyerPoolCode},
+        </if>
+        <if test="target.buyerName != null">
+            BUYER_NAME = #{target.buyerName},
+        </if>
+        <if test="target.buyerCode != null">
+            BUYER_CODE = #{target.buyerCode},
+        </if>
+        <if test="target.pricePlateStart != null">
+            PRICE_PLATE_START = #{target.pricePlateStart},
+        </if>
+        <if test="target.pricePlateEnd != null">
+            PRICE_PLATE_END = #{target.pricePlateEnd},
+        </if>
+        DEL_FLG = #{target.delFlg},
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        RESEARCH_ID = #{filter.researchId}
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.bypo.bean.entity.BypoProductSaleResearch">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYPO_PRODUCT_SALE_RESEARCH
+        WHERE
+        RESEARCH_ID = #{researchId}
+    </select>
+
+    <select id="findAll" parameterType="com.framework.base.rest.param.BaseRestParam"
+            resultType="com.bms.bypo.bean.entity.BypoProductSaleResearch">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYPO_PRODUCT_SALE_RESEARCH
+        WHERE
+        1 = 1
+        <if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND A.DEL_FLG = #{filterMap.delFlg}
+        </if>
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.bypo.bean.param.ProductSaleResearchRsParam"
+            resultType="com.bms.bypo.bean.entity.BypoProductSaleResearch">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYPO_PRODUCT_SALE_RESEARCH
+        WHERE
+        1 = 1
+        AND DEL_FLG = FALSE
+        <if test="researchId !=null and researchId !=''">
+            AND RESEARCH_ID = #{researchId}
+        </if>
+        <if test="lgcsAreaCode !=null and lgcsAreaCode !=''">
+            AND LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="buyerType !=null and buyerType !=''">
+            AND BUYER_TYPE = #{buyerType}
+        </if>
+        <if test="buyerFirstCategory !=null and buyerFirstCategory !=''">
+            AND BUYER_FIRST_CATEGORY = #{buyerFirstCategory}
+        </if>
+        <if test="buyerSubCategory !=null and buyerSubCategory !=''">
+            AND BUYER_SUB_CATEGORY = #{buyerSubCategory}
+        </if>
+        <if test="buyerPoolCode !=null and buyerPoolCode !=''">
+            AND BUYER_POOL_CODE = #{buyerPoolCode}
+        </if>
+        <if test="buyerName !=null and buyerName !=''">
+            AND BUYER_NAME = #{buyerName}
+        </if>
+        <if test="buyerCode !=null and buyerCode !=''">
+            AND BUYER_CODE = #{buyerCode}
+        </if>
+        <if test="pricePlateStart != null and pricePlateStart != ''">
+            <![CDATA[AND PRICE_PLATE_START >= #{pricePlateStart}]]>
+        </if>
+        <if test="pricePlateEnd != null and pricePlateEnd != ''">
+            <![CDATA[AND PRICE_PLATE_END <= #{pricePlateEnd}]]>
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYPO_PRODUCT_SALE_RESEARCH
+        WHERE
+        1 = 1
+        <if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND A.DEL_FLG = #{filterMap.delFlg}
+        </if>
+    </select>
+
+</mapper>

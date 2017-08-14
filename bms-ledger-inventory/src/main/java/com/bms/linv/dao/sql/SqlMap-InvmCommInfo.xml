@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmCommInfoDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		INFO_ID AS infoId,
+		COMMODITY_ID AS commodityId,
+		L_A_ID AS laId,
+		COMMODITY_NAME AS commodityName,
+		PD_ID AS pdId,
+		PDRS_ID AS pdrsId,
+		PDRS_CODE AS pdrsCode,
+		PDRS_NAME AS pdrsName,
+		LOT_NO AS lotNo,
+		SALE_STATUS_ID AS saleStatusId,
+		SALE_STATUS_CODE AS saleStatusCode,
+		SALE_STATUS_NAME AS saleStatusName
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.linv.bean.entity.InvmCommInfo">
+		INSERT INTO invm_comm_info (
+			INFO_ID,
+			COMMODITY_ID,
+			L_A_ID,
+			COMMODITY_NAME,
+			PD_ID,
+			PDRS_ID,
+			PDRS_CODE,
+			PDRS_NAME,
+			LOT_NO,
+			SALE_STATUS_ID,
+			SALE_STATUS_CODE,
+			SALE_STATUS_NAME,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{infoId},
+			#{commodityId},
+			#{laId},
+			#{commodityName},
+			#{pdId},
+			#{pdrsId},
+			#{pdrsCode},
+			#{pdrsName},
+			#{lotNo},
+			#{saleStatusId},
+			#{saleStatusCode},
+			#{saleStatusName},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.linv.bean.entity.InvmCommInfo">
+		UPDATE invm_comm_info 
+		SET 
+			COMMODITY_ID = #{commodityId},
+			L_A_ID = #{laId},
+			COMMODITY_NAME = #{commodityName},
+			PD_ID = #{pdId},
+			PDRS_ID = #{pdrsId},
+			PDRS_CODE = #{pdrsCode},
+			PDRS_NAME = #{pdrsName},
+			LOT_NO = #{lotNo},
+			SALE_STATUS_ID = #{saleStatusId},
+			SALE_STATUS_CODE = #{saleStatusCode},
+			SALE_STATUS_NAME = #{saleStatusName}
+		WHERE
+			INFO_ID = #{infoId}		
+	</update>
+	
+	<select id="findOne" parameterType="com.bms.linv.bean.entity.InvmCommInfo" resultType="com.bms.linv.bean.entity.InvmCommInfo">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_comm_info
+		WHERE 1= 1
+		<if test="infoId !=null and infoId !=''">
+			AND INFO_ID = #{infoId}
+		</if>
+		<if test="pdId !=null and pdId !=''">
+			AND PD_ID = #{pdId}
+		</if>
+
+<if test="commodityId !=null and commodityId !=''">
+			AND COMMODITY_ID = #{commodityId}
+		</if>
+
+	</select>
+
+	<select id="findAll" parameterType="com.bms.linv.bean.entity.InvmCommInfo" resultType="com.bms.linv.bean.entity.InvmCommInfo">
+		SELECT
+			<include refid="selectColumns" />
+		FROM
+			invm_comm_info
+		WHERE
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>
+	</select>
+
+	<select id="countAll" parameterType="com.bms.linv.bean.entity.InvmCommInfo" resultType="int">
+		SELECT
+			count(1)
+		FROM
+			invm_comm_info
+		WHERE
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>
+	</select>
+	
+</mapper>

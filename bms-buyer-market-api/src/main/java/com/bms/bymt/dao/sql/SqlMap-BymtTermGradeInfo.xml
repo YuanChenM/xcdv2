@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bymt.dao.BymtTermGradeInfoDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		GRADE_INFO_ID AS gradeInfoId,
+		TERM_MARKET_ID AS termMarketId,
+		IS_SUPPORT AS isSupport,
+		COVER_AREA AS coverArea,
+		COVER_AREA_STANDARD AS coverAreaStandard,
+		YEAR_AMOUNT AS yearAmount,
+		YEAR_AMOUNT_STANDARD AS yearAmountStandard,
+		LARGEST_TARGET_PRO AS largestTargetPro,
+		LARGEST_TARGET_NUM AS largestTargetNum,
+		LARGEST_TARGET_STANDARD AS largestTargetStandard,
+		TARGET_CONSUMER_NUM AS targetConsumerNum,
+		TARGET_CONSUMER_NUM_STANDARD AS targetConsumerNumStandard,
+		MARKET_TARGET_LEVEL_TYPE AS marketTargetLevelType,
+		MARKET_TARGET_LEVEL_STANDARD AS marketTargetLevelStandard,
+		MARKET_COVER_AREA AS marketCoverArea,
+		MARKET_COVER_AREA_STANDARD AS marketCoverAreaStandard,
+		MARKET_NATURE_RANK AS marketNatureRank,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+	<sql id="selectBeanColumns">
+		marketInfo.GRADE_INFO_ID AS gradeInfoId,
+		marketInfo.TERM_MARKET_ID AS termMarketId,
+		marketInfo.IS_SUPPORT AS isSupport,
+		marketInfo.COVER_AREA AS coverArea,
+		marketInfo.COVER_AREA_STANDARD AS coverAreaStandard,
+		marketInfo.YEAR_AMOUNT AS yearAmount,
+		marketInfo.YEAR_AMOUNT_STANDARD AS yearAmountStandard,
+		marketInfo.LARGEST_TARGET_PRO AS largestTargetPro,
+		marketInfo.LARGEST_TARGET_NUM AS largestTargetNum,
+		marketInfo.LARGEST_TARGET_STANDARD AS largestTargetStandard,
+		marketInfo.TARGET_CONSUMER_NUM AS targetConsumerNum,
+		marketInfo.TARGET_CONSUMER_NUM_STANDARD AS targetConsumerNumStandard,
+		marketInfo.MARKET_TARGET_LEVEL_TYPE AS marketTargetLevelType,
+		marketInfo.MARKET_TARGET_LEVEL_STANDARD AS marketTargetLevelStandard,
+		marketInfo.MARKET_COVER_AREA AS marketCoverArea,
+		marketInfo.MARKET_COVER_AREA_STANDARD AS marketCoverAreaStandard,
+		marketInfo.MARKET_NATURE_RANK AS marketNatureRank,
+		marketResult.GRADE_RESULT_ID AS gradeResultId,
+		marketResult.TERM_MARKET_LEVEL AS termMarketLevel,
+		marketResult.MARKET_RANGE AS marketRange,
+		marketResult.SERVE_TYPE AS serveType
+	</sql>
+
+	<insert id="save" parameterType="com.bms.bymt.bean.entity.BymtTermGradeInfo">
+		INSERT INTO BYMT_TERM_GRADE_INFO (
+			GRADE_INFO_ID,
+			TERM_MARKET_ID,
+			IS_SUPPORT,
+			COVER_AREA,
+			COVER_AREA_STANDARD,
+			YEAR_AMOUNT,
+			YEAR_AMOUNT_STANDARD,
+			LARGEST_TARGET_PRO,
+			LARGEST_TARGET_NUM,
+			LARGEST_TARGET_STANDARD,
+			TARGET_CONSUMER_NUM,
+			TARGET_CONSUMER_NUM_STANDARD,
+			MARKET_TARGET_LEVEL_TYPE,
+			MARKET_TARGET_LEVEL_STANDARD,
+			MARKET_COVER_AREA,
+			MARKET_COVER_AREA_STANDARD,
+			MARKET_NATURE_RANK,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES (
+			#{gradeInfoId},
+			#{termMarketId},
+			#{isSupport},
+			#{coverArea},
+			#{coverAreaStandard},
+			#{yearAmount},
+			#{yearAmountStandard},
+			#{largestTargetPro},
+			#{largestTargetNum},
+			#{largestTargetStandard},
+			#{targetConsumerNum},
+			#{targetConsumerNumStandard},
+			#{marketTargetLevelType},
+			#{marketTargetLevelStandard},
+			#{marketCoverArea},
+			#{marketCoverAreaStandard},
+			#{marketNatureRank},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+	<update id="modify" parameterType="com.bms.bymt.bean.entity.BymtTermGradeInfo">
+		UPDATE BYMT_TERM_GRADE_INFO
+		SET
+			<if test="delFlg != null and delFlg==false">
+				TERM_MARKET_ID = #{termMarketId},
+				IS_SUPPORT = #{isSupport},
+				COVER_AREA = #{coverArea},
+				COVER_AREA_STANDARD = #{coverAreaStandard},
+				YEAR_AMOUNT = #{yearAmount},
+				YEAR_AMOUNT_STANDARD = #{yearAmountStandard},
+				LARGEST_TARGET_PRO = #{largestTargetPro},
+				LARGEST_TARGET_NUM = #{largestTargetNum},
+				LARGEST_TARGET_STANDARD = #{largestTargetStandard},
+				TARGET_CONSUMER_NUM = #{targetConsumerNum},
+				TARGET_CONSUMER_NUM_STANDARD = #{targetConsumerNumStandard},
+				MARKET_TARGET_LEVEL_TYPE = #{marketTargetLevelType},
+				MARKET_TARGET_LEVEL_STANDARD = #{marketTargetLevelStandard},
+				MARKET_COVER_AREA = #{marketCoverArea},
+				MARKET_COVER_AREA_STANDARD = #{marketCoverAreaStandard},
+				MARKET_NATURE_RANK = #{marketNatureRank},
+				CRT_ID = #{crtId},
+				CRT_TIME = #{crtTime},
+				UPD_ID = #{updId},
+				UPD_TIME = #{updTime},
+				VERSION = #{version},
+			</if>
+			DEL_FLG = #{delFlg}
+		WHERE
+		DEL_FLG = FALSE
+		AND TERM_MARKET_ID = #{termMarketId}
+	</update>
+
+	<select id="findOne" parameterType="long" resultType="com.bms.bymt.bean.entity.BymtTermGradeInfo">
+		SELECT
+			<include refid="selectColumns" />
+		FROM
+			BYMT_TERM_GRADE_INFO
+		WHERE
+			GRADE_INFO_ID = #{gradeInfoId}
+	</select>
+
+	<select id="findAll" parameterType="com.bms.bymt.bean.param.TermGradeInfoParam" resultType="com.bms.bymt.bean.param.TermGradeInfoParam">
+		SELECT
+			<include refid="selectColumns" />
+		FROM
+			BYMT_TERM_GRADE_INFO
+		WHERE
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND DEL_FLG = #{filterMap.delFlg}
+			</if>
+	</select>
+
+	<select id="countAll" parameterType="com.bms.bymt.bean.param.TermGradeInfoParam" resultType="int">
+		SELECT
+			count(1)
+		FROM
+			BYMT_TERM_GRADE_INFO
+		WHERE
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND DEL_FLG = #{filterMap.delFlg}
+			</if>
+	</select>
+
+	<select id="getDefineGrade" parameterType="com.bms.bymt.bean.param.TermGradeInfoParam" resultType="com.bms.bymt.bean.result.TerminalModuleDefGradeResult">
+		SELECT
+		<include refid="selectBeanColumns" />
+		FROM
+		BYMT_TERM_GRADE_INFO marketInfo
+		LEFT JOIN BYMT_TERM_GRADE_RESULT marketResult ON marketResult.GRADE_INFO_ID = marketInfo.GRADE_INFO_ID
+		AND marketResult.DEL_FLG = FALSE
+		WHERE
+		marketInfo.DEL_FLG = FALSE
+		AND marketInfo.TERM_MARKET_ID = #{termMarketId}
+	</select>
+
+</mapper>

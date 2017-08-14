@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.region.dao.RegnRelationDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		RELA_ID AS relaId,
+		LGCS_KEY AS lgcsKey,
+		REGN_KEY AS regnKey,
+		RELA_TYPE AS relaType
+	</sql>
+
+    <insert id="save" parameterType="com.bms.region.bean.entity.RegnRelation">
+		INSERT INTO REGN_RELATION (
+			RELA_ID,
+			LGCS_KEY,
+			REGN_KEY,
+			RELA_TYPE,
+			DEL_FLG,
+            CRT_ID,
+            CRT_TIME,
+            UPD_ID,
+            UPD_TIME,
+            VERSION
+		)
+		VALUES (
+			#{relaId},
+			#{lgcsKey},
+			#{regnKey},
+			#{relaType},
+			false,
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            1
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.region.bean.entity.RegnRelation">
+        UPDATE REGN_RELATION
+        SET
+        <if test="target.lgcsKey!= null">
+            LGCS_KEY = #{target.lgcsKey},
+        </if>
+        <if test="target.regnKey!= null">
+            REGN_KEY = #{target.regnKey},
+        </if>
+        <if test="target.relaType!= null">
+            RELA_TYPE = #{target.relaType}
+        </if>
+        WHERE
+        DEL_FLG = false
+        AND RELA_ID = #{filter.relaId}
+    </update>
+    <sql id="param_province_Logistics">
+		,a.LGCS_AREA_ID AS lgcsAreaId,
+		a.LGCS_AREA_CODE AS lgcsAreaCode,
+		a.LGCS_AREA_NAME AS lgcsAreaName,
+		P.PROVINCE_ID AS provinceId,
+		P.PROVINCE_CODE AS provinceCode,
+		P.PROVINCE_NAME AS provinceName
+	</sql>
+    <sql id="param_City_Zone">
+		,c.ZONE_ID AS zoneId
+		,c.ZONE_CODE AS zoneCode
+		,c.ZONE_NAME AS zoneName
+		,rc.CITY_ID AS cityId
+		,rc.CITY_CODE AS cityCode
+		,rc.CITY_NAME AS cityName
+	</sql>
+    <sql id="param_District">
+		,d.DISTRICT_ID AS districtId
+		,d.DISTRICT_CODE AS districtCode
+		,d.DISTRICT_NAME AS districtName
+	</sql>
+    <sql id="param_Distribution">
+		,ld.DISTRIBUTION_ID AS distributionId
+		,ld.DISTRIBUTION_CODE AS distributionCode
+		,ld.DISTRIBUTION_NAME AS distributionName
+	</sql>
+    <select id="findAll" parameterType="com.bms.region.bean.param.RegnRelationLevelParam"
+            resultType="com.bms.region.bean.param.CityLogRsParam">
+        SELECT
+        r.RELA_ID,
+        '${searchLevel}' AS searchLevel
+        <if test="relaType >= 1">
+            <if test="searchLevel >= 1">
+                <include refid="param_province_Logistics"/>
+                <include refid="param_City_Zone"/>
+            </if>
+            <if test="searchLevel == 2">
+                <include refid="param_District"/>
+            </if>
+            <if test="searchLevel == 3">
+                <include refid="param_Distribution"/>
+            </if>
+        </if>
+        FROM
+        REGN_RELATION r
+        <if test="relaType == 1">
+            <include refid="table_1"/>
+        </if>
+        <if test="relaType == 2">
+            <include refid="table_2"/>
+        </if>
+        <if test="relaType == 4">
+            <include refid="table_3"/>
+        </if>
+        WHERE
+        r.DEL_FLG = FALSE
+        AND r.RELA_TYPE = #{relaType}
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND a.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND a.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND a.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+        <if test="zoneId != null and zoneId != ''">
+            AND c.ZONE_ID = #{zoneId}
+        </if>
+        <if test="zoneCode != null and zoneCode != ''">
+            AND c.ZONE_CODE = #{zoneCode}
+        </if>
+        <if test="zoneName != null and zoneName != ''">
+            AND c.ZONE_NAME LIKE #{zoneName}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            AND rc.CITY_ID = #{cityId}
+        </if>
+        <if test="cityName != null and cityName != ''">
+            AND rc.CITY_NAME LIKE #{cityName}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND rc.CITY_CODE = #{cityCode}
+        </if>
+        <if test="provinceCode != null and provinceCode != ''">
+            AND p.PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="provinceName != null and provinceName != ''">
+            AND p.PROVINCE_NAME LIKE #{provinceName}
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            AND p.PROVINCE_ID = #{provinceId}
+        </if>
+        <if test="relaType == 4">
+            <if test="districtCode != null and districtCode != ''">
+                AND d.DISTRICT_CODE = #{districtCode}
+            </if>
+            <if test="districtName != null and districtName != ''">
+                AND d.DISTRICT_NAME LIKE #{districtName}
+            </if>
+            <if test="districtId != null and districtId != ''">
+                AND d.DISTRICT_ID = #{districtId}
+            </if>
+        </if>
+        <if test="relaType != 4">
+            <if test="relaType == 2 or searchLevel == 2">
+                <if test="districtCode != null and districtCode != ''">
+                    AND d.DISTRICT_CODE = #{districtCode}
+                </if>
+                <if test="districtName != null and districtName != ''">
+                    AND d.DISTRICT_NAME LIKE #{districtName}
+                </if>
+                <if test="districtId != null and districtId != ''">
+                    AND d.DISTRICT_ID = #{districtId}
+                </if>
+            </if>
+
+            <if test="relaType == 2 or searchLevel == 3">
+                <if test="distributionCode!= null and distributionCode!= ''">
+                    AND ld.DISTRIBUTION_CODE = #{distributionCode}
+                </if>
+                <if test="distributionId!= null and distributionId!= ''">
+                    AND ld.DISTRIBUTION_ID = #{distributionId}
+                </if>
+                <if test="distributionName!= null and distributionName!= ''">
+                    AND ld.DISTRIBUTION_NAME LIKE #{distributionName}
+                </if>
+            </if>
+
+        </if>
+        <if test="relaType == 1">
+            AND NOT EXISTS (SELECT 1 FROM regn_relation c WHERE c.REGN_KEY = d.DISTRICT_ID AND c.RELA_TYPE = '4')
+            <if test="searchLevel == 1">
+                GROUP BY rc.CITY_ID
+            </if>
+            UNION ALL
+            SELECT
+            r.RELA_ID,
+            '${searchLevel}' AS searchLevel
+            <if test="searchLevel >= 1">
+                <include refid="param_province_Logistics"/>
+                <include refid="param_City_Zone"/>
+            </if>
+            <if test="searchLevel == 2">
+                <include refid="param_District"/>
+            </if>
+            <if test="searchLevel == 3">
+                <include refid="param_Distribution"/>
+            </if>
+            FROM
+            REGN_RELATION r
+            <include refid="table_3"/>
+            WHERE r.DEL_FLG = FALSE
+            AND r.RELA_TYPE = '4'
+            <if test="lgcsAreaId != null and lgcsAreaId != ''">
+                AND a.LGCS_AREA_ID = #{lgcsAreaId}
+            </if>
+            <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+                AND a.LGCS_AREA_CODE = #{lgcsAreaCode}
+            </if>
+            <if test="lgcsAreaName != null and lgcsAreaName != ''">
+                AND a.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+            </if>
+            <if test="zoneId != null and zoneId != ''">
+                AND c.ZONE_ID = #{zoneId}
+            </if>
+            <if test="zoneCode != null and zoneCode != ''">
+                AND c.ZONE_CODE = #{zoneCode}
+            </if>
+            <if test="zoneName != null and zoneName != ''">
+                AND c.ZONE_NAME LIKE #{zoneName}
+            </if>
+            <if test="cityId != null and cityId != ''">
+                AND rc.CITY_ID = #{cityId}
+            </if>
+            <if test="cityName != null and cityName != ''">
+                AND rc.CITY_NAME LIKE #{cityName}
+            </if>
+            <if test="cityCode != null and cityCode != ''">
+                AND rc.CITY_CODE = #{cityCode}
+            </if>
+            <if test="provinceCode != null and provinceCode != ''">
+                AND p.PROVINCE_CODE = #{provinceCode}
+            </if>
+            <if test="provinceName != null and provinceName != ''">
+                AND p.PROVINCE_NAME LIKE #{provinceName}
+            </if>
+            <if test="provinceId != null and provinceId != ''">
+                AND p.PROVINCE_ID = #{provinceId}
+            </if>
+            <if test="districtCode != null and districtCode != ''">
+                AND d.DISTRICT_CODE = #{districtCode}
+            </if>
+            <if test="districtName != null and districtName != ''">
+                AND d.DISTRICT_NAME LIKE #{districtName}
+            </if>
+            <if test="districtId != null and districtId != ''">
+                AND d.DISTRICT_ID = #{districtId}
+            </if>
+            <if test="searchLevel == 1">
+                GROUP BY rc.CITY_ID
+            </if>
+        </if>
+
+
+    </select>
+    <sql id="table_1">
+        INNER JOIN REGN_CITY rc ON rc.CITY_ID = r.REGN_KEY AND rc.DISABLE_FLG = '1' AND rc.DEL_FLG = FALSE
+        INNER JOIN REGN_LOGISTICS_ZONE c ON c.ZONE_ID = r.LGCS_KEY AND c.DEL_FLG = FALSE AND c.DISABLE_FLG = '1'
+        INNER JOIN REGN_PROVINCE P ON p.PROVINCE_ID = rc.PROVINCE_ID AND p.DISABLE_FLG = '1' AND p.DEL_FLG = FALSE
+        INNER JOIN REGN_LOGISTICS_AREA a ON a.LGCS_AREA_ID = c.LGCS_AREA_ID AND a.DEL_FLG = FALSE AND a.DISABLE_FLG = '1'
+        LEFT JOIN REGN_DISTRICT d ON rc.CITY_ID = d.CITY_ID AND d.DEL_FLG = false AND d.DISABLE_FLG = 1
+        <if test="searchLevel == 3">
+            LEFT JOIN REGN_LOGISTICS_DISTRIBUTION ld ON ld.ZONE_ID = c.ZONE_ID AND ld.DEL_FLG = false AND ld.DISABLE_FLG
+            = 1
+        </if>
+    </sql>
+
+    <sql id="table_2">
+		INNER JOIN REGN_LOGISTICS_DISTRIBUTION ld ON ld.DISTRIBUTION_ID = r.LGCS_KEY AND ld.DEL_FLG = false AND ld.DISABLE_FLG = 1
+		INNER JOIN REGN_DISTRICT d ON r.REGN_KEY = d.DISTRICT_ID AND d.DEL_FLG = false AND d.DISABLE_FLG = 1
+		INNER JOIN REGN_CITY rc ON rc.CITY_ID = d.CITY_ID AND rc.DISABLE_FLG = '1' AND rc.DEL_FLG = FALSE
+		INNER JOIN REGN_LOGISTICS_ZONE c ON c.ZONE_ID = ld.ZONE_ID AND c.DEL_FLG = FALSE AND c.DISABLE_FLG = '1'
+		INNER JOIN REGN_PROVINCE P ON p.PROVINCE_ID = rc.PROVINCE_ID AND p.DISABLE_FLG = '1' AND p.DEL_FLG = FALSE
+		INNER JOIN REGN_LOGISTICS_AREA a ON a.LGCS_AREA_ID = c.LGCS_AREA_ID AND a.DEL_FLG = FALSE AND a.DISABLE_FLG = '1'
+	</sql>
+
+    <sql id="table_3">
+		INNER JOIN REGN_DISTRICT d	ON r.REGN_KEY = d.DISTRICT_ID AND d.DEL_FLG = FALSE	AND d.DISABLE_FLG = 1
+		INNER JOIN REGN_CITY rc	ON rc.CITY_ID = d.CITY_ID AND rc.DISABLE_FLG = '1' AND rc.DEL_FLG = FALSE
+        INNER JOIN REGN_PROVINCE P	ON p.PROVINCE_ID = rc.PROVINCE_ID	AND p.DISABLE_FLG = '1'	AND p.DEL_FLG = FALSE
+        INNER JOIN REGN_LOGISTICS_ZONE c ON c.ZONE_ID = r.LGCS_KEY	AND c.DEL_FLG = FALSE AND c.DISABLE_FLG = '1'
+        INNER JOIN REGN_LOGISTICS_AREA a ON a.LGCS_AREA_ID = c.LGCS_AREA_ID	AND a.DEL_FLG = FALSE AND a.DISABLE_FLG = '1'
+	</sql>
+
+
+    <select id="checkMaxCode" parameterType="java.util.HashMap"
+            resultType="java.util.HashMap">
+        <if test="codeType!= null and codeType == 1">
+            SELECT
+            LPAD(MAX(PROVINCE_CODE),2,'0')as maxCode
+            FROM
+            regn_province
+            WHERE
+            DEL_FLG = FALSE
+            AND DISABLE_FLG = '1'
+        </if>
+        <if test="codeType!= null and codeType == 2">
+            SELECT
+            LPAD(MAX(CITY_CODE),3,'0') as maxCode
+            FROM
+            regn_city
+            WHERE
+            DEL_FLG = FALSE
+            AND DISABLE_FLG = '1'
+        </if>
+        <if test="codeType!= null and codeType == 3">
+            SELECT
+            LPAD(MAX(DISTRICT_CODE),2,'0') as maxCode
+            FROM
+            regn_district
+            WHERE
+            DEL_FLG = FALSE
+            AND DISABLE_FLG = '1'
+            AND CITY_ID = #{cityId}
+        </if>
+        <if test="codeType!= null and codeType == 4">
+            SELECT
+            LPAD(MAX(STREET_CODE),2,'0') as maxCode
+            FROM
+            regn_street
+            WHERE
+            DEL_FLG = FALSE
+            AND DISABLE_FLG = '1'
+            AND DISTRICT_ID = #{districtId}
+
+        </if>
+        <if test="codeType!= null and codeType == 11">
+            SELECT
+            LPAD(MAX(LGCS_AREA_CODE),2,'0') as maxCode
+            FROM
+            REGN_LOGISTICS_AREA
+            WHERE
+            DEL_FLG = FALSE
+            AND DISABLE_FLG = '1'
+        </if>
+        <if test="codeType!= null and codeType == 12">
+            SELECT
+            LPAD(MAX(ZONE_CODE),3,'0') as maxCode
+            FROM
+            REGN_LOGISTICS_ZONE
+            WHERE
+            DEL_FLG = FALSE
+            AND DISABLE_FLG = '1'
+        </if>
+        <if test="codeType!= null and codeType == 13">
+            SELECT
+            LPAD(MAX(DISTRIBUTION_CODE),2,'0') as maxCode
+            FROM
+            REGN_LOGISTICS_DISTRIBUTION
+            WHERE
+            DEL_FLG = FALSE
+            AND DISABLE_FLG = '1'
+            AND ZONE_ID = #{zoneId}
+        </if>
+        <if test="codeType!= null and codeType == 14">
+            SELECT
+            LPAD(MAX(DEMESNE_CODE),2,'0') as maxCode
+            FROM
+            REGN_LOGISTICS_DEMESNE
+            WHERE
+            DEL_FLG = FALSE
+            AND DISABLE_FLG = '1'
+            AND DISTRIBUTION_ID = #{distributionId}
+        </if>
+    </select>
+
+
+</mapper>

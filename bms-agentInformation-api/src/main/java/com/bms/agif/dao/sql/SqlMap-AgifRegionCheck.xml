@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifRegionCheckDao">
+
+    <select id="checkRegionNum" parameterType="com.bms.agif.bean.param.AgentParam"
+            resultType="int">
+        select SUM(a.NUMS) from (
+        select count(1) AS NUMS from AGIF_PARTNER
+        <where>
+            <include refid="Where_region"/>
+        </where>
+        union
+        select count(1) AS NUMS from AGIF_AGENT
+        <where>
+            <include refid="Where_region"/>
+        </where>
+        union
+        select count(1) AS NUMS from AGIF_BUTLER_ADDRESS
+        <where>
+            <include refid="Where_region"/>
+        </where>
+        ) a
+    </select>
+    <sql id="Where_region">
+        DEL_FLG = FALSE
+        <if test="provinceName != null">
+            AND PROVINCE_NAME = #{provinceName}
+        </if>
+        <if test="provinceId != null">
+            AND PROVINCE_ID = #{provinceId}
+        </if>
+        <if test="provinceCode != null">
+            AND PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="cityId != null">
+            AND CITY_ID = #{cityId}
+        </if>
+        <if test="cityCode != null">
+            AND CITY_CODE = #{cityCode}
+        </if>
+        <if test="cityName != null">
+            AND CITY_NAME = #{cityName}
+        </if>
+        <if test="districtId != null">
+            AND DISTRICT_ID = #{districtId}
+        </if>
+        <if test="districtCode != null">
+            AND DISTRICT_CODE = #{districtCode}
+        </if>
+        <if test="districtName != null">
+            AND DISTRICT_NAME = #{districtName}
+        </if>
+        <if test="streetId != null">
+            AND STREET_ID = #{streetId}
+        </if>
+        <if test="streetCode != null">
+            AND STREET_CODE = #{streetCode}
+        </if>
+        <if test="streetName != null">
+            AND STREET_NAME = #{streetName}
+        </if>
+    </sql>
+
+    <select id="checkLgcsRegionNum" parameterType="com.bms.agif.bean.param.AgentDemesneParam"
+            resultType="int">
+        select SUM(a.NUMS) from (
+        select count(1) AS NUMS from AGIF_PARTNER_DISTRIBUTION
+        <where>
+            <include refid="Where_lgcs_region"/>
+            <if test="demesneId != null and demesneId != 0">
+                AND 1 = 2
+            </if>
+        </where>
+        <if test="lgcsAreaId != null ">
+            union
+            select count(1) AS NUMS from AGIF_AGENT_LEVEL_STANDARD
+            where DEL_FLG = FALSE
+            AND LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        union
+        select count(1) AS NUMS from AGIF_AGENT_DEMESNE
+        <where>
+            <include refid="Where_lgcs_region"/>
+            <if test="demesneId != null">
+                AND DEMESNE_ID = #{demesneId}
+            </if>
+        </where>
+        <if test="lgcsAreaId != null ">
+            union
+            select count(1) AS NUMS from AGIF_BUTLER_LEVEL_STANDARD
+            where DEL_FLG = FALSE
+            AND LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        ) a
+    </select>
+
+    <sql id="Where_lgcs_region">
+        DEL_FLG = FALSE
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND LGCS_AREA_NAME = #{lgcsAreaName}
+        </if>
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="zoneId != null and zoneId != ''">
+            AND ZONE_ID = #{zoneId}
+        </if>
+        <if test="zoneCode != null and zoneCode != ''">
+            AND ZONE_CODE = #{zoneCode}
+        </if>
+        <if test="zoneName != null and zoneName != ''">
+            AND ZONE_NAME = #{zoneName}
+        </if>
+        <if test="distributionId != null and distributionId != ''">
+            AND DISTRIBUTION_ID = #{distributionId}
+        </if>
+    </sql>
+</mapper>

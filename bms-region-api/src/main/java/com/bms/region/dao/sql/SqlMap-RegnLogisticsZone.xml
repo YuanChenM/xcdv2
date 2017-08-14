@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.region.dao.RegnLogisticsZoneDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		ZONE_ID AS zoneId,
+		LGCS_AREA_ID AS lgcsAreaId,
+		ZONE_CODE AS zoneCode,
+		ZONE_NAME AS zoneName,
+		DISABLE_FLG AS disableFlg
+	</sql>
+    <sql id="selectColumns2">
+        a.LGCS_AREA_ID AS lgcsAreaId,
+		a.LGCS_AREA_CODE AS lgcsAreaCode,
+		a.LGCS_AREA_NAME AS lgcsAreaName,
+		c.ZONE_ID AS zoneId,
+		c.ZONE_CODE AS zoneCode,
+		c.ZONE_NAME AS zoneName,
+		a.DEL_FLG AS delFlg,
+		a.DISABLE_FLG AS disableFlg
+    </sql>
+
+    <insert id="save" parameterType="com.bms.region.bean.entity.RegnLogisticsZone">
+		INSERT INTO REGN_LOGISTICS_ZONE (
+			ZONE_ID,
+			LGCS_AREA_ID,
+			ZONE_CODE,
+			ZONE_NAME,
+			DISABLE_FLG,
+            DEL_FLG,
+            CRT_ID,
+            CRT_TIME,
+            UPD_ID,
+            UPD_TIME,
+            VERSION
+		)
+		VALUES (
+			#{zoneId},
+			#{lgcsAreaId},
+			#{zoneCode},
+			#{zoneName},
+            '1',
+            false,
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            1
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.region.bean.param.BaseBean">
+		UPDATE REGN_LOGISTICS_ZONE 
+		SET
+        <if test="target.lgcsAreaId !=null">
+			LGCS_AREA_ID = #{target.lgcsAreaId},
+        </if>
+        <if test="target.zoneCode !=null">
+			ZONE_CODE = #{target.zoneCode},
+        </if>
+        <if test="target.zoneName !=null">
+			ZONE_NAME = #{target.zoneName},
+        </if>
+        <if test="target.disableFlg !=null">
+			DISABLE_FLG = #{target.disableFlg},
+        </if>
+        <if test="target.delFlg !=null">
+            DEL_FLG=#{target.delFlg},
+        </if>
+        UPD_ID=#{target.updId},
+        UPD_TIME=#{target.updTime}
+		WHERE
+        DEL_FLG=false
+        AND DISABLE_FLG='1'
+		AND	ZONE_ID = #{filter.zoneId}
+	</update>
+
+    <select id="getParamCount" parameterType="com.bms.region.bean.param.RegnLogisticsZoneParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        REGN_LOGISTICS_ZONE
+        WHERE
+        DEL_FLG = FALSE
+        AND DISABLE_FLG='1'
+        AND (
+        ZONE_CODE= #{zoneCode}
+        OR ZONE_NAME = #{zoneName}
+        )
+        <if test="zoneId!= null and zoneId!= ''">
+            AND ZONE_ID &lt;&gt; #{zoneId}
+        </if>
+    </select>
+    <select id="findPageList" parameterType="com.bms.region.bean.param.RegnLogisticsZonePageParam"
+            resultType="com.bms.region.bean.result.LogisticsZoneRestResult">
+        SELECT
+        <include refid="selectColumns2"/>
+        FROM
+        REGN_LOGISTICS_ZONE c
+        INNER JOIN REGN_LOGISTICS_AREA a ON c.LGCS_AREA_ID = a.LGCS_AREA_ID
+        AND c.DEL_FLG = a.DEL_FLG AND c.DISABLE_FLG = a.DISABLE_FLG
+        WHERE c.DEL_FLG = FALSE
+        AND c.DISABLE_FLG = 1
+        <if test="zoneId!= null and zoneId!= ''">
+            AND c.ZONE_ID = #{zoneId}
+        </if>
+        <if test="zoneCode!= null and zoneCode!= ''">
+            AND c.ZONE_CODE = #{zoneCode}
+        </if>
+        <if test="zoneName!= null and zoneName!= ''">
+            AND c.ZONE_NAME LIKE #{zoneName}
+        </if>
+        <if test="lgcsAreaId!= null and lgcsAreaId!= ''">
+            AND a.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="lgcsAreaCode!= null and lgcsAreaCode!= ''">
+            AND a.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName!= null and lgcsAreaName!= ''">
+            AND a.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+    </select>
+
+    <select id="findOne" parameterType="com.bms.region.bean.param.RegnLogisticsZoneParam"
+            resultType="com.bms.region.bean.result.LogisticsZoneRestResult">
+        SELECT
+        <include refid="selectColumns2"/>
+        FROM
+        REGN_LOGISTICS_ZONE c
+        INNER JOIN REGN_LOGISTICS_AREA a ON c.LGCS_AREA_ID = a.LGCS_AREA_ID
+        AND c.DEL_FLG = a.DEL_FLG AND c.DISABLE_FLG = a.DISABLE_FLG
+        WHERE c.DEL_FLG = FALSE
+        AND c.DISABLE_FLG = 1
+        AND c.ZONE_ID = #{zoneId}
+    </select>
+</mapper>

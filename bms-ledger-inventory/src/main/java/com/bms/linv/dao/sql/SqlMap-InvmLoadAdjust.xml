@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmLoadAdjustDao">
+
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+        LOAD_ADJUST_ID AS loadAdjustId,
+        LOAD_ADJUST_CODE AS loadAdjustCode,
+        WMS_ADJUST_CODE AS wmsAdjustCode,
+        ADJUST_DATE AS adjustDate,
+        ADJUST_PERSON AS adjustPerson,
+        REASON_CODE AS reasonCode,
+        REASON_NAME AS reasonName
+    </sql>
+
+
+    <insert id="save" parameterType="com.bms.linv.bean.entity.InvmLoadAdjust">
+        INSERT INTO invm_load_adjust
+        (
+            LOAD_ADJUST_ID,
+            LOAD_ADJUST_CODE,
+            WMS_ADJUST_CODE,
+            ADJUST_DATE,
+            ADJUST_PERSON,
+            REASON_CODE,
+            REASON_NAME,
+            DEL_FLG,
+            CRT_ID,
+            CRT_TIME,
+            VERSION
+            )
+            VALUES
+            (
+            #{loadAdjustId},
+            #{loadAdjustCode},
+            #{wmsAdjustCode},
+            #{adjustDate},
+            #{adjustPerson},
+            #{reasonCode},
+            #{reasonName},
+            0,
+            #{crtId},
+            #{crtTime},
+            1
+        )
+    </insert>
+
+    <select id="findOne" parameterType="com.bms.linv.bean.entity.InvmLoadAdjust"
+            resultType="com.bms.linv.bean.entity.InvmLoadAdjust">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        invm_load_adjust
+        WHERE
+        1=1
+        <if test="wmsAdjustCode !=null and wmsAdjustCode !=''">
+            AND WMS_ADJUST_CODE=#{wmsAdjustCode}
+        </if>
+        <if test="reasonCode !=null and reasonCode !=''">
+            AND REASON_CODE=#{reasonCode}
+        </if>
+        <if test="adjustDate !=null and adjustDate !=''">
+            AND ADJUST_DATE=#{adjustDate}
+        </if>
+    </select>
+
+</mapper>

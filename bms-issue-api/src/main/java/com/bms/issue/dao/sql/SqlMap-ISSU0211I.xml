@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.issue.dao.ISSU0211IDao">
+    <resultMap id="L1Result" type="com.bms.issue.bean.result.ISSU0211IRestResult">
+        <id property="itemId" column="L1_itemId"/>
+        <result property="questionId" column="L1_questionId"/>
+        <result property="itemDesc" column="itemDesc"/>
+        <result property="itemSolution" column="itemSolution"/>
+        <result property="itemExcutor" column="itemExcutor"/>
+        <result property="itemStartTime" column="itemStartTime"/>
+        <result property="itemEndTime" column="itemEndTime"/>
+        <result property="itemResult" column="itemResult"/>
+        <result property="itemFeedBack" column="itemFeedBack"/>
+        <result property="itemCloser" column="itemCloser"/>
+        <result property="itemCloseTime" column="itemCloseTime"/>
+        <result property="delFlg" column="L1_delFlg"/>
+        <result property="crtId" column="L1_crtId"/>
+        <result property="crtTime" column="L1_crtTime"/>
+        <result property="updId" column="L1_updId"/>
+        <result property="updTime" column="L1_updTime"/>
+        <result property="ver" column="L1_ver"/>
+        <result property="sortSeq" column="L1_sortSeq"/>
+        <collection property="accessorys" resultMap="L2Result" />
+    </resultMap>
+
+    <resultMap id="L2Result" type="com.bms.issue.bean.result.ISSUAccessorysRestResult">
+        <id property="accessoryId" column="accessoryId"/>
+        <result property="accessoryType" column="accessoryType"/>
+        <result property="fileId" column="fileId"/>
+        <result property="fileName" column="fileName"/>
+        <result property="fileType" column="fileType"/>
+        <result property="L2_delFlg" column=""/>
+        <result property="delFlg" column="L2_delFlg"/>
+        <result property="crtId" column="L2_crtId"/>
+        <result property="crtTime" column="L2_crtTime"/>
+        <result property="updId" column="L2_updId"/>
+        <result property="updTime" column="L2_updTime"/>
+        <result property="ver" column="L2_ver"/>
+        <result property="sortSeq" column="L2_sortSeq"/>
+    </resultMap>
+
+    <sql id="L1Select">
+        L1.ITEM_ID AS L1_itemId,
+        L1.QUESTION_ID AS L1_questionId,
+        ITEM_DESC AS itemDesc,
+        ITEM_SOLUTION AS itemSolution,
+        ITEM_EXCUTOR AS itemExcutor,
+        DATE_FORMAT(ITEM_START_TIME,'%Y-%m-%d %T') AS itemStartTime,
+        DATE_FORMAT(ITEM_END_TIME,'%Y-%m-%d %T') AS itemEndTime,
+        ITEM_RESULT AS itemResult,
+        ITEM_FEEDBACK AS itemFeedBack,
+        ITEM_CLOSER AS itemCloser,
+        DATE_FORMAT(ITEM_CLOSE_TIME,'%Y-%m-%d %T') AS itemCloseTime,
+        L1.DEL_FLG AS L1_delFlg,
+        L1.CRT_ID AS L1_crtId,
+        DATE_FORMAT(L1.CRT_TIME,'%Y-%m-%d %T') AS L1_crtTime,
+        L1.UPD_ID AS L1_updId,
+        DATE_FORMAT(L1.UPD_TIME,'%Y-%m-%d %T') AS L1_updTime,
+        L1.VERSION AS L1_ver
+    </sql>
+
+    <sql id="L2Select">
+        ,ACCESSORY_ID AS accessoryId,
+        ACCESSORY_TYPE AS accessoryType,
+        FILE_ID AS fileId,
+        FILE_NAME AS fileName,
+        FILE_TYPE AS fileType,
+        L2.DEL_FLG AS L2_delFlg,
+        L2.CRT_ID AS L2_crtId,
+        DATE_FORMAT(L2.CRT_TIME,'%Y-%m-%d %T') AS L2_crtTime,
+        L2.UPD_ID AS L2_updId,
+        DATE_FORMAT(L2.UPD_TIME,'%Y-%m-%d %T') AS L2_updTime,
+        L2.VERSION AS L2_ver
+    </sql>
+
+    <select id="findPageList" parameterType="com.bms.issue.common.rest.SearchRestParam" resultMap="L1Result">
+        SELECT
+        <if test="pagingLevel>=1">
+            <include refid="L1Select" />
+        </if>
+        <if test="pagingLevel>=2">
+            <include refid="L2Select" />
+        </if>
+        <if test="pagingLevel==1">
+            , (@sortSeq := @sortSeq + 1) AS L1_sortSeq
+        </if>
+        <if test="pagingLevel==2">
+            , (@sortSeq := @sortSeq + 1) AS L2_sortSeq
+        </if>
+        FROM
+        <include refid="From" />
+        <where>
+            <include refid="Where" />
+        </where>
+        <include refid="GroupBy" />
+    </select>
+
+    <sql id="From">
+        (select @sortSeq := 0) AS SEQ,
+        <if test="searchLevel>=1">
+            ISSU_QUESTION_ITEM AS L1
+        </if>
+        <if test="searchLevel==2">
+            LEFT JOIN ISSU_QUESTION_ACCESSORY AS L2
+            ON L2.ITEM_ID = L1.ITEM_ID
+            AND L2.DEL_FLG = 0
+        </if>
+        <if test="searchLevel>2">
+            LEFT JOIN ISSU_QUESTION_ACCESSORY AS L2
+            ON L2.ITEM_ID = L1.ITEM_ID
+            AND L2.DEL_FLG = 0
+        </if>
+    </sql>
+
+    <sql id="Where">
+      AND L1.DEL_FLG = 0
+      <if test="null != filter">
+        <if test="filter.itemDesc != null">
+            AND L1.ITEM_DESC LIKE #{filter.itemDesc}
+        </if>
+
+        <if test="filter.itemSolution != null">
+            AND L1.ITEM_SOLUTION LIKE #{filter.itemSolution}
+        </if>
+
+        <if test="filter.itemExcutor != null">
+            AND L1.ITEM_EXCUTOR LIKE #{filter.itemExcutor}
+        </if>
+
+        <if test="filter.itemStartTimeFrom != null">
+            AND DATE_FORMAT(L1.ITEM_START_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{filter.itemStartTimeFrom},'%Y-%m-%d')
+        </if>
+
+        <if test="filter.itemStartTimeTo != null">
+            AND DATE_FORMAT(L1.ITEM_START_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{filter.itemStartTimeTo},'%Y-%m-%d')
+        </if>
+
+        <if test="filter.itemEndTimeFrom != null">
+            AND DATE_FORMAT(L1.ITEM_END_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{filter.itemEndTimeFrom},'%Y-%m-%d')
+        </if>
+
+        <if test="filter.itemEndTimeTo != null">
+            AND DATE_FORMAT(L1.ITEM_END_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{filter.itemEndTimeTo},'%Y-%m-%d')
+        </if>
+
+        <if test="filter.itemResult != null">
+          AND L1.ITEM_RESULT LIKE #{filter.itemResult}
+        </if>
+
+        <if test="filter.itemFeedBack != null">
+            AND L1.ITEM_FEEDBACK LIKE #{filter.itemFeedBack}
+        </if>
+
+        <if test="filter.itemCloser != null">
+            AND L1.ITEM_CLOSER LIKE #{filter.itemCloser}
+        </if>
+
+        <if test="filter.itemCloseTimeFrom != null">
+            AND DATE_FORMAT(L1.ITEM_CLOSE_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{filter.itemCloseTimeFrom},'%Y-%m-%d')
+        </if>
+
+        <if test="filter.itemCloseTimeTo != null">
+            AND DATE_FORMAT(L1.ITEM_CLOSE_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{filter.itemCloseTimeTo},'%Y-%m-%d')
+        </if>
+
+        <if test="filter.questionId != null">
+            AND L1.QUESTION_ID IN
+            <foreach collection="filter.questionId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.itemId != null">
+            AND L1.ITEM_ID IN
+            <foreach collection="filter.itemId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.accessoryId != null">
+            AND L2.ACCESSORY_ID IN
+            <foreach collection="filter.accessoryId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="filter.fileId != null">
+            AND L2.FILE_ID IN
+            <foreach collection="filter.fileId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+      </if>
+    </sql>
+
+    <sql id="GroupBy">
+        <if test="pagingLevel==1 and searchLevel>1">
+            GROUP BY L1.ITEM_ID
+        </if>
+    </sql>
+
+</mapper>

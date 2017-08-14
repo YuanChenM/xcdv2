@@ -1,0 +1,830 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.prce.dao.PrcePricePlateDao">
+
+    <!-- 价盘一览查询 -->
+    <select id="findPageList" parameterType="com.bms.prce.bean.param.PRCE0207IParam"
+            resultType="com.bms.prce.bean.result.PRCE0207IResult">
+        SELECT
+        t1.lgcsAreaCode,
+        t1.lgcsAreaName,
+        t1.commodityCode,
+        t1.commodityName,
+        t1.saleStatusName,
+        t1.goodId,
+        t1.classesName,
+        t1.machiningName,
+        t1.itemName,
+        t1.breedSalesName,
+        t1.packageSpecification,
+        t1.netWeight,
+        t1.brandName,
+        t1.qualityGradeTypeName,
+        t1.marketingStatusId,
+        t1.marketingStatusName,
+        t1.userType,
+        t1.buyerLevel,
+        t1.pricePlateId,
+        t1.normPrice,
+        ROUND(t1.unitPrice,2) as unitPrice,
+        t1.startTime,
+        t1.endTime,
+        t2.MARKETING_STATUS_ID AS futureMarketingStatusId,
+        t2.PRICE_PLATE_ID AS futurePriceFlg
+        FROM (
+        SELECT A.LGCS_AREA_CODE AS lgcsAreaCode,
+        A.LGCS_AREA_NAME AS lgcsAreaName,
+        A.COMMODITY_CODE AS commodityCode,
+        A.COMMODITY_NAME AS commodityName,
+        A.SALE_STATUS_NAME AS saleStatusName,
+        A.GOOD_ID AS goodId,
+        A.CLASSES_NAME AS classesName,
+        A.MACHINING_NAME AS machiningName,
+        A.ITEM_NAME AS itemName,
+        A.BREED_NAME AS breedSalesName,
+        A.PACKAGE_SPECIFICATION AS packageSpecification,
+        A.NET_WEIGHT AS netWeight,
+        A.BRAND_NAME AS brandName,
+        A.QUALITY_GRADE_TYPE_NAME AS qualityGradeTypeName,
+        B.MARKETING_STATUS_ID AS marketingStatusId,
+        C.MARKETING_STATUS_NAME AS marketingStatusName,
+        B.USER_TYPE AS userType,
+        B.BUYER_LEVEL AS buyerLevel,
+        B.PRICE_PLATE_ID AS pricePlateId,
+        B.NORM_PRICE AS normPrice,
+        A.NET_WEIGHT * B.NORM_PRICE AS unitPrice,
+        B.START_TIME AS startTime,
+        B.END_TIME AS endTime
+        FROM PRCE_PRODUCT_INFO A
+        LEFT JOIN PRCE_PRICE_PLATE B
+        ON A.GOOD_ID = B.GOOD_ID
+        AND A.LGCS_AREA_CODE = B.LGCS_AREA_CODE
+        <if test="searchEndTime != null and searchEndTime != ''">
+            <![CDATA[AND B.START_TIME  < '${searchEndTime}']]>
+        </if>
+        <if test="searchStartTime != null and searchStartTime != ''">
+            <![CDATA[AND (B.END_TIME >= '${searchStartTime}' OR B.END_TIME IS NULL)]]>
+        </if>
+        <if test="userType != null and userType != ''">
+            AND B.USER_TYPE = #{userType}
+        </if>
+        <if test="buyerLevel != null and buyerLevel != ''">
+            AND B.BUYER_LEVEL = #{buyerLevel}
+        </if>
+        AND B.DEL_FLG = 0
+        LEFT JOIN PRCE_MARKETING_STATUS C
+        ON B.MARKETING_STATUS_ID = C.MARKETING_STATUS_ID
+        WHERE A.DEL_FLG = 0
+        <if test="goodId != null and goodId != ''">
+            AND A.GOOD_ID = #{goodId}
+        </if>
+        <if test="commodityCode != null and commodityCode != ''">
+            AND A.COMMODITY_CODE LIKE #{commodityCode}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND A.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND A.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+        <if test="classesName != null and classesName != ''">
+            AND A.CLASSES_NAME LIKE #{classesName}
+        </if>
+        <if test="machiningName != null and machiningName != ''">
+            AND A.MACHINING_NAME LIKE #{machiningName}
+        </if>
+        <if test="itemName != null and itemName != ''">
+            AND A.ITEM_NAME LIKE #{itemName}
+        </if>
+        <if test="breedSalesName != null and breedSalesName != ''">
+            AND A.BREED_NAME LIKE #{breedSalesName}
+        </if>
+        <if test="brandName != null and brandName != ''">
+            AND A.BRAND_NAME LIKE #{brandName}
+        </if>
+        <if test="qualityGradeTypeName != null and qualityGradeTypeName != ''">
+            AND A.QUALITY_GRADE_TYPE_NAME = #{qualityGradeTypeName}
+        </if>
+        <if test="netWeight != null and netWeight != ''">
+            AND A.NET_WEIGHT = #{netWeight}
+        </if>
+        <if test="saleStatusName != null and saleStatusName != ''">
+            AND A.SALE_STATUS_NAME LIKE #{saleStatusName}
+        </if>
+        <if test="packageSpecification != null and packageSpecification != ''">
+            AND A.PACKAGE_SPECIFICATION LIKE #{packageSpecification}
+        </if>
+        <if test="shelfStu != null and shelfStu != ''">
+            AND A.SHELF_STU = #{shelfStu}
+        </if>
+        <if test="havePlate == true">
+            AND B.PRICE_PLATE_ID IS NOT NULL
+        </if>
+        <if test="havePlate == false">
+            AND B.PRICE_PLATE_ID IS NULL
+        </if>
+        <if test="ownerType != null and ownerType != ''">
+            AND B.OWNER_TYPE = #{ownerType}
+        </if>
+        ) t1
+        LEFT JOIN (
+        SELECT D.PRICE_PLATE_ID, D.MARKETING_STATUS_ID, D.GOOD_ID,D.LGCS_AREA_CODE,MAX(D.START_TIME) as START_TIME
+        from PRCE_PRICE_PLATE D
+        WHERE D.DEL_FLG = 0
+        <if test="searchStartTime != null and searchStartTime != ''">
+            <![CDATA[AND '${searchStartTime}' < D.START_TIME]]>
+        </if>
+        <if test="userType != null and userType != ''">
+            AND D.USER_TYPE = #{userType}
+        </if>
+        <if test="buyerLevel != null and buyerLevel != ''">
+            AND D.BUYER_LEVEL = #{buyerLevel}
+        </if>
+        <if test="goodId != null and goodId != ''">
+            AND D.GOOD_ID = #{goodId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND D.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        GROUP BY D.GOOD_ID,D.LGCS_AREA_CODE
+        ) t2 ON t1.goodId = t2.GOOD_ID
+        AND t1.lgcsAreaCode = t2.LGCS_AREA_CODE
+        <![CDATA[AND IFNULL(t1.startTime,'${searchStartTime}') < t2.START_TIME]]>
+        WHERE 1=1
+        <if test="haveLaterPlate == true">
+            AND t2.PRICE_PLATE_ID IS NOT NULL
+        </if>
+        <if test="haveLaterPlate == false">
+            AND t2.PRICE_PLATE_ID IS NULL
+        </if>
+    </select>
+
+    <!--价盘刷新：根据时间查询价盘-->
+    <select id="findPlateByTime" parameterType="com.bms.prce.bean.param.PRCE0210IDealParam"
+            resultType="com.bms.prce.bean.entity.PrcePricePlate">
+        SELECT
+        PRICE_PLATE_ID AS pricePlateId,
+        LGCS_AREA_CODE AS lgcsAreaCode,
+        GOOD_ID AS goodId,
+        MARKETING_WAY_CONFIG_ID AS marketingWayConfigId,
+        MARKETING_STATUS_ID AS marketingStatusId,
+        USER_TYPE AS userType,
+        BUYER_LEVEL AS buyerLevel,
+        START_TIME AS startTime,
+        END_TIME AS endTime,
+        NORM_PRICE AS normPrice,
+        OWNER_TYPE AS ownerType,
+        OWNER_ID AS ownerId,
+        OWNER_NAME AS ownerName
+        FROM
+        PRCE_PRICE_PLATE
+        WHERE DEL_FLG = 0
+        AND MARKETING_WAY_CONFIG_ID IN
+        <foreach collection="marketingWayConfigIds" item="item" index="index" open="(" separator="," close=")">#{item}
+        </foreach>
+        <if test="searchFlg == 0">
+            <![CDATA[AND START_TIME = '${updTimeStr}' ]]>
+        </if>
+        <if test="searchFlg == 1">
+            <![CDATA[AND START_TIME < '${updTimeStr}' ]]>
+            <![CDATA[AND (END_TIME > '${updTimeStr}' OR END_TIME IS NULL)]]>
+        </if>
+        <if test="searchFlg == 2">
+            <![CDATA[AND START_TIME <= '${updTimeStr}' ]]>
+            <![CDATA[AND (END_TIME > '${updTimeStr}' OR END_TIME IS NULL)]]>
+        </if>
+    </select>
+
+    <!--价盘刷新：删除未生效价盘-->
+    <update id="deleteModify" parameterType="com.bms.prce.bean.param.PRCE0210IDealParam">
+        UPDATE PRCE_PRICE_PLATE PPP
+        INNER JOIN (
+        SELECT PPP.PRICE_PLATE_ID
+        FROM PRCE_PRICE_PLATE PPP
+        INNER JOIN(
+        SELECT GOOD_ID,LGCS_AREA_CODE , USER_TYPE, BUYER_LEVEL
+        from PRCE_PRICE_PLATE
+        where DEL_FLG = 0
+        AND MARKETING_WAY_CONFIG_ID IN
+        <foreach collection="marketingWayConfigIds" item="item" index="index" open="(" separator="," close=")">#{item}
+        </foreach>
+        <![CDATA[AND START_TIME <= '${updTimeStr}' ]]>
+        <![CDATA[AND (END_TIME > '${updTimeStr}' OR END_TIME IS NULL)]]>
+        ) T
+        ON PPP.GOOD_ID = T.GOOD_ID
+        AND PPP.LGCS_AREA_CODE = T.LGCS_AREA_CODE
+        AND PPP.USER_TYPE = T.USER_TYPE
+        AND PPP.BUYER_LEVEL = T.BUYER_LEVEL
+        AND PPP.DEL_FLG = 0
+        <![CDATA[AND PPP.START_TIME > '${updTimeStr}']]>
+        UNION
+        SELECT PRICE_PLATE_ID
+        FROM PRCE_PRICE_PLATE
+        WHERE DEL_FLG = 0
+        AND MARKETING_WAY_CONFIG_ID IN
+        <foreach collection="marketingWayConfigIds" item="item" index="index" open="(" separator="," close=")">#{item}
+        </foreach>
+        <![CDATA[AND START_TIME > '${updTimeStr}' ]]>
+        ) T1
+        ON PPP.PRICE_PLATE_ID = T1.PRICE_PLATE_ID
+        SET PPP.DEL_FLG = 1,
+        PPP.UPD_ID = #{updId},
+        PPP.UPD_TIME = #{updTimeStr},
+        PPP.VERSION = PPP.VERSION + 1
+    </update>
+
+    <!--价盘刷新：插入新价盘-->
+    <insert id="saveByTime" parameterType="com.bms.prce.bean.param.PRCE0210IDealParam">
+        INSERT INTO PRCE_PRICE_PLATE (
+        LGCS_AREA_CODE,
+        GOOD_ID,
+        MARKETING_WAY_CONFIG_ID,
+        MARKETING_STATUS_ID,
+        USER_TYPE,
+        BUYER_LEVEL,
+        START_TIME,
+        END_TIME,
+        NORM_PRICE,
+        OWNER_TYPE,
+        OWNER_ID,
+        OWNER_NAME,
+        DEL_FLG,
+        CRT_Id,
+        CRT_TIME,
+        UPD_Id,
+        UPD_TIME,
+        VERSION
+        )SELECT
+        LGCS_AREA_CODE,
+        GOOD_ID,
+        MARKETING_WAY_CONFIG_ID,
+        MARKETING_STATUS_ID,
+        USER_TYPE,
+        BUYER_LEVEL,
+        #{updTimeStr},
+        null,
+        NORM_PRICE,
+        OWNER_TYPE,
+        OWNER_ID,
+        OWNER_NAME,
+        0,
+        #{updId},
+        #{updTimeStr},
+        #{updId},
+        #{updTimeStr},
+        1
+        FROM
+        PRCE_PRICE_PLATE
+        WHERE DEL_FLG = 0
+        AND MARKETING_WAY_CONFIG_ID IN
+        <foreach collection="marketingWayConfigIds" item="item" index="index" open="(" separator="," close=")">#{item}
+        </foreach>
+        <![CDATA[AND START_TIME < '${updTimeStr}' ]]>
+        <![CDATA[AND (END_TIME > '${updTimeStr}' OR END_TIME IS NULL)]]>
+    </insert>
+
+    <!--价盘比较查询：结果Map-->
+    <resultMap id="plateMap" type="com.bms.prce.bean.result.PRCE0211IResult">
+        <id property="pricePlateId" column="PRICE_PLATE_ID"/>
+        <result property="goodId" column="GOOD_ID"/>
+        <result property="lgcsAreaCode" column="LGCS_AREA_CODE"/>
+        <result property="userType" column="USER_TYPE"/>
+        <result property="buyerLevel" column="BUYER_LEVEL"/>
+        <result property="startTime" column="START_TIME"/>
+        <result property="endTime" column="END_TIME"/>
+        <result property="wayTypeId" column="WAY_TYPE_ID_X"/>
+        <result property="wayConfigId" column="WAY_CONFIG_ID_X"/>
+        <result property="wayTypeName" column="WAY_TYPE_NAME_X"/>
+        <result property="price" column="FACT_PRICE_X"/>
+        <result property="unitPrice" column="UNIT_PRICE_X"/>
+        <collection property="plateDetailList" ofType="com.bms.prce.bean.result.PRCE0211IDetailResult">
+            <id property="pricePlateDetailId" column="PRICE_PLATE_DETAIL_ID"/>
+            <result property="startQty" column="START_QTY"/>
+            <result property="endQty" column="END_QTY"/>
+            <result property="wayTypeId" column="WAY_TYPE_ID"/>
+            <result property="wayConfigId" column="WAY_CONFIG_ID"/>
+            <result property="wayTypeName" column="WAY_TYPE_NAME"/>
+            <result property="price" column="FACT_PRICE"/>
+            <result property="unitPrice" column="UNIT_PRICE"/>
+        </collection>
+    </resultMap>
+
+    <!--价盘比较查询：查询sql-->
+    <select id="findPlates" parameterType="com.bms.prce.bean.param.PRCE0211IParam" resultMap="plateMap">
+        <if test="returnType == 0">
+            SELECT
+            PPP.PRICE_PLATE_ID,
+            PPP.GOOD_ID,
+            PPP.LGCS_AREA_CODE,
+            PPP.START_TIME,
+            PPP.END_TIME,
+            PPP.USER_TYPE,
+            PPP.BUYER_LEVEL,
+            PPPD.WAY_TYPE_ID,
+            PPPD.WAY_CONFIG_ID,
+            PWT.WAY_TYPE_NAME,
+            PPPD.START_QTY,
+            PPPD.END_QTY,
+            PPPD.FACT_PRICE,
+            ROUND(PPI.NET_WEIGHT * PPPD.FACT_PRICE,2) AS UNIT_PRICE,
+            <if test="qty == null or qty == ''">
+                NULL AS WAY_TYPE_ID_X,
+                NULL AS WAY_CONFIG_ID_X,
+                NULL AS WAY_TYPE_NAME_X,
+                NULL AS FACT_PRICE_X,
+                NULL AS UNIT_PRICE_X
+            </if>
+            <if test="qty != null and qty != ''">
+                t1.WAY_TYPE_ID AS WAY_TYPE_ID_X,
+                t1.WAY_CONFIG_ID AS WAY_CONFIG_ID_X,
+                t1.WAY_TYPE_NAME AS WAY_TYPE_NAME_X,
+                t1.FACT_PRICE AS FACT_PRICE_X,
+                ROUND(PPI.NET_WEIGHT * t1.FACT_PRICE,2) AS UNIT_PRICE_X
+            </if>
+            FROM
+            PRCE_PRICE_PLATE PPP
+            LEFT JOIN PRCE_PRICE_PLATE_DETAIL PPPD
+            ON PPP.PRICE_PLATE_ID = PPPD.PRICE_PLATE_ID
+            AND PPPD.DEL_FLG = 0
+            LEFT JOIN PRCE_WAY_TYPE PWT
+            ON PPPD.WAY_TYPE_ID = PWT.WAY_TYPE_ID
+            LEFT JOIN PRCE_PRODUCT_INFO PPI
+            ON PPP.GOOD_ID = PPI.GOOD_ID
+            AND PPP.LGCS_AREA_CODE = PPI.LGCS_AREA_CODE
+            <if test="qty != null and qty != ''">
+                INNER JOIN (
+                SELECT
+                PPP.PRICE_PLATE_ID,
+                PPPD.WAY_TYPE_ID,
+                PPPD.WAY_CONFIG_ID,
+                PWT.WAY_TYPE_NAME,
+                PPPD.FACT_PRICE
+                FROM
+                PRCE_PRICE_PLATE PPP
+                LEFT JOIN PRCE_PRICE_PLATE_DETAIL PPPD
+                ON PPP.PRICE_PLATE_ID = PPPD.PRICE_PLATE_ID
+                AND PPPD.DEL_FLG = 0
+                LEFT JOIN PRCE_WAY_TYPE PWT
+                ON PPPD.WAY_TYPE_ID = PWT.WAY_TYPE_ID
+                WHERE PPP.DEL_FLG = 0
+                AND PPP.GOOD_ID = #{goodId}
+                AND PPP.LGCS_AREA_CODE = #{lgcsAreaCode}
+                AND PPP.USER_TYPE = #{userType}
+                <if test="buyerLevel != null and buyerLevel != ''">
+                    AND PPP.BUYER_LEVEL = #{buyerLevel}
+                </if>
+                <if test="compareTime != null and compareTime.length>0">
+                    AND (
+                    <foreach collection="compareTime" index="index" item="item" separator="OR">
+                        <![CDATA[PPP.START_TIME <= #{item} ]]>
+                        <![CDATA[AND (PPP.END_TIME > #{item} OR PPP.END_TIME IS NULL)]]>
+                    </foreach>
+                    )
+                </if>
+                <if test="qty != null and qty != ''">
+                    <![CDATA[AND PPPD.START_QTY <= #{qty}]]>
+                    <![CDATA[AND (PPPD.END_QTY >= #{qty} OR PPPD.END_QTY IS NULL)]]>
+                </if>
+                ) t1
+                ON t1.PRICE_PLATE_ID = PPP.PRICE_PLATE_ID
+            </if>
+            WHERE PPP.DEL_FLG = 0
+            AND PPP.GOOD_ID = #{goodId}
+            AND PPP.LGCS_AREA_CODE = #{lgcsAreaCode}
+            AND PPP.USER_TYPE = #{userType}
+            <if test="buyerLevel != null and buyerLevel != ''">
+                AND PPP.BUYER_LEVEL = #{buyerLevel}
+            </if>
+            <if test="compareTime != null and compareTime.length>0">
+                AND (
+                <foreach collection="compareTime" index="index" item="item" separator="OR">
+                    <![CDATA[PPP.START_TIME <= #{item}]]>
+                    <![CDATA[AND (PPP.END_TIME > #{item} OR PPP.END_TIME IS NULL)]]>
+                </foreach>
+                )
+            </if>
+            ORDER BY PPPD.START_QTY DESC
+        </if>
+        <if test="returnType == 1 or returnType == 2">
+            SELECT
+            PPP.PRICE_PLATE_ID,
+            PPP.GOOD_ID,
+            PPP.LGCS_AREA_CODE,
+            PPP.START_TIME,
+            PPP.END_TIME,
+            PPP.USER_TYPE,
+            PPP.BUYER_LEVEL,
+            PPPD.WAY_TYPE_ID,
+            PPPD.WAY_CONFIG_ID,
+            PWT.WAY_TYPE_NAME,
+            PPPD.START_QTY,
+            PPPD.END_QTY,
+            PPPD.FACT_PRICE,
+            ROUND(PPI.NET_WEIGHT * PPPD.FACT_PRICE,2) AS UNIT_PRICE,
+            t1.WAY_TYPE_ID AS WAY_TYPE_ID_X,
+            t1.WAY_CONFIG_ID AS WAY_CONFIG_ID_X,
+            t1.WAY_TYPE_NAME AS WAY_TYPE_NAME_X,
+            t1.FACT_PRICE AS FACT_PRICE_X,
+            ROUND(PPI.NET_WEIGHT * t1.FACT_PRICE,2) AS UNIT_PRICE_X
+            FROM
+            PRCE_PRICE_PLATE PPP
+            LEFT JOIN PRCE_PRICE_PLATE_DETAIL PPPD
+            ON PPP.PRICE_PLATE_ID = PPPD.PRICE_PLATE_ID
+            AND PPPD.DEL_FLG = 0
+            LEFT JOIN PRCE_WAY_TYPE PWT
+            ON PPPD.WAY_TYPE_ID = PWT.WAY_TYPE_ID
+            LEFT JOIN PRCE_PRODUCT_INFO PPI
+            ON PPP.GOOD_ID = PPI.GOOD_ID
+            AND PPP.LGCS_AREA_CODE = PPI.LGCS_AREA_CODE
+            INNER JOIN (
+            SELECT
+            PPP.PRICE_PLATE_ID,
+            PPPD.WAY_TYPE_ID,
+            PPPD.WAY_CONFIG_ID,
+            PWT.WAY_TYPE_NAME,
+            PPPD.FACT_PRICE
+            FROM
+            PRCE_PRICE_PLATE PPP
+            LEFT JOIN PRCE_PRICE_PLATE_DETAIL PPPD
+            ON PPP.PRICE_PLATE_ID = PPPD.PRICE_PLATE_ID
+            AND PPPD.DEL_FLG = 0
+            LEFT JOIN PRCE_WAY_TYPE PWT
+            ON PPPD.WAY_TYPE_ID = PWT.WAY_TYPE_ID
+            WHERE PPP.DEL_FLG = 0
+            AND PPP.GOOD_ID = #{goodId}
+            AND PPP.LGCS_AREA_CODE = #{lgcsAreaCode}
+            AND PPP.USER_TYPE = #{userType}
+            <if test="buyerLevel != null and buyerLevel != ''">
+                AND PPP.BUYER_LEVEL = #{buyerLevel}
+            </if>
+            <if test="compareTime != null and compareTime.length>0">
+                AND (
+                <foreach collection="compareTime" index="index" item="item" separator="OR">
+                    <![CDATA[PPP.START_TIME <= #{item} ]]>
+                    <![CDATA[AND (PPP.END_TIME > #{item} OR PPP.END_TIME IS NULL)]]>
+                </foreach>
+                )
+            </if>
+            <if test="qty != null and qty != ''">
+                <![CDATA[AND PPPD.START_QTY <= #{qty}]]>
+                <![CDATA[AND (PPPD.END_QTY >= #{qty} OR PPPD.END_QTY IS NULL)]]>
+            </if>
+            <if test="returnType == 1">
+                ORDER BY PPPD.FACT_PRICE, PPP.START_TIME DESC
+            </if>
+            <if test="returnType == 2">
+                ORDER BY PPPD.FACT_PRICE DESC, PPP.START_TIME DESC
+            </if>
+            LIMIT 0,1
+            ) t1
+            ON t1.PRICE_PLATE_ID = PPP.PRICE_PLATE_ID
+            ORDER BY PPPD.START_QTY DESC
+        </if>
+    </select>
+
+    <!--价盘修改：保存价盘-->
+    <insert id="save" parameterType="com.bms.prce.bean.entity.PrcePricePlate">
+        INSERT INTO PRCE_PRICE_PLATE (
+        LGCS_AREA_CODE,
+        GOOD_ID,
+        MARKETING_WAY_CONFIG_ID,
+        MARKETING_STATUS_ID,
+        USER_TYPE,
+        BUYER_LEVEL,
+        START_TIME,
+        END_TIME,
+        NORM_PRICE,
+        OWNER_TYPE,
+        OWNER_ID,
+        OWNER_NAME,
+        DEL_FLG,
+        CRT_Id,
+        CRT_TIME,
+        UPD_Id,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES (
+        #{lgcsAreaCode},
+        #{goodId},
+        #{marketingWayConfigId},
+        #{marketingStatusId},
+        #{userType},
+        #{buyerLevel},
+        #{startTime},
+        #{endTime},
+        #{normPrice},
+        #{ownerType},
+        #{ownerId},
+        #{ownerName},
+        0,
+        #{crtId},
+        #{crtTime},
+        #{crtId},
+        #{crtTime},
+        1
+        )
+    </insert>
+
+    <!--价盘修改：修改价盘-->
+    <update id="modify" parameterType="com.bms.prce.bean.entity.PrcePricePlate">
+        UPDATE PRCE_PRICE_PLATE
+        SET
+        LGCS_AREA_CODE = #{lgcsAreaCode},
+        GOOD_ID = #{goodId},
+        MARKETING_WAY_CONFIG_ID = #{marketingWayConfigId},
+        MARKETING_STATUS_ID = #{marketingStatusId},
+        USER_TYPE = #{userType},
+        BUYER_LEVEL = #{buyerLevel},
+        START_TIME = #{startTime},
+        END_TIME = #{endTime},
+        NORM_PRICE = #{normPrice},
+        OWNER_TYPE = #{ownerType},
+        OWNER_ID = #{ownerId},
+        OWNER_NAME = #{ownerName},
+        UPD_ID = #{updId},
+		UPD_TIME = #{updTime},
+		VERSION = VERSION + 1
+        WHERE
+        PRICE_PLATE_ID = #{pricePlateId}
+        AND DEL_FLG = 0
+    </update>
+
+
+    <update id="modifyByTime" parameterType="com.bms.prce.bean.param.PRCE0210IDealParam">
+        UPDATE PRCE_PRICE_PLATE PPP
+        INNER JOIN (
+        SELECT
+        PRICE_PLATE_ID
+        FROM
+        PRCE_PRICE_PLATE
+        WHERE DEL_FLG = 0
+        AND MARKETING_WAY_CONFIG_ID IN
+        <foreach collection="marketingWayConfigIds" item="item" index="index" open="(" separator="," close=")">#{item}
+        </foreach>
+        <if test="searchFlg == 0">
+            <![CDATA[AND START_TIME = '${updTimeStr}']]>
+        </if>
+        <if test="searchFlg == 1">
+            <![CDATA[AND START_TIME < '${updTimeStr}' ]]>
+            <![CDATA[AND (END_TIME > '${updTimeStr}' OR END_TIME IS NULL)]]>
+        </if>
+        <if test="searchFlg == 2">
+            <![CDATA[AND START_TIME <= '${updTimeStr}' ]]>
+            <![CDATA[AND (END_TIME > '${updTimeStr}' OR END_TIME IS NULL)]]>
+        </if>
+        ) t1
+        ON t1.PRICE_PLATE_ID = PPP.PRICE_PLATE_ID
+        SET
+        <if test="searchFlg == 0">
+            PPP.END_TIME = NULL,
+        </if>
+        <if test="searchFlg == 1 or searchFlg == 2">
+            PPP.END_TIME = #{updTimeStr},
+        </if>
+        PPP.UPD_ID = #{updId},
+        PPP.UPD_TIME = #{updTimeStr},
+        PPP.VERSION = PPP.VERSION + 1
+        WHERE PPP.DEL_FLG = 0
+    </update>
+
+    <select id="findPlateId" parameterType="com.bms.prce.bean.param.PRCESearchParam" resultType="Long">
+        SELECT
+        PRICE_PLATE_ID AS pricePlateId
+        FROM
+        PRCE_PRICE_PLATE
+        WHERE DEL_FLG = 0
+        AND LGCS_AREA_CODE = #{lgcsAreaCode}
+        AND GOOD_ID = #{goodId}
+        AND USER_TYPE = #{userType}
+        <if test="buyerLevel != null and buyerLevel != ''">
+            AND BUYER_LEVEL = #{buyerLevel}
+        </if>
+        AND START_TIME = #{startTimeStr}
+        AND END_TIME IS NULL
+    </select>
+
+    <!-- 价盘信息查询 -->
+    <select id="findPrcePricePlateList" parameterType="com.bms.prce.bean.param.PRCE0207IParam"
+            resultType="com.bms.prce.bean.result.PRCE0213IResult">
+        SELECT
+        t1.lgcsAreaCode,
+        t1.lgcsAreaName,
+        t1.goodId,
+        t1.commodityCode,
+        t1.commodityName,
+        t1.brandItemPropertySku,
+        t1.classesName,
+        t1.machiningName,
+        t1.breedSalesName,
+        t1.packageSpecification,
+        t1.brandName,
+        t1.qualityGradeTypeCode,
+        t1.qualityGradeTypeName,
+        t1.netWeight,
+        t1.packageQuantity,
+        t1.marketingStatusId,
+        t1.marketingStatusName,
+        t1.saleStatusName,
+        t1.userType,
+        t1.userTypeName,
+        t1.buyerLevel,
+        t1.pricePlateId,
+        t1.normPrice,
+        ROUND(t1.unitPrice,2) as unitPrice,
+        t1.startTime,
+        t1.endTime,
+        t2.MARKETING_STATUS_ID AS futureMarketingStatusId,
+        t2.PRICE_PLATE_ID AS futurePriceFlg
+        FROM (
+        SELECT A.LGCS_AREA_CODE AS lgcsAreaCode,
+        A.LGCS_AREA_NAME AS lgcsAreaName,
+        A.COMMODITY_CODE AS commodityCode,
+        A.COMMODITY_NAME AS commodityName,
+        A.BRAND_ITEM_PROPERTY_SKU AS brandItemPropertySku,
+        A.SALE_STATUS_NAME AS saleStatusName,
+        A.GOOD_ID AS goodId,
+        A.CLASSES_NAME AS classesName,
+        A.MACHINING_NAME AS machiningName,
+        A.BREED_NAME AS breedSalesName,
+        A.PACKAGE_SPECIFICATION AS packageSpecification,
+        A.NET_WEIGHT AS netWeight,
+        A.BRAND_NAME AS brandName,
+        A.QUALITY_GRADE_TYPE_CODE AS qualityGradeTypeCode,
+        A.QUALITY_GRADE_TYPE_NAME AS qualityGradeTypeName,
+        A.PACKAGE_QUANTITY AS packageQuantity,
+        B.MARKETING_STATUS_ID AS marketingStatusId,
+        C.MARKETING_STATUS_NAME AS marketingStatusName,
+        B.USER_TYPE AS userType,
+        CASE B.USER_TYPE
+        WHEN 0 THEN '买家'
+        WHEN 1 THEN '账期买家'
+        WHEN 2 THEN '买手'
+        END AS userTypeName,
+        CASE B.BUYER_LEVEL
+        WHEN 0 THEN '标准买家'
+        WHEN 1 THEN '一级买家'
+        WHEN 2 THEN '二级买家'
+        WHEN 3 THEN '三级买家'
+        END AS buyerLevel,
+        B.PRICE_PLATE_ID AS pricePlateId,
+        B.NORM_PRICE AS normPrice,
+        A.NET_WEIGHT * B.NORM_PRICE AS unitPrice,
+        B.START_TIME AS startTime,
+        B.END_TIME AS endTime
+        FROM PRCE_PRODUCT_INFO A
+        LEFT JOIN PRCE_PRICE_PLATE B
+        ON A.GOOD_ID = B.GOOD_ID
+        AND A.LGCS_AREA_CODE = B.LGCS_AREA_CODE
+        <if test="searchEndTime != null and searchEndTime != ''">
+            <![CDATA[AND B.START_TIME  < '${searchEndTime}']]>
+        </if>
+        <if test="searchStartTime != null and searchStartTime != ''">
+            <![CDATA[AND (B.END_TIME >= '${searchStartTime}' OR B.END_TIME IS NULL)]]>
+        </if>
+        <if test="userType != null and userType != ''">
+            AND B.USER_TYPE = #{userType}
+        </if>
+        AND B.BUYER_LEVEL = 0
+        AND B.DEL_FLG = 0
+        LEFT JOIN PRCE_MARKETING_STATUS C
+        ON B.MARKETING_STATUS_ID = C.MARKETING_STATUS_ID
+        WHERE A.DEL_FLG = 0
+        <if test="goodId != null and goodId != ''">
+            AND A.GOOD_ID = #{goodId}
+        </if>
+        <if test="commodityCode != null and commodityCode != ''">
+            AND A.COMMODITY_CODE LIKE #{commodityCode}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND A.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND A.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+        <if test="classesName != null and classesName != ''">
+            AND A.CLASSES_NAME LIKE #{classesName}
+        </if>
+        <if test="machiningName != null and machiningName != ''">
+            AND A.MACHINING_NAME LIKE #{machiningName}
+        </if>
+        <if test="breedSalesName != null and breedSalesName != ''">
+            AND A.BREED_NAME LIKE #{breedSalesName}
+        </if>
+        <if test="brandName != null and brandName != ''">
+            AND A.BRAND_NAME LIKE #{brandName}
+        </if>
+        <if test="netWeight != null and netWeight != ''">
+            AND A.NET_WEIGHT = #{netWeight}
+        </if>
+        <if test="saleStatusName != null and saleStatusName != ''">
+            AND A.SALE_STATUS_NAME LIKE #{saleStatusName}
+        </if>
+        <if test="packageSpecification != null and packageSpecification != ''">
+            AND A.PACKAGE_SPECIFICATION LIKE #{packageSpecification}
+        </if>
+        <if test="shelfStu != null and shelfStu != ''">
+            AND A.SHELF_STU = #{shelfStu}
+        </if>
+        <if test="havePlate == true">
+            AND B.PRICE_PLATE_ID IS NOT NULL
+        </if>
+        <if test="havePlate == false">
+            AND B.PRICE_PLATE_ID IS NULL
+        </if>
+        <if test="ownerType != null and ownerType != ''">
+            AND B.OWNER_TYPE = #{ownerType}
+        </if>
+        ) t1
+        LEFT JOIN (
+        SELECT D.PRICE_PLATE_ID, D.MARKETING_STATUS_ID, D.GOOD_ID,D.LGCS_AREA_CODE,MAX(D.START_TIME) as START_TIME
+        from PRCE_PRICE_PLATE D
+        WHERE D.DEL_FLG = 0
+        <if test="searchStartTime != null and searchStartTime != ''">
+            <![CDATA[AND '${searchStartTime}' < D.START_TIME]]>
+        </if>
+        <if test="userType != null and userType != ''">
+            AND D.USER_TYPE = #{userType}
+        </if>
+        <if test="goodId != null and goodId != ''">
+            AND D.GOOD_ID = #{goodId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND D.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        AND D.BUYER_LEVEL = 0
+        GROUP BY D.GOOD_ID,D.LGCS_AREA_CODE
+        ) t2 ON t1.goodId = t2.GOOD_ID
+        AND t1.lgcsAreaCode = t2.LGCS_AREA_CODE
+        <![CDATA[AND IFNULL(t1.startTime,'${searchStartTime}') < t2.START_TIME]]>
+        WHERE 1=1
+        <if test="haveLaterPlate == true">
+            AND t2.PRICE_PLATE_ID IS NOT NULL
+        </if>
+        <if test="haveLaterPlate == false">
+            AND t2.PRICE_PLATE_ID IS NULL
+        </if>
+    </select>
+
+    <!-- 查询价盘详细信息 -->
+    <select id="findPrcePricePlate" parameterType="com.bms.prce.bean.param.PRCE0213IParam"
+            resultType="com.bms.prce.bean.result.PRCE0213IPlateDetailResult">
+        SELECT DD.PRICE_PLATE_ID AS pricePlateId,
+        DD.BALANCE_RATIO AS balanceRatio,
+        DD.FACT_PRICE AS factPrice,
+        PR.NET_WEIGHT AS netWeight,
+        D.BUYER_LEVEL AS buyerLevel,
+        D.MARKETING_STATUS_ID AS marketingStatusId,
+        ROUND(PR.NET_WEIGHT * DD.FACT_PRICE,2) AS unitPrice,
+        DD.WAY_CONFIG_ID AS wayConfigId,
+        DD.WAY_TYPE_ID AS wayTypeId
+        FROM PRCE_PRICE_PLATE_DETAIL DD
+        LEFT JOIN PRCE_PRICE_PLATE D ON DD.PRICE_PLATE_ID = D.PRICE_PLATE_ID
+        LEFT JOIN PRCE_PRODUCT_INFO PR ON D.GOOD_ID = PR.GOOD_ID AND PR.LGCS_AREA_CODE = D.LGCS_AREA_CODE
+        WHERE DD.DEL_FLG = 0
+        <if test="commodityCode != null and commodityCode != ''">
+            AND PR.COMMODITY_CODE LIKE #{commodityCode}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND PR.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND PR.LGCS_AREA_NAME LIKE #{lgcsAreaName}
+        </if>
+        <if test="classesName != null and classesName != ''">
+            AND PR.CLASSES_NAME LIKE #{classesName}
+        </if>
+        <if test="machiningName != null and machiningName != ''">
+            AND PR.MACHINING_NAME LIKE #{machiningName}
+        </if>
+        <if test="breedSalesName != null and breedSalesName != ''">
+            AND PR.BREED_NAME LIKE #{breedSalesName}
+        </if>
+        <if test="brandName != null and brandName != ''">
+            AND PR.BRAND_NAME LIKE #{brandName}
+        </if>
+        <if test="netWeight != null and netWeight != ''">
+            AND PR.NET_WEIGHT = #{netWeight}
+        </if>
+        <if test="saleStatusName != null and saleStatusName != ''">
+            AND PR.SALE_STATUS_NAME LIKE #{saleStatusName}
+        </if>
+        <if test="packageSpecification != null and packageSpecification != ''">
+            AND PR.PACKAGE_SPECIFICATION LIKE #{packageSpecification}
+        </if>
+        <if test="shelfStu != null and shelfStu != ''">
+            AND PR.SHELF_STU = #{shelfStu}
+        </if>
+        <if test="havePlate == true">
+            AND D.PRICE_PLATE_ID IS NOT NULL
+        </if>
+        <if test="havePlate == false">
+            AND D.PRICE_PLATE_ID IS NULL
+        </if>
+        <if test="ownerType != null and ownerType != ''">
+            AND D.OWNER_TYPE = #{ownerType}
+        </if>
+        ORDER BY DD.PRICE_PLATE_ID,DD.WAY_TYPE_ID,DD.WAY_CONFIG_ID DESC
+    </select>
+
+</mapper>

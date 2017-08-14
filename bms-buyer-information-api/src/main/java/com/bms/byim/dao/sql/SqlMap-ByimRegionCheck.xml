@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimRegionCheckDao">
+
+    <select id="checkRegionNum" parameterType="com.bms.byim.bean.param.BuyerAllRsParam"
+            resultType="int">
+        select SUM(a.NUMS) from (
+        select count(1) AS NUMS from BYIM_BUYER
+        <where>
+            <include refid="Where_region"/>
+            <if test="districtId != null and districtId != 0">
+                AND DISTRICT_ID = #{districtId}
+            </if>
+            <if test="streetId != null and streetId != 0">
+                AND STREET_ID = #{streetId}
+            </if>
+        </where>
+        union
+        select count(1) AS NUMS from BYIM_DELIVERY_AREA
+        <where>
+            <include refid="Where_region"/>
+            <if test="districtId != null and districtId != 0">
+                AND 1 = 2
+            </if>
+            <if test="streetId != null and streetId != 0">
+                AND 1 = 2
+            </if>
+        </where>
+        union
+        select count(1) AS NUMS from BYIM_DELIVERY_ADDR
+        <where>
+            <include refid="Where_region"/>
+            <if test="streetId != null">
+                AND 1 = 2
+            </if>
+        </where>
+        ) a
+    </select>
+    <sql id="Where_region">
+        DEL_FLG = FALSE
+        <if test="provinceId != null and provinceId != 0">
+            AND PROVINCE_ID = #{provinceId}
+        </if>
+        <if test="cityId != null and cityId != 0">
+            AND CITY_ID = #{cityId}
+        </if>
+
+    </sql>
+
+    <select id="checkLgcsRegionNum" parameterType="com.bms.byim.bean.param.BuyerAllRsParam"
+            resultType="int">
+        select SUM(a.NUMS) from (
+        select count(1) AS NUMS from BYIM_BUYER
+        <where>
+            <include refid="Where_lgcs_region"/>
+        </where>
+        <if test="lgcsAreaId != null and lgcsAreaId != 0">
+            union
+            select count(1) AS NUMS from byim_buyer_pool_relation_ship
+            where DEL_FLG = FALSE
+            AND LGCS_AREA_ID = #{lgcsAreaId}
+            union
+            select count(1) AS NUMS from BYIM_DELIVERY_AREA
+            where DEL_FLG = FALSE
+            AND LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        ) a
+    </select>
+
+
+
+    <sql id="Where_lgcs_region">
+        DEL_FLG = FALSE
+        <if test="lgcsAreaId != null and lgcsAreaId != 0">
+            AND LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="zoneId != null and zoneId != 0">
+            AND ZONE_ID = #{zoneId}
+        </if>
+        <if test="distributionId != null and distributionId != 0">
+            AND DISTRIBUTION_ID = #{distributionId}
+        </if>
+        <if test="demesneId != null and demesneId != 0">
+            AND DEMESNE_ID = #{demesneId}
+        </if>
+    </sql>
+</mapper>

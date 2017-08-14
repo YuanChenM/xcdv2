@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.batch.order.dao.ORDR0801BDao">
+    <select id="getReturnResults" resultType="com.batch.order.bean.result.ORDR0801BResult">
+        SELECT DISTINCT
+            obr.RETURN_ID AS returnId,
+            obr.return_code AS returnCode,
+            obr.ORDER_ID AS orderId,
+            obr.BUYER_CODE AS buyerCode,
+            obr.BUYER_NAME AS buyerName,
+            obr.BUYER_ID AS buyerId,
+            (
+                SELECT DISTINCT odn.DISTRIBUTION_NOTIFICATION_ID
+                FROM
+                    ORDR_DISTRIBUTION_NOTIFICATION odn
+                INNER JOIN ordr_buyer_return_detail obrd ON obrd.DISTRIBUTION_NOTIFICATION_ID = odn.DISTRIBUTION_NOTIFICATION_ID
+                WHERE
+                    obrd.RETURN_ID = obr.RETURN_ID
+                AND odn.DEL_FLG = 0
+                AND obrd.DEL_FLG = 0
+            ) AS shipId,
+            (
+                SELECT DISTINCT odn.FACT_WH_CODE
+                FROM
+                    ORDR_DISTRIBUTION_NOTIFICATION odn
+                INNER JOIN ordr_buyer_return_detail obrd ON obrd.DISTRIBUTION_NOTIFICATION_ID = odn.DISTRIBUTION_NOTIFICATION_ID
+                WHERE
+                    obrd.RETURN_ID = obr.RETURN_ID
+                AND odn.DEL_FLG = 0
+                AND obrd.DEL_FLG = 0
+            ) AS whCode,
+            obo.BUYER_TYPE AS buyerType,
+            obr.VERSION AS ver,
+            obr.APPLY_TIME AS returnTime,
+            obr.BUYER_RETURN_TYPE AS returnType,
+            oboa.LOGISTICS_ZONE_CODE AS logisticsZoneCode
+        FROM
+            ordr_buyer_return obr
+        LEFT JOIN ordr_buyer_order obo ON obo.BUYER_ORDER_ID = obr.ORDER_ID
+        LEFT JOIN ORDR_BUYER_ORDER_ATTACHED oboa ON oboa.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+        WHERE
+            obr.DEL_FLG = 0
+        AND obo.DEL_FLG = 0
+        AND obr.BUYER_RETURN_STATUS = '002'
+    </select>
+
+    <select id="getReturnDetailResults" resultType="com.batch.order.bean.result.ORDR0801BDetailResult" parameterType="com.batch.order.bean.result.ORDR0801BResult">
+        SELECT DISTINCT
+            obrd.DETAIL_ID AS returnDetailId,
+            odnd.SKU AS sku,
+            oboa.LOGISTICS_ZONE_CODE AS logisticsZoneCode,
+            '00000001' AS sellerId,
+            odnd.GOODS_UNIT AS goodsUnit,
+            odnd.DISTRIBUTION_QUANTITY AS detailQty,
+            obrd.RETURN_QTY AS returnQty,
+            obbod.REAL_UNIT_PRICE AS returnPrice,
+            'RETURNED' AS inventoryStatus,
+            obfdda.SALE_LABEL_CODE AS salesTag
+        FROM
+            ordr_buyer_return_detail obrd
+        LEFT JOIN ordr_distribution_notification_detail odnd ON odnd.DISTRIBUTION_NOTIFICATION_DETAIL_ID = obrd.DISTRIBUTION_NOTIFICATION_DETAIL_ID
+        LEFT JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL obfdd ON obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID = odnd.BUYER_FORCAST_DELIVER_DETAIL_ID
+        LEFT JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED obfdda ON obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID = obfdda.BUYER_FORCAST_DELIVER_DETAIL_ID
+        LEFT JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod ON obbod.BUYER_BATCH_ORDER_DETAIL_ID = obfdd.BUYER_BATCH_ORDER_DETAIL_ID
+        LEFT JOIN ORDR_BUYER_ORDER_ATTACHED oboa ON oboa.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+        WHERE
+            obrd.RETURN_ID = #{returnId}
+    </select>
+
+    <select id="getReturnInfo" parameterType="com.batch.order.bean.result.ORDR0801BResult" resultType="com.batch.order.bean.entity.BuyerReturnHistoryEntity">
+        SELECT
+            RETURN_ID AS returnId
+            , RETURN_CODE AS returnCode
+            , ORDER_ID AS orderId
+            , BUYER_ID AS buyerId
+            , BUYER_CODE AS buyerCode
+            , BUYER_NAME AS buyerName
+            , BUYER_RETURN_SOURCE AS buyerReturnSource
+            , BUYER_RETURN_TYPE AS buyerReturnType
+            , RETURN_AMOUNT AS returnAmount
+            , RETURN_REASON_ID AS returnReasonId
+            , BUYER_APPLY_USER_TYPE AS buyerApplyUserType
+            , APPLY_UID AS applyUid
+            , APPLY_UNAME AS applyUname
+            , APPLY_TIME AS applyTime
+            , APPLY_REMARK AS applyRemark
+            , BUYER_CONFIRM_USER_TYPE AS buyerConfirmUserType
+            , CONFIRM_UID AS confirmUid
+            , CONFIRM_UNAME AS confirmUname
+            , CONFIRM_TIME AS confirmTime
+            , CONFIRM_TYPE AS confirmType
+            , CONFIRM_REMARK AS confirmRemark
+            , INBOUND_UID AS inboundUid
+            , INBOUND_UNAME AS inboundUname
+            , INBOUND_TIME AS inboundTime
+            , BUYER_RETURN_STATUS AS buyerReturnStatus
+            , IMAGE1 AS image1
+            , IMAGE2 AS image2
+            , IMAGE3 AS image3
+            , IMAGE4 AS image4
+            , IMAGE5 AS image5
+            , DEL_FLG AS delFlg
+            , CRT_ID AS crtId
+            , CRT_TIME AS crtTime
+            , UPD_ID AS updId
+            , UPD_TIME AS updTime
+            , VERSION AS version
+        FROM
+          ORDR_BUYER_RETURN
+        WHERE RETURN_ID = #{returnId}
+    </select>
+
+    <insert id="saveHistory" parameterType="com.batch.order.bean.entity.BuyerReturnHistoryEntity">
+        INSERT INTO
+        ORDR_BUYER_RETURN_HISTORY
+        (
+        HISTORY_ID
+        , RETURN_ID
+        , RETURN_CODE
+        , ORDER_ID
+        , BUYER_ID
+        , BUYER_CODE
+        , BUYER_NAME
+        , BUYER_RETURN_SOURCE
+        , BUYER_RETURN_TYPE
+        , RETURN_AMOUNT
+        , RETURN_REASON_ID
+        , BUYER_APPLY_USER_TYPE
+        , APPLY_UID
+        , APPLY_UNAME
+        , APPLY_TIME
+        , APPLY_REMARK
+        , BUYER_CONFIRM_USER_TYPE
+        , CONFIRM_UID
+        , CONFIRM_UNAME
+        , CONFIRM_TIME
+        , CONFIRM_TYPE
+        , CONFIRM_REMARK
+        , INBOUND_UID
+        , INBOUND_UNAME
+        , INBOUND_TIME
+        , BUYER_RETURN_STATUS
+        , IMAGE1
+        , IMAGE2
+        , IMAGE3
+        , IMAGE4
+        , IMAGE5
+        , DEL_FLG
+        , CRT_ID
+        , CRT_TIME
+        , UPD_ID
+        , UPD_TIME
+        , VERSION
+        )
+        VALUES
+        (
+        #{historyId}
+        , #{returnId}
+        , #{returnCode}
+        , #{orderId}
+        , #{buyerId}
+        , #{buyerCode}
+        , #{buyerName}
+        , #{buyerReturnSource}
+        , #{buyerReturnType}
+        , #{returnAmount}
+        , #{returnReasonId}
+        , #{buyerApplyUserType}
+        , #{applyUid}
+        , #{applyUname}
+        , #{applyTime}
+        , #{applyRemark}
+        , #{buyerConfirmUserType}
+        , #{confirmUid}
+        , #{confirmUname}
+        , #{confirmTime}
+        , #{confirmType}
+        , #{confirmRemark}
+        , #{inboundUid}
+        , #{inboundUname}
+        , #{inboundTime}
+        , #{buyerReturnStatus}
+        , #{image1}
+        , #{image2}
+        , #{image3}
+        , #{image4}
+        , #{image5}
+        , #{delFlg}
+        , #{crtId}
+        , #{crtTime}
+        , #{updId}
+        , #{updTime}
+        , #{version}
+        )
+    </insert>
+
+    <update id="modifyReturnStu" parameterType="com.batch.order.bean.result.ORDR0801BResult">
+        UPDATE ordr_buyer_return
+        SET BUYER_RETURN_STATUS = '003',
+          VERSION = VERSION + 1
+        WHERE
+            RETURN_ID = #{returnId}
+    </update>
+</mapper>

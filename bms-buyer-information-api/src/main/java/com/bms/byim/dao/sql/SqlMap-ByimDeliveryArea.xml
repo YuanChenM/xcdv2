@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimDeliveryAreaDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		DELIVERY_AREA_ID AS deliveryAreaId,
+		LGCS_AREA_CODE AS lgcsAreaCode,
+		LGCS_AREA_NAME AS lgcsAreaName,
+		PROVINCE_CODE AS provinceCode,
+		PROVINCE_NAME AS provinceName,
+		CITY_CODE AS cityCode,
+		CITY_NAME AS cityName,
+		DELIVERY_AREA AS deliveryArea,
+		PASS_TRAFFIC_MODEL AS passTrafficModel,
+		DELIVERY_AREA_CODE AS deliveryAreaCode,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+
+    <insert id="save" parameterType="com.bms.byim.bean.entity.ByimDeliveryArea">
+		INSERT INTO BYIM_DELIVERY_AREA (
+			DELIVERY_AREA_ID,
+			PROVINCE_ID,
+			PROVINCE_CODE,
+			PROVINCE_NAME,
+			CITY_ID,
+			CITY_CODE,
+			CITY_NAME,
+			DELIVERY_AREA,
+			PASS_TRAFFIC_MODEL,
+			DELIVERY_AREA_CODE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES (
+			#{deliveryAreaId},
+			#{provinceId},
+			#{provinceCode},
+			#{provinceName},
+			#{cityId},
+			#{cityCode},
+			#{cityName},
+			#{deliveryArea},
+			#{passTrafficModel},
+			#{deliveryAreaCode},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYIM_DELIVERY_AREA (
+        DELIVERY_AREA_ID,
+        PROVINCE_ID,
+        PROVINCE_CODE,
+        PROVINCE_NAME,
+        CITY_ID,
+        CITY_CODE,
+        CITY_NAME,
+        DELIVERY_AREA,
+        PASS_TRAFFIC_MODEL,
+        DELIVERY_AREA_CODE,
+
+
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" index="index" item="param" separator=",">
+            (
+            #{param.deliveryAreaId},
+            #{param.provinceId},
+            #{param.provinceCode},
+            #{param.provinceName},
+            #{param.cityId},
+            #{param.cityCode},
+            #{param.cityName},
+            #{param.deliveryArea},
+            #{param.passTrafficModel},
+            #{param.deliveryAreaCode},
+
+            #{param.delFlg},
+            #{param.crtId},
+            #{param.crtTime},
+            #{param.updId},
+            #{param.updTime},
+            #{param.version}
+            )
+         </foreach>
+
+    </insert>
+
+    <update id="modify" parameterType="com.bms.byim.bean.param.BaseBean">
+        UPDATE BYIM_DELIVERY_AREA
+        SET
+        <if test="target.lgcsAreaId !=null">
+            LGCS_AREA_ID = #{target.lgcsAreaId},
+        </if>
+        <if test="target.lgcsAreaCode !=null">
+            LGCS_AREA_CODE = #{target.lgcsAreaCode},
+        </if>
+        <if test="target.lgcsAreaName !=null">
+            LGCS_AREA_NAME = #{target.lgcsAreaName},
+        </if>
+        <if test="target.provinceId !=null">
+            PROVINCE_ID = #{target.provinceId},
+        </if>
+        <if test="target.provinceCode !=null">
+            PROVINCE_CODE = #{target.provinceCode},
+        </if>
+        <if test="target.provinceName !=null">
+            PROVINCE_NAME = #{target.provinceName},
+        </if>
+        <if test="target.cityId !=null">
+            CITY_ID = #{target.cityId},
+        </if>
+        <if test="target.cityCode !=null">
+            CITY_CODE = #{target.cityCode},
+        </if>
+        <if test="target.cityName !=null">
+            CITY_NAME = #{target.cityName},
+        </if>
+        <if test="target.deliveryArea !=null">
+            DELIVERY_AREA = #{target.deliveryArea},
+        </if>
+        <if test="target.passTrafficModel !=null">
+            PASS_TRAFFIC_MODEL = #{target.passTrafficModel},
+        </if>
+        <if test="target.deliveryAreaCode !=null">
+            DELIVERY_AREA_CODE = #{target.deliveryAreaCode},
+        </if>
+        <if test="target.version !=null">
+            VERSION = #{target.version},
+        </if>
+        DEL_FLG = #{target.delFlg},
+
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+
+        WHERE
+        DEL_FLG=false
+        AND DELIVERY_AREA_ID = #{filter.deliveryAreaId}
+    </update>
+
+    <select id="findOne" parameterType="com.bms.byim.bean.param.DeliveryAreaRsParam"
+            resultType="com.bms.byim.bean.entity.ByimDeliveryArea">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_DELIVERY_AREA
+        WHERE
+        DEL_FLG=false
+        AND PROVINCE_CODE =#{provinceCode}
+        AND CITY_CODE =#{cityCode}
+        AND DELIVERY_AREA_CODE = #{deliveryAreaCode}
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.byim.bean.param.DeliveryAreaRsParam"
+            resultType="com.bms.byim.bean.entity.ByimDeliveryArea">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_DELIVERY_AREA
+        WHERE
+        DEL_FLG =false
+        <if test="deliveryAreaId !=null and deliveryAreaId !=''">
+            AND  DELIVERY_AREA_ID = #{deliveryAreaId}
+        </if>
+        <if test="lgcsAreaCode !=null and lgcsAreaCode !=''">
+            AND LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="provinceCode !=null and provinceCode !=''">
+            AND PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="cityCode !=null and cityCode !=''">
+            AND CITY_CODE = #{cityCode}
+        </if>
+        <if test="deliveryArea !=null and deliveryArea !=''">
+            AND DELIVERY_AREA = #{deliveryArea}
+        </if>
+
+        <if test="passTrafficModel !=null and passTrafficModel !=''">
+            AND PASS_TRAFFIC_MODEL = #{passTrafficModel}
+        </if>
+        <if test="deliveryAreaCode !=null and deliveryAreaCode !=''">
+            AND DELIVERY_AREA_CODE = #{deliveryAreaCode}
+        </if>
+
+    </select>
+
+    <select id="count" parameterType="com.bms.byim.bean.param.DeliveryAreaRsParam"
+            resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYIM_DELIVERY_AREA
+        WHERE 1=1
+        AND DEL_FLG=false
+        AND DELIVERY_AREA_ID = #{deliveryAreaId}
+    </select>
+
+
+    <!-- 用target里面的值作为条件-->
+    <select id="findAll" parameterType="com.bms.byim.bean.param.DeliveryAreaRsParam"
+            resultType="com.bms.byim.bean.entity.ByimDeliveryArea">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_DELIVERY_AREA
+        WHERE 1=1
+        AND DEL_FLG=false
+       <!-- <if test="lgcsAreaCode ==null">
+            AND LGCS_AREA_CODE =#{lgcsAreaCode}
+        </if>-->
+        AND PROVINCE_CODE =#{provinceCode}
+        AND CITY_CODE =#{cityCode}
+        <if test="deliveryAreaId ==null">
+            AND DELIVERY_AREA_CODE = #{deliveryAreaCode}
+        </if>
+        <if test="deliveryAreaId !=null">
+            AND DELIVERY_AREA_CODE != #{deliveryAreaCode}
+        </if>
+    </select>
+
+    <select id="findDeliveryArea" resultType="int" parameterType="com.bms.byim.bean.param.DeliveryAreaRsParam">
+        SELECT
+            COUNT(1)
+        FROM
+            BYIM_DELIVERY_ADDR
+        WHERE DEL_FLG = FALSE
+        AND DELIVERY_AREA_ID = #{filter.deliveryAreaId}
+    </select>
+</mapper>

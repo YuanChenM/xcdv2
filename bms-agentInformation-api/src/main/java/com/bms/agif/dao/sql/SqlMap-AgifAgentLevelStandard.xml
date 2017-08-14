@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifAgentLevelStandardDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		LEVEL_ID AS levelId,
+		LEVEL_NAME AS levelName,
+		LGCS_AREA_ID AS lgcsAreaId,
+		LGCS_AREA_CODE AS lgcsAreaCode,
+		LGCS_AREA_NAME AS lgcsAreaName,
+		FREQUENCY_TOTAL_SYMBOL AS frequencyTotalSymbol,
+		FREQUENCY_TOTAL AS frequencyTotal,
+		FREQUENCY_1_SYMBOL AS frequency1Symbol,
+		FREQUENCY_1 AS frequency1,
+		FREQUENCY_2_SYMBOL AS frequency2Symbol,
+		FREQUENCY_2 AS frequency2,
+		FREQUENCY_3_SYMBOL AS frequency3Symbol,
+		FREQUENCY_3 AS frequency3,
+		FREQUENCY_4_SYMBOL AS frequency4Symbol,
+		FREQUENCY_4 AS frequency4,
+		AMOUNT_TOTAL_SYMBOL AS amountTotalSymbol,
+		AMOUNT_TOTAL AS amountTotal,
+		AMOUNT_1_SYMBOL AS amount1Symbol,
+		AMOUNT_1 AS amount1,
+		AMOUNT_2_SYMBOL AS amount2Symbol,
+		AMOUNT_2 AS amount2,
+		AMOUNT_3_SYMBOL AS amount3Symbol,
+		AMOUNT_3 AS amount3,
+		AMOUNT_4_SYMBOL AS amount4Symbol,
+		AMOUNT_4 AS amount4
+
+	</sql>
+
+    <select id="findPageList" parameterType="com.bms.agif.bean.param.AgentLevelStandardPageParam"
+            resultType="com.bms.agif.bean.param.AgentLevelStandardPageParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_AGENT_LEVEL_STANDARD
+        WHERE
+        DEL_FLG = FALSE
+        <if test="levelId != null and levelId != ''">
+            AND LEVEL_ID = #{levelId}
+        </if>
+        <if test="levelName != null and levelName != ''">
+            AND LEVEL_NAME = #{levelName}
+        </if>
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND LGCS_AREA_NAME = #{lgcsAreaName}
+        </if>
+    </select>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO AGIF_AGENT_LEVEL_STANDARD (
+        LEVEL_ID,
+        LEVEL_NAME,
+        LGCS_AREA_ID,
+        LGCS_AREA_CODE,
+        LGCS_AREA_NAME,
+
+        FREQUENCY_TOTAL_SYMBOL,
+        FREQUENCY_TOTAL,
+        FREQUENCY_1_SYMBOL,
+        FREQUENCY_1,
+        FREQUENCY_2_SYMBOL,
+        FREQUENCY_2,
+        FREQUENCY_3_SYMBOL,
+        FREQUENCY_3,
+        FREQUENCY_4_SYMBOL,
+        FREQUENCY_4,
+
+        AMOUNT_TOTAL_SYMBOL ,
+        AMOUNT_TOTAL,
+        AMOUNT_1_SYMBOL,
+        AMOUNT_1,
+        AMOUNT_2_SYMBOL,
+        AMOUNT_2,
+        AMOUNT_3_SYMBOL,
+        AMOUNT_3,
+        AMOUNT_4_SYMBOL,
+        AMOUNT_4,
+
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+
+        )
+        VALUES (
+        <foreach collection="list" index="index" item="bean" separator=",">
+            #{bean.levelId},
+            #{bean.levelName},
+            #{bean.lgcsAreaId},
+            #{bean.lgcsAreaCode},
+            #{bean.lgcsAreaName},
+
+            #{bean.frequencyTotalSymbol},
+            #{bean.frequencyTotal},
+            #{bean.frequency1Symbol},
+            #{bean.frequency1},
+            #{bean.frequency2Symbol},
+            #{bean.frequency2},
+            #{bean.frequency3Symbol},
+            #{bean.frequency3},
+            #{bean.frequency4Symbol},
+            #{bean.frequency4},
+
+            #{bean.amountTotalSymbol},
+            #{bean.amountTotal},
+            #{bean.amount1Symbol},
+            #{bean.amount1},
+            #{bean.amount2Symbol},
+            #{bean.amount2},
+            #{bean.amount3Symbol},
+            #{bean.amount3},
+            #{bean.amount4Symbol},
+            #{bean.amount4},
+
+            #{bean.delFlg},
+            #{bean.crtId},
+            #{bean.crtTime},
+            #{bean.updId},
+            #{bean.updTime},
+            #{bean.version}
+        </foreach>
+        )
+    </insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.param.BaseBean">
+        UPDATE AGIF_AGENT_LEVEL_STANDARD
+        SET
+        <if test="target.levelName !=null">
+            LEVEL_NAME = #{target.levelName},
+        </if>
+        <if test="target.lgcsAreaId !=null">
+            LGCS_AREA_ID = #{target.lgcsAreaId},
+        </if>
+        <if test="target.lgcsAreaCode !=null">
+            LGCS_AREA_CODE = #{target.lgcsAreaCode},
+        </if>
+        <if test="target.lgcsAreaName !=null">
+            LGCS_AREA_NAME = #{target.lgcsAreaName},
+        </if>
+        <if test="target.frequencyTotalSymbol !=null">
+            FREQUENCY_TOTAL_SYMBOL = #{target.frequencyTotalSymbol},
+        </if>
+        <if test="target.frequencyTotal !=null">
+            FREQUENCY_TOTAL = #{target.frequencyTotal},
+        </if>
+        <if test="target.frequency1Symbol !=null">
+            FREQUENCY_1_SYMBOL = #{target.frequency1Symbol},
+        </if>
+        <if test="target.frequency1 !=null">
+            FREQUENCY_1 = #{target.frequency1},
+        </if>
+        <if test="target.frequency2Symbol !=null">
+            FREQUENCY_2_SYMBOL = #{target.frequency2Symbol},
+        </if>
+        <if test="target.frequency2 !=null">
+            FREQUENCY_2 = #{target.frequency2},
+        </if>
+        <if test="target.frequency3Symbol !=null">
+            FREQUENCY_3_SYMBOL = #{target.frequency3Symbol},
+        </if>
+        <if test="target.frequency3 !=null">
+            FREQUENCY_3 = #{target.frequency3},
+        </if>
+        <if test="target.frequency4Symbol !=null">
+            FREQUENCY_4_SYMBOL = #{target.frequency4Symbol},
+        </if>
+        <if test="target.frequency4 !=null">
+            FREQUENCY_4 = #{target.frequency4},
+        </if>
+        <if test="target.amountTotalSymbol !=null">
+            AMOUNT_TOTAL_SYMBOL = #{target.amountTotalSymbol},
+        </if>
+        <if test="target.amountTotal !=null">
+            AMOUNT_TOTAL = #{target.amountTotal},
+        </if>
+        <if test="target.amount1Symbol !=null">
+            AMOUNT_1_SYMBOL = #{target.amount1Symbol},
+        </if>
+        <if test="target.amount1 !=null">
+            AMOUNT_1 = #{target.amount1},
+        </if>
+        <if test="target.amount2Symbol !=null">
+            AMOUNT_2_SYMBOL = #{target.amount2Symbol},
+        </if>
+        <if test="target.amount2 !=null">
+            AMOUNT_2 = #{target.amount2},
+        </if>
+        <if test="target.amount3Symbol !=null">
+            AMOUNT_3_SYMBOL = #{target.amount3Symbol},
+        </if>
+        <if test="target.amount3 !=null">
+            AMOUNT_3 = #{target.amount3},
+        </if>
+        <if test="target.amount4Symbol !=null">
+            AMOUNT_4_SYMBOL = #{target.amount4Symbol},
+        </if>
+        <if test="target.amount4 !=null">
+            AMOUNT_4 = #{target.amount4},
+        </if>
+
+        <if test="target.delFlg !=null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+
+        UPD_ID=#{target.updId},
+        UPD_TIME=#{target.updTime}
+        WHERE
+        LEVEL_ID = #{filter.levelId}
+        AND DEL_FLG = FALSE
+    </update>
+
+
+    <select id="findAll" parameterType="com.bms.agif.bean.entity.AgifAgentLevelStandard"
+            resultType="com.bms.agif.bean.entity.AgifAgentLevelStandard">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_AGENT_LEVEL_STANDARD
+        WHERE
+        1 = 1
+        <if test="delFlg != null and delFlg != ''">
+            AND DEL_FLG = #{delFlg}
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.bms.agif.bean.entity.AgifAgentLevelStandard" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        AGIF_AGENT_LEVEL_STANDARD
+        WHERE
+        1 = 1
+        <if test="delFlg != null and delFlg != ''">
+            AND DEL_FLG = #{delFlg}
+        </if>
+    </select>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.agif.bean.entity.AgifAgentLevelStandard">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_AGENT_LEVEL_STANDARD
+        WHERE
+        LEVEL_ID = #{levelId}
+    </select>
+
+</mapper>

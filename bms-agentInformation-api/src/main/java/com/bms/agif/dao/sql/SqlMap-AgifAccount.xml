@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifAccountDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		ACCOUNT_ID AS accountId,
+		AGENT_ID AS agentId,
+		ACCOUNT_NAME AS accountName,
+		PASSWORD AS password,
+		TEL_NO AS telNo,
+		MAIL_ADDR AS mailAddr
+	</sql>
+
+    <insert id="save" parameterType="com.bms.agif.bean.entity.AgifAccount">
+		INSERT INTO AGIF_AGENT_ACCOUNT (
+			ACCOUNT_ID,
+			AGENT_ID,
+			ACCOUNT_NAME,
+			PASSWORD,
+			TEL_NO,
+			MAIL_ADDR,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{accountId},
+			#{agentId},
+			#{accountName},
+			#{password},
+			#{telNo},
+			#{mailAddr},
+			FALSE,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.param.BaseBean">
+        UPDATE AGIF_AGENT_ACCOUNT
+        SET
+        PASSWORD = (SELECT a.passWord FROM(SELECT right(TEL_NO,8) as passWord FROM AGIF_AGENT_ACCOUNT WHERE ACCOUNT_ID =
+        #{filter.accountId})a ),
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        ACCOUNT_ID = #{filter.accountId}
+        <if test="filter.agentId != null and filter.agentId != ''">
+            AND AGENT_ID = #{filter.agentId}
+        </if>
+        AND DEL_FLG = FALSE
+    </update>
+
+    <select id="findOne" parameterType="com.bms.agif.bean.param.AccountParam"
+            resultType="com.bms.agif.bean.param.AccountParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_AGENT_ACCOUNT
+        WHERE
+        AGENT_ID = #{agentId}
+        <if test="accountId != null and accountId != ''">
+            AND ACCOUNT_ID = #{accountId}
+        </if>
+        AND DEL_FLG = FALSE
+    </select>
+
+    <select id="findAll" parameterType="com.bms.agif.bean.entity.AgifAccount"
+            resultType="com.bms.agif.bean.entity.AgifAccount">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_ACCOUNT
+        WHERE
+        1 = 1
+        <if test="delFlg != null and delFlg != ''">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+    </select>
+
+    <select id="count" parameterType="com.bms.agif.bean.param.AccountParam" resultType="int">
+        SELECT
+			count(1)
+		FROM
+			(
+				SELECT
+					ACCOUNT_NAME,
+					TEL_NO,
+					AGENT_ID
+				FROM
+					AGIF_AGENT_ACCOUNT
+				WHERE
+					DEL_FLG = FALSE
+                    AND AGENT_ID != #{agentId}
+			  ) account
+		WHERE
+        account.ACCOUNT_NAME = #{accountName}
+        OR account.TEL_NO = #{telNo}
+    </select>
+
+    <update id="delete" parameterType="com.bms.agif.bean.entity.AgifAgentAccount">
+        UPDATE AGIF_AGENT_ACCOUNT
+        SET
+        DEL_FLG = TRUE ,
+        UPD_ID = #{updId},
+        UPD_TIME = #{updTime}
+        WHERE
+        AGENT_ID = #{agentId}
+        AND DEL_FLG = FALSE
+    </update>
+
+    <update id="updateAccount" parameterType="com.bms.agif.bean.param.BaseBean">
+        UPDATE AGIF_AGENT_ACCOUNT
+        SET
+        <if test="target.telNo != null">
+            TEL_NO = #{target.telNo},
+        </if>
+        <if test="target.mailAddr != null">
+            MAIL_ADDR = #{target.mailAddr},
+        </if>
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        AGENT_ID = #{target.agentId}
+        <if test="filter.accountId != null and filter.accountId != ''">
+            AND ACCOUNT_ID = #{filter.accountId}
+        </if>
+        AND DEL_FLG = FALSE
+    </update>
+</mapper>

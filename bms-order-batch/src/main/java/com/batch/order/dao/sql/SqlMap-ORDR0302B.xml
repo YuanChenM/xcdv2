@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.batch.order.dao.ORDR0302BDao">
+    <resultMap id="distributionResult" type="com.batch.order.bean.result.ORDR0302DistributionResult">
+        <result property="buyerOrderId" column="buyerOrderId"/>
+        <result property="buyerOrderCode" column="buyerOrderCode"/>
+        <result property="orderType" column="orderType"/>
+        <result property="buyerId" column="buyerId"/>
+        <result property="buyerType" column="buyerType"/>
+        <result property="buyerTypeName" column="buyerTypeName"/>
+        <result property="buyerCode" column="buyerCode"/>
+        <result property="buyerName" column="buyerName"/>
+        <result property="paymentType" column="paymentType"/>
+        <result property="receiverName" column="receiverName"/>
+        <result property="receiverPhone" column="receiverPhone"/>
+        <result property="receiverQq" column="receiverQq"/>
+        <result property="receiverWechat" column="receiverWechat"/>
+        <result property="receiverMail" column="receiverMail"/>
+        <result property="receiverProvince" column="receiverProvince"/>
+        <result property="receiverCity" column="receiverCity"/>
+        <result property="receiverDistrict" column="receiverDistrict"/>
+        <result property="receiverAddress" column="receiverAddress"/>
+        <result property="receiverAssistAddress" column="receiverAssistAddress"/>
+        <result property="deliveryArea" column="deliveryArea"/>
+        <result property="passTrafficModel" column="passTrafficModel"/>
+        <result property="distributionType" column="distributionType"/>
+        <result property="receivePeriod" column="receivePeriod"/>
+        <result property="receiveEarliest" column="receiveEarliest"/>
+        <result property="receiveLatest" column="receiveLatest"/>
+        <result property="receiveWaitHour" column="receiveWaitHour"/>
+        <result property="advancedNotificationHour" column="advancedNotificationHour"/>
+        <result property="animalQuarantineCertificationFlg" column="animalQuarantineCertificationFlg"/>
+        <result property="stevedoreRequirement" column="stevedoreRequirement"/>
+        <result property="packageRequirement" column="packageRequirement"/>
+        <result property="nearestParkingDistance" column="nearestParkingDistance"/>
+        <result property="remark" column="remark"/>
+        <result property="requiredDistributionDate" column="requiredDistributionDate"/>
+        <result property="expectedSendDatetime" column="expectedSendDatetime"/>
+        <result property="expectedArrivalDatetime" column="expectedArrivalDatetime"/>
+        <result property="useNetFlg" column="useNetFlg"/>
+        <result property="paymentStu" column="paymentStu"/>
+        <collection property="detailEntities" ofType="com.batch.order.bean.result.ORDR0302DistributionDetailResult">
+            <result property="buyerBatchOrderId" column="buyerBatchOrderId"/>
+            <result property="buyerBatchOrderStu" column="buyerBatchOrderStu"/>
+            <result property="isLateFlg" column="isLateFlg"/>
+            <collection property="distributionDetailEntities" ofType="com.batch.order.bean.result.ORDR0302DistributionDetailsResult">
+                <result column="buyerForcastDeliverDetailId" property="buyerForcastDeliverDetailId"/>
+                <result column="goodsId" property="goodsId"/>
+                <result column="sku" property="sku"/>
+                <result column="batchCode" property="batchCode"/>
+                <result column="goodsUnit" property="goodsUnit"/>
+                <result column="realUnitPrice" property="realUnitPrice"/>
+                <result column="sellerCode" property="sellerCode"/>
+                <result column="distributionQuantity" property="distributionQuantity"/>
+                <result column="sellSideCode" property="sellSideCode"/>
+                <result column="logisticsZoneName" property="logisticsZoneName"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="getBuyerOrderList" resultType="com.batch.order.bean.result.ORDR0302DistributionResult">
+        SELECT DISTINCT
+          obo.BUYER_ORDER_ID AS buyerOrderId,
+          obo.USE_NET_FLG AS useNetFlg,
+          obo.PAYMENT_STU AS paymentStu,
+          obo.BUYER_ORDER_CODE AS buyerOrderCode
+        FROM
+          ORDR_BUYER_ORDER obo
+          INNER JOIN ORDR_BUYER_ORDER_ATTACHED oboa
+            ON oboa.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+            ON obbo.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_ATTACHED obboa
+            ON obboa.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+            ON obbod.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+            AND obbod.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+          INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL obfdd
+            ON obfdd.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+            AND obfdd.BUYER_BATCH_ORDER_DETAIL_ID = obbod.BUYER_BATCH_ORDER_DETAIL_ID
+          INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED obfdda
+            ON obfdda.BUYER_FORCAST_DELIVER_DETAIL_ID = obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID
+          LEFT JOIN ordr_distribution_notification odn
+            ON odn.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+            AND odn.DEL_FLG = 0
+        WHERE obo.DEL_FLG = 0
+          AND oboa.DEL_FLG = 0
+          AND obbo.DEL_FLG = 0
+          AND obboa.DEL_FLG = 0
+          AND obbod.DEL_FLG = 0
+          AND obfdd.DEL_FLG = 0
+          AND obfdda.DEL_FLG = 0
+          AND obbo.BUYER_BATCH_ORDER_STU = "003"
+          AND obfdd.FORCAST_TYPE = "001"
+          AND (odn.DISTRIBUTION_NOTIFICATION_STU IS NULL OR
+          (odn.DISTRIBUTION_NOTIFICATION_STU = '099'
+          AND DATE_FORMAT(odn.UPD_TIME,'%Y-%m-%d') <![CDATA[ <= ]]> DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 DAY),'%Y-%m-%d')))
+        UNION
+        SELECT DISTINCT
+          obo.BUYER_ORDER_ID AS buyerOrderId,
+          obo.USE_NET_FLG AS useNetFlg,
+          obo.PAYMENT_STU AS paymentStu,
+          obo.BUYER_ORDER_CODE AS buyerOrderCode
+        FROM
+          ORDR_BUYER_FORCAST_DELIVER_DETAIL obfdd
+          INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED obfdda
+            ON obfdda.BUYER_FORCAST_DELIVER_DETAIL_ID = obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+            ON obbo.BUYER_BATCH_ORDER_ID = obfdd.BUYER_BATCH_ORDER_ID
+          INNER JOIN ORDR_BUYER_ORDER obo
+            ON obbo.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_ORDER_ATTACHED oboa
+            ON oboa.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_ATTACHED obboa
+            ON obboa.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+            ON obbod.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+            AND obbod.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+        WHERE obfdd.DEL_FLG = 0
+          AND obbo.DEL_FLG = 0
+          AND obo.DEL_FLG = 0
+          AND oboa.DEL_FLG = 0
+          AND obboa.DEL_FLG = 0
+          AND obbod.DEL_FLG = 0
+          AND obfdd.REDISTRIBUTION_DATE IS NOT NULL
+          AND obfdd.FORCAST_TYPE = '002'
+          AND NOT EXISTS
+            (SELECT
+              1
+            FROM
+              ORDR_DISTRIBUTION_NOTIFICATION_DETAIL odnd
+            WHERE odnd.BUYER_FORCAST_DELIVER_DETAIL_ID = obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID
+              AND odnd.DEL_FLG = 0)
+    </select>
+
+    <select id="getOrderBatchList" resultMap="distributionResult" parameterType="com.batch.order.bean.result.ORDR0302DistributionResult">
+        SELECT DISTINCT
+          obo.BUYER_ORDER_ID AS buyerOrderId,
+          obo.BUYER_ORDER_CODE AS buyerOrderCode,
+          obo.ORDER_TYPE AS orderType,
+          obo.BUYER_ID AS buyerId,
+          obo.BUYER_TYPE AS buyerType,
+          obo.BUYER_TYPE_NAME AS buyerTypeName,
+          oboa.BUYER_CODE AS buyerCode,
+          oboa.BUYER_NAME AS buyerName,
+          obo.PAYMENT_TYPE AS paymentType,
+          obboa.RECEIVER_NAME AS receiverName,
+          obboa.RECEIVER_PHONE AS receiverPhone,
+          obboa.RECEIVER_QQ AS receiverQq,
+          obboa.RECEIVER_WECHAT AS receiverWechat,
+          obboa.RECEIVER_MAIL AS receiverMail,
+          obboa.RECEIVER_PROVINCE AS receiverProvince,
+          obboa.RECEIVER_CITY AS receiverCity,
+          obboa.RECEIVER_DISTRICT AS receiverDistrict,
+          obboa.RECEIVER_ADDRESS AS receiverAddress,
+          obboa.RECEIVER_ASSIST_ADDRESS AS receiverAssistAddress,
+          obboa.DELIVERY_AREA AS deliveryArea,
+          obboa.PASS_TRAFFIC_MODEL AS passTrafficModel,
+          obboa.DISTRIBUTION_TYPE AS distributionType,
+          obboa.RECEIVE_PERIOD AS receivePeriod,
+          obboa.RECEIVE_EARLIEST AS receiveEarliest,
+          obboa.RECEIVE_LATEST AS receiveLatest,
+          obboa.RECEIVE_WAIT_HOUR AS receiveWaitHour,
+          obboa.ADVANCED_NOTIFICATION_HOUR AS advancedNotificationHour,
+          obboa.ANIMAL_QUARANTINE_CERTIFICATION_FLG AS animalQuarantineCertificationFlg,
+          obboa.STEVEDORE_REQUIREMENT AS stevedoreRequirement,
+          obboa.PACKAGE_REQUIREMENT AS packageRequirement,
+          obboa.NEAREST_PARKING_DISTANCE AS nearestParkingDistance,
+          obboa.REMARK AS remark,
+          obbo.REQUIRED_DISTRIBUTION_DATE AS requiredDistributionDate,
+          obbo.EXPECTED_SEND_DATETIME AS expectedSendDatetime,
+          obbo.EXPECTED_ARRIVAL_DATETIME AS expectedArrivalDatetime,
+          obo.USE_NET_FLG AS useNetFlg,
+          obo.PAYMENT_STU AS paymentStu,
+          obbo.BUYER_BATCH_ORDER_ID AS buyerBatchOrderId,
+          obbo.BUYER_BATCH_ORDER_STU AS buyerBatchOrderStu,
+          obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID AS buyerForcastDeliverDetailId,
+          obfdd.GOODS_ID AS goodsId,
+          obfdd.SKU AS sku,
+          obfdda.BATCH_CODE AS batchCode,
+          obbod.GOODS_UNIT AS goodsUnit,
+          obbod.REAL_UNIT_PRICE AS realUnitPrice,
+          obfdda.SELLER_CODE AS sellerCode,
+          obfdd.PLAN_SEND_QUANTITY AS distributionQuantity,
+          obfdda.SELL_SIDE_CODE AS sellSideCode,
+          oboa.LOGISTICS_ZONE_NAME AS logisticsZoneName,
+          FALSE AS isLateFlg
+        FROM
+          ORDR_BUYER_ORDER obo
+          INNER JOIN ORDR_BUYER_ORDER_ATTACHED oboa
+            ON oboa.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+            ON obbo.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_ATTACHED obboa
+            ON obboa.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+            ON obbod.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+            AND obbod.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+          INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL obfdd
+            ON obfdd.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+            AND obfdd.BUYER_BATCH_ORDER_DETAIL_ID = obbod.BUYER_BATCH_ORDER_DETAIL_ID
+          INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED obfdda
+            ON obfdda.BUYER_FORCAST_DELIVER_DETAIL_ID = obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID
+        WHERE obo.DEL_FLG = 0
+          AND oboa.DEL_FLG = 0
+          AND obbo.DEL_FLG = 0
+          AND obboa.DEL_FLG = 0
+          AND obbod.DEL_FLG = 0
+          AND obfdd.DEL_FLG = 0
+          AND obfdda.DEL_FLG = 0
+          AND obbo.BUYER_BATCH_ORDER_STU = "003"
+          AND obfdd.FORCAST_TYPE = "001"
+          AND obo.BUYER_ORDER_ID = #{buyerOrderId}
+        UNION
+        SELECT DISTINCT
+          obo.BUYER_ORDER_ID AS buyerOrderId,
+          obo.BUYER_ORDER_CODE AS buyerOrderCode,
+          obo.ORDER_TYPE AS orderType,
+          obo.BUYER_ID AS buyerId,
+          obo.BUYER_TYPE AS buyerType,
+          obo.BUYER_TYPE_NAME AS buyerTypeName,
+          oboa.BUYER_CODE AS buyerCode,
+          oboa.BUYER_NAME AS buyerName,
+          obo.PAYMENT_TYPE AS paymentType,
+          obboa.RECEIVER_NAME AS receiverName,
+          obboa.RECEIVER_PHONE AS receiverPhone,
+          obboa.RECEIVER_QQ AS receiverQq,
+          obboa.RECEIVER_WECHAT AS receiverWechat,
+          obboa.RECEIVER_MAIL AS receiverMail,
+          obboa.RECEIVER_PROVINCE AS receiverProvince,
+          obboa.RECEIVER_CITY AS receiverCity,
+          obboa.RECEIVER_DISTRICT AS receiverDistrict,
+          obboa.RECEIVER_ADDRESS AS receiverAddress,
+          obboa.RECEIVER_ASSIST_ADDRESS AS receiverAssistAddress,
+          obboa.DELIVERY_AREA AS deliveryArea,
+          obboa.PASS_TRAFFIC_MODEL AS passTrafficModel,
+          obboa.DISTRIBUTION_TYPE AS distributionType,
+          obboa.RECEIVE_PERIOD AS receivePeriod,
+          obboa.RECEIVE_EARLIEST AS receiveEarliest,
+          obboa.RECEIVE_LATEST AS receiveLatest,
+          obboa.RECEIVE_WAIT_HOUR AS receiveWaitHour,
+          obboa.ADVANCED_NOTIFICATION_HOUR AS advancedNotificationHour,
+          obboa.ANIMAL_QUARANTINE_CERTIFICATION_FLG AS animalQuarantineCertificationFlg,
+          obboa.STEVEDORE_REQUIREMENT AS stevedoreRequirement,
+          obboa.PACKAGE_REQUIREMENT AS packageRequirement,
+          obboa.NEAREST_PARKING_DISTANCE AS nearestParkingDistance,
+          obboa.REMARK AS remark,
+          obbo.REQUIRED_DISTRIBUTION_DATE AS requiredDistributionDate,
+          obbo.EXPECTED_SEND_DATETIME AS expectedSendDatetime,
+          obbo.EXPECTED_ARRIVAL_DATETIME AS expectedArrivalDatetime,
+          obo.USE_NET_FLG AS useNetFlg,
+          obo.PAYMENT_STU AS paymentStu,
+          obbo.BUYER_BATCH_ORDER_ID AS buyerBatchOrderId,
+          obbo.BUYER_BATCH_ORDER_STU AS buyerBatchOrderStu,
+          obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID AS buyerForcastDeliverDetailId,
+          obfdd.GOODS_ID AS goodsId,
+          obfdd.SKU AS sku,
+          obfdda.BATCH_CODE AS batchCode,
+          obbod.GOODS_UNIT AS goodsUnit,
+          obbod.REAL_UNIT_PRICE AS realUnitPrice,
+          obfdda.SELLER_CODE AS sellerCode,
+          obfdd.PLAN_SEND_QUANTITY AS distributionQuantity,
+          obfdda.SELL_SIDE_CODE AS sellSideCode,
+          oboa.LOGISTICS_ZONE_NAME AS logisticsZoneName,
+          TRUE AS isLateFlg
+        FROM
+          ORDR_BUYER_FORCAST_DELIVER_DETAIL obfdd
+          INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED obfdda
+            ON obfdda.BUYER_FORCAST_DELIVER_DETAIL_ID = obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+            ON obbo.BUYER_BATCH_ORDER_ID = obfdd.BUYER_BATCH_ORDER_ID
+          INNER JOIN ORDR_BUYER_ORDER obo
+            ON obbo.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_ORDER_ATTACHED oboa
+            ON oboa.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_ATTACHED obboa
+            ON obboa.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+          INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+            ON obbod.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+            AND obbod.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+            AND obbod.GOODS_ID = obfdd.GOODS_ID
+        WHERE obfdd.DEL_FLG = 0
+          AND obbo.DEL_FLG = 0
+          AND obo.DEL_FLG = 0
+          AND oboa.DEL_FLG = 0
+          AND obboa.DEL_FLG = 0
+          AND obbod.DEL_FLG = 0
+          AND obfdd.REDISTRIBUTION_DATE IS NOT NULL
+          AND obo.BUYER_ORDER_ID = #{buyerOrderId}
+          AND obfdd.FORCAST_TYPE = '002'
+          AND NOT EXISTS
+            (SELECT
+              1
+            FROM
+              ORDR_DISTRIBUTION_NOTIFICATION_DETAIL odnd
+            WHERE odnd.BUYER_FORCAST_DELIVER_DETAIL_ID = obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID
+              AND odnd.DEL_FLG = 0)
+    </select>
+
+    <select id="findHistory" parameterType="com.batch.order.bean.result.ORDR0302DistributionDetailResult" resultType="com.batch.order.bean.entity.BuyerBatchOrderHistoryEntity">
+        SELECT
+        BUYER_BATCH_ORDER_ID AS buyerBatchOrderId
+        , BUYER_BATCH_ORDER_CODE AS buyerBatchOrderCode
+        , BUYER_ORDER_ID AS buyerOrderId
+        , REQUIRED_DISTRIBUTION_DATE AS requiredDistributionDate
+        , EXPECTED_SEND_DATETIME AS expectedSendDatetime
+        , EXPECTED_ARRIVAL_DATETIME AS expectedArrivalDatetime
+        , ORDER_AMOUNT AS orderAmount
+        , FREIGHT AS freight
+        , PREFERENTIAL_AMOUNT AS preferentialAmount
+        , RECEIVE_AMOUNT AS receiveAmount
+        , EARNEST_PERCENT AS earnestPercent
+        , EARNEST_AMOUNT AS earnestAmount
+        , ADVANCE_PAYMENT_PERCENT AS advancePaymentPercent
+        , ADVANCE_PAYMENT_AMOUNT AS advancePaymentAmount
+        , BUYER_BATCH_ORDER_STU AS buyerBatchOrderStu
+        , DEL_FLG AS delFlg
+        , CRT_ID AS crtId
+        , CRT_TIME AS crtTime
+        , UPD_ID AS updId
+        , UPD_TIME AS updTime
+        , VERSION  AS version
+        FROM
+        ORDR_BUYER_BATCH_ORDER
+        WHERE BUYER_BATCH_ORDER_ID = #{buyerBatchOrderId}
+    </select>
+
+    <insert id="saveDistributionInfo" parameterType="com.batch.order.bean.result.ORDR0302DistributionResult">
+        INSERT INTO
+        ORDR_DISTRIBUTION_NOTIFICATION
+        (
+        DISTRIBUTION_NOTIFICATION_ID
+        , DISTRIBUTION_NOTIFICATION_CODE
+        , BUYER_ORDER_ID
+        , BUYER_ORDER_CODE
+        , ORDER_TYPE
+        , BUYER_ID
+        , BUYER_TYPE
+        , BUYER_TYPE_NAME
+        , BUYER_CODE
+        , BUYER_NAME
+        , PAYMENT_TYPE
+        , RECEIVER_NAME
+        , RECEIVER_PHONE
+        , RECEIVER_QQ
+        , RECEIVER_WECHAT
+        , RECEIVER_MAIL
+        , RECEIVER_PROVINCE
+        , RECEIVER_CITY
+        , RECEIVER_DISTRICT
+        , RECEIVER_ADDRESS
+        , RECEIVER_ASSIST_ADDRESS
+        , DELIVERY_AREA
+        , PASS_TRAFFIC_MODEL
+        , DISTRIBUTION_TYPE
+        , RECEIVE_PERIOD
+        , RECEIVE_EARLIEST
+        , RECEIVE_LATEST
+        , RECEIVE_WAIT_HOUR
+        , ADVANCED_NOTIFICATION_HOUR
+        , ANIMAL_QUARANTINE_CERTIFICATION_FLG
+        , STEVEDORE_REQUIREMENT
+        , PACKAGE_REQUIREMENT
+        , NEAREST_PARKING_DISTANCE
+        , REMARK
+        , REQUIRED_DISTRIBUTION_DATE
+        , EXPECTED_SEND_DATETIME
+        , EXPECTED_ARRIVAL_DATETIME
+        , DISTRIBUTION_NOTIFICATION_STU
+        , SEND_FLG
+        , DEL_FLG
+        , CRT_ID
+        , CRT_TIME
+        , UPD_ID
+        , UPD_TIME
+        , VERSION
+        )
+        VALUES
+        (
+        #{distributionNotificationId}
+        , #{distributionNotificationCode}
+        , #{buyerOrderId}
+        , #{buyerOrderCode}
+        , #{orderType}
+        , #{buyerId}
+        , #{buyerType}
+        , #{buyerTypeName}
+        , #{buyerCode}
+        , #{buyerName}
+        , #{paymentType}
+        , #{receiverName}
+        , #{receiverPhone}
+        , #{receiverQq}
+        , #{receiverWechat}
+        , #{receiverMail}
+        , #{receiverProvince}
+        , #{receiverCity}
+        , #{receiverDistrict}
+        , #{receiverAddress}
+        , #{receiverAssistAddress}
+        , #{deliveryArea}
+        , #{passTrafficModel}
+        , #{distributionType}
+        , #{receivePeriod}
+        , #{receiveEarliest}
+        , #{receiveLatest}
+        , #{receiveWaitHour}
+        , #{advancedNotificationHour}
+        , #{animalQuarantineCertificationFlg}
+        , #{stevedoreRequirement}
+        , #{packageRequirement}
+        , #{nearestParkingDistance}
+        , #{remark}
+        , #{requiredDistributionDate}
+        , #{expectedSendDatetime}
+        , #{expectedArrivalDatetime}
+        , #{distributionNotificationStu}
+        , #{sendFlg}
+        , #{delFlg}
+        , #{crtId}
+        , #{crtTime}
+        , #{updId}
+        , #{updTime}
+        , #{version}
+        )
+    </insert>
+
+    <insert id="saveDistributionDetailInfo" parameterType="com.batch.order.bean.entity.DistributionNotificationDetailEntity">
+        INSERT INTO
+        ORDR_DISTRIBUTION_NOTIFICATION_DETAIL
+        (
+        DISTRIBUTION_NOTIFICATION_DETAIL_ID
+        , DISTRIBUTION_NOTIFICATION_ID
+        , BUYER_FORCAST_DELIVER_DETAIL_ID
+        , GOODS_ID
+        , SKU
+        , BATCH_CODE
+        , GOODS_UNIT
+        , SELLER_CODE
+        , DISTRIBUTION_QUANTITY
+        , SELL_SIDE_CODE
+        , LOGISTICS_ZONE_NAME
+        , DEL_FLG
+        , CRT_ID
+        , CRT_TIME
+        , UPD_ID
+        , UPD_TIME
+        , VERSION
+        )
+        VALUES
+        (
+        #{distributionNotificationDetailId}
+        , #{distributionNotificationId}
+        , #{buyerForcastDeliverDetailId}
+        , #{goodsId}
+        , #{sku}
+        , #{batchCode}
+        , #{goodsUnit}
+        , #{sellerCode}
+        , #{distributionQuantity}
+        , #{sellSideCode}
+        , #{logisticsZoneName}
+        , #{delFlg}
+        , #{crtId}
+        , #{crtTime}
+        , #{updId}
+        , #{updTime}
+        , #{version}
+        )
+    </insert>
+
+    <insert id="saveBuyerBatchOrderHistory" parameterType="com.batch.order.bean.entity.BuyerBatchOrderHistoryEntity">
+        INSERT INTO
+        ORDR_BUYER_BATCH_ORDER_HISTORY
+        (
+        HISTORY_ID
+        , BUYER_BATCH_ORDER_ID
+        , BUYER_BATCH_ORDER_CODE
+        , BUYER_ORDER_ID
+        , REQUIRED_DISTRIBUTION_DATE
+        , EXPECTED_SEND_DATETIME
+        , EXPECTED_ARRIVAL_DATETIME
+        , ORDER_AMOUNT
+        , FREIGHT
+        , PREFERENTIAL_AMOUNT
+        , RECEIVE_AMOUNT
+        , EARNEST_PERCENT
+        , EARNEST_AMOUNT
+        , ADVANCE_PAYMENT_PERCENT
+        , ADVANCE_PAYMENT_AMOUNT
+        , BUYER_BATCH_ORDER_STU
+        , DEL_FLG
+        , CRT_ID
+        , CRT_TIME
+        , UPD_ID
+        , UPD_TIME
+        , VERSION
+        )
+        VALUES
+        (
+        #{historyId}
+        , #{buyerBatchOrderId}
+        , #{buyerBatchOrderCode}
+        , #{buyerOrderId}
+        , #{requiredDistributionDate}
+        , #{expectedSendDatetime}
+        , #{expectedArrivalDatetime}
+        , #{orderAmount}
+        , #{freight}
+        , #{preferentialAmount}
+        , #{receiveAmount}
+        , #{earnestPercent}
+        , #{earnestAmount}
+        , #{advancePaymentPercent}
+        , #{advancePaymentAmount}
+        , #{buyerBatchOrderStu}
+        , #{delFlg}
+        , #{crtId}
+        , #{crtTime}
+        , #{updId}
+        , #{updTime}
+        , #{version}
+        )
+    </insert>
+
+    <update id="modifyBuyerBatchInfo" parameterType="com.batch.order.bean.result.ORDR0302DistributionDetailResult">
+        UPDATE ORDR_BUYER_BATCH_ORDER
+        SET
+        BUYER_BATCH_ORDER_STU = #{buyerBatchOrderStu}
+        , UPD_ID = #{updId}
+        , UPD_TIME = #{updTime}
+        , VERSION = VERSION + 1
+        WHERE
+        BUYER_BATCH_ORDER_ID = #{buyerBatchOrderId}
+    </update>
+</mapper>

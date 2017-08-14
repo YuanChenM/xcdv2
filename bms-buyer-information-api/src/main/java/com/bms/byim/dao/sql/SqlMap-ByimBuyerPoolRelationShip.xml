@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimBuyerPoolRelationShipDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		RELATION_SHIP_ID AS relationShipId,
+		BUYER_ID AS buyerId,
+		BUYER_POOL_ID AS buyerPoolId,
+		LGCS_AREA_ID AS lgcsAreaId,
+		LGCS_AREA_CODE AS lgcsAreaCode,
+		LGCS_AREA_NAME AS lgcsAreaName,
+		BUYER_TYPE AS buyerType,
+		BUYER_TYPE_NAME AS buyerTypeName,
+		BUYER_FIRST_CATEGORY AS buyerFirstCategory,
+		BUYER_FIRST_CATEGORY_NAME AS buyerFirstCategoryName,
+		BUYER_SUB_CATEGORY AS buyerSubCategory,
+		BUYER_SUB_CATEGORY_NAME AS buyerSubCategoryName,
+		BUYER_POOL_NAME AS buyerPoolName,
+		BUYER_POOL_CODE AS buyerPoolCode,
+		MARKETING_FIRST_STATUS AS marketingFirstStatus,
+		MARKETING_FIRST_STATUS_NAME AS marketingFirstStatusName,
+		MARKETING_SUB_STATUS AS marketingSubStatus,
+		MARKETING_SUB_STATUS_NAME AS marketingSubStatusName,
+		BUYER_POOL_TYPE AS buyerPoolType
+	</sql>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYIM_BUYER_POOL_RELATION_SHIP (
+        RELATION_SHIP_ID,
+        BUYER_ID,
+        BUYER_POOL_ID,
+        LGCS_AREA_ID,
+        LGCS_AREA_CODE,
+        LGCS_AREA_NAME,
+        BUYER_TYPE,
+        BUYER_TYPE_NAME,
+        BUYER_FIRST_CATEGORY,
+        BUYER_FIRST_CATEGORY_NAME,
+        BUYER_SUB_CATEGORY,
+        BUYER_SUB_CATEGORY_NAME,
+        BUYER_POOL_NAME,
+        BUYER_POOL_CODE,
+        MARKETING_FIRST_STATUS,
+        MARKETING_FIRST_STATUS_NAME,
+        MARKETING_SUB_STATUS,
+        MARKETING_SUB_STATUS_NAME,
+        BUYER_POOL_TYPE,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="lg" index="index" separator=",">
+            (
+            #{lg.relationShipId},
+            #{lg.buyerId},
+            #{lg.buyerPoolId},
+            #{lg.lgcsAreaId},
+            #{lg.lgcsAreaCode},
+            #{lg.lgcsAreaName},
+            #{lg.buyerType},
+            #{lg.buyerTypeName},
+            #{lg.buyerFirstCategory},
+            #{lg.buyerFirstCategoryName},
+            #{lg.buyerSubCategory},
+            #{lg.buyerSubCategoryName},
+            #{lg.buyerPoolName},
+            #{lg.buyerPoolCode},
+            #{lg.marketingFirstStatus},
+            #{lg.marketingFirstStatusName},
+            #{lg.marketingSubStatus},
+            #{lg.marketingSubStatusName},
+            #{lg.buyerPoolType},
+            false,
+            #{lg.crtId},
+            #{lg.crtTime},
+            #{lg.updId},
+            #{lg.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.byim.bean.param.BaseBean">
+        UPDATE BYIM_BUYER_POOL_RELATION_SHIP
+        SET
+        <if test="target.lgcsAreaId != null">
+            LGCS_AREA_ID = #{target.lgcsAreaId},
+        </if>
+        <if test="target.lgcsAreaCode != null">
+            LGCS_AREA_CODE = #{target.lgcsAreaCode},
+        </if>
+        <if test="target.lgcsAreaName != null">
+            LGCS_AREA_NAME = #{target.lgcsAreaName},
+        </if>
+        <if test="target.buyerType != null">
+            BUYER_TYPE = #{target.buyerType},
+        </if>
+        <if test="target.buyerTypeName != null">
+            BUYER_TYPE_NAME = #{target.buyerTypeName},
+        </if>
+        <if test="target.buyerFirstCategory != null">
+            BUYER_FIRST_CATEGORY = #{target.buyerFirstCategory},
+        </if>
+        <if test="target.buyerFirstCategoryName != null">
+            BUYER_FIRST_CATEGORY_NAME = #{target.buyerFirstCategoryName},
+        </if>
+        <if test="target.buyerSubCategory != null">
+            BUYER_SUB_CATEGORY = #{target.buyerSubCategory},
+        </if>
+        <if test="target.buyerSubCategoryName != null">
+            BUYER_SUB_CATEGORY_NAME = #{target.buyerSubCategoryName},
+        </if>
+        <if test="target.buyerPoolId != null">
+            BUYER_POOL_ID = #{target.buyerPoolId},
+        </if>
+        <if test="target.buyerPoolName != null">
+            BUYER_POOL_NAME = #{target.buyerPoolName},
+        </if>
+        <if test="target.buyerPoolCode != null">
+            BUYER_POOL_CODE = #{target.buyerPoolCode},
+        </if>
+        <if test="target.marketingFirstStatus != null">
+            MARKETING_FIRST_STATUS = #{target.marketingFirstStatus},
+        </if>
+        <if test="target.marketingFirstStatusName != null">
+            MARKETING_FIRST_STATUS_NAME = #{target.marketingFirstStatusName},
+        </if>
+        <if test="target.marketingSubStatus != null">
+            MARKETING_SUB_STATUS = #{target.marketingSubStatus},
+        </if>
+        <if test="target.marketingSubStatusName != null">
+            MARKETING_SUB_STATUS_NAME = #{target.marketingSubStatusName},
+        </if>
+        <if test="target.buyerPoolType != null">
+            BUYER_POOL_TYPE = #{target.buyerPoolType},
+        </if>
+        DEL_FLG = #{target.delFlg},
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        BUYER_ID = #{filter.buyerId}
+        AND DEL_FLG = FALSE
+        <if test="filter.buyerPoolId != null and filter.buyerPoolId != ''">
+            AND BUYER_POOL_ID = #{filter.buyerPoolId}
+        </if>
+        <if test="filter.buyerPoolCode != null and filter.buyerPoolCode != ''">
+            AND BUYER_POOL_CODE= #{filter.buyerPoolCode}
+        </if>
+        <if test="filter.relationShipId != null and filter.relationShipId != ''">
+            AND RELATION_SHIP_ID = #{filter.relationShipId}
+        </if>
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.byim.bean.entity.ByimBuyerPoolRelationShip">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_BUYER_POOL_RELATION_SHIP
+        WHERE
+        RELATION_SHIP_ID = #{relationShipId}
+    </select>
+
+    <select id="findAll" parameterType="com.bms.byim.bean.param.BuyerPoolRelationShipRsParam"
+            resultType="com.bms.byim.bean.param.BuyerPoolRelationShipRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_BUYER_POOL_RELATION_SHIP
+        WHERE
+        BUYER_ID = #{buyerId}
+        AND DEL_FLG = FALSE
+        <if test="buyerPoolId != null and buyerPoolId != ''">
+            AND BUYER_POOL_ID = #{buyerPoolId}
+        </if>
+        <if test="buyerPoolName != null and buyerPoolName != ''">
+            AND BUYER_POOL_NAME LIKE #{buyerPoolName}
+        </if>
+        <if test="buyerPoolCode != null and buyerPoolCode != ''">
+            AND BUYER_POOL_CODE= #{buyerPoolCode}
+        </if>
+
+    </select>
+
+    <select id="count" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYIM_BUYER_POOL_RELATION_SHIP
+        WHERE
+        BUYER_ID = #{buyerId}
+        AND BUYER_POOL_ID = #{buyerPoolId}
+        AND DEL_FLG = FALSE
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.byim.bean.param.BuyerPoolBuyersRsParam"
+            resultType="com.bms.byim.bean.param.BuyerPoolBuyersRsParam">
+        SELECT
+        byPoolRs.RELATION_SHIP_ID AS relationShipId,
+        byPoolRs.BUYER_POOL_ID AS buyerPoolId,
+        byPoolRs.LGCS_AREA_ID AS lgcsAreaId,
+        byPoolRs.LGCS_AREA_CODE AS lgcsAreaCode,
+        byPoolRs.LGCS_AREA_NAME AS lgcsAreaName,
+        byPoolRs.BUYER_TYPE AS buyerType,
+        byPoolRs.BUYER_TYPE_NAME AS buyerTypeName,
+        byPoolRs.BUYER_FIRST_CATEGORY AS buyerFirstCategory,
+        byPoolRs.BUYER_FIRST_CATEGORY_NAME AS buyerFirstCategoryName,
+        byPoolRs.BUYER_SUB_CATEGORY AS buyerSubCategory,
+        byPoolRs.BUYER_SUB_CATEGORY_NAME AS buyerSubCategoryName,
+        byPoolRs.BUYER_POOL_NAME AS buyerPoolName,
+        byPoolRs.BUYER_POOL_CODE AS buyerPoolCode,
+        basic.BUYER_ID AS buyerId,
+        basic.BUYER_CODE AS buyerCode,
+        basic.BUYER_NAME AS buyerName,
+        basic.BUYER_ADDR AS buyerAddr,
+        basic.PROVINCE_ID AS provinceId,
+        basic.PROVINCE_CODE AS provinceCode,
+        basic.PROVINCE_NAME AS provinceName,
+        basic.CITY_ID AS cityId,
+        basic.CITY_CODE AS cityCode,
+        basic.CITY_NAME AS cityName,
+        basic.DISTRICT_ID AS districtId,
+        basic.DISTRICT_CODE AS districtCode,
+        basic.DISTRICT_NAME AS districtName,
+        basic.BUYER_QQ AS buyerQq,
+        basic.BUYER_WECHAT AS buyerWechat,
+        basic.MARKETING_FIRST_STATUS AS marketingFirstStatusStr,
+        basic.MARKETING_FIRST_STATUS_NAME AS marketingFirstStatusName,
+        basic.MARKETING_SUB_STATUS AS marketingSubStatus,
+        basic.MARKETING_SUB_STATUS_NAME AS marketingSubStatusName,
+        basic.INFO_ERROR_FLG AS infoErrorFlg,
+        basic.INFO_ERROR_REMARK AS infoErrorRemark,
+        basic.CRT_ID AS crtId,
+        basic.CRT_TIME AS crtTime,
+        basic.UPD_ID AS updId,
+        basic.UPD_TIME AS updTime,
+        employee.EMPLOYEE_NAME AS bossName,
+        employee.EMPLOYEE_TEL AS employeeTel,
+        employee.EMPLOYEE_WECHAT AS employeeWechat,
+        employee.EMPLOYEE_QQ AS employeeQq,
+        store.MARKET_ID AS marketId,
+        store.MARKET_CODE AS marketCode,
+        store.MARKET_NAME AS marketName,
+        store.MARKET_TYPE AS marketType,
+        store.STORE_ADDR AS storeAddr,
+        store.STORE_NO AS storeNo,
+        store.REGISTRANT_ID AS registrantId,
+        store.REGISTRANT_DATE AS registrantDate,
+        store.PRE_REGISTRANT_ID AS preRegistrantId,
+        store.PRE_REGISTRATION_DATE AS preRegistrationDate
+        FROM
+        BYIM_BUYER_POOL_RELATION_SHIP byPoolRs
+        INNER JOIN BYIM_BUYER basic ON byPoolRs.BUYER_ID = basic.BUYER_ID
+        AND basic.DEL_FLG = FALSE
+        LEFT JOIN BYIM_STORE store ON basic.BUYER_ID = store.BUYER_ID
+        AND store.DEL_FLG = FALSE
+        LEFT JOIN BYIM_EMPLOYEE employee ON basic.BUYER_ID = employee.BUYER_ID
+        AND employee.EMPLOYEE_TYPE = '1'
+        AND employee.IS_NEWEST_BOSS = TRUE
+        AND employee.DEL_FLG = FALSE
+        WHERE
+        byPoolRs.DEL_FLG = FALSE
+        <if test="buyerId != null and buyerId != ''">
+            AND byPoolRs.BUYER_ID = #{buyerId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND byPoolRs.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="buyerType != null and buyerType != ''">
+            AND byPoolRs.BUYER_TYPE = #{buyerType}
+        </if>
+        <if test="buyerFirstCategory != null and buyerFirstCategory != ''">
+            AND byPoolRs.BUYER_FIRST_CATEGORY = #{buyerFirstCategory}
+        </if>
+        <if test="buyerSubCategory != null and buyerSubCategory != ''">
+            AND byPoolRs.BUYER_SUB_CATEGORY = #{buyerSubCategory}
+        </if>
+        <if test="buyerPoolCode != null and buyerPoolCode != ''">
+            AND byPoolRs.BUYER_POOL_CODE = #{buyerPoolCode}
+        </if>
+        <if test="periodStart != null and periodStart != ''">
+            <![CDATA[AND byPoolRs.CRT_TIME >= #{periodStart}]]>
+        </if>
+        <if test="periodEnd != null and periodEnd != ''">
+            <![CDATA[AND byPoolRs.CRT_TIME <= #{periodEnd}]]>
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND basic.CITY_CODE = #{cityCode}
+        </if>
+        <if test="districtCode != null and districtCode != ''">
+            AND basic.DISTRICT_CODE = #{districtCode}
+        </if>
+        <if test="marketingFirstStatus != null and marketingFirstStatus.length > 0">
+            AND basic.MARKETING_FIRST_STATUS IN
+            <foreach collection="marketingFirstStatus" item="marketingFirstStatus" open="(" separator="," close=")">
+                #{marketingFirstStatus}
+            </foreach>
+        </if>
+        <if test="buyerName != null and buyerName != ''">
+            AND basic.BUYER_NAME LIKE #{buyerName}
+        </if>
+        <if test="marketCode != null and marketCode != ''">
+            AND store.MARKET_CODE = #{marketCode}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.batch.linv.dao.Inventory0101BDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+        LOAD_NO AS loadNo,
+        WH_ID AS whId,
+        WH_CODE AS whCode,
+        L_A_ID AS laId,
+        L_A_CODE AS laCode,
+        S_PLAT_CODE AS splatCode,
+        OWNER_ID AS ownerId,
+        OWNER_CODE AS ownerCode,
+        OWNER_TYPE AS ownerType,
+        OWNER_D_TYPE AS ownerDType,
+        COMMODITY_ID AS commodityId,
+        SKU_CODE AS skuCode,
+        LOT_NO AS lotNo,
+        BUY_PRICE AS buyPrice,
+        UOM AS uom,
+        QTY AS qty,
+        IV_TYPE AS ivType,
+        SALES_LABEL AS salesLabel,
+        DEL_FLG AS delFlg,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS version
+    </sql>
+
+    <!-- 查询商品数据 -->
+    <select id="findAll" resultType="com.batch.linv.bean.entity.LinvLoad">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        LINV_LOAD
+    </select>
+
+    <insert id="save" parameterType="com.batch.linv.bean.entity.LinvLoad">
+        INSERT INTO LINV_LOAD (
+        LOAD_NO,
+        WH_ID,
+        WH_CODE,
+        L_A_ID,
+        L_A_CODE,
+        S_PLAT_CODE,
+        OWNER_ID,
+        OWNER_CODE,
+        OWNER_TYPE,
+        OWNER_D_TYPE,
+        COMMODITY_ID,
+        SKU_CODE,
+        LOT_NO,
+        BUY_PRICE,
+        UOM,
+        QTY,
+        IV_TYPE,
+        SALES_LABEL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        VERSION
+        )
+        VALUES (
+        #{loadNo},
+        #{whId},
+        #{whCode},
+        #{laId},
+        #{laCode},
+        #{splatCode},
+        #{ownerId},
+        #{ownerCode},
+        #{ownerType},
+        #{ownerDType},
+        #{commodityId},
+        #{skuCode},
+        #{lotNo},
+        #{buyPrice},
+        #{uom},
+        #{qty},
+        #{ivType},
+        #{salesLabel},
+        #{delFlg},
+        #{crtId},
+        #{crtTime},
+        1
+        )
+    </insert>
+</mapper>

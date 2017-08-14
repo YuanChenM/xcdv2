@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.batch.order.dao.ORDR0303BDao">
+    <select id="getXmlList" resultType="com.batch.order.bean.result.ORDR0303BResult">
+        SELECT DISTINCT
+        odn.DISTRIBUTION_NOTIFICATION_ID AS orderId,
+        odn.DISTRIBUTION_NOTIFICATION_CODE AS orderCode,
+        obo.BUYER_ORDER_ID AS originalorderId,
+        obo.ORDER_TYPE AS orderType,
+        obo.BUYER_ID AS buyerId,
+        oboa.BUYER_NAME AS buyerName,
+        odn.VERSION AS ver,
+        obboa.RECEIVER_NAME AS name,
+        obboa.RECEIVER_PHONE AS tel,
+        obboa.RECEIVER_WECHAT AS wx,
+        obboa.RECEIVER_QQ AS qq,
+        obboa.RECEIVER_PROVINCE AS province,
+        obboa.RECEIVER_CITY AS city,
+        obboa.RECEIVER_DISTRICT AS district,
+        obboa.RECEIVER_ADDRESS AS addr,
+        obboa.RECEIVER_ASSIST_ADDRESS AS addr2,
+        obboa.ADDRESS_KEY AS addrKey,
+        obboa.DELIVERY_AREA_CODE AS deliveryAreaCode,
+        odn.WH_CODE AS whCode,
+        odn.WH_NAME AS whName,
+        obo.ORDER_AMOUNT AS orderAmount,
+        obo.RECEIVE_AMOUNT AS receiveAmount,
+        obo.PAYMENT_STU AS paymentStu,
+        obo.USE_NET_FLG AS useNetFlg
+        FROM ordr_distribution_notification odn
+        INNER JOIN ordr_distribution_notification_detail odnd
+        ON odn.DISTRIBUTION_NOTIFICATION_ID = odnd.DISTRIBUTION_NOTIFICATION_ID
+        AND odnd.del_flg = 0
+        INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL obfdd
+        ON odnd.BUYER_FORCAST_DELIVER_DETAIL_ID = obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID
+        AND obfdd.del_flg = 0
+        AND FORCAST_TYPE = '001'
+        INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+        ON obfdd.BUYER_BATCH_ORDER_ID = obbo.BUYER_BATCH_ORDER_ID
+        AND obbo.del_flg = 0
+        INNER JOIN ORDR_BUYER_BATCH_ORDER_ATTACHED obboa
+        ON obfdd.BUYER_BATCH_ORDER_ID = obboa.BUYER_BATCH_ORDER_ID
+        AND obboa.del_flg = 0
+        INNER JOIN ORDR_BUYER_ORDER obo
+        ON odn.BUYER_ORDER_ID = obo.BUYER_ORDER_ID
+        AND obo.del_flg = 0
+        INNER JOIN ORDR_BUYER_ORDER_ATTACHED oboa
+        ON odn.BUYER_ORDER_ID = oboa.BUYER_ORDER_ID
+        AND oboa.del_flg = 0
+        WHERE odn.DEL_FLG = 0
+        AND odn.DISTRIBUTION_NOTIFICATION_STU = '008'
+        AND (
+              odn.REQUIRED_DISTRIBUTION_DATE IS NULL
+              OR DATE_FORMAT(
+              odn.REQUIRED_DISTRIBUTION_DATE,
+              '%Y-%m-%d'
+            ) <![CDATA[ <= ]]> DATE_FORMAT(
+              DATE_ADD(NOW(), INTERVAL 1 DAY),
+              '%Y-%m-%d'
+            )
+          )
+        GROUP BY odn.DISTRIBUTION_NOTIFICATION_ID
+    </select>
+
+    <select id="getDetailList" resultType="com.batch.order.bean.result.ORDR0303BDistributionResult"
+            parameterType="com.batch.order.bean.result.ORDR0303BResult">
+        SELECT
+        odnd.DISTRIBUTION_NOTIFICATION_DETAIL_ID AS orderline,
+        obfdd.SKU AS sku,
+        obfdda.BATCH_CODE AS inboundBatch,
+        obbod.GOODS_UNIT AS uom,
+        '00000001' AS consignee,
+        oboa.LOGISTICS_ZONE_CODE AS area,
+        obfdda.SALE_LABEL_CODE AS saleLabelCode,
+        obfdd.PLAN_SEND_QUANTITY AS qtyoriginal,
+        obbod.REAL_UNIT_PRICE AS inputQty,
+        oboa.LOGISTICS_ZONE_CODE AS attributes,
+        '001' AS inventoryStatus
+        FROM ordr_distribution_notification odn
+        INNER JOIN ordr_distribution_notification_detail odnd
+        ON odn.DISTRIBUTION_NOTIFICATION_ID = odnd.DISTRIBUTION_NOTIFICATION_ID
+        AND odnd.del_flg = 0
+        INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL obfdd
+        ON odnd.BUYER_FORCAST_DELIVER_DETAIL_ID = obfdd.BUYER_FORCAST_DELIVER_DETAIL_ID
+        AND obfdd.del_flg = 0
+        INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED obfdda
+        ON odnd.BUYER_FORCAST_DELIVER_DETAIL_ID = obfdda.BUYER_FORCAST_DELIVER_DETAIL_ID
+        AND obfdda.del_flg = 0
+        INNER JOIN ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+        ON obbod.BUYER_BATCH_ORDER_DETAIL_ID = obfdd.BUYER_BATCH_ORDER_DETAIL_ID
+        AND obbod.del_flg = 0
+        INNER JOIN ORDR_BUYER_ORDER_ATTACHED oboa
+        ON oboa.BUYER_ORDER_ID = odn.BUYER_ORDER_ID
+        AND oboa.del_flg = 0
+        WHERE odn.DEL_FLG = 0
+        AND odn.DISTRIBUTION_NOTIFICATION_ID = #{orderId}
+    </select>
+
+    <update id="modifyDisStatus" parameterType="com.batch.order.bean.entity.DistributionNotificationEntity">
+        UPDATE ordr_distribution_notification
+        SET
+        DISTRIBUTION_NOTIFICATION_STU = #{distributionNotificationStu}
+        , SEND_FLG = #{sendFlg}
+        , UPD_ID = #{updId}
+        , UPD_TIME = #{updTime}
+        , VERSION = VERSION + 1
+        WHERE
+        DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+    </update>
+
+    <select id="findHistory" resultType="com.batch.order.bean.entity.DistributionNotificationHistoryEntity"
+            parameterType="com.batch.order.bean.entity.DistributionNotificationEntity">
+        SELECT
+            DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+            , DISTRIBUTION_NOTIFICATION_CODE AS distributionNotificationCode
+            , BUYER_ORDER_ID AS buyerOrderId
+            , BUYER_ORDER_CODE AS buyerOrderCode
+            , ORDER_TYPE AS orderType
+            , BUYER_ID AS buyerId
+            , BUYER_TYPE AS buyerType
+            , BUYER_TYPE_NAME AS buyerTypeName
+            , BUYER_CODE AS buyerCode
+            , BUYER_NAME AS buyerName
+            , PAYMENT_TYPE AS paymentType
+            , RECEIVER_NAME AS receiverName
+            , RECEIVER_PHONE AS receiverPhone
+            , RECEIVER_QQ AS receiverQq
+            , RECEIVER_WECHAT AS receiverWechat
+            , RECEIVER_MAIL AS receiverMail
+            , RECEIVER_PROVINCE AS receiverProvince
+            , RECEIVER_CITY AS receiverCity
+            , RECEIVER_DISTRICT AS receiverDistrict
+            , RECEIVER_ADDRESS AS receiverAddress
+            , RECEIVER_ASSIST_ADDRESS AS receiverAssistAddress
+            , DELIVERY_AREA AS deliveryArea
+            , PASS_TRAFFIC_MODEL AS passTrafficModel
+            , DISTRIBUTION_TYPE AS distributionType
+            , REQUIRED_DISTRIBUTION_DATE AS requiredDistributionDate
+            , RECEIVE_PERIOD AS receivePeriod
+            , RECEIVE_EARLIEST AS receiveEarliest
+            , RECEIVE_LATEST AS receiveLatest
+            , RECEIVE_WAIT_HOUR AS receiveWaitHour
+            , ADVANCED_NOTIFICATION_HOUR AS advancedNotificationHour
+            , ANIMAL_QUARANTINE_CERTIFICATION_FLG AS animalQuarantineCertificationFlg
+            , STEVEDORE_REQUIREMENT AS stevedoreRequirement
+            , PACKAGE_REQUIREMENT AS packageRequirement
+            , NEAREST_PARKING_DISTANCE AS nearestParkingDistance
+            , REMARK AS remark
+            , EXPECTED_SEND_DATETIME AS expectedSendDatetime
+            , EXPECTED_ARRIVAL_DATETIME AS expectedArrivalDatetime
+            , DISTRIBUTION_NOTIFICATION_STU AS distributionNotificationStu
+            , SEND_FLG AS sendFlg
+            , WH_CODE AS whCode
+            , WH_NAME AS whName
+            , FACT_WH_CODE AS factWhCode
+            , FACT_WH_NAME AS factWhName
+            , DEL_FLG AS delFlg
+            , CRT_ID AS crtId
+            , CRT_TIME AS crtTime
+            , UPD_ID AS updId
+            , UPD_TIME AS updTime
+            , VERSION AS version
+            FROM
+            ORDR_DISTRIBUTION_NOTIFICATION
+            WHERE DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+    </select>
+
+    <insert id="saveHistory" parameterType="com.batch.order.bean.entity.DistributionNotificationHistoryEntity">
+        INSERT INTO
+        ORDR_DISTRIBUTION_NOTIFICATION_HISTORY
+        (
+        HISTORY_ID
+        , DISTRIBUTION_NOTIFICATION_ID
+        , DISTRIBUTION_NOTIFICATION_CODE
+        , BUYER_ORDER_ID
+        , BUYER_ORDER_CODE
+        , ORDER_TYPE
+        , BUYER_ID
+        , BUYER_TYPE
+        , BUYER_TYPE_NAME
+        , BUYER_CODE
+        , BUYER_NAME
+        , PAYMENT_TYPE
+        , RECEIVER_NAME
+        , RECEIVER_PHONE
+        , RECEIVER_QQ
+        , RECEIVER_WECHAT
+        , RECEIVER_MAIL
+        , RECEIVER_PROVINCE
+        , RECEIVER_CITY
+        , RECEIVER_DISTRICT
+        , RECEIVER_ADDRESS
+        , RECEIVER_ASSIST_ADDRESS
+        , DELIVERY_AREA
+        , PASS_TRAFFIC_MODEL
+        , DISTRIBUTION_TYPE
+        , REQUIRED_DISTRIBUTION_DATE
+        , RECEIVE_PERIOD
+        , RECEIVE_EARLIEST
+        , RECEIVE_LATEST
+        , RECEIVE_WAIT_HOUR
+        , ADVANCED_NOTIFICATION_HOUR
+        , ANIMAL_QUARANTINE_CERTIFICATION_FLG
+        , STEVEDORE_REQUIREMENT
+        , PACKAGE_REQUIREMENT
+        , NEAREST_PARKING_DISTANCE
+        , REMARK
+        , EXPECTED_SEND_DATETIME
+        , EXPECTED_ARRIVAL_DATETIME
+        , DISTRIBUTION_NOTIFICATION_STU
+        , SEND_FLG
+        , DEL_FLG
+        , CRT_ID
+        , CRT_TIME
+        , UPD_ID
+        , UPD_TIME
+        , VERSION
+        )
+        VALUES
+        (
+        #{historyId}
+        , #{distributionNotificationId}
+        , #{distributionNotificationCode}
+        , #{buyerOrderId}
+        , #{buyerOrderCode}
+        , #{orderType}
+        , #{buyerId}
+        , #{buyerType}
+        , #{buyerTypeName}
+        , #{buyerCode}
+        , #{buyerName}
+        , #{paymentType}
+        , #{receiverName}
+        , #{receiverPhone}
+        , #{receiverQq}
+        , #{receiverWechat}
+        , #{receiverMail}
+        , #{receiverProvince}
+        , #{receiverCity}
+        , #{receiverDistrict}
+        , #{receiverAddress}
+        , #{receiverAssistAddress}
+        , #{deliveryArea}
+        , #{passTrafficModel}
+        , #{distributionType}
+        , #{requiredDistributionDate}
+        , #{receivePeriod}
+        , #{receiveEarliest}
+        , #{receiveLatest}
+        , #{receiveWaitHour}
+        , #{advancedNotificationHour}
+        , #{animalQuarantineCertificationFlg}
+        , #{stevedoreRequirement}
+        , #{packageRequirement}
+        , #{nearestParkingDistance}
+        , #{remark}
+        , #{expectedSendDatetime}
+        , #{expectedArrivalDatetime}
+        , #{distributionNotificationStu}
+        , #{sendFlg}
+        , #{delFlg}
+        , #{crtId}
+        , #{crtTime}
+        , #{updId}
+        , #{updTime}
+        , #{version}
+        )
+    </insert>
+
+    <select id="getDistributionCount" resultType="Integer" parameterType="com.batch.order.bean.result.ORDR0303BResult">
+        SELECT
+        COUNT(1)
+        FROM
+        ORDR_BUYER_ORDER obo
+        INNER JOIN ORDR_DISTRIBUTION_NOTIFICATION odn
+        ON obo.BUYER_ORDER_ID = odn.BUYER_ORDER_ID
+        AND odn.DEL_FLG = 0
+        WHERE odn.SEND_FLG = 1
+        AND obo.BUYER_ORDER_ID = #{originalorderId}
+        AND odn.DISTRIBUTION_NOTIFICATION_STU != '099'
+        AND obo.DEL_FLG = 0
+    </select>
+
+    <select id="getReceiveCount" resultType="Integer" parameterType="com.batch.order.bean.result.ORDR0303BResult">
+        SELECT
+        COUNT(1)
+        FROM
+        ORDR_BUYER_ORDER obo
+        INNER JOIN ORDR_DISTRIBUTION_NOTIFICATION odn
+        ON obo.BUYER_ORDER_ID = odn.BUYER_ORDER_ID
+        AND odn.DEL_FLG = 0
+        INNER JOIN ordr_receive_notification orn
+        ON orn.DISTRIBUTION_NOTIFICATION_ID = odn.DISTRIBUTION_NOTIFICATION_ID
+        AND orn.DEL_FLG = 0
+        WHERE obo.BUYER_ORDER_ID = #{originalorderId}
+        AND obo.DEL_FLG = 0
+    </select>
+</mapper>

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bypo.dao.BypoBuyerPoolDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		BUYER_POOL_ID AS buyerPoolId,
+		LGCS_AREA_ID AS lgcsAreaId,
+		LGCS_AREA_CODE AS lgcsAreaCode,
+		LGCS_AREA_NAME AS lgcsAreaName,
+
+		ZONE_ID AS zoneId,
+		ZONE_CODE AS zoneCode,
+		ZONE_NAME AS zoneName,
+		DISTRIBUTION_ID AS distributionId,
+		DISTRIBUTION_NAME AS distributionName,
+		DISTRIBUTION_CODE AS distributionCode,
+		DEMESNE_ID AS demesneId,
+		DEMESNE_NAME AS demesneName,
+		DEMESNE_CODE AS demesneCode,
+
+		BUYER_TYPE AS buyerType,
+		BUYER_TYPE_NAME AS buyerTypeName,
+		BUYER_FIRST_CATEGORY AS buyerFirstCategory,
+		BUYER_FIRST_CATEGORY_NAME AS buyerFirstCategoryName,
+		BUYER_SUB_CATEGORY AS buyerSubCategory,
+		BUYER_SUB_CATEGORY_NAME AS buyerSubCategoryName,
+		BUYER_POOL_NAME AS buyerPoolName,
+		BUYER_POOL_CODE AS buyerPoolCode
+	</sql>
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYPO_BUYER_POOL (
+        BUYER_POOL_ID,
+        LGCS_AREA_ID,
+        LGCS_AREA_CODE,
+        LGCS_AREA_NAME,
+        ZONE_ID,
+        ZONE_CODE,
+        ZONE_NAME,
+        DISTRIBUTION_ID,
+        DISTRIBUTION_NAME,
+        DISTRIBUTION_CODE,
+        DEMESNE_ID,
+        DEMESNE_NAME,
+        DEMESNE_CODE,
+
+        BUYER_TYPE,
+        BUYER_TYPE_NAME,
+        BUYER_FIRST_CATEGORY,
+        BUYER_FIRST_CATEGORY_NAME,
+        BUYER_SUB_CATEGORY,
+        BUYER_SUB_CATEGORY_NAME,
+        BUYER_POOL_NAME,
+        BUYER_POOL_CODE,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" index="index" item="param" separator=",">
+            (
+            #{param.buyerPoolId},
+            #{param.lgcsAreaId},
+            #{param.lgcsAreaCode},
+            #{param.lgcsAreaName},
+
+            #{param.zoneId},
+            #{param.zoneCode},
+            #{param.zoneName},
+
+            #{param.distributionId},
+            #{param.distributionName},
+            #{param.distributionCode},
+
+            #{param.demesneId},
+            #{param.demesneName},
+            #{param.demesneCode},
+
+            #{param.buyerType},
+            #{param.buyerTypeName},
+            #{param.buyerFirstCategory},
+            #{param.buyerFirstCategoryName},
+            #{param.buyerSubCategory},
+            #{param.buyerSubCategoryName},
+            #{param.buyerPoolName},
+            #{param.buyerPoolCode},
+            #{param.delFlg},
+            #{param.crtId},
+            #{param.crtTime},
+            #{param.updId},
+            #{param.updTime},
+            #{param.version}
+            )
+        </foreach>
+
+    </insert>
+    <update id="modify" parameterType="com.bms.bypo.bean.param.BaseBean">
+        UPDATE BYPO_BUYER_POOL
+        SET
+        DEl_FLG = #{target.delFlg}
+        <if test="target.lgcsAreaCode != null">
+            ,LGCS_AREA_CODE = #{target.lgcsAreaCode}
+        </if>
+        <if test="target.lgcsAreaId != null">
+            ,LGCS_AREA_ID = #{target.lgcsAreaId}
+        </if>
+        <if test="target.lgcsAreaName != null">
+            ,LGCS_AREA_NAME = #{target.lgcsAreaName}
+        </if>
+        <if test="target.zoneId != null">
+            ,ZONE_ID = #{target.zoneId}
+        </if>
+        <if test="target.zoneCode != null">
+            ,ZONE_CODE = #{target.zoneCode}
+        </if>
+        <if test="target.zoneName != null">
+            ,ZONE_NAME = #{target.zoneName}
+        </if>
+        <if test="target.distributionId != null">
+            ,DISTRIBUTION_ID = #{target.distributionId}
+        </if>
+        <if test="target.distributionCode != null">
+            ,DISTRIBUTION_CODE = #{target.distributionCode}
+        </if>
+        <if test="target.distributionName != null">
+            ,DISTRIBUTION_NAME = #{target.distributionName}
+        </if>
+
+        <if test="target.demesneId != null">
+            ,DEMESNE_ID= #{target.demesneId}
+        </if>
+        <if test="target.demesneCode != null">
+            ,DEMESNE_CODE= #{target.demesneCode}
+        </if>
+        <if test="target.demesneName != null">
+            ,DEMESNE_NAME = #{target.demesneName}
+        </if>
+
+        <if test="target.buyerType != null">
+            ,BUYER_TYPE = #{target.buyerType}
+        </if>
+        <if test="target.buyerTypeName != null">
+            ,BUYER_TYPE_NAME = #{target.buyerTypeName}
+        </if>
+        <if test="target.buyerFirstCategory != null">
+            ,BUYER_FIRST_CATEGORY = #{target.buyerFirstCategory}
+        </if>
+        <if test="target.buyerFirstCategoryName != null">
+            ,BUYER_FIRST_CATEGORY_NAME = #{target.buyerFirstCategoryName}
+        </if>
+        <if test="target.buyerSubCategory != null">
+            ,BUYER_SUB_CATEGORY = #{target.buyerSubCategory}
+        </if>
+        <if test="target.buyerSubCategoryName != null">
+            ,BUYER_SUB_CATEGORY_NAME = #{target.buyerSubCategoryName}
+        </if>
+        <if test="target.buyerPoolName != null">
+            ,BUYER_POOL_NAME = #{target.buyerPoolName}
+        </if>
+        <if test="target.buyerPoolCode != null">
+            ,BUYER_POOL_CODE = #{target.buyerPoolCode}
+        </if>
+        WHERE
+        DEl_FLG = FALSE AND
+        BUYER_POOL_ID = #{filter.buyerPoolId}
+    </update>
+    <select id="findOne" parameterType="com.bms.bypo.bean.param.BuyerPoolRsParam"
+            resultType="com.bms.bypo.bean.param.BuyerPoolRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYPO_BUYER_POOL
+        WHERE
+        DEl_FLG = FALSE
+        <if test="lgcsAreaId !=null and lgcsAreaId !=''">
+            AND LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="buyerPoolId != null and buyerPoolId != ''">
+            AND BUYER_POOL_ID = #{buyerPoolId}
+        </if>
+        <if test="buyerPoolCode != null and buyerPoolCode != ''">
+            AND BUYER_POOL_CODE = #{buyerPoolCode}
+        </if>
+
+
+    </select>
+    <select id="findPageList" parameterType="com.bms.bypo.bean.param.BuyerPoolRsParam"
+            resultType="com.bms.bypo.bean.param.BuyerPoolRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYPO_BUYER_POOL
+        WHERE
+        DEL_FLG = FALSE
+        <if test="buyerPoolId != null and buyerPoolId != ''">
+            AND BUYER_POOL_ID = #{buyerPoolId}
+        </if>
+        <if test="buyerPoolIds != null and buyerPoolIds.size > 0">
+            AND BUYER_POOL_ID IN
+            <foreach item="item" index="index" collection="buyerPoolIds" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="buyerType != null and buyerType != ''">
+            AND BUYER_TYPE = #{buyerType}
+        </if>
+        <if test="buyerFirstCategory != null and buyerFirstCategory != ''">
+            AND BUYER_FIRST_CATEGORY = #{buyerFirstCategory}
+        </if>
+        <if test="buyerSubCategory != null and buyerSubCategory != ''">
+            AND BUYER_SUB_CATEGORY = #{buyerSubCategory}
+        </if>
+        <if test="buyerPoolCode != null and buyerPoolCode != ''">
+            AND BUYER_POOL_CODE LIKE #{buyerPoolCode}
+        </if>
+        <if test="buyerPoolName != null and buyerPoolName != ''">
+            AND BUYER_POOL_NAME LIKE #{buyerPoolName}
+        </if>
+        UNION
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYPO_BUYER_POOL
+        WHERE
+        DEL_FLG = FALSE
+        <if test="buyerPoolId != null and buyerPoolId != ''">
+            AND BUYER_POOL_ID = #{buyerPoolId}
+        </if>
+        <if test="buyerPoolIds != null and buyerPoolIds.size > 0">
+            AND BUYER_POOL_ID NOT IN
+            <foreach item="item" index="index" collection="buyerPoolIds" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="buyerType != null and buyerType != ''">
+            AND BUYER_TYPE = #{buyerType}
+        </if>
+        <if test="buyerFirstCategory != null and buyerFirstCategory != ''">
+            AND BUYER_FIRST_CATEGORY = #{buyerFirstCategory}
+        </if>
+        <if test="buyerSubCategory != null and buyerSubCategory != ''">
+            AND BUYER_SUB_CATEGORY = #{buyerSubCategory}
+        </if>
+        <if test="buyerPoolCode != null and buyerPoolCode != ''">
+            AND BUYER_POOL_CODE LIKE #{buyerPoolCode}
+        </if>
+        <if test="buyerPoolName != null and buyerPoolName != ''">
+            AND BUYER_POOL_NAME LIKE #{buyerPoolName}
+        </if>
+    </select>
+</mapper>

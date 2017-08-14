@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmSkuInfoDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		SKU_CODE AS skuCode,
+		PD_ID AS pdId,
+		PDRS_ID AS pdrsId,
+		PDRS_CODE AS pdrsCode,
+		PDRS_NAME AS pdrsName,
+		MFRS_ID AS mfrsId,
+		MFRS_CODE AS mfrsCode,
+		MFRS_NAME AS mfrsName
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.linv.bean.entity.InvmSkuInfo">
+		INSERT INTO invm_sku_info (
+			SKU_CODE,
+			PD_ID,
+			PDRS_ID,
+			PDRS_CODE,
+			PDRS_NAME,
+			MFRS_ID,
+			MFRS_CODE,
+			MFRS_NAME,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{skuCode},
+			#{pdId},
+			#{pdrsId},
+			#{pdrsCode},
+			#{pdrsName},
+			#{mfrsId},
+			#{mfrsCode},
+			#{mfrsName},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.linv.bean.entity.InvmSkuInfo">
+		UPDATE invm_sku_info 
+		SET 
+			PD_ID = #{pdId},
+			PDRS_ID = #{pdrsId},
+			PDRS_CODE = #{pdrsCode},
+			PDRS_NAME = #{pdrsName},
+			MFRS_ID = #{mfrsId},
+			MFRS_CODE = #{mfrsCode},
+			MFRS_NAME = #{mfrsName}
+		WHERE
+			SKU_CODE = #{skuCode}		
+	</update>
+	
+	<select id="findOne" parameterType="com.bms.linv.bean.entity.InvmSkuInfo" resultType="com.bms.linv.bean.entity.InvmSkuInfo">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_sku_info
+		WHERE	
+			SKU_CODE = #{skuCode}	
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.linv.bean.entity.InvmSkuInfo" resultType="com.bms.linv.bean.entity.InvmSkuInfo">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_sku_info
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>		
+	</select>
+	
+	<select id="countAll" parameterType="com.bms.linv.bean.entity.InvmSkuInfo" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			invm_sku_info
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>				
+	</select>
+	
+</mapper>

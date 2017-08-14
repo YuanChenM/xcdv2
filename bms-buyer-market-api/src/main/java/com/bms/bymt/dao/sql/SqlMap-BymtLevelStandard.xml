@@ -1,0 +1,141 @@
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bymt.dao.BymtLevelStandardDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		STANDARD_ID AS standardId,
+		STANDARD_CODE AS standardCode,
+		STANDARD_LEVEL AS standardLevel,
+		COVER_AREA AS coverArea,
+		YEAR_AMOUNT AS yearAmount,
+		LARGEST_TARGET_BUYER AS largestTargetBuyer,
+		TARGET_BUYER_NUM AS targetBuyerNum,
+		BUYER_GROUPS AS buyerGroups,
+		MARKET_RANGE AS marketRange,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.bymt.bean.entity.BymtLevelStandard">
+		INSERT INTO BYMT_LEVEL_STANDARD (
+			STANDARD_ID,
+			STANDARD_CODE,
+			STANDARD_LEVEL,
+			COVER_AREA,
+			YEAR_AMOUNT,
+			LARGEST_TARGET_BUYER,
+			TARGET_BUYER_NUM,
+			BUYER_GROUPS,
+			MARKET_RANGE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES (
+			#{standardId},
+			#{standardCode},
+			#{standardLevel},
+			#{coverArea},
+			#{yearAmount},
+			#{largestTargetBuyer},
+			#{targetBuyerNum},
+			#{buyerGroups},
+			#{marketRange},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.bymt.bean.entity.BymtLevelStandard">
+		UPDATE BYMT_LEVEL_STANDARD 
+		SET
+		<if test="target.standardCode != null">
+			STANDARD_CODE = #{target.standardCode},
+		</if>
+		<if test="target.standardLevel != null">
+			STANDARD_LEVEL = #{target.standardLevel},
+		</if>
+		<if test="target.coverArea != null">
+			COVER_AREA = #{target.coverArea},
+		</if>
+		<if test="target.yearAmount != null">
+			YEAR_AMOUNT = #{target.yearAmount},
+		</if>
+		<if test="target.largestTargetBuyer != null">
+			LARGEST_TARGET_BUYER = #{target.largestTargetBuyer},
+		</if>
+		<if test="target.targetBuyerNum != null">
+			TARGET_BUYER_NUM = #{target.targetBuyerNum},
+		</if>
+		<if test="target.buyerGroups != null">
+			BUYER_GROUPS = #{target.buyerGroups},
+		</if>
+		<if test="target.marketRange != null">
+			MARKET_RANGE = #{target.marketRange},
+		</if>
+		<if test="target.delFlg != null">
+			DEL_FLG = #{target.delFlg},
+		</if>
+		<if test="target.updId != null ">
+			UPD_ID = #{target.updId},
+		</if>
+			UPD_TIME = #{target.updTime}
+		WHERE
+			STANDARD_ID = #{filter.standardId}
+			AND DEL_FLG = FALSE
+	</update>
+	
+	<select id="findAll" parameterType="com.bms.bymt.bean.entity.BymtLevelStandard" resultType="com.bms.bymt.bean.entity.BymtLevelStandard">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYMT_LEVEL_STANDARD
+		WHERE
+			DEL_FLG = FALSE
+		AND STANDARD_CODE = #{standardCode}
+		UNION ALL
+		SELECT
+			<include refid="selectColumns" />
+		FROM
+		BYMT_LEVEL_STANDARD
+		WHERE
+		DEL_FLG = FALSE
+		AND STANDARD_LEVEL = #{standardLevel}
+	</select>
+	
+	<select id="findPageList" parameterType="com.bms.bymt.bean.param.MarketLevelStandardRsParam" resultType="com.bms.bymt.bean.entity.BymtLevelStandard">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYMT_LEVEL_STANDARD
+		WHERE	
+		DEL_FLG = FALSE
+		<if test="standardId != null and standardId != ''">
+			AND STANDARD_ID = #{standardId}
+		</if>
+		<if test="standardCode != null and standardCode != ''">
+			AND STANDARD_CODE = #{standardCode}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="com.bms.bymt.bean.entity.BymtLevelStandard" resultType="int">
+		SELECT
+			count(1)
+		FROM 
+			BYMT_LEVEL_STANDARD
+		WHERE
+		DEL_FLG = FALSE
+		AND STANDARD_CODE = #{standardCode}
+	</select>
+	
+</mapper>

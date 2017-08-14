@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifPartnerDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		partner.PARTNER_ID AS partnerId,
+		partner.PARTNER_NAME AS partnerName,
+		partner.PARTNER_CODE AS partnerCode,
+		partner.CATEGORY_CODE AS categoryCode,
+		partner.CATEGORY_NAME AS categoryName,
+		partner.PARTNER_SEX AS partnerSex,
+		partner.PARTNER_PIC AS partnerPic,
+		partner.PARTNER_CARD_ID AS partnerCardId,
+		partner.PROVINCE_NAME AS provinceName,
+		partner.PROVINCE_ID AS provinceId,
+		partner.PROVINCE_CODE AS provinceCode,
+		partner.CITY_ID AS cityId,
+		partner.CITY_CODE AS cityCode,
+		partner.CITY_NAME AS cityName,
+		partner.DISTRICT_ID AS districtId,
+		partner.DISTRICT_CODE AS districtCode,
+		partner.DISTRICT_NAME AS districtName,
+		partner.STREET_ID AS streetId,
+		partner.STREET_CODE AS streetCode,
+		partner.STREET_NAME AS streetName,
+		partner.PARTNER_ADDR AS partnerAddr,
+		partner.PARTNER_WECHAT AS partnerWechat,
+		partner.PARTNER_QQ AS partnerQq,
+		partner.PARTNER_BANK_NAME AS partnerBankName,
+		partner.PARTNER_BANK_ACCOUNT_NAME AS partnerBankAccountName,
+		partner.PARTNER_PIC_WEB AS partnerPicWeb,
+		partner.PARTNER_BANK_ACCOUNT AS partnerBankAccount,
+		account.ACCOUNT_NAME AS accountName,
+		account.TEL_NO AS telNo,
+		account.PASSWORD AS password,
+		account.MAIL_ADDR AS mailAddr
+	</sql>
+
+    <sql id="selectAgentColumns">
+        distribution.LGCS_AREA_ID AS lgcsAreaId,
+        distribution.LGCS_AREA_CODE AS lgcsAreaCode,
+        distribution.LGCS_AREA_NAME AS lgcsAreaName,
+        distribution.ZONE_ID AS zoneId,
+        distribution.ZONE_CODE AS zoneCode,
+        distribution.ZONE_NAME AS zoneName,
+        distribution.DISTRIBUTION_ID AS distributionId,
+        distribution.DISTRIBUTION_CODE AS distributionCode,
+        distribution.DISTRIBUTION_NAME AS distributionName,
+        distribution.DISTRIBUTION_TYPE AS distributionType,
+        demesne.DEMESNE_TYPE AS demesneType,
+        demesne.DEMESNE_ID AS demesneId,
+        demesne.DEMESNE_CODE AS demesneCode,
+        demesne.DEMESNE_NAME AS demesneName,
+        agent.CATEGORY_CODE AS categoryCode,
+        agent.CATEGORY_NAME AS categoryName,
+        agent.AGENT_CODE AS agentCode,
+        agent.AGENT_NAME AS agentName,
+        account.TEL_NO AS telNo
+    </sql>
+
+    <insert id="save" parameterType="com.bms.agif.bean.entity.AgifPartner">
+		INSERT INTO AGIF_PARTNER (
+			PARTNER_ID,
+			PARTNER_NAME,
+			PARTNER_CODE,
+			CATEGORY_CODE,
+			CATEGORY_NAME,
+			PARTNER_SEX,
+			PARTNER_PIC,
+			PARTNER_CARD_ID,
+			PROVINCE_NAME,
+			PROVINCE_ID,
+			PROVINCE_CODE,
+			CITY_ID,
+			CITY_CODE,
+			CITY_NAME,
+			DISTRICT_ID,
+			DISTRICT_CODE,
+			DISTRICT_NAME,
+			STREET_ID,
+			STREET_CODE,
+			STREET_NAME,
+			PARTNER_ADDR,
+			PARTNER_WECHAT,
+			PARTNER_QQ,
+			PARTNER_BANK_NAME,
+			PARTNER_BANK_ACCOUNT_NAME,
+			PARTNER_PIC_WEB,
+			PARTNER_BANK_ACCOUNT,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{partnerId},
+			#{partnerName},
+			#{partnerCode},
+			#{categoryCode},
+			#{categoryName},
+			#{partnerSex},
+			#{partnerPic},
+			#{partnerCardId},
+			#{provinceName},
+			#{provinceId},
+			#{provinceCode},
+			#{cityId},
+			#{cityCode},
+			#{cityName},
+			#{districtId},
+			#{districtCode},
+			#{districtName},
+			#{streetId},
+			#{streetCode},
+			#{streetName},
+			#{partnerAddr},
+			#{partnerWechat},
+			#{partnerQq},
+			#{partnerBankName},
+			#{partnerBankAccountName},
+			#{partnerPicWeb},
+			#{partnerBankAccount},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.entity.AgifPartner">
+        UPDATE AGIF_PARTNER
+        SET
+        <if test="target.partnerName != null">
+            PARTNER_NAME = #{target.partnerName},
+        </if>
+        <!--<if test="target.partnerCode != null">-->
+        <!--PARTNER_CODE = #{target.partnerCode},-->
+        <!--</if>-->
+        <if test="target.categoryCode != null">
+            CATEGORY_CODE = #{target.categoryCode},
+        </if>
+        <if test="target.categoryName != null">
+            CATEGORY_NAME = #{target.categoryName},
+        </if>
+        <if test="target.partnerSex != null">
+            PARTNER_SEX = #{target.partnerSex},
+        </if>
+        <if test="target.partnerPic != null">
+            PARTNER_PIC = #{target.partnerPic},
+        </if>
+        <if test="target.partnerCardId != null">
+            PARTNER_CARD_ID = #{target.partnerCardId},
+        </if>
+        <if test="target.provinceName != null">
+            PROVINCE_NAME = #{target.provinceName},
+        </if>
+        <if test="target.provinceId != null">
+            PROVINCE_ID = #{target.provinceId},
+        </if>
+        <if test="target.provinceCode != null">
+            PROVINCE_CODE = #{target.provinceCode},
+        </if>
+        <if test="target.cityId != null">
+            CITY_ID = #{target.cityId},
+        </if>
+        <if test="target.cityCode != null">
+            CITY_CODE = #{target.cityCode},
+        </if>
+        <if test="target.cityName != null">
+            CITY_NAME = #{target.cityName},
+        </if>
+        <if test="target.districtId != null">
+            DISTRICT_ID = #{target.districtId},
+        </if>
+        <if test="target.districtCode != null">
+            DISTRICT_CODE = #{target.districtCode},
+        </if>
+        <if test="target.districtName != null">
+            DISTRICT_NAME = #{target.districtName},
+        </if>
+        <if test="target.streetId != null">
+            STREET_ID = #{target.streetId},
+        </if>
+        <if test="target.streetCode != null">
+            STREET_CODE = #{target.streetCode},
+        </if>
+        <if test="target.streetName != null">
+            STREET_NAME = #{target.streetName},
+        </if>
+        <if test="target.partnerAddr != null">
+            PARTNER_ADDR = #{target.partnerAddr},
+        </if>
+        <if test="target.partnerWechat != null">
+            PARTNER_WECHAT = #{target.partnerWechat},
+        </if>
+        <if test="target.partnerQq != null">
+            PARTNER_QQ = #{target.partnerQq},
+        </if>
+        <if test="target.partnerBankName != null">
+            PARTNER_BANK_NAME = #{target.partnerBankName},
+        </if>
+        <if test="target.partnerBankAccountName != null">
+            PARTNER_BANK_ACCOUNT_NAME = #{target.partnerBankAccountName},
+        </if>
+        <if test="target.partnerPicWeb != null">
+            PARTNER_PIC_WEB = #{target.partnerPicWeb},
+        </if>
+        <if test="target.partnerBankAccount != null">
+            PARTNER_BANK_ACCOUNT = #{target.partnerBankAccount},
+        </if>
+        <if test="target.delFlg != null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+
+        DEL_FLG = FALSE
+        <if test="filter.partnerId !=null and filter.partnerId !=''">
+            AND PARTNER_ID = #{filter.partnerId}
+        </if>
+        <if test="filter.partnerCode !=null and filter.partnerCode !=''">
+            AND PARTNER_CODE = #{filter.partnerCode}
+        </if>
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.agif.bean.entity.AgifPartner">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_PARTNER partner
+
+        WHERE
+        PARTNER_ID = #{partnerId}
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.agif.bean.param.PartnerRsParam"
+            resultType="com.bms.agif.bean.param.PartnerRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_PARTNER partner
+        LEFT JOIN AGIF_PARTNER_ACCOUNT account ON partner.PARTNER_ID = account.PARTNER_ID
+        AND account.DEL_FLG = FALSE
+        LEFT JOIN AGIF_PARTNER_DISTRIBUTION distribution ON distribution.PARTNER_ID = partner.PARTNER_ID
+        AND distribution.DEL_FLG = FALSE
+        WHERE partner.DEL_FLG = FALSE
+        <if test="accountName != null and accountName != ''">
+            AND account.ACCOUNT_NAME LIKE #{accountName}
+        </if>
+        <if test="telNo != null and telNo != ''">
+            AND account.TEL_NO LIKE #{telNo}
+        </if>
+        <if test="mailAddr != null and mailAddr != ''">
+            AND account.MAIL_ADDR = #{mailAddr}
+        </if>
+        <if test="partnerId != null and partnerId != ''">
+            AND partner.PARTNER_ID = #{partnerId}
+        </if>
+        <if test="partnerName != null and partnerName != ''">
+            AND partner.PARTNER_NAME LIKE #{partnerName}
+        </if>
+        <if test="partnerCode != null and partnerCode != ''">
+            AND partner.PARTNER_CODE LIKE #{partnerCode}
+        </if>
+        <if test="categoryCode != null and categoryCode != ''">
+            AND partner.CATEGORY_CODE = #{categoryCode}
+        </if>
+        <if test="categoryName != null and categoryName != ''">
+            AND partner.CATEGORY_NAME = #{categoryName}
+        </if>
+        <if test="partnerSex != null and partnerSex != ''">
+            AND partner.PARTNER_SEX = #{partnerSex}
+        </if>
+        <if test="partnerPic != null and partnerPic != ''">
+            AND partner.PARTNER_PIC = #{partnerPic}
+        </if>
+        <if test="partnerCardId != null and partnerCardId != ''">
+            AND partner.PARTNER_CARD_ID = #{partnerCardId}
+        </if>
+        <if test="provinceName != null and provinceName != ''">
+            AND partner.PROVINCE_NAME = #{provinceName}
+        </if>
+        <if test="partnerCardId != null and partnerCardId != ''">
+            AND partner.PARTNER_CARD_ID = #{partnerCardId}
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            AND partner.PROVINCE_ID = #{provinceId}
+        </if>
+        <if test="provinceCode != null and provinceCode != ''">
+            AND partner.PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            AND partner.CITY_ID = #{cityId}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND partner.CITY_CODE = #{cityCode}
+        </if>
+        <if test="cityName != null and cityName != ''">
+            AND partner.CITY_NAME = #{cityName}
+        </if>
+        <if test="districtId != null and districtId != ''">
+            AND partner.DISTRICT_ID = #{districtId}
+        </if>
+        <if test="districtCode != null and districtCode != ''">
+            AND partner.DISTRICT_CODE = #{districtCode}
+        </if>
+        <if test="districtName != null and districtName != ''">
+            AND partner.DISTRICT_NAME = #{districtName}
+        </if>
+        <if test="streetId != null and streetId != ''">
+            AND partner.STREET_ID = #{streetId}
+        </if>
+        <if test="streetCode != null and streetCode != ''">
+            AND partner.STREET_CODE = #{streetCode}
+        </if>
+        <if test="streetName != null and streetName != ''">
+            AND partner.STREET_NAME = #{streetName}
+        </if>
+        <if test="partnerAddr != null and partnerAddr != ''">
+            AND partner.PARTNER_ADDR = #{partnerAddr}
+        </if>
+        <if test="partnerWechat != null and partnerWechat != ''">
+            AND partner.PARTNER_WECHAT = #{partnerWechat}
+        </if>
+        <if test="partnerQq != null and partnerQq != ''">
+            AND partner.PARTNER_QQ = #{partnerQq}
+        </if>
+        <if test="partnerBankName != null and partnerBankName != ''">
+            AND partner.PARTNER_BANK_NAME = #{partnerBankName}
+        </if>
+        <if test="partnerBankAccountName != null and partnerBankAccountName != ''">
+            AND partner.PARTNER_BANK_ACCOUNT_NAME = #{partnerBankAccountName}
+        </if>
+        <if test="partnerPicWeb != null and partnerPicWeb != ''">
+            AND partner.PARTNER_PIC_WEB = #{partnerPicWeb}
+        </if>
+        <if test="partnerBankAccount != null and partnerBankAccount != ''">
+            AND partner.PARTNER_BANK_ACCOUNT = #{partnerBankAccount}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND distribution.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="zoneCode != null and zoneCode != ''">
+            AND distribution.ZONE_CODE = #{zoneCode}
+        </if>
+        <if test="distributionCode != null and distributionCode != ''">
+            AND distribution.DISTRIBUTION_CODE = #{distributionCode}
+        </if>
+        GROUP BY partner.PARTNER_ID
+        ORDER BY partner.PARTNER_CODE DESC
+    </select>
+
+    <select id="findAgentPageList" resultType="com.bms.agif.bean.param.PartnerAgentPageRsParam"
+            parameterType="com.bms.agif.bean.param.PartnerAgentPageRsParam">
+        SELECT
+        <include refid="selectAgentColumns"/>
+        FROM
+        agif_partner_distribution distribution
+        INNER JOIN agif_partner partner ON distribution.PARTNER_ID = partner.PARTNER_ID
+        AND partner.DEL_FLG = FALSE
+        INNER JOIN AGIF_AGENT_DEMESNE demesne ON demesne.DISTRIBUTION_ID = distribution.DISTRIBUTION_ID
+        AND demesne.DEL_FLG = FALSE
+        INNER JOIN agif_agent agent ON agent.AGENT_ID = demesne.AGENT_ID
+        AND agent.DEL_FLG = FALSE
+        LEFT JOIN agif_agent_account account ON account.AGENT_ID = agent.AGENT_ID
+        AND account.DEL_FLG = FALSE
+        WHERE partner.PARTNER_ID = #{partnerId}
+        AND distribution.DEL_FLG = FALSE
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND distribution.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="zoneCode != null and zoneCode != ''">
+            AND distribution.zoneCode = #{zoneCode}
+        </if>
+        <if test="distributionType != null and distributionType != ''">
+            AND distribution.DISTRIBUTION_TYPE = #{distributionType}
+        </if>
+        <if test="distributionCode != null and distributionCode != ''">
+            AND distribution.DISTRIBUTION_CODE LIKE #{distributionCode}
+        </if>
+        <if test="distributionName != null and distributionName != ''">
+            AND distribution.DISTRIBUTION_NAME LIKE #{distributionName}
+        </if>
+        <if test="demesneType != null and demesneType != ''">
+            AND demesne.DEMESNE_TYPE = #{demesneType}
+        </if>
+        <if test="demesneCode != null and demesneCode != ''">
+            AND demesne.DEMESNE_CODE LIKE #{demesneCode}
+        </if>
+        <if test="demesneName != null and demesneName != ''">
+            AND demesne.DEMESNE_NAME LIKE #{demesneName}
+        </if>
+        <if test="categoryCode != null and categoryCode != ''">
+            AND agent.CATEGORY_CODE = #{categoryCode}
+        </if>
+        <if test="agentCode != null and agentCode != ''">
+            AND agent.AGENT_CODE LIKE #{agentCode}
+        </if>
+        <if test="agentName != null and agentName != ''">
+            AND agent.AGENT_NAME LIKE #{agentName}
+        </if>
+        <if test="telNo != null and telNo != ''">
+            AND account.TEL_NO LIKE #{telNo}
+        </if>
+        GROUP BY demesne.DEMESNE_ID
+    </select>
+
+    <select id="count" parameterType="com.bms.agif.bean.param.PartnerRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        AGIF_PARTNER
+        WHERE
+            PARTNER_NAME = #{partnerName}
+            AND DEL_FLG = FALSE
+            AND PARTNER_ID != #{partnerId}
+    </select>
+
+    <select id="findAgentCode" resultType="String">
+        SELECT
+        lpad(IFNULL(max(CAST(agent.AGENT_CODE AS UNSIGNED)),0)+1,9,'0') as agentCode
+        FROM
+        agif_agent agent
+    </select>
+
+    <select id="findButlerCode" resultType="String">
+        SELECT
+        lpad(IFNULL(max(CAST(butler.BUTLER_CODE AS UNSIGNED)),0)+1,9,'0') as butlerCode
+        FROM
+        agif_butler butler
+    </select>
+
+    <select id="findPartnerCode" resultType="String">
+        SELECT
+        lpad(IFNULL(max(CAST(partner.PARTNER_CODE AS UNSIGNED)),0)+1,9,'0') as partnerCode
+        FROM
+        agif_partner partner
+    </select>
+
+    <select id="selectPartnerTel" parameterType="com.bms.agif.bean.param.PartnerRsParam"
+            resultType="com.bms.agif.bean.param.PartnerRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_PARTNER partner
+        INNER JOIN AGIF_PARTNER_ACCOUNT account ON partner.PARTNER_ID = account.PARTNER_ID AND partner.DEL_FLG =
+        account.DEL_FLG
+        WHERE
+        account.TEL_NO = #{telNo}
+        AND partner.DEL_FLG = FALSE
+    </select>
+</mapper>

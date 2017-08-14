@@ -1,0 +1,39 @@
+spring:
+  aop:
+    auto: true
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+config:
+    server:
+      ifSwagger: true
+      ifDataSource: true
+      ifDataSourceClassName:
+
+api:
+  contact:
+    name: xxxx
+    url:  http://..
+    email: xxxx@hoperun.com
+  title: XXXX
+  description: XXXXXX
+  version: 1.0
+  termsOfServiceUrl:
+  license:
+  licenseUrl:
+  groupName: test
+
+mybatis:
+  mapperLocations: classpath*:com/batch/*/dao/sql/SqlMap-*.xml
+  configPath: classpath:mybatis-config.xml
+  daoBasePackagePath: com.*.*/dao/**
+
+context:
+      listener:
+         classes: com.framework.boot.listener.ApplicationEventListener
+
+server:
+  port: 8094
+  context-path: /bms-bybatch-api/

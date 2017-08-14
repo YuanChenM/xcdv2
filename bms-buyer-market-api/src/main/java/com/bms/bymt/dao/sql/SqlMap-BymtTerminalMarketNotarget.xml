@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.bymt.dao.BymtTerminalMarketNotargetDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		NOTARGET_ID AS notargetId,
+		TERM_MARKET_ID AS termMarketId,
+		NOBUYER_NAME AS nobuyerName,
+		NOBUYER_NUM AS nobuyerNum,
+		TRADE_AMOUNT AS tradeAmount,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+	</sql>
+	
+	<insert id="batchInsert" parameterType="List">
+		INSERT INTO BYMT_TERMINAL_MARKET_NOTARGET (
+			NOTARGET_ID,
+			TERM_MARKET_ID,
+			NOBUYER_NAME,
+			NOBUYER_NUM,
+			TRADE_AMOUNT,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION			
+		)
+		VALUES
+		<foreach collection="list" item="param" index="index" separator=",">
+			(
+			#{param.notargetId},
+			#{param.termMarketId},
+			#{param.nobuyerName},
+			#{param.nobuyerNum},
+			#{param.tradeAmount},
+			0,
+			#{param.crtId},
+			#{param.crtTime},
+			#{param.updId},
+			#{param.updTime},
+			1
+			)
+		</foreach>
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.bymt.bean.entity.BymtTerminalMarketNotarget">
+		UPDATE BYMT_TERMINAL_MARKET_NOTARGET 
+		SET
+		<if test="target.nobuyerNum != null">
+			NOBUYER_NUM = #{target.nobuyerNum},
+		</if>
+		<if test="target.tradeAmount != null">
+			TRADE_AMOUNT = #{target.tradeAmount},
+		</if>
+		<if test="target.delFlg != null">
+			DEL_FLG = #{target.delFlg},
+		</if>
+		<if test="target.updId != null">
+			UPD_ID = #{target.updId},
+		</if>
+			UPD_TIME = #{target.updTime}
+		WHERE
+			NOTARGET_ID = #{filter.notargetId}
+		AND DEL_FLG = FALSE
+	</update>
+	
+	<select id="findOne" parameterType="com.bms.bymt.bean.entity.BymtTerminalMarketNotarget" resultType="com.bms.bymt.bean.entity.BymtTerminalMarketNotarget">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYMT_TERMINAL_MARKET_NOTARGET
+		WHERE
+			NOBUYER_NAME = #{nobuyerName}
+		AND DEL_FLG = FALSE
+		AND TERM_MARKET_ID = #{termMarketId}
+	</select>
+	
+	<select id="findAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="com.bms.bymt.bean.entity.BymtTerminalMarketNotarget">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			BYMT_TERMINAL_MARKET_NOTARGET
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND DEL_FLG = #{filterMap.delFlg}
+			</if>		
+	</select>
+	
+	<select id="countAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			BYMT_TERMINAL_MARKET_NOTARGET
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND DEL_FLG = #{filterMap.delFlg}
+			</if>				
+	</select>
+
+	<select id="findPageList" parameterType="com.bms.bymt.bean.param.TerminalMarketNotargetRsParam" resultType="com.bms.bymt.bean.entity.BymtTerminalMarketNotarget">
+		SELECT
+		<include refid="selectColumns" />
+		FROM
+		BYMT_TERMINAL_MARKET_NOTARGET
+		WHERE
+		1 = 1
+		AND DEL_FLG = FALSE
+		<if test="nobuyerName !=null and nobuyerName != ''">
+			AND NOBUYER_NAME LIKE #{nobuyerName}
+		</if>
+		<if test="nobuyerNum !=null and nobuyerNum != ''">
+			AND NOBUYER_NUM = #{nobuyerNum}
+		</if>
+		<if test="termMarketId !=null and termMarketId != ''">
+			AND TERM_MARKET_ID = #{termMarketId}
+		</if>
+	</select>
+
+	<select id="findSum" parameterType="com.bms.bymt.bean.param.TerminalMarketNotargetRsParam" resultType="com.bms.bymt.bean.param.TerminalMarketNotargetRsParam">
+		SELECT
+		SUM(NOBUYER_NUM) AS sumNoBuyerNum,
+		SUM(TRADE_AMOUNT) AS sumTradeAmount
+		FROM
+		BYMT_TERMINAL_MARKET_NOTARGET
+		WHERE
+		DEL_FLG = FALSE
+		<if test="nobuyerName !=null and nobuyerName != ''">
+			AND NOBUYER_NAME LIKE #{nobuyerName}
+		</if>
+		<if test="nobuyerNum !=null and nobuyerNum != ''">
+			AND NOBUYER_NUM = #{nobuyerNum}
+		</if>
+		<if test="termMarketId !=null and termMarketId != ''">
+			AND TERM_MARKET_ID = #{termMarketId}
+		</if>
+	</select>
+
+</mapper>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimEmployeeDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		EMPLOYEE_ID AS employeeId,
+		BUYER_ID AS buyerId,
+		STORE_ID AS storeId,
+		EMPLOYEE_NAME AS employeeName,
+		EMPLOYEE_TYPE AS employeeType,
+		EMPLOYEE_TEL AS employeeTel,
+		EMPLOYEE_QQ AS employeeQq,
+		EMPLOYEE_WECHAT AS employeeWechat,
+		EMPLOYEE_CARD_FLG AS employeeCardFlg,
+		EMPLOYEE_CARD_PIC AS employeeCardPic,
+		IS_CONTACT_PERSON AS isContactPerson,
+		IS_PURCHASE AS isPurchase,
+		IS_RECEIVE_PERSON AS isReceivePerson,
+		IS_NEWEST_BOSS AS isNewestBoss
+	</sql>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO BYIM_EMPLOYEE (
+        EMPLOYEE_ID,
+        BUYER_ID,
+        STORE_ID,
+        EMPLOYEE_NAME,
+        EMPLOYEE_TYPE,
+        EMPLOYEE_TEL,
+        EMPLOYEE_QQ,
+        EMPLOYEE_WECHAT,
+        EMPLOYEE_CARD_FLG,
+        EMPLOYEE_CARD_PIC,
+        IS_CONTACT_PERSON,
+        IS_PURCHASE,
+        IS_RECEIVE_PERSON,
+        IS_NEWEST_BOSS,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="lg" index="index" separator=",">
+            (
+            #{lg.employeeId},
+            #{lg.buyerId},
+            #{lg.storeId},
+            #{lg.employeeName},
+            #{lg.employeeType},
+            #{lg.employeeTel},
+            #{lg.employeeQq},
+            #{lg.employeeWechat},
+            #{lg.employeeCardFlg},
+            #{lg.employeeCardPic},
+            #{lg.isContactPerson},
+            #{lg.isPurchase},
+            #{lg.isReceivePerson},
+            #{lg.isNewestBoss},
+            false,
+            #{lg.crtId},
+            #{lg.crtTime},
+            #{lg.updId},
+            #{lg.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+    <update id="modifyFalse" parameterType="com.bms.byim.bean.entity.ByimEmployee">
+        UPDATE BYIM_EMPLOYEE
+        SET IS_NEWEST_BOSS = FALSE
+        WHERE
+        BUYER_ID = #{buyerId}
+    </update>
+
+    <update id="modifyIsNewestBoss" parameterType="com.bms.byim.bean.entity.ByimEmployee">
+        UPDATE BYIM_EMPLOYEE
+        SET IS_NEWEST_BOSS = TRUE
+        WHERE
+        BUYER_ID = #{buyerId}
+        AND EMPLOYEE_ID = #{employeeId}
+    </update>
+
+    <update id="modify" parameterType="com.bms.byim.bean.param.BaseBean">
+        UPDATE BYIM_EMPLOYEE
+        SET
+        <if test="target.employeeName != null">
+            EMPLOYEE_NAME = #{target.employeeName},
+        </if>
+        <if test="target.employeeType != null">
+            EMPLOYEE_TYPE = #{target.employeeType},
+        </if>
+        <if test="target.employeeTel != null">
+            EMPLOYEE_TEL = #{target.employeeTel},
+        </if>
+        <if test="target.employeeQq != null">
+            EMPLOYEE_QQ = #{target.employeeQq},
+        </if>
+        <if test="target.employeeWechat != null">
+            EMPLOYEE_WECHAT = #{target.employeeWechat},
+        </if>
+        <if test="target.employeeCardFlg != null">
+            EMPLOYEE_CARD_FLG = #{target.employeeCardFlg},
+        </if>
+        <if test="target.employeeCardPic != null">
+            EMPLOYEE_CARD_PIC = #{target.employeeCardPic},
+        </if>
+        <if test="target.isContactPerson != null">
+            IS_CONTACT_PERSON = #{target.isContactPerson},
+        </if>
+        <if test="target.isPurchase != null">
+            IS_PURCHASE = #{target.isPurchase},
+        </if>
+        <if test="target.isReceivePerson != null">
+            IS_RECEIVE_PERSON = #{target.isReceivePerson},
+        </if>
+        IS_NEWEST_BOSS = #{target.isNewestBoss},
+        DEL_FLG = #{target.delFlg},
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        DEL_FLG = FALSE
+        <if test="filter.buyerId != null">
+            AND BUYER_ID = #{filter.buyerId}
+        </if>
+        <if test="filter.employeeId != null">
+            AND EMPLOYEE_ID = #{filter.employeeId}
+        </if>
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.byim.bean.entity.ByimEmployee">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_EMPLOYEE
+        WHERE
+        EMPLOYEE_ID = #{employeeId}
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.byim.bean.param.EmployeeRsParam"
+            resultType="com.bms.byim.bean.param.EmployeeRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_EMPLOYEE
+        WHERE
+        BUYER_ID = #{buyerId}
+        AND DEL_FLG = FALSE
+        <if test="employeeId != null and employeeId != ''">
+            AND EMPLOYEE_ID = #{employeeId}
+        </if>
+        <if test="employeeName != null and employeeName != ''">
+            AND EMPLOYEE_NAME LIKE #{employeeName}
+        </if>
+        <if test="employeeType != null and employeeType != ''">
+            AND EMPLOYEE_TYPE = #{employeeType}
+        </if>
+        <if test="employeeTel != null and employeeTel != ''">
+            AND EMPLOYEE_TEL LIKE #{employeeTel}
+        </if>
+        <if test="employeeQq != null and employeeQq != ''">
+            AND EMPLOYEE_QQ LIKE #{employeeQq}
+        </if>
+        <if test="employeeWechat != null and employeeWechat != ''">
+            AND EMPLOYEE_WECHAT LIKE #{employeeWechat}
+        </if>
+
+    </select>
+
+    <select id="countAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYIM_EMPLOYEE
+        WHERE
+        1 = 1
+        <if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND A.DEL_FLG = #{filterMap.delFlg}
+        </if>
+    </select>
+
+</mapper>

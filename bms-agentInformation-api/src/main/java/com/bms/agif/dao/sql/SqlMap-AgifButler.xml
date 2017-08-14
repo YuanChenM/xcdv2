@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifButlerDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		butler.BUTLER_ID AS butlerId,
+		butler.AGENT_ID AS agentId,
+		butler.BUTLER_CODE AS butlerCode,
+		butler.BUTLER_NAME AS butlerName,
+		butler.BUTLER_BIRTHDAY AS butlerBirthday,
+		butler.BUTLER_SEX AS butlerSex,
+		butler.BUTLER_WECHAT AS butlerWechat,
+		butler.BUTLER_QQ AS butlerQq,
+		ID_CARD_NO AS idCardNo,
+		butler.ID_CARD_FRONT AS idCardFront,
+		butler.ID_CARD_BACK AS idCardBack,
+	</sql>
+    <sql id="agentColumns">
+		agent.AGENT_NAME AS agentName,
+		agent.AGENT_CODE AS agentCode,
+	</sql>
+    <sql id="accountColumns">
+		account.ACCOUNT_ID AS accountId,
+		account.ACCOUNT_NAME AS accountName,
+		account.PASSWORD AS password,
+		account.TEL_NO AS telNo,
+		account.MAIL_ADDR AS mailAddr
+	</sql>
+    <sql id="demesneColumns">
+		demesne.LGCS_AREA_ID AS lgcsAreaId,
+		demesne.LGCS_AREA_CODE AS lgcsAreaCode,
+		demesne.LGCS_AREA_NAME AS lgcsAreaName,
+		demesne.ZONE_ID AS zoneId,
+		demesne.ZONE_CODE AS zoneCode,
+		demesne.ZONE_NAME AS zoneName,
+		demesne.DISTRIBUTION_ID AS distributionId,
+		demesne.DISTRIBUTION_TYPE AS distributionType,
+		demesne.DISTRIBUTION_NAME AS distributionName,
+		demesne.DISTRIBUTION_CODE AS distributionCode,
+		demesne.DEMESNE_ID AS demesneId,
+		demesne.DEMESNE_TYPE AS demesneType,
+		demesne.DEMESNE_NAME AS demesneName,
+		demesne.DEMESNE_CODE AS demesneCode
+	</sql>
+
+    <insert id="save" parameterType="com.bms.agif.bean.entity.AgifButler">
+		INSERT INTO AGIF_BUTLER (
+			BUTLER_ID,
+			AGENT_ID,
+			BUTLER_CODE,
+			BUTLER_NAME,
+			BUTLER_BIRTHDAY,
+			BUTLER_SEX,
+			BUTLER_WECHAT,
+			BUTLER_QQ,
+			ID_CARD_NO,
+			ID_CARD_FRONT,
+			ID_CARD_BACK,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{butlerId},
+			#{agentId},
+			#{butlerCode},
+			#{butlerName},
+			#{butlerBirthday},
+			#{butlerSex},
+			#{butlerWechat},
+			#{butlerQq},
+			#{idCardNo},
+			#{idCardFront},
+			#{idCardBack},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.agif.bean.param.BaseBean">
+        UPDATE AGIF_BUTLER
+        SET
+        <if test="target.agentId != '' and target.agentId != null">
+            AGENT_ID = #{target.agentId},
+        </if>
+        <!--<if test="target.butlerCode != '' and target.butlerCode != null">-->
+        <!--BUTLER_CODE = #{target.butlerCode},-->
+        <!--</if>-->
+        <if test="target.butlerName != null">
+            BUTLER_NAME = #{target.butlerName},
+        </if>
+        <if test="target.butlerBirthday != null">
+            BUTLER_BIRTHDAY = #{target.butlerBirthday},
+        </if>
+        <if test="target.butlerSex != null">
+            BUTLER_SEX = #{target.butlerSex},
+        </if>
+        <if test="target.butlerWechat != null">
+            BUTLER_WECHAT = #{target.butlerWechat},
+        </if>
+        <if test="target.butlerQq != null">
+            BUTLER_QQ = #{target.butlerQq},
+        </if>
+        <if test="target.idCardNo != null">
+            ID_CARD_NO = #{target.idCardNo},
+        </if>
+        <if test="target.idCardFront != null">
+            ID_CARD_FRONT = #{target.idCardFront},
+        </if>
+        <if test="target.idCardBack != null">
+            ID_CARD_BACK = #{target.idCardBack},
+        </if>
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime},
+        DEL_FLG = #{target.delFlg}
+        WHERE
+
+        DEL_FLG = FALSE
+        <if test="filter.butlerId !=null and filter.butlerId !=''">
+            AND BUTLER_ID = #{filter.butlerId}
+        </if>
+        <if test="filter.butlerCode !=null and filter.butlerCode !=''">
+            AND BUTLER_CODE = #{filter.butlerCode}
+        </if>
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.agif.bean.entity.AgifButler">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        AGIF_BUTLER butler
+        WHERE
+        BUTLER_ID = #{butlerId}
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.agif.bean.param.ButlerRsParam"
+            resultType="com.bms.agif.bean.param.ButlerRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        <include refid="agentColumns"/>
+        <include refid="accountColumns"/>,
+        <include refid="demesneColumns"/>
+        FROM AGIF_BUTLER butler
+        LEFT JOIN AGIF_BUTLER_ACCOUNT account ON butler.BUTLER_ID = account.BUTLER_ID AND butler.DEL_FLG =
+        account.DEL_FLG
+        LEFT JOIN AGIF_AGENT agent ON butler.AGENT_ID = agent.AGENT_ID AND butler.DEL_FLG = agent.DEL_FLG
+        LEFT JOIN AGIF_BUTLER_DEMESNE butlDemesne ON butlDemesne.BUTLER_ID = butler.BUTLER_ID AND butlDemesne.DEL_FLG =
+        butler.DEL_FLG
+        LEFT JOIN AGIF_AGENT_DEMESNE demesne ON demesne.AGENT_DEMESNE_ID = butlDemesne.AGENT_DEMESNE_ID AND
+        demesne.DEL_FLG = butlDemesne.DEL_FLG
+        WHERE
+        butler.DEL_FLG = false
+        <if test="butlerId != null and butlerId != ''">
+            AND butler.BUTLER_ID = #{butlerId}
+        </if>
+        <if test="accountName != null and accountName != ''">
+            AND account.ACCOUNT_NAME LIKE #{accountName}
+        </if>
+        <if test="telNo != null and telNo != ''">
+            AND account.TEL_NO LIKE #{telNo}
+        </if>
+        <if test="butlerCode != null and butlerCode != ''">
+            AND butler.BUTLER_CODE LIKE #{butlerCode}
+        </if>
+        <if test="butlerName != null and butlerName != ''">
+            AND butler.BUTLER_NAME LIKE #{butlerName}
+        </if>
+        <if test="agentName != null and agentName != ''">
+            AND agent.AGENT_NAME LIKE #{agentName}
+        </if>
+        <if test="agentCode != null and agentCode != ''">
+            AND agent.AGENT_CODE LIKE #{agentCode}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND demesne.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="zoneCode != null and zoneCode != ''">
+            AND demesne.ZONE_CODE = #{zoneCode}
+        </if>
+        <if test="distributionCode != null and distributionCode != ''">
+            AND demesne.DISTRIBUTION_CODE = #{distributionCode}
+        </if>
+        <if test="demesneCode != null and demesneCode != ''">
+            AND demesne.DEMESNE_CODE = #{demesneCode}
+        </if>
+        <if test="distributionType != null and distributionType != ''">
+            AND demesne.DISTRIBUTION_TYPE = #{distributionType}
+        </if>
+        <if test="demesneType != null and demesneType != ''">
+            AND demesne.DEMESNE_TYPE = #{demesneType}
+        </if>
+        <if test="demesneId != null and demesneId != ''">
+            AND demesne.DEMESNE_ID = #{demesneId}
+        </if>
+        <if test="distributionId != null and distributionId != ''">
+            AND demesne.DISTRIBUTION_ID = #{distributionId}
+        </if>
+        GROUP BY butler.BUTLER_ID
+        ORDER BY butler.BUTLER_CODE DESC
+    </select>
+
+    <select id="count" parameterType="com.bms.agif.bean.param.ButlerRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        AGIF_BUTLER
+        WHERE
+        BUTLER_NAME = #{butlerName}
+        AND DEL_FLG = FALSE
+        AND BUTLER_ID != #{butlerId}
+    </select>
+
+    <select id="selectButlerTel" parameterType="com.bms.agif.bean.param.ButlerRsParam"
+            resultType="com.bms.agif.bean.param.ButlerRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        <include refid="accountColumns"/>
+        FROM
+        AGIF_BUTLER butler
+        INNER JOIN AGIF_BUTLER_ACCOUNT account ON butler.BUTLER_ID = account.BUTLER_ID AND butler.DEL_FLG =
+        account.DEL_FLG
+        WHERE
+        account.TEL_NO = #{telNo}
+        AND butler.DEL_FLG = FALSE
+    </select>
+
+    <select id="selectAgent" parameterType="com.bms.agif.bean.param.ButlerRsParam" resultType="String">
+        SELECT
+        AGENT_ID
+        FROM
+        AGIF_BUTLER
+        WHERE
+        DEL_FLG = FALSE
+        AND BUTLER_ID = #{butlerId}
+    </select>
+
+
+    <select id="findAll" parameterType="com.bms.agif.bean.param.ButlerRsParam"
+            resultType="com.bms.agif.bean.param.ButlerRsParam">
+        SELECT
+        <include refid="demesneColumns"/>
+        FROM AGIF_BUTLER_DEMESNE butlDemesne
+        LEFT JOIN AGIF_AGENT_DEMESNE demesne ON demesne.AGENT_DEMESNE_ID = butlDemesne.AGENT_DEMESNE_ID AND
+        demesne.DEL_FLG = butlDemesne.DEL_FLG
+        WHERE
+        butlDemesne.DEL_FLG = false
+        AND butlDemesne.BUTLER_ID = #{butlerId}
+    </select>
+</mapper>

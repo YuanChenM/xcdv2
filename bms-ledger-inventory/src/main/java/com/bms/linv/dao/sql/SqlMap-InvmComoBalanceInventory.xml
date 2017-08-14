@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmComoBalanceInventoryDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		INV_ID AS invId,
+		STORE_DEAL_ID as storeDealId,
+		STORE_NO AS storeNo,
+		TRANSACTION_ID AS transactionId,
+		TRANSACTION_NO AS transactionNo,
+		TRANSACTION_DETAIL_ID AS transactionDetailId,
+		TRANSACTION_SOURCE AS transactionSource,
+		TRANSACTION_TYPE AS transactionType,
+		TRANSACTION_TIME AS transactionTime,
+		REF_NO AS refNo,
+		BIZ_TYPE AS bizType,
+		DEAL_PRICE AS dealPrice,
+		INBOUND_QTY AS inboundQty,
+		OUTBOUND_QTY AS outboundQty,
+		SRC_ID AS srcId,
+		SRC_CODE AS srcCode,
+		SRC_TYPE AS srcType
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.linv.bean.entity.InvmComoBalanceInventory">
+		INSERT INTO invm_como_balance_inventory (
+			INV_ID,
+			STORE_DEAL_ID,
+			STORE_NO,
+			TRANSACTION_ID,
+			TRANSACTION_NO,
+			TRANSACTION_DETAIL_ID,
+			TRANSACTION_SOURCE,
+			TRANSACTION_TYPE,
+			TRANSACTION_TIME,
+			REF_NO,
+			BIZ_TYPE,
+			DEAL_PRICE,
+			INBOUND_QTY,
+			OUTBOUND_QTY,
+			SRC_ID,
+			SRC_CODE,
+			SRC_TYPE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{invId},
+			#{storeDealId},
+			#{storeNo},
+			#{transactionId},
+			#{transactionNo},
+			#{transactionDetailId},
+			#{transactionSource},
+			#{transactionType},
+			#{transactionTime},
+			#{refNo},
+			#{bizType},
+			#{dealPrice},
+			#{inboundQty},
+			#{outboundQty},
+			#{srcId},
+			#{srcCode},
+			#{srcType},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.linv.bean.entity.InvmComoBalanceInventory">
+		UPDATE invm_como_balance_inventory 
+		SET 
+			OUTBOUND_QTY = OUTBOUND_QTY + #{outboundQty},
+			UPD_ID = #{updId},
+			UPD_TIME = #{updTime},
+		    VERSION = VERSION+1
+		WHERE 1=1
+		<if test="storeNo !=null and storeNo !=''">
+			AND STORE_NO = #{storeNo}
+		</if>
+		<if test="invId !=null and invId !=''">
+			AND INV_ID = #{invId}
+		</if>
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.linv.bean.entity.InvmComoBalanceInventory">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_balance_inventory
+		WHERE	
+			INV_ID = #{invId}	
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.linv.bean.entity.InvmComoBalanceInventory" resultType="com.bms.linv.bean.entity.InvmComoBalanceInventory">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_balance_inventory
+		WHERE	
+			1 = 1
+		AND STORE_NO = #{storeNo}
+		AND (INBOUND_QTY-OUTBOUND_QTY) > 0
+		ORDER BY TRANSACTION_TIME  asc
+	</select>
+	
+	<select id="findAlltoSub" parameterType="com.bms.linv.bean.entity.InvmComoBalanceInventory" resultType="com.bms.linv.bean.entity.InvmComoBalanceInventory">
+		SELECT
+		<include refid="selectColumns" />
+		FROM
+		invm_como_balance_inventory
+		WHERE
+		1 = 1
+		AND STORE_NO = #{storeNo}
+		AND OUTBOUND_QTY >  0
+		<if test="transactionId != null and transactionId != ''">
+			AND TRANSACTION_ID = #{transactionId}
+		</if>
+		<if test="transactionNo != null and transactionNo != ''">
+			AND TRANSACTION_NO = #{transactionNo}
+		</if>
+		<if test="transactionDetailId != null and transactionDetailId != ''">
+			AND TRANSACTION_DETAIL_ID = #{transactionDetailId}
+		</if>
+		ORDER BY TRANSACTION_TIME  desc
+	</select>
+	
+	<select id="countAll" parameterType="com.bms.linv.bean.entity.InvmComoBalanceInventory" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			invm_como_balance_inventory
+		WHERE	
+			1 = 1
+			<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+				AND A.DEL_FLG = #{filterMap.delFlg}
+			</if>				
+	</select>
+	
+</mapper>

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimDeliveryAddrDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		delivery.DELIVERY_ID AS deliveryId,
+		delivery.BUYER_ID AS buyerId,
+		delivery.PROVINCE_ID AS provinceId,
+		delivery.PROVINCE_CODE AS provinceCode,
+		delivery.PROVINCE_NAME AS provinceName,
+		delivery.CITY_ID AS cityId,
+		delivery.CITY_CODE AS cityCode,
+		delivery.CITY_NAME AS cityName,
+		delivery.DISTRICT_ID AS districtId,
+		delivery.DISTRICT_CODE AS districtCode,
+		delivery.DISTRICT_NAME AS districtName,
+		delivery.DELIVERY_ADDR AS deliveryAddr,
+		delivery.VIRTUAL_ADDR AS virtualAddr,
+		delivery.REFERENCE_ADDR AS referenceAddr,
+		delivery.MANAGE_ADDR AS manageAddr,
+		delivery.RECEIVE_PERSON_NAME AS receivePersonName,
+		delivery.RECEIVE_PERSON_TEL AS receivePersonTel,
+		delivery.RECEIVE_PERSON_WECHAT AS receivePersonWechat,
+		delivery.RECEIVE_PERSON_QQ AS receivePersonQq,
+		delivery.DELIVERY_AREA_ID AS deliveryAreaId,
+		delivery.DELIVERY_AREA AS deliveryArea,
+		delivery.DELIVERY_AREA_CODE AS deliveryAreaCode,
+		delivery.PASS_TRAFFIC_MODEL AS passTrafficModel,
+		delivery.IS_DEFAULT_FLG AS isDefaultFlg
+	</sql>
+
+    <insert id="save" parameterType="com.bms.byim.bean.entity.ByimDeliveryAddr">
+		INSERT INTO BYIM_DELIVERY_ADDR (
+			DELIVERY_ID,
+			BUYER_ID,
+			PROVINCE_ID,
+			PROVINCE_CODE,
+			PROVINCE_NAME,
+			CITY_ID,
+			CITY_CODE,
+			CITY_NAME,
+			DISTRICT_ID,
+			DISTRICT_CODE,
+			DISTRICT_NAME,
+			DELIVERY_ADDR,
+			VIRTUAL_ADDR,
+			REFERENCE_ADDR,
+			MANAGE_ADDR,
+			RECEIVE_PERSON_NAME,
+			RECEIVE_PERSON_TEL,
+			RECEIVE_PERSON_WECHAT,
+			RECEIVE_PERSON_QQ,
+			DELIVERY_AREA_ID,
+			DELIVERY_AREA,
+			DELIVERY_AREA_CODE,
+			PASS_TRAFFIC_MODEL,
+			IS_DEFAULT_FLG,
+
+			DEL_FLG,
+            CRT_ID,
+            CRT_TIME,
+            UPD_ID,
+            UPD_TIME,
+            VERSION
+		)
+		VALUES (
+			#{deliveryId},
+			#{buyerId},
+			#{provinceId},
+			#{provinceCode},
+			#{provinceName},
+			#{cityId},
+			#{cityCode},
+			#{cityName},
+			#{districtId},
+			#{districtCode},
+			#{districtName},
+			#{deliveryAddr},
+			#{virtualAddr},
+			#{referenceAddr},
+			#{manageAddr},
+			#{receivePersonName},
+			#{receivePersonTel},
+			#{receivePersonWechat},
+			#{receivePersonQq},
+			#{deliveryAreaId},
+			#{deliveryArea},
+			#{deliveryAreaCode},
+			#{passTrafficModel},
+			#{isDefaultFlg},
+
+			#{delFlg},
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            #{version}
+
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.byim.bean.param.BaseBean">
+        UPDATE BYIM_DELIVERY_ADDR
+        SET
+        <if test="target.virtualAddr !=null">
+            VIRTUAL_ADDR = #{target.virtualAddr},
+        </if>
+        <!--<if test="target.buyerId !=null and target.buyerId !=''">
+            BUYER_ID = #{target.buyerId},
+        </if>-->
+        <if test="target.provinceId !=null">
+            PROVINCE_ID = #{target.provinceId},
+        </if>
+        <if test="target.provinceCode !=null">
+            PROVINCE_CODE = #{target.provinceCode},
+        </if>
+        <if test="target.provinceName !=null">
+            PROVINCE_NAME = #{target.provinceName},
+        </if>
+        <if test="target.cityId !=null">
+            CITY_ID = #{target.cityId},
+        </if>
+        <if test="target.cityCode !=null">
+            CITY_CODE = #{target.cityCode},
+        </if>
+        <if test="target.cityName !=null">
+            CITY_NAME = #{target.cityName},
+        </if>
+        <if test="target.districtId !=null">
+            DISTRICT_ID = #{target.districtId},
+        </if>
+        <if test="target.districtCode !=null">
+            DISTRICT_CODE = #{target.districtCode},
+        </if>
+        <if test="target.districtName !=null">
+            DISTRICT_NAME = #{target.districtName},
+        </if>
+        <if test="target.deliveryAddr !=null">
+            DELIVERY_ADDR = #{target.deliveryAddr},
+        </if>
+        <if test="target.referenceAddr !=null">
+            REFERENCE_ADDR = #{target.referenceAddr},
+        </if>
+        <if test="target.manageAddr !=null">
+            MANAGE_ADDR = #{target.manageAddr},
+        </if>
+        <if test="target.receivePersonName !=null">
+            RECEIVE_PERSON_NAME = #{target.receivePersonName},
+        </if>
+        <if test="target.receivePersonTel !=null">
+            RECEIVE_PERSON_TEL = #{target.receivePersonTel},
+        </if>
+        <if test="target.receivePersonWechat !=null">
+            RECEIVE_PERSON_WECHAT = #{target.receivePersonWechat},
+        </if>
+        <if test="target.receivePersonQq !=null">
+            RECEIVE_PERSON_QQ = #{target.receivePersonQq},
+        </if>
+        <if test="target.deliveryAreaId !=null">
+            DELIVERY_AREA_ID = #{target.deliveryAreaId},
+        </if>
+        <if test="target.deliveryArea !=null">
+            DELIVERY_AREA = #{target.deliveryArea},
+        </if>
+        <if test="target.deliveryAreaCode !=null">
+            DELIVERY_AREA_CODE = #{target.deliveryAreaCode},
+        </if>
+        <if test="target.passTrafficModel !=null">
+            PASS_TRAFFIC_MODEL = #{target.passTrafficModel},
+        </if>
+        <if test="target.isDefaultFlg !=null">
+            IS_DEFAULT_FLG = #{target.isDefaultFlg},
+        </if>
+        <if test="target.version !=null">
+            VERSION = #{target.version},
+        </if>
+        DEL_FLG = #{target.delFlg},
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        1=1
+        AND DEL_FLG=false
+        AND DELIVERY_ID = #{filter.deliveryId}
+    </update>
+
+    <select id="findPageList" parameterType="com.bms.byim.bean.param.DeliveryAddrRsParam"
+            resultType="com.bms.byim.bean.param.DeliveryAddrRsParam">
+        SELECT
+        basic.NORMAL_RECEIVE_TIME AS normalReceiveTime,
+        basic.EARLIEST_TIME AS earliestTime,
+        basic.LATEST_TIME AS latestTime,
+        basic.PAYMENT_TYPE AS paymentType,
+        <include refid="selectColumns"/>
+        FROM
+        BYIM_BUYER basic
+        INNER JOIN BYIM_DELIVERY_ADDR delivery ON basic.BUYER_ID = delivery.BUYER_ID AND delivery.DEL_FLG = FALSE
+        WHERE
+        basic.DEL_FLG = FALSE
+        AND basic.BUYER_ID =#{buyerId}
+        <if test="deliveryId !=null and deliveryId !=''">
+            AND delivery.DELIVERY_ID = #{deliveryId}
+        </if>
+        <if test="virtualAddr !=null and virtualAddr !=''">
+            AND delivery.VIRTUAL_ADDR = #{virtualAddr}
+        </if>
+        <if test="provinceId !=null and provinceId !=''">
+            AND delivery.PROVINCE_ID =#{provinceId}
+        </if>
+        <if test="provinceId !=null and provinceId !=''">
+            AND delivery.PROVINCE_ID =#{provinceId}
+        </if>
+        <if test="provinceCode !=null and provinceCode !=''">
+            AND delivery.PROVINCE_CODE =#{provinceCode}
+        </if>
+        <if test="provinceName !=null and provinceName !=''">
+            AND delivery.PROVINCE_NAME =#{provinceName}
+        </if>
+        <if test=" cityId!=null and  cityId!=''">
+            AND delivery.CITY_ID =#{cityId}
+        </if>
+        <if test=" cityCode !=null and  cityCode !=''">
+            AND delivery.CITY_CODE =#{cityCode}
+        </if>
+        <if test="cityName !=null and cityName !=''">
+            AND delivery.CITY_NAME =#{cityName}
+        </if>
+        <if test="districtId !=null and  districtId!=''">
+            AND delivery.DISTRICT_ID =#{districtId}
+        </if>
+        <if test="districtCode !=null and districtCode !=''">
+            AND delivery.DISTRICT_CODE =#{districtCode}
+        </if>
+        <if test="districtName !=null and districtName !=''">
+            AND delivery.DISTRICT_NAME =#{districtName}
+        </if>
+
+        <if test="deliveryAddr !=null and  deliveryAddr!=''">
+            AND delivery.DELIVERY_ADDR =#{deliveryAddr}
+        </if>
+
+        <if test=" referenceAddr !=null and referenceAddr !=''">
+            AND delivery.REFERENCE_ADDR =#{referenceAddr}
+        </if>
+
+        <if test="manageAddr  !=null and manageAddr !=''">
+            AND delivery.MANAGE_ADDR =#{manageAddr}
+        </if>
+
+        <if test=" receivePersonName !=null and  receivePersonName!=''">
+            AND delivery.RECEIVE_PERSON_NAME =#{receivePersonName}
+        </if>
+
+        <if test="  receivePersonTel !=null and receivePersonTel !=''">
+            AND delivery.RECEIVE_PERSON_TEL =#{receivePersonTel}
+        </if>
+
+        <if test=" receivePersonWechat  !=null and  receivePersonWechat !=''">
+            AND delivery.RECEIVE_PERSON_WECHAT =#{receivePersonWechat}
+        </if>
+
+        <if test=" receivePersonQq !=null and receivePersonQq !=''">
+            AND delivery.RECEIVE_PERSON_QQ =#{receivePersonQq}
+        </if>
+
+        <if test=" deliveryAreaId !=null and deliveryAreaId !=''">
+            AND delivery.DELIVERY_AREA_ID =#{deliveryAreaId}
+        </if>
+
+        <if test=" deliveryArea !=null and deliveryArea !=''">
+            AND delivery.DELIVERY_AREA =#{deliveryArea}
+        </if>
+
+        <if test="  passTrafficModel !=null and passTrafficModel !=''">
+            AND delivery.PASS_TRAFFIC_MODEL =#{passTrafficModel}
+        </if>
+
+        <if test="  isDefaultFlg !=null and  isDefaultFlg!=''">
+            AND delivery.IS_DEFAULT_FLG =#{isDefaultFlg}
+        </if>
+
+    </select>
+
+    <select id="findAll" parameterType="com.bms.byim.bean.param.DeliveryAreaCodeRsParam"
+            resultType="com.bms.byim.bean.result.DeliveryAreaCodeResult">
+        SELECT
+            DELIVERY_AREA_CODE AS deliveryAreaCode
+        FROM
+            byim_delivery_addr
+        WHERE DEL_FLG = FALSE
+        AND BUYER_ID = #{buyerId}
+        AND PROVINCE_NAME = #{provinceName}
+        AND CITY_NAME = #{cityName}
+        AND DISTRICT_NAME = #{districtName}
+        AND DELIVERY_ADDR = #{deliveryAddr}
+    </select>
+
+    <select id="count" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        BYIM_DELIVERY_ADDR
+        WHERE
+        1 = 1
+        <if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND DEL_FLG = #{filterMap.delFlg}
+        </if>
+    </select>
+
+    <update id="modifyDefaultFlg" parameterType="com.bms.byim.bean.entity.ByimDeliveryAddr">
+    UPDATE BYIM_DELIVERY_ADDR
+    SET IS_DEFAULT_FLG = FALSE
+    WHERE BUYER_ID = #{buyerId}
+    </update>
+
+</mapper>

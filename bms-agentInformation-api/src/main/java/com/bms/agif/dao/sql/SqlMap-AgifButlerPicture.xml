@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.agif.dao.AgifButlerPictureDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		PIC_ID AS picId,
+		BUTLER_ID AS butlerId,
+		LICENSE_PIC AS licensePic,
+		UPD_TIME AS updTime,
+		DEFAULT_FLG AS defaultFlg
+	</sql>
+	
+	<insert id="save" parameterType="com.bms.agif.bean.entity.AgifButlerPicture">
+
+		INSERT INTO AGIF_BUTLER_PICTURE (
+			PIC_ID,
+			BUTLER_ID,
+			LICENSE_PIC,
+			DEFAULT_FLG,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{picId},
+			#{butlerId},
+			#{licensePic},
+			#{defaultFlg},
+			#{delFlg},
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            #{version}
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.agif.bean.entity.AgifButlerPicture">
+		UPDATE AGIF_BUTLER_PICTURE 
+		SET
+		<if test="target.licensePic != null">
+			LICENSE_PIC = #{target.licensePic},
+		</if>
+		<if test="target.defaultFlg != null">
+			DEFAULT_FLG = #{target.defaultFlg},
+		</if>
+			UPD_ID = #{target.updId},
+        	UPD_TIME = #{target.updTime},
+        	DEL_FLG = #{target.delFlg}
+		WHERE
+			DEL_FLG = FALSE
+			AND PIC_ID = #{filter.picId}
+	</update>
+	
+	<select id="findOne" parameterType="long" resultType="com.bms.agif.bean.entity.AgifButlerPicture">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			AGIF_BUTLER_PICTURE
+		WHERE	
+			PIC_ID = #{picId}	
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.agif.bean.param.ButlerPictureRsParam" resultType="com.bms.agif.bean.param.ButlerPictureRsParam">
+		SELECT
+		pic.PIC_ID AS picId,
+		pic.BUTLER_ID AS butlerId,
+		pic.LICENSE_PIC AS licensePic,
+		pic.UPD_TIME AS updTime,
+		pic.DEFAULT_FLG AS defaultFlg
+		FROM 
+			AGIF_BUTLER_PICTURE pic
+		LEFT JOIN AGIF_BUTLER butler ON  pic.DEL_FLG = butler.DEL_FLG AND pic.BUTLER_ID = butler.BUTLER_ID
+		WHERE
+		pic.DEL_FLG = FALSE
+		<if test="picId != '' and picId != null">
+			AND pic.PIC_ID = #{picId}
+		</if>
+		<if test="butlerId != '' and butlerId != null">
+			AND pic.BUTLER_ID = #{butlerId}
+		</if>
+		<if test="butlerCode != null and butlerCode != '' ">
+			AND butler.BUTLER_CODE = #{butlerCode}
+		</if>
+
+	</select>
+	
+	<select id="countAll" parameterType="com.bms.agif.bean.entity.AgifButlerPicture" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			AGIF_BUTLER_PICTURE
+		WHERE	
+			1 = 1
+			<if test="delFlg != null and delFlg != ''">
+				AND A.DEL_FLG = #{delFlg}
+			</if>				
+	</select>
+	
+</mapper>

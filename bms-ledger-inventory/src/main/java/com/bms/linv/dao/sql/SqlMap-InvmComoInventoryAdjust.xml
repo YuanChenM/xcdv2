@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmComoInventoryAdjustDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		COMO_ADJUST_ID AS comoAdjustId,
+		COMO_ADJUST_CODE AS comoAdjustCode,
+		L_A_ID AS laId,
+		L_A_CODE AS laCode,
+		OWNER_ID AS ownerId,
+		OWNER_CODE AS ownerCode,
+		OWNER_TYPE AS ownerType,
+		ADJUST_DATE AS adjustDate,
+		ADJUST_PERSON AS adjustPerson,
+		REMARK AS remark,
+	</sql>
+
+    <!--条件-->
+    <sql id="whereCondition">
+        <where>
+            1=1
+            <if test="laId !=null and laId !=''">
+                AND L_A_ID = #{laId}
+            </if>
+            <if test="ownerId !=null and ownerId !=''">
+                AND OWNER_ID = #{ownerId}
+            </if>
+            <if test="ownerCode !=null and ownerCode !=''">
+                AND OWNER_CODE = #{ownerCode}
+            </if>
+            <if test="ownerType !=null and ownerType !=''">
+                AND OWNER_TYPE = #{ownerType}
+            </if>
+            <if test="adjustDate !=null and adjustDate !=''">
+                AND ADJUST_DATE = #{adjustDate}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="save" parameterType="com.bms.linv.bean.entity.InvmComoInventoryAdjust">
+		INSERT INTO invm_como_inventory_adjust (
+			COMO_ADJUST_ID,
+			COMO_ADJUST_CODE,
+			L_A_ID,
+			L_A_CODE,
+			OWNER_ID,
+			OWNER_CODE,
+			OWNER_TYPE,
+			ADJUST_DATE,
+			ADJUST_PERSON,
+			REMARK,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{comoAdjustId},
+			#{comoAdjustCode},
+			#{laId},
+			#{laCode},
+			#{ownerId},
+			#{ownerCode},
+			#{ownerType},
+			#{adjustDate},
+			#{adjustPerson},
+			#{remark},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+
+    <select id="findOne" parameterType="com.bms.linv.bean.entity.InvmComoInventoryAdjust"
+            resultType="com.bms.linv.bean.entity.InvmComoInventoryAdjust">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        invm_como_inventory_adjust
+        <include refid="whereCondition"/>
+    </select>
+
+</mapper>

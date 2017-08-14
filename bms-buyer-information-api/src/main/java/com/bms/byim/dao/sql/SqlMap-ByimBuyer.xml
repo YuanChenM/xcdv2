@@ -1,0 +1,1073 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.byim.dao.ByimBuyerDao">
+    <!-- 查询字段 -->
+    <sql id="basicColumns">
+		basic.BUYER_ID AS buyerId,
+		BUYER_CODE AS buyerCode,
+		DISPLAY_CODE AS displayCode,
+		BUYER_TYPE AS buyerType,
+		BUYER_TYPE_NAME AS buyerTypeName,
+		BUYER_FIRST_CATEGORY AS buyerFirstCategory,
+		BUYER_FIRST_CATEGORY_NAME AS buyerFirstCategoryName,
+		BUYER_SUB_CATEGORY AS buyerSubCategory,
+		BUYER_SUB_CATEGORY_NAME AS buyerSubCategoryName,
+		BUYER_NAME AS buyerName,
+		BUYER_ADDR AS buyerAddr,
+		LGCS_AREA_ID AS lgcsAreaId,
+		LGCS_AREA_CODE AS lgcsAreaCode,
+		LGCS_AREA_NAME AS lgcsAreaName,
+		PROVINCE_ID AS provinceId,
+		PROVINCE_CODE AS provinceCode,
+		PROVINCE_NAME AS provinceName,
+		CITY_ID AS cityId,
+		CITY_CODE AS cityCode,
+		CITY_NAME AS cityName,
+		DISTRICT_ID AS districtId,
+		DISTRICT_CODE AS districtCode,
+		DISTRICT_NAME AS districtName,
+		STREET_ID AS streetId,
+		STREET_CODE AS streetCode,
+		STREET_NAME AS streetName,
+		BUYER_QQ AS buyerQq,
+		BUYER_WECHAT AS buyerWechat,
+		PAYMENT_TYPE AS paymentType,
+		NORMAL_RECEIVE_TIME AS normalReceiveTime,
+		EARLIEST_TIME AS earliestTime,
+		LATEST_TIME AS latestTime,
+		TEL_MARKETING_TIME AS telMarketingTime,
+		TEL_MARKETING_NO AS telMarketingNo,
+		WECHAT_MARKETING_NO AS wechatMarketingNo,
+		QQ_MARKETING_NO AS qqMarketingNo,
+		MARKETING_FIRST_STATUS AS marketingFirstStatus,
+		MARKETING_FIRST_STATUS_NAME AS marketingFirstStatusName,
+		MARKETING_SUB_STATUS AS marketingSubStatus,
+		MARKETING_SUB_STATUS_NAME AS marketingSubStatusName,
+		INFO_ERROR_FLG AS infoErrorFlg,
+		INFO_ERROR_REMARK AS infoErrorRemark,
+		REGISTER_SOURCE AS registerSource,
+		REGISTER_SOURCE_NAME AS registerSourceName,
+		IS_CREDIT_TERM_BUYER AS isCreditTermBuyer,
+		IS_CONTROL_PUERCHASNG_CHAIN AS isControlPuerchasngChain,
+		EMPLOYEE_NAME AS bossName,
+		EMPLOYEE_TEL AS bossTel,
+		EMPLOYEE_WECHAT AS bossWechat,
+		EMPLOYEE_QQ AS bossQq,
+		ZONE_ID AS zoneId,
+        ZONE_CODE AS zoneCode,
+        ZONE_NAME AS zoneName,
+        DISTRIBUTION_ID AS distributionId,
+        DISTRIBUTION_CODE AS distributionCode,
+        DISTRIBUTION_NAME AS distributionName,
+        DEMESNE_ID AS demesneId,
+        DEMESNE_CODE AS demesneCode,
+        DEMESNE_NAME AS demesneName,
+        FREQUENTER_LEVEL_F AS frequenterLevelF,
+        FREQUENTER_LEVEL_A AS frequenterLevelA,
+        FREQUENTER_LEVEL_CODE  AS frequenterLevelCode,
+        GRADE AS grade,
+        PAYMENT_PERIOD_TYPE AS paymentPeriodType,
+        PAYMENT_PERIOD_NAME AS paymentPeriodName,
+	</sql>
+
+    <sql id="storeColumns">
+		store.STORE_ID AS storeId,
+		MARKET_ID AS marketId,
+		MARKET_CODE AS marketCode,
+		MARKET_NAME AS marketName,
+		MARKET_TYPE AS marketType,
+		MARKET_SCALE AS marketScale,
+		LEGAL_PAPER_NAME AS legalPaperName,
+		LEGAL_PAPER_TYPE AS legalPaperType,
+		LEGAL_PAPER_NO AS legalPaperNo,
+		LEGAL_PAPER_PIC AS legalPaperPic,
+		STORE_ADDR AS storeAddr,
+		STORE_NO AS storeNo,
+		STORE_TEL AS storeTel,
+		STORE_WEBSITE AS storeWebsite,
+		STORE_WECHAT AS storeWechat,
+		STORE_LICENSE_TYPE AS storeLicenseType,
+		STORE_LICENSE_NO AS storeLicenseNo,
+		REGISTRANT_ID AS registrantId,
+		REGISTRANT_DATE AS registrantDate,
+		PRE_REGISTRANT_ID AS preRegistrantId,
+		PRE_REGISTRATION_DATE AS preRegistrationDate,
+		DEFAULT_STORE_FLG AS defaultStoreFlg,
+	</sql>
+    <sql id="accountColumns">
+		account.TEL_NO AS telNo,
+		account.MAIL_ADDR AS  mailAddr,
+		account.ACCOUNT_NO AS  accountName,
+		account.PASSWORD  AS password
+	</sql>
+
+    <sql id="deliveryColumns">
+        addr.MANAGE_ADDR AS manageAddr,
+        addr.DELIVERY_ADDR AS deliveryAddr,
+        addr.REFERENCE_ADDR AS referenceAddr,
+        addr.RECEIVE_PERSON_NAME AS receivePersonName,
+        addr.RECEIVE_PERSON_TEL AS receivePersonTel,
+        terminal.TERM_MARKET_NAME AS termMarketName,
+        terminal.TERM_MARKET_ADDRESS AS termMarketAddress,
+        CASE
+        WHEN terminal.TERM_MARKET_LEVEL = '0' THEN '未定级'
+        WHEN terminal.TERM_MARKET_LEVEL = '1' THEN '一批市场'
+        WHEN terminal.TERM_MARKET_LEVEL = '2' THEN '二批市场'
+        WHEN terminal.TERM_MARKET_LEVEL = '3' THEN '三批市场'
+        WHEN terminal.TERM_MARKET_LEVEL = '4' THEN '批发市场外'
+        ELSE ''
+        END AS termMarketLevel,
+        food.FOOD_MARKET_NAME AS foodMarketName,
+        food.FOOD_MARKET_ADDRESS AS foodMarketAddress,
+    </sql>
+
+    <sql id="buyerColumns">
+        basic.BUYER_ID AS buyerId,
+        BUYER_CODE AS buyerCode,
+        DISPLAY_CODE AS displayCode,
+        BUYER_TYPE AS buyerType,
+        BUYER_TYPE_NAME AS buyerTypeName,
+        BUYER_FIRST_CATEGORY AS buyerFirstCategory,
+        BUYER_FIRST_CATEGORY_NAME AS buyerFirstCategoryName,
+        BUYER_SUB_CATEGORY AS buyerSubCategory,
+        BUYER_SUB_CATEGORY_NAME AS buyerSubCategoryName,
+        BUYER_NAME AS buyerName,
+        BUYER_ADDR AS buyerAddr,
+        basic.LGCS_AREA_ID AS lgcsAreaId,
+        basic.LGCS_AREA_CODE AS lgcsAreaCode,
+        basic.LGCS_AREA_NAME AS lgcsAreaName,
+        basic.PROVINCE_ID AS provinceId,
+        basic.PROVINCE_CODE AS provinceCode,
+        basic.PROVINCE_NAME AS provinceName,
+        basic.CITY_ID AS cityId,
+        basic.CITY_CODE AS cityCode,
+        basic.CITY_NAME AS cityName,
+        basic.DISTRICT_ID AS districtId,
+        basic.DISTRICT_CODE AS districtCode,
+        basic.DISTRICT_NAME AS districtName,
+        STREET_ID AS streetId,
+        STREET_CODE AS streetCode,
+        STREET_NAME AS streetName,
+        BUYER_QQ AS buyerQq,
+        BUYER_WECHAT AS buyerWechat,
+        PAYMENT_TYPE AS paymentType,
+        CASE
+        WHEN NORMAL_RECEIVE_TIME = '01' THEN '06:00-08:00'
+        WHEN NORMAL_RECEIVE_TIME = '02' THEN '08:00-10:00'
+        WHEN NORMAL_RECEIVE_TIME = '03' THEN '10:00-12:00'
+        WHEN NORMAL_RECEIVE_TIME = '04' THEN '12:00-14:00'
+        WHEN NORMAL_RECEIVE_TIME = '05' THEN '14:00-16:00'
+        WHEN NORMAL_RECEIVE_TIME = '06' THEN '16:00-18:00'
+        WHEN NORMAL_RECEIVE_TIME = '07' THEN '18:00-20:00'
+        WHEN NORMAL_RECEIVE_TIME = '08' THEN '20:00-22:00'
+        WHEN NORMAL_RECEIVE_TIME = '09' THEN '22:00-24:00'
+        WHEN NORMAL_RECEIVE_TIME = '10' THEN '00:00-02:00'
+        WHEN NORMAL_RECEIVE_TIME = '11' THEN '02:00-04:00'
+        WHEN NORMAL_RECEIVE_TIME = '12' THEN '04:00-06:00'
+        ELSE ''
+        END AS normalReceiveTime,
+        EARLIEST_TIME AS earliestTime,
+        LATEST_TIME AS latestTime,
+        TEL_MARKETING_TIME AS telMarketingTime,
+        TEL_MARKETING_NO AS telMarketingNo,
+        WECHAT_MARKETING_NO AS wechatMarketingNo,
+        QQ_MARKETING_NO AS qqMarketingNo,
+        MARKETING_FIRST_STATUS AS marketingFirstStatus,
+        MARKETING_FIRST_STATUS_NAME AS marketingFirstStatusName,
+        MARKETING_SUB_STATUS AS marketingSubStatus,
+        MARKETING_SUB_STATUS_NAME AS marketingSubStatusName,
+        INFO_ERROR_FLG AS infoErrorFlg,
+        INFO_ERROR_REMARK AS infoErrorRemark,
+        REGISTER_SOURCE AS registerSource,
+        REGISTER_SOURCE_NAME AS registerSourceName,
+        IS_CREDIT_TERM_BUYER AS isCreditTermBuyer,
+        IS_CONTROL_PUERCHASNG_CHAIN AS isControlPuerchasngChain,
+        EMPLOYEE_NAME AS bossName,
+        EMPLOYEE_TEL AS bossTel,
+        EMPLOYEE_WECHAT AS bossWechat,
+        EMPLOYEE_QQ AS bossQq,
+        basic.ZONE_ID AS zoneId,
+        basic.ZONE_CODE AS zoneCode,
+        basic.ZONE_NAME AS zoneName,
+        DISTRIBUTION_ID AS distributionId,
+        DISTRIBUTION_CODE AS distributionCode,
+        DISTRIBUTION_NAME AS distributionName,
+        DEMESNE_ID AS demesneId,
+        DEMESNE_CODE AS demesneCode,
+        DEMESNE_NAME AS demesneName,
+        FREQUENTER_LEVEL_F AS frequenterLevelF,
+        FREQUENTER_LEVEL_A AS frequenterLevelA,
+        FREQUENTER_LEVEL_CODE  AS frequenterLevelCode,
+        GRADE AS grade,
+        PAYMENT_PERIOD_TYPE AS paymentPeriodType,
+        PAYMENT_PERIOD_NAME AS paymentPeriodName,
+    </sql>
+
+    <insert id="save" parameterType="com.bms.byim.bean.entity.ByimBuyer">
+		INSERT INTO BYIM_BUYER (
+			BUYER_ID,
+			BUYER_CODE,
+			DISPLAY_CODE,
+			BUYER_TYPE,
+			BUYER_TYPE_NAME,
+			BUYER_FIRST_CATEGORY,
+			BUYER_FIRST_CATEGORY_NAME,
+			BUYER_SUB_CATEGORY,
+			BUYER_SUB_CATEGORY_NAME,
+			BUYER_NAME,
+			BUYER_ADDR,
+			LGCS_AREA_ID,
+			LGCS_AREA_CODE,
+			LGCS_AREA_NAME,
+			ZONE_ID,
+            ZONE_CODE,
+            ZONE_NAME,
+			PROVINCE_ID,
+			PROVINCE_CODE,
+			PROVINCE_NAME,
+			CITY_ID,
+			CITY_CODE,
+			CITY_NAME,
+			DISTRICT_ID,
+			DISTRICT_CODE,
+			DISTRICT_NAME,
+			STREET_ID,
+			STREET_CODE,
+			STREET_NAME,
+			BUYER_QQ,
+			BUYER_WECHAT,
+			MARKETING_FIRST_STATUS,
+			MARKETING_FIRST_STATUS_NAME,
+			MARKETING_SUB_STATUS,
+			MARKETING_SUB_STATUS_NAME,
+			INFO_ERROR_FLG,
+			INFO_ERROR_REMARK,
+			REGISTER_SOURCE,
+			REGISTER_SOURCE_NAME,
+			FREQUENTER_LEVEL_F,
+			FREQUENTER_LEVEL_A,
+            FREQUENTER_LEVEL_CODE,
+            GRADE,
+            PAYMENT_PERIOD_TYPE,
+            PAYMENT_PERIOD_NAME,
+			IS_CREDIT_TERM_BUYER,
+			IS_CONTROL_PUERCHASNG_CHAIN,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{buyerId},
+			#{buyerCode},
+			#{displayCode},
+			#{buyerType},
+			#{buyerTypeName},
+			#{buyerFirstCategory},
+			#{buyerFirstCategoryName},
+			#{buyerSubCategory},
+			#{buyerSubCategoryName},
+			#{buyerName},
+			#{buyerAddr},
+			#{lgcsAreaId},
+			#{lgcsAreaCode},
+			#{lgcsAreaName},
+			#{zoneId},
+			#{zoneCode},
+			#{zoneName},
+			#{provinceId},
+			#{provinceCode},
+			#{provinceName},
+			#{cityId},
+			#{cityCode},
+			#{cityName},
+			#{districtId},
+			#{districtCode},
+			#{districtName},
+			#{streetId},
+			#{streetCode},
+			#{streetName},
+			#{buyerQq},
+			#{buyerWechat},
+			#{marketingFirstStatus},
+			#{marketingFirstStatusName},
+			#{marketingSubStatus},
+			#{marketingSubStatusName},
+			#{infoErrorFlg},
+			#{infoErrorRemark},
+			#{registerSource},
+			#{registerSourceName},
+			#{frequenterLevelF},
+			#{frequenterLevelA},
+			#{frequenterLevelCode},
+			#{grade},
+			#{paymentPeriodType},
+			#{paymentPeriodName},
+			#{isCreditTermBuyer},
+			#{isControlPuerchasngChain},
+			#{delFlg},
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			#{version}
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.byim.bean.param.BaseBean">
+        UPDATE BYIM_BUYER
+        SET
+        DEL_FLG = #{target.delFlg}
+        <if test="target.provinceId != null">
+            ,PROVINCE_ID = #{target.provinceId}
+        </if>
+        <if test="target.provinceCode != null">
+            ,PROVINCE_CODE = #{target.provinceCode}
+        </if>
+        <if test="target.provinceName != null">
+            ,PROVINCE_NAME = #{target.provinceName}
+        </if>
+        <if test="target.cityId != null">
+            ,CITY_ID = #{target.cityId}
+        </if>
+        <if test="target.cityCode != null">
+            ,CITY_CODE = #{target.cityCode}
+        </if>
+        <if test="target.cityName != null">
+            ,CITY_NAME = #{target.cityName}
+        </if>
+        <if test="target.districtId != null">
+            ,DISTRICT_ID = #{target.districtId}
+        </if>
+        <if test="target.districtCode != null">
+            ,DISTRICT_CODE = #{target.districtCode}
+        </if>
+        <if test="target.districtName != null">
+            ,DISTRICT_NAME = #{target.districtName}
+        </if>
+        <if test="target.streetId != null">
+            ,STREET_ID = #{target.streetId}
+        </if>
+        <if test="target.streetCode != null">
+            ,STREET_CODE = #{target.streetCode}
+        </if>
+        <if test="target.streetName != null">
+            ,STREET_NAME = #{target.streetName}
+        </if>
+        <if test="target.buyerName != null">
+            ,BUYER_NAME = #{target.buyerName}
+        </if>
+        <if test="target.lgcsAreaCode != null">
+            ,LGCS_AREA_CODE = #{target.lgcsAreaCode}
+        </if>
+        <if test="target.lgcsAreaName != null">
+            ,LGCS_AREA_NAME = #{target.lgcsAreaName}
+        </if>
+        <if test="target.cityId != null">
+            ,CITY_ID = #{target.cityId}
+        </if>
+        <if test="target.cityCode != null">
+            ,CITY_CODE = #{target.cityCode}
+        </if>
+        <if test="target.cityName != null">
+            ,CITY_NAME = #{target.cityName}
+        </if>
+        <if test="target.districtId != null">
+            ,DISTRICT_ID = #{target.districtId}
+        </if>
+        <if test="target.districtCode != null">
+            ,DISTRICT_CODE = #{target.districtCode}
+        </if>
+        <if test="target.districtName != null">
+            ,DISTRICT_NAME = #{target.districtName}
+        </if>
+        <if test="target.buyerAddr != null">
+            ,BUYER_ADDR = #{target.buyerAddr}
+        </if>
+        <if test="target.buyerQq != null">
+            ,BUYER_QQ = #{target.buyerQq}
+        </if>
+        <if test="target.buyerWechat != null">
+            ,BUYER_WECHAT = #{target.buyerWechat}
+        </if>
+        <if test="target.paymentType != null">
+            ,PAYMENT_TYPE = #{target.paymentType}
+        </if>
+        <if test="target.normalReceiveTime != null">
+            ,NORMAL_RECEIVE_TIME = #{target.normalReceiveTime}
+        </if>
+        <if test="target.earliestTime != null">
+            ,EARLIEST_TIME = #{target.earliestTime}
+        </if>
+        <if test="target.latestTime != null">
+            ,LATEST_TIME = #{target.latestTime}
+        </if>
+        <if test="target.telMarketingTime != null">
+            ,TEL_MARKETING_TIME = #{target.telMarketingTime}
+        </if>
+        <if test="target.telMarketingNo != null">
+            ,TEL_MARKETING_NO = #{target.telMarketingNo}
+        </if>
+        <if test="target.wechatMarketingNo != null">
+            ,WECHAT_MARKETING_NO = #{target.wechatMarketingNo}
+        </if>
+        <if test="target.qqMarketingNo != null">
+            ,QQ_MARKETING_NO = #{target.qqMarketingNo}
+        </if>
+        <if test="target.marketingFirstStatus != null">
+            ,MARKETING_FIRST_STATUS = #{target.marketingFirstStatus}
+        </if>
+        <if test="target.marketingFirstStatusName != null">
+            ,MARKETING_FIRST_STATUS_NAME = #{target.marketingFirstStatusName}
+        </if>
+        <if test="target.marketingSubStatus != null">
+            ,MARKETING_SUB_STATUS = #{target.marketingSubStatus}
+        </if>
+        <if test="target.marketingSubStatusName != null">
+            ,MARKETING_SUB_STATUS_NAME = #{target.marketingSubStatusName}
+        </if>
+        <if test="target.infoErrorFlg != null">
+            ,INFO_ERROR_FLG = #{target.infoErrorFlg}
+        </if>
+        <if test="target.infoErrorRemark != null">
+            ,INFO_ERROR_REMARK = #{target.infoErrorRemark}
+        </if>
+        <if test="target.isCreditTermBuyer != null">
+            ,IS_CREDIT_TERM_BUYER = #{target.isCreditTermBuyer}
+        </if>
+        <if test="target.isControlPuerchasngChain != null">
+            ,IS_CONTROL_PUERCHASNG_CHAIN = #{target.isControlPuerchasngChain}
+        </if>
+        <if test="target.zoneCode != null">
+            ,ZONE_CODE = #{target.zoneCode}
+        </if>
+        <if test="target.zoneName != null">
+            ,ZONE_NAME = #{target.zoneName}
+        </if>
+        <if test="target.distributionCode != null">
+            ,DISTRIBUTION_CODE = #{target.distributionCode}
+        </if>
+        <if test="target.distributionName != null">
+            ,DISTRIBUTION_NAME = #{target.distributionName}
+        </if>
+        <if test="target.demesneCode != null">
+            ,DEMESNE_CODE = #{target.demesneCode}
+        </if>
+        <if test="target.demesneName != null">
+            ,DEMESNE_NAME = #{target.demesneName}
+        </if>
+        <if test="target.frequenterLevelF != null">
+            ,FREQUENTER_LEVEL_F = #{target.frequenterLevelF}
+        </if>
+        <if test="target.frequenterLevelA != null">
+            ,FREQUENTER_LEVEL_A = #{target.frequenterLevelA}
+        </if>
+        <if test="target.frequenterLevelCode != null">
+            ,FREQUENTER_LEVEL_CODE = #{target.frequenterLevelCode}
+        </if>
+        <if test="target.grade != null">
+            ,GRADE = #{target.grade}
+        </if>
+        <if test="target.paymentPeriodType != null">
+            ,PAYMENT_PERIOD_TYPE = #{target.paymentPeriodType}
+        </if>
+        <if test="target.paymentPeriodName != null">
+            ,PAYMENT_PERIOD_NAME = #{target.paymentPeriodName}
+        </if>
+        <if test="target.buyerType != null">
+            ,BUYER_TYPE = #{target.buyerType}
+        </if>
+        <if test="target.buyerTypeName != null">
+            ,BUYER_TYPE_NAME = #{target.buyerTypeName}
+        </if>
+        <if test="target.buyerFirstCategory != null">
+            ,BUYER_FIRST_CATEGORY = #{target.buyerFirstCategory}
+        </if>
+        <if test="target.buyerFirstCategoryName != null">
+            ,BUYER_FIRST_CATEGORY_NAME = #{target.buyerFirstCategoryName}
+        </if>
+        ,LGCS_AREA_ID = #{target.lgcsAreaId}
+        ,ZONE_ID = #{target.zoneId}
+        ,DISTRIBUTION_ID = #{target.distributionId}
+        ,DEMESNE_ID = #{target.demesneId}
+        ,UPD_ID = #{target.updId}
+        ,UPD_TIME = #{target.updTime}
+        WHERE
+        DEL_FLG = FALSE
+        <if test="filter.buyerId != null and filter.buyerId != ''">
+            AND BUYER_ID = #{filter.buyerId}
+        </if>
+        <if test="filter.buyerCode != null and filter.buyerCode != ''">
+            AND BUYER_CODE = #{filter.buyerCode}
+        </if>
+    </update>
+
+    <select id="findOne" parameterType="com.bms.byim.bean.entity.ByimBuyer"
+            resultType="com.bms.byim.bean.entity.ByimBuyer">
+		SELECT
+		BUYER_ID AS buyerId,
+		BUYER_CODE AS buyerCode,
+		BUYER_TYPE AS buyerType,
+		BUYER_FIRST_CATEGORY AS buyerFirstCategory,
+		BUYER_SUB_CATEGORY AS buyerSubCategory,
+		LGCS_AREA_CODE AS lgcsAreaCode,
+		PROVINCE_CODE AS provinceCode,
+		CITY_CODE AS cityCode,
+		DISTRICT_CODE AS districtCode,
+		STREET_CODE AS streetCode,
+		BUYER_QQ AS buyerQq,
+		BUYER_WECHAT AS buyerWechat,
+		MARKETING_FIRST_STATUS AS marketingFirstStatus,
+		MARKETING_SUB_STATUS AS marketingSubStatus
+		FROM
+		BYIM_BUYER
+		WHERE
+		DEL_FLG = FALSE AND BUYER_ID = #{buyerId}
+	</select>
+
+    <select id="findPageList" parameterType="com.bms.byim.bean.param.BuyerAllRsParam"
+            resultType="com.bms.byim.bean.param.BuyerAllRsParam">
+        SELECT
+        <include refid="basicColumns"/>
+        <include refid="storeColumns"/>
+        <include refid="accountColumns"/>
+        FROM
+        BYIM_BUYER basic LEFT JOIN BYIM_STORE store ON basic.BUYER_ID = store.BUYER_ID AND store.DEL_FLG = FALSE
+        LEFT JOIN BYIM_EMPLOYEE employee ON basic.BUYER_ID = employee.BUYER_ID AND employee.EMPLOYEE_TYPE = '1' AND
+        employee.IS_NEWEST_BOSS = TRUE AND employee.DEL_FLG = FALSE
+        LEFT JOIN BYIM_ACCOUNT account ON account.BUYER_ID = basic.BUYER_ID AND basic.DEL_FLG = account.DEL_FLG
+        AND account.ACCOUNT_ID IN (
+        SELECT
+        max(ACCOUNT_ID)
+        FROM
+        BYIM_ACCOUNT
+        WHERE
+        DEL_FLG = FALSE
+        <if test="buyerId != null and buyerId != ''">
+            AND BUYER_ID = #{buyerId}
+        </if>
+        GROUP BY BUYER_ID
+        ORDER BY CRT_TIME DESC
+        )
+        WHERE
+        basic.DEL_FLG = FALSE
+        <if test="buyerId != null and buyerId != ''">
+            AND basic.BUYER_ID = #{buyerId}
+        </if>
+        <if test="buyerCode != null and buyerCode != ''">
+            AND basic.BUYER_CODE LIKE #{buyerCode}
+        </if>
+        <if test="displayCode != null and displayCode != ''">
+            AND basic.DISPLAY_CODE LIKE #{displayCode}
+        </if>
+        <if test="buyerType != null and buyerType != ''">
+            AND basic.BUYER_TYPE = #{buyerType}
+        </if>
+        <if test="buyerTypeName != null and buyerTypeName != ''">
+            AND basic.BUYER_TYPE_NAME = #{buyerTypeName}
+        </if>
+        <if test="buyerFirstCategory != null and buyerFirstCategory != ''">
+            AND basic.BUYER_FIRST_CATEGORY = #{buyerFirstCategory}
+        </if>
+        <if test="buyerFirstCategoryName != null and buyerFirstCategoryName != ''">
+            AND basic.BUYER_FIRST_CATEGORY_NAME = #{buyerFirstCategoryName}
+        </if>
+        <if test="buyerSubCategory != null and buyerSubCategory != ''">
+            AND basic.BUYER_SUB_CATEGORY = #{buyerSubCategory}
+        </if>
+        <if test="buyerSubCategoryName != null and buyerSubCategoryName != ''">
+            AND basic.BUYER_SUB_CATEGORY_NAME = #{buyerSubCategoryName}
+        </if>
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND basic.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND basic.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            AND basic.PROVINCE_ID = #{provinceId}
+        </if>
+        <if test="provinceCode != null and provinceCode != ''">
+            AND basic.PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            AND basic.CITY_ID = #{cityId}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND basic.CITY_CODE = #{cityCode}
+        </if>
+        <if test="districtId != null and districtId != ''">
+            AND basic.DISTRICT_ID = #{districtId}
+        </if>
+        <if test="districtCode != null and districtCode != ''">
+            AND basic.DISTRICT_CODE = #{districtCode}
+        </if>
+        <if test="streetId != null and streetId != ''">
+            AND basic.STREET_ID = #{streetId}
+        </if>
+        <if test="streetCode != null and streetCode != ''">
+            AND basic.STREET_CODE = #{streetCode}
+        </if>
+        <if test="marketId != null and marketId != ''">
+            AND store.MARKET_ID = #{marketId}
+        </if>
+        <if test="marketCode != null and marketCode != ''">
+            AND store.MARKET_CODE LIKE #{marketCode}
+        </if>
+        <if test="marketName != null and marketName != ''">
+            AND store.MARKET_NAME LIKE #{marketName}
+        </if>
+        <if test="marketingFirstStatus != null and marketingFirstStatus != ''">
+            AND basic.MARKETING_FIRST_STATUS = #{marketingFirstStatus}
+        </if>
+        <if test="marketingSubStatus != null and marketingSubStatus != ''">
+            AND basic.MARKETING_SUB_STATUS = #{marketingSubStatus}
+        </if>
+        <if test="buyerName != null and buyerName != ''">
+            AND basic.BUYER_NAME LIKE #{buyerName}
+        </if>
+        <if test="storeNo != null and storeNo != ''">
+            AND store.STORE_NO = #{storeNo}
+        </if>
+        <if test="bossName != null and bossName != ''">
+            AND employee.EMPLOYEE_NAME LIKE #{bossName}
+        </if>
+        <if test="telNo != null and telNo != ''">
+            AND account.TEL_NO LIKE #{telNo}
+        </if>
+        <if test="mailAddr != null and mailAddr != ''">
+            AND account.MAIL_ADDR LIKE #{mailAddr}
+        </if>
+        <if test="accountName != null and accountName != ''">
+            AND account.ACCOUNT_NO LIKE #{accountName}
+        </if>
+        <if test="frequenterLevelF != null and frequenterLevelF != ''">
+            AND basic.FREQUENTER_LEVEL_F LIKE #{frequenterLevelF}
+        </if>
+        <if test="frequenterLevelA != null and frequenterLevelA != ''">
+            AND basic.FREQUENTER_LEVEL_A LIKE #{frequenterLevelA}
+        </if>
+        <if test="frequenterLevelCode != null and frequenterLevelCode != ''">
+            AND basic.FREQUENTER_LEVEL_CODE LIKE #{frequenterLevelCode}
+        </if>
+        <if test="grade != null and grade != ''">
+            AND basic.GRADE LIKE #{grade}
+        </if>
+        <if test="isCreditTermBuyer != null">
+            AND basic.IS_CREDIT_TERM_BUYER = #{isCreditTermBuyer}
+        </if>
+        <if test="isControlPuerchasngChain != null">
+            AND basic.IS_CONTROL_PUERCHASNG_CHAIN = #{isControlPuerchasngChain}
+        </if>
+        ORDER BY BUYER_CODE DESC
+    </select>
+    <select id="findMarketSequenceCode" parameterType="com.bms.byim.bean.param.BuyerBasicRsParam" resultType="String">
+		SELECT
+		IFNULL(
+				Max(RIGHT(basic.BUYER_CODE, 3)),
+				'000'
+			) AS MaxSequenceCode
+		FROM
+			BYIM_BUYER basic INNER JOIN BYIM_STORE store ON basic.BUYER_ID = store.BUYER_ID AND basic.DEL_FLG = 0 AND store.DEL_FLG = 0
+		WHERE
+			basic.BUYER_FIRST_CATEGORY = #{buyerFirstCategory}
+			AND store.MARKET_ID = #{marketId} AND store.MARKET_TYPE = #{marketType}
+	</select>
+    <select id="findDistrictSequenceCode" parameterType="com.bms.byim.bean.param.BuyerBasicRsParam" resultType="String">
+		SELECT
+			IFNULL(
+				Max(RIGHT(BUYER_CODE, 4)),
+				'0000'
+			) AS MaxSequenceCode
+		FROM
+			BYIM_BUYER
+		WHERE
+			BUYER_FIRST_CATEGORY = #{buyerFirstCategory}
+		AND LGCS_AREA_CODE = #{lgcsAreaCode}
+		AND CITY_CODE = #{cityCode}
+		AND DISTRICT_CODE = #{districtCode}
+		AND DEL_FLG = 0
+	</select>
+
+
+    <select id="findPageListToBuyerIds" parameterType="com.bms.byim.bean.param.BuyerBasicBuyerIdsRsParam"
+            resultType="com.bms.byim.bean.param.BuyerAllRsParam">
+        SELECT
+        <include refid="basicColumns"/>
+        <include refid="storeColumns"/>
+        <include refid="accountColumns"/>
+        FROM
+        BYIM_BUYER basic LEFT JOIN BYIM_STORE store ON basic.BUYER_ID = store.BUYER_ID AND store.DEL_FLG = FALSE
+        LEFT JOIN BYIM_EMPLOYEE employee ON basic.BUYER_ID = employee.BUYER_ID AND employee.EMPLOYEE_TYPE = '1' AND
+        employee.IS_NEWEST_BOSS = TRUE AND employee.DEL_FLG = FALSE
+        LEFT JOIN BYIM_ACCOUNT account ON account.BUYER_ID = basic.BUYER_ID AND basic.DEL_FLG = account.DEL_FLG AND
+        account.ACCOUNT_ID IN (
+        SELECT
+        max(ACCOUNT_ID)
+        FROM
+        BYIM_ACCOUNT
+        WHERE
+        DEL_FLG = FALSE
+        <if test="buyerIds != null">
+            AND BUYER_ID IN
+            <foreach collection="buyerIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY BUYER_ID
+        ORDER BY CRT_TIME DESC
+        )
+        WHERE
+        basic.DEL_FLG = FALSE
+        <if test="buyerIds != null">
+            AND basic.BUYER_ID IN
+            <foreach collection="buyerIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="buyerCode != null and buyerCode != ''">
+            AND basic.BUYER_CODE LIKE #{buyerCode}
+        </if>
+        <if test="buyerAccount != null and buyerAccount != ''">
+            AND account.ACCOUNT_NO LIKE #{buyerAccount}
+        </if>
+        <if test="buyerTelNo != null and buyerTelNo != ''">
+            AND account.TEL_NO LIKE #{buyerTelNo}
+        </if>
+        <if test="buyerStoreNo != null and buyerStoreNo != ''">
+            AND store.STORE_NO LIKE #{buyerStoreNo}
+        </if>
+        <if test="buyerBossName != null and buyerBossName != ''">
+            AND employee.EMPLOYEE_NAME LIKE #{buyerBossName}
+        </if>
+        <if test="buyerType != null and buyerType != ''">
+            AND basic.BUYER_TYPE = #{buyerType}
+        </if>
+        <if test="buyerTypeName != null and buyerTypeName != ''">
+            AND basic.BUYER_TYPE_NAME LIKE #{buyerTypeName}
+        </if>
+        <if test="buyerMarketId != null and buyerMarketId != ''">
+            AND store.MARKET_ID = #{buyerMarketId}
+        </if>
+        <if test="buyerMarketName != null and buyerMarketName != ''">
+            AND store.MARKET_NAME LIKE #{buyerMarketName}
+        </if>
+        <if test="buyerName != null and buyerName != ''">
+            AND basic.BUYER_NAME LIKE #{buyerName}
+        </if>
+    </select>
+
+    <select id="checkAccountIsExist" resultType="int" parameterType="com.bms.byim.bean.param.BuyerBasicRsParam">
+        SELECT
+        COUNT(1)
+        FROM
+            BYIM_ACCOUNT
+        WHERE
+            DEL_FLG = FALSE
+        AND ACCOUNT_NO = #{accountNo}
+    </select>
+
+    <select id="checkNameIsExist" resultType="int" parameterType="com.bms.byim.bean.param.BuyerBasicRsParam">
+        SELECT
+        COUNT(1)
+        FROM
+        BYIM_BUYER
+        WHERE
+        DEL_FLG = FALSE
+        AND BUYER_NAME = #{accountNo}
+    </select>
+
+    <select id="checkTelNoIsExist" resultType="int" parameterType="com.bms.byim.bean.param.BuyerBasicRsParam">
+        SELECT
+        COUNT(1)
+        FROM
+        BYIM_ACCOUNT
+        WHERE
+        DEL_FLG = FALSE
+        AND TEL_NO = #{telNo}
+    </select>
+
+    <select id="checkBuyerNameIsExist" resultType="int" parameterType="com.bms.byim.bean.param.BuyerBasicRsParam">
+        SELECT
+        COUNT(1)
+        FROM
+        BYIM_BUYER
+        WHERE
+        DEL_FLG = FALSE
+        AND BUYER_NAME = #{buyerName}
+        <if test="buyerId != null">
+            AND BUYER_ID != #{buyerId}
+        </if>
+    </select>
+
+    <select id="checkBuyerAccountNoIsExist" resultType="int" parameterType="com.bms.byim.bean.param.BuyerBasicRsParam">
+        SELECT
+        COUNT(1)
+        FROM
+        BYIM_ACCOUNT
+        WHERE
+        DEL_FLG = FALSE
+        AND ACCOUNT_NO = #{buyerName}
+        <if test="buyerId != null">
+            AND BUYER_ID != #{buyerId}
+        </if>
+    </select>
+
+
+    <insert id="saveAccount" parameterType="com.bms.byim.bean.entity.ByimAccount">
+        INSERT INTO byim_account (
+        ACCOUNT_ID,
+        BUYER_ID,
+        ACCOUNT_NO,
+        PASSWORD,
+        TEL_NO,
+        MAIL_ADDR,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES (
+        #{accountId},
+        #{buyerId},
+        #{accountNo},
+        #{password},
+        #{telNo},
+        #{mailAddr},
+        #{delFlg},
+        #{crtId},
+        #{crtTime},
+        #{updId},
+        #{updTime},
+        #{version}
+        )
+    </insert>
+
+    <select id="findBuyerAccount" resultType="com.bms.byim.bean.param.BuyerAccountRsParam"
+            parameterType="com.bms.byim.bean.param.BuyerAccountRsParam">
+        SELECT
+        ACCOUNT_ID AS accountId,
+		BUYER_ID AS buyerId,
+		ACCOUNT_NO AS accountNo,
+		PASSWORD AS password,
+		TEL_NO AS telNo,
+		MAIL_ADDR AS mailAddr
+		FROM
+		  BYIM_ACCOUNT
+		WHERE
+		DEL_FLG = FALSE
+		AND BUYER_ID = #{buyerId}
+    </select>
+
+    <update id="updateBuyerAccount" parameterType="com.bms.byim.bean.param.BaseBean">
+        UPDATE BYIM_ACCOUNT
+        SET
+        PASSWORD = (
+            SELECT
+                a. password
+            FROM
+            (
+            SELECT
+                RIGHT (TEL_NO, 6) AS password
+            FROM
+                BYIM_ACCOUNT
+            WHERE
+                ACCOUNT_ID = #{filter.accountId})a ),
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        ACCOUNT_ID = #{filter.accountId}
+    </update>
+    <select id="findCode" resultType="String">
+        SELECT
+            lpad(
+                IFNULL(
+                    max(CAST(BUYER_CODE AS UNSIGNED)),
+                    0
+                ) + 1,
+                10,
+                '0'
+            ) AS buyerCode
+        FROM
+            BYIM_BUYER
+    </select>
+
+
+    <update id="deleteAccount" parameterType="com.bms.byim.bean.entity.ByimAccount">
+        UPDATE BYIM_ACCOUNT
+        SET
+        DEL_FLG = TRUE ,
+        UPD_ID = #{updId},
+        UPD_TIME = #{updTime}
+        WHERE
+        BUYER_ID = #{buyerId}
+        AND DEL_FLG = FALSE
+    </update>
+
+    <select id="findBuyerId" resultType="String">
+        SELECT
+        BUYER_ID
+        FROM
+        BYIM_BUYER
+        WHERE
+        DEL_FLG = FALSE
+        AND BUYER_CODE = #{buyerCode}
+    </select>
+    <select id="findBuyerAllInfoList" parameterType="com.bms.byim.bean.param.BuyerAllInfoRsParam"
+            resultType="com.bms.byim.bean.result.BuyerAllInfoRsResult">
+        SELECT
+        <include refid="buyerColumns"/>
+        <include refid="deliveryColumns"/>
+        <include refid="storeColumns"/>
+        <include refid="accountColumns"/>
+        FROM
+        BYIM_BUYER basic LEFT JOIN BYIM_STORE store ON basic.BUYER_ID = store.BUYER_ID AND store.DEL_FLG = FALSE
+        LEFT JOIN bymt_terminal_market_basic terminal ON terminal.TERM_MARKET_ID = store.MARKET_ID AND terminal.DEL_FLG = FALSE
+        LEFT JOIN bymt_food_market_basic food ON food.FOOD_MARKET_ID = store.MARKET_ID AND food.DEL_FLG = FALSE
+        LEFT JOIN BYIM_EMPLOYEE employee ON basic.BUYER_ID = employee.BUYER_ID AND employee.EMPLOYEE_TYPE = '1' AND
+        employee.IS_NEWEST_BOSS = TRUE AND employee.DEL_FLG = FALSE
+        LEFT JOIN byim_delivery_addr addr ON basic.BUYER_ID = addr.BUYER_ID AND addr.IS_DEFAULT_FLG = TRUE AND
+        addr.DEL_FLG = FALSE
+        LEFT JOIN BYIM_ACCOUNT account ON account.BUYER_ID = basic.BUYER_ID AND basic.DEL_FLG = account.DEL_FLG
+        AND account.ACCOUNT_ID IN (
+        SELECT
+        max(ACCOUNT_ID)
+        FROM
+        BYIM_ACCOUNT
+        WHERE
+        DEL_FLG = FALSE
+        <if test="buyerId != null and buyerId != ''">
+            AND BUYER_ID = #{buyerId}
+        </if>
+        GROUP BY BUYER_ID
+        ORDER BY CRT_TIME DESC
+        )
+        WHERE
+        basic.DEL_FLG = FALSE
+        <if test="buyerId != null and buyerId != ''">
+            AND basic.BUYER_ID = #{buyerId}
+        </if>
+        <if test="buyerCode != null and buyerCode != ''">
+            AND basic.BUYER_CODE LIKE #{buyerCode}
+        </if>
+        <if test="displayCode != null and displayCode != ''">
+            AND basic.DISPLAY_CODE LIKE #{displayCode}
+        </if>
+        <if test="buyerType != null and buyerType != ''">
+            AND basic.BUYER_TYPE = #{buyerType}
+        </if>
+        <if test="buyerTypeName != null and buyerTypeName != ''">
+            AND basic.BUYER_TYPE_NAME = #{buyerTypeName}
+        </if>
+        <if test="buyerFirstCategory != null and buyerFirstCategory != ''">
+            AND basic.BUYER_FIRST_CATEGORY = #{buyerFirstCategory}
+        </if>
+        <if test="buyerFirstCategoryName != null and buyerFirstCategoryName != ''">
+            AND basic.BUYER_FIRST_CATEGORY_NAME = #{buyerFirstCategoryName}
+        </if>
+        <if test="buyerSubCategory != null and buyerSubCategory != ''">
+            AND basic.BUYER_SUB_CATEGORY = #{buyerSubCategory}
+        </if>
+        <if test="buyerSubCategoryName != null and buyerSubCategoryName != ''">
+            AND basic.BUYER_SUB_CATEGORY_NAME = #{buyerSubCategoryName}
+        </if>
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND basic.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="lgcsAreaCode != null and lgcsAreaCode != ''">
+            AND basic.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            AND basic.PROVINCE_ID = #{provinceId}
+        </if>
+        <if test="provinceCode != null and provinceCode != ''">
+            AND basic.PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            AND basic.CITY_ID = #{cityId}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND basic.CITY_CODE = #{cityCode}
+        </if>
+        <if test="districtId != null and districtId != ''">
+            AND basic.DISTRICT_ID = #{districtId}
+        </if>
+        <if test="districtCode != null and districtCode != ''">
+            AND basic.DISTRICT_CODE = #{districtCode}
+        </if>
+        <if test="streetId != null and streetId != ''">
+            AND basic.STREET_ID = #{streetId}
+        </if>
+        <if test="streetCode != null and streetCode != ''">
+            AND basic.STREET_CODE = #{streetCode}
+        </if>
+        <if test="marketId != null and marketId != ''">
+            AND store.MARKET_ID = #{marketId}
+        </if>
+        <if test="marketCode != null and marketCode != ''">
+            AND store.MARKET_CODE LIKE #{marketCode}
+        </if>
+        <if test="marketName != null and marketName != ''">
+            AND store.MARKET_NAME LIKE #{marketName}
+        </if>
+        <if test="foodMarketCode != null and foodMarketCode != ''">
+            AND food.FOOD_MARKET_CODE LIKE #{foodMarketCode}
+        </if>
+        <if test="foodMarketName != null and foodMarketName != ''">
+            AND food.FOOD_MARKET_NAME LIKE #{foodMarketName}
+        </if>
+        <if test="termMarketCode != null and termMarketCode != ''">
+            AND terminal.TERM_MARKET_CODE LIKE #{termMarketCode}
+        </if>
+        <if test="termMarketName != null and termMarketName != ''">
+            AND terminal.TERM_MARKET_NAME LIKE #{termMarketName}
+        </if>
+        <if test="marketingFirstStatus != null and marketingFirstStatus != ''">
+            AND basic.MARKETING_FIRST_STATUS = #{marketingFirstStatus}
+        </if>
+        <if test="marketingSubStatus != null and marketingSubStatus != ''">
+            AND basic.MARKETING_SUB_STATUS = #{marketingSubStatus}
+        </if>
+        <if test="buyerName != null and buyerName != ''">
+            AND basic.BUYER_NAME LIKE #{buyerName}
+        </if>
+        <if test="storeNo != null and storeNo != ''">
+            AND store.STORE_NO = #{storeNo}
+        </if>
+        <if test="bossName != null and bossName != ''">
+            AND employee.EMPLOYEE_NAME LIKE #{bossName}
+        </if>
+        <if test="telNo != null and telNo != ''">
+            AND account.TEL_NO = #{telNo}
+        </if>
+        <if test="mailAddr != null and mailAddr != ''">
+            AND account.MAIL_ADDR LIKE #{mailAddr}
+        </if>
+        <if test="accountName != null and accountName != ''">
+            AND account.ACCOUNT_NO LIKE #{accountName}
+        </if>
+        <if test="frequenterLevelF != null and frequenterLevelF != ''">
+            AND basic.FREQUENTER_LEVEL_F LIKE #{frequenterLevelF}
+        </if>
+        <if test="frequenterLevelA != null and frequenterLevelA != ''">
+            AND basic.FREQUENTER_LEVEL_A LIKE #{frequenterLevelA}
+        </if>
+        <if test="frequenterLevelCode != null and frequenterLevelCode != ''">
+            AND basic.FREQUENTER_LEVEL_CODE LIKE #{frequenterLevelCode}
+        </if>
+        <if test="grade != null and grade != ''">
+            AND basic.GRADE LIKE #{grade}
+        </if>
+        <if test="isCreditTermBuyer != null">
+            AND basic.IS_CREDIT_TERM_BUYER = #{isCreditTermBuyer}
+        </if>
+        <if test="isControlPuerchasngChain != null">
+            AND basic.IS_CONTROL_PUERCHASNG_CHAIN = #{isControlPuerchasngChain}
+        </if>
+        ORDER BY BUYER_CODE DESC
+    </select>
+</mapper>

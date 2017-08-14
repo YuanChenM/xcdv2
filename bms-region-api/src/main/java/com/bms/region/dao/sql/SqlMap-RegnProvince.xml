@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.region.dao.RegnProvinceDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		PROVINCE_ID AS provinceId,
+		PROVINCE_CODE AS provinceCode,
+		PROVINCE_NAME AS provinceName,
+		DIVISION_LEVEL AS divisionLevel,
+		DISABLE_FLG AS disableFlg
+	</sql>
+
+    <sql id="selectColumns2">
+        p.PROVINCE_ID AS provinceId,
+        p.PROVINCE_CODE AS provinceCode,
+        p.PROVINCE_NAME AS provinceName,
+        p.DIVISION_LEVEL AS divisionLevel,
+        p.DISABLE_FLG AS disableFlg
+    </sql>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO REGN_PROVINCE (
+        PROVINCE_ID,
+        PROVINCE_CODE,
+        PROVINCE_NAME,
+        DIVISION_LEVEL,
+        DISABLE_FLG,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="lg" index="index" separator=",">
+            (
+            #{lg.provinceId},
+            #{lg.provinceCode},
+            #{lg.provinceName},
+            #{lg.divisionLevel},
+            1,
+            false,
+            #{lg.crtId},
+            #{lg.crtTime},
+            #{lg.updId},
+            #{lg.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.region.bean.param.BaseBean">
+        UPDATE REGN_PROVINCE
+        SET
+        <if test="target.provinceCode != null">
+            PROVINCE_CODE = #{target.provinceCode},
+        </if>
+        <if test="target.provinceName != null">
+            PROVINCE_NAME = #{target.provinceName},
+        </if>
+        <if test="target.disableFlg != null">
+            DISABLE_FLG = #{target.disableFlg},
+        </if>
+        DEL_FLG = #{target.delFlg},
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime}
+        WHERE
+        PROVINCE_ID = #{filter.provinceId}
+        AND DEL_FLG = FALSE
+    </update>
+
+    <select id="checkData" parameterType="com.bms.region.bean.param.ProvinceRsParam"
+            resultType="com.bms.region.bean.param.ProvinceRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        REGN_PROVINCE
+        WHERE
+        DEL_FLG = FALSE
+        AND DISABLE_FLG = 1
+        AND (PROVINCE_CODE = #{provinceCode} OR PROVINCE_NAME = #{provinceName})
+        <if test="provinceId != null and provinceId != ''">
+            AND PROVINCE_ID &lt;&gt; #{provinceId}
+        </if>
+    </select>
+
+    <select id="checkedProvinceId" parameterType="com.bms.region.bean.param.ProvinceRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        REGN_PROVINCE
+        WHERE
+        DEL_FLG = FALSE
+        AND PROVINCE_ID = #{provinceId}
+    </select>
+
+    <select id="findAll" parameterType="com.bms.region.bean.param.ProvinceRsParam"
+            resultType="com.bms.region.bean.param.ProvinceRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        REGN_PROVINCE
+        WHERE
+        DEL_FLG = FALSE
+        AND DISABLE_FLG = 1
+        <if test="provinceCode != null and provinceCode != ''">
+            AND PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="provinceName != null and provinceName != ''">
+            AND PROVINCE_NAME LIKE #{provinceName}
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            AND PROVINCE_ID = #{provinceId}
+        </if>
+    </select>
+
+    <select id="count" parameterType="com.bms.region.bean.param.ProvinceRsParam" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			REGN_PROVINCE
+		WHERE
+			DEL_FLG = FALSE
+            AND DISABLE_FLG = 1
+			AND PROVINCE_CODE = #{provinceCode}
+	</select>
+
+    <!--<select id="findRelaProvinceList" parameterType="com.bms.region.bean.param.ProvinceRsParam"
+            resultType="com.bms.region.bean.param.ProvinceRsParam">
+        SELECT
+        <include refid="selectColumns2"/>
+        FROM REGN_PROVINCE p
+        INNER JOIN REGN_LOGISTICS_AREA_RELATION r ON p.PROVINCE_ID = r.PROVINCE_ID AND r.DEL_FLG = FALSE AND r.DISABLE_FLG = TRUE
+        INNER JOIN REGN_LOGISTICS_AREA a ON r.LGCS_AREA_ID = a.LGCS_AREA_ID AND r.DEL_FLG = FALSE AND r.DISABLE_FLG = TRUE
+        WHERE
+        p.DEL_FLG = FALSE
+        AND p.DISABLE_FLG = TRUE
+        <if test="lgcsAreaId != null and lgcsAreaId != ''">
+            AND r.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="lgcsAreaName != null and lgcsAreaName != ''">
+            AND a.LGCS_AREA_NAME = #{lgcsAreaName}
+        </if>
+        <if test="provinceId != null and provinceId != ''">
+            AND r.PROVINCE_ID = #{provinceId}
+        </if>
+        <if test="provinceCode != null and provinceCode != ''">
+            AND p.PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="provinceName != null and provinceName != ''">
+            AND p.PROVINCE_NAME = #{provinceName}
+        </if>
+        GROUP BY p.PROVINCE_ID
+    </select>-->
+</mapper>

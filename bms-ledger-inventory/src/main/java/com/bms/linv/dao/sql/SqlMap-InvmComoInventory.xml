@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.linv.dao.InvmComoInventoryDao">
+    <!-- 查询字段 -->
+	<sql id="selectColumns">
+		STORE_NO AS storeNo,
+		L_A_ID AS laId,
+		L_A_CODE AS laCode,
+		S_PLAT_CODE AS splatCode,
+		OWNER_ID AS ownerId,
+		OWNER_CODE AS ownerCode,
+		OWNER_TYPE AS ownerType,
+		OWNER_D_TYPE AS ownerDType,
+		COMMODITY_ID AS commodityId,
+		UOM AS uom,
+		IV_QTY AS ivQty,
+		IV_TYPE AS ivType,
+		COMO_IV_TYPE AS comoIvType
+	</sql>
+	
+	<!--条件-->
+	<sql id="whereCondition">
+		<where>
+			1=1
+			<if test="laId !=null and laId !=''">
+				AND L_A_ID = #{laId}
+			</if>
+			<if test="ownerId !=null and ownerId !=''">
+				AND OWNER_ID = #{ownerId}
+			</if>
+			<if test="ownerCode !=null and ownerCode !=''">
+				AND OWNER_CODE = #{ownerCode}
+			</if>
+			<if test="ownerType !=null and ownerType !=''">
+				AND OWNER_TYPE = #{ownerType}
+			</if>
+			<if test="splatCode !=null and splatCode !=''">
+				AND S_PLAT_CODE = #{splatCode}
+			</if>
+			<if test="ivType !=null and ivType !=''">
+				AND IV_TYPE = #{ivType}
+			</if>
+			<if test="comoIvType !=null and comoIvType !=''">
+				AND COMO_IV_TYPE = #{comoIvType}
+			</if>
+			<if test="commodityId !=null and commodityId !=''">
+				AND COMMODITY_ID = #{commodityId}
+			</if>
+			<if test="uom !=null and uom !=''">
+				AND UOM = #{uom}
+			</if>
+		<if test="storeNo !=null and storeNo !=''">
+				AND STORE_NO = #{storeNo}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="save" parameterType="com.bms.linv.bean.entity.InvmComoInventory">
+		INSERT INTO invm_como_inventory (
+			STORE_NO,
+			L_A_ID,
+			L_A_CODE,
+			S_PLAT_CODE,
+			OWNER_ID,
+			OWNER_CODE,
+			OWNER_TYPE,
+			OWNER_D_TYPE,
+			COMMODITY_ID,
+			UOM,
+			IV_QTY,
+			IV_TYPE,
+			COMO_IV_TYPE,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{storeNo},
+			#{laId},
+			#{laCode},
+			#{splatCode},
+			#{ownerId},
+			#{ownerCode},
+			#{ownerType},
+			#{ownerDType},
+			#{commodityId},
+			#{uom},
+			#{ivQty},
+			#{ivType},
+			#{comoIvType},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+	
+	<update id="modify" parameterType="com.bms.linv.bean.entity.InvmComoInventory">
+		UPDATE invm_como_inventory 
+		SET 
+			IV_QTY = IV_QTY +  #{ivQty},
+			UPD_ID = #{updId},
+			UPD_TIME = #{updTime},
+		    VERSION = VERSION+1
+		WHERE
+			STORE_NO = #{storeNo}		
+	</update>
+	
+	<select id="findOne" parameterType="com.bms.linv.bean.entity.InvmComoInventory" resultType="com.bms.linv.bean.entity.InvmComoInventory">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_inventory
+		<include refid="whereCondition"/>
+		limit 1
+	</select>
+	
+	<select id="findAll" parameterType="com.bms.linv.bean.entity.InvmComoInventory" resultType="com.bms.linv.bean.entity.InvmComoInventory">
+		SELECT 
+			<include refid="selectColumns" />
+		FROM 
+			invm_como_inventory
+			<include refid="whereCondition"/>
+	</select>
+	
+	<select id="countAll" parameterType="com.bms.linv.bean.entity.InvmComoInventory" resultType="int">
+		SELECT 
+			count(1)
+		FROM 
+			invm_como_inventory
+			<include refid="whereCondition"/>
+	</select>
+
+
+	<select id="findPageList" parameterType="com.bms.linv.bean.param.LINV0113IParam" resultType="com.bms.linv.bean.result.LINV0113IResult">
+
+		SELECT
+		t.L_A_ID AS logisticsId,
+		t.L_A_CODE AS logisticsCode,
+		t.logisticsName AS logisticsName,
+		t.S_PLAT_CODE AS splatCode,
+		t.OWNER_ID AS ownerId,
+		t.OWNER_CODE AS ownerCode,
+		t.ownerName AS ownerName,
+		t.OWNER_TYPE AS ownerType,
+		t.COMMODITY_ID AS commodityId,
+		t.COMMODITY_NAME AS commodityName,
+		t.PD_ID AS pdId,
+		t.IV_TYPE AS ivType,
+		t.COMO_IV_TYPE AS comoIvType,
+		t.SALE_STATUS_ID AS saleStatusId,
+		t.SALE_STATUS_CODE AS saleStatusCode,
+		t.SALE_STATUS_NAME AS saleStatusName,
+		t.UOM AS uom,
+		t.TOTAL_QTY AS totalQty,
+		t.ONHAND_QTY AS onhandQty,
+		t.BUFFER_QTY AS bufferQty,
+		t.ALOC_QTY AS allocatedQty,
+		t.AVAILABLE_QTY AS availableQty
+		from
+		(
+		SELECT
+		l.L_A_ID ,
+		l.L_A_CODE ,
+		nl.NAME as logisticsName,
+		l.S_PLAT_CODE ,
+		l.OWNER_ID ,
+		l.OWNER_CODE ,
+		n.NAME as  ownerName,
+		l.OWNER_TYPE ,
+		l.COMMODITY_ID ,
+		c.COMMODITY_NAME ,
+		c.PD_ID ,
+		l.IV_TYPE ,
+		l.COMO_IV_TYPE ,
+		c.SALE_STATUS_ID ,
+		c.SALE_STATUS_CODE ,
+		c.SALE_STATUS_NAME ,
+		l.UOM ,
+		l.TOTAL_QTY ,
+		l.ONHAND_QTY ,
+		l.BUFFER_QTY ,
+		l.ALOC_QTY ,
+		l.AVAILABLE_QTY
+		FROM
+		(
+		SELECT
+		t.L_A_ID,
+		t.L_A_CODE,
+		t.S_PLAT_CODE,
+		t.OWNER_ID,
+		t.OWNER_CODE,
+		t.OWNER_TYPE,
+		t.COMMODITY_ID,
+		t.IV_TYPE,
+		t.COMO_IV_TYPE,
+		t.UOM,
+		SUM(t.IV_QTY) AS TOTAL_QTY,
+		0 AS BUFFER_QTY,
+		SUM(t.IV_QTY) AS ONHAND_QTY,
+		SUM(t.ALOC_QTY) AS ALOC_QTY,
+		(
+		SUM(t.IV_QTY) - SUM(t.ALOC_QTY)
+		) AS AVAILABLE_QTY
+		FROM
+		(
+		SELECT
+		L_A_ID,
+		L_A_CODE,
+		S_PLAT_CODE,
+		OWNER_ID,
+		OWNER_CODE,
+		OWNER_TYPE,
+		COMMODITY_ID,
+		IV_TYPE,
+		COMO_IV_TYPE,
+		UOM,
+		IV_QTY,
+		0 AS ALOC_QTY
+		FROM
+		INVM_COMO_INVENTORY
+		UNION ALL
+		SELECT
+		L_A_ID,
+		NULL AS L_A_CODE,
+		S_PLAT_CODE,
+		OWNER_ID,
+		OWNER_CODE,
+		OWNER_TYPE,
+		COMMODITY_ID,
+		IV_TYPE,
+		COMO_IV_TYPE,
+		UOM,
+		0 AS IV_QTY,
+		ALOC_QTY
+		FROM
+		INVM_COMO_ALOC_INVENTORY
+		) t
+		GROUP BY
+		t.L_A_ID,
+		t.S_PLAT_CODE,
+		t.OWNER_ID,
+		t.OWNER_CODE,
+		t.OWNER_TYPE,
+		t.COMMODITY_ID,
+		t.IV_TYPE,
+		t.COMO_IV_TYPE,
+		t.UOM
+		) l
+		LEFT JOIN invm_name_info n ON n. CODE = l.OWNER_CODE
+		AND n.TYPE = '003'
+		LEFT JOIN invm_name_info nl ON nl. CODE = l.L_A_CODE
+		AND nl.TYPE = '001'
+		LEFT JOIN invm_comm_info c ON c.COMMODITY_ID = l.COMMODITY_ID
+		) t
+		where 1=1
+		<if test="logisticsId != null and logisticsId.size>0 ">
+			AND t.L_A_ID IN
+			<foreach collection="logisticsId"  item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="salePlatform != null and salePlatform.size>0 ">
+			AND t.S_PLAT_CODE IN
+			<foreach collection="salePlatform"  item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="ownerId != null and ownerId.size>0">
+			AND t.OWNER_ID IN
+			<foreach collection="ownerId"  item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="ownerType != null and ownerType.size>0">
+			AND t.OWNER_TYPE IN
+			<foreach collection="ownerType"  item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="commodityId != null and commodityId.size>0">
+			AND t.COMMODITY_ID IN
+			<foreach collection="commodityId"  item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="uom != null and uom.size>0">
+			AND t.UOM IN
+			<foreach collection="uom"  item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="ivType != null and ivType.size>0">
+			AND t.IV_TYPE IN
+			<foreach collection="ivType"  item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="comoIvType != null and comoIvType.size>0">
+			AND t.COMO_IV_TYPE IN
+			<foreach collection="comoIvType"  item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="commodityName != null and commodityName !=''">
+			AND t.COMMODITY_NAME like  '%${commodityName}%'
+		</if>
+		<if test="ownerName != null and ownerName !=''">
+			AND t.ownerName like  '%${ownerName}%'
+		</if>
+	</select>
+</mapper>
