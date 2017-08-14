@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bootstrap-select page</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../dist/css/bootstrap.css">
+  <style>
+    .important {
+      color: #f00;
+      background-color: #fdd;
+    }
+    .annotation {
+      color: #999;
+      background-color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" style="padding-top:20px">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            简单表格控件
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <h5>实例</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="hdatatable">
+                  <div class="htable-responsive">
+                    <table class="htable">
+                      <colgroup>
+                        <col width="50">
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                        <col width="150">
+                        <col width="200">
+                        <col width="150">
+                      </colgroup>
+                      <thead>
+                        <tr>
+                          <th>编号</th>
+                          <th>类型</th>
+                          <th>数量</th>
+                          <th>重量</th>
+                          <th>金额</th>
+                          <th>日期</th>
+                          <th>备注</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td class="sno">1</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number">3</td>
+                        <td class="number" data-fixed="3">5</td>
+                        <td class="money">1236.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-success"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">2</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number">2.5</td>
+                        <td class="number" data-fixed="3">4</td>
+                        <td class="money">-2321</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-success"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">3</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number">2000</td>
+                        <td class="number" data-fixed="3">3</td>
+                        <td class="money">36.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-success"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">4 </td>
+                        <td class="text">鸡肉</td>
+                        <td class="number"></td>
+                        <td class="number" data-fixed="3">2</td>
+                        <td class="money">36.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-success"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colspan="2" class="label">当前页合计</td>
+                          <td class="number">2005.5</td>
+                          <td class="number" data-fixed="3">14000</td>
+                          <td class="money">-1012.4</td>
+                          <td colspan="3"></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <h5>代码</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <pre>
+&lt;div <code class="important">class="hdatatable"</code>&gt; <code class="annotation">&lt;!-- Hoperun Datatable. JS会把hdatatable当做数据表格处理--&gt;</code>
+  &lt;div <code class="important">class="htable-responsive"</code>&gt; <code class="annotation">&lt;!-- 当表格长度超出后，添加横向滚动条 --&gt;</code>
+    &lt;table <code class="important">class="htable"</code>&gt; <code class="annotation">&lt;!-- Hoperun Table. 表格的CSS样式 --&gt;</code>
+      &lt;<code class="important">colgroup</code>&gt; <code class="annotation">&lt;!-- 表格的宽度在这里处理（当有多层表头时，在th中设置宽度会失效，所以在这里处理表格宽度） --&gt;</code>
+        &lt;col width="50"&gt;
+        &lt;col width="100"&gt;
+        &lt;col width="100"&gt;
+        &lt;col width="100"&gt;
+        &lt;col width="100"&gt;
+        &lt;col width="150"&gt;
+        &lt;col width="200"&gt;
+        &lt;col width="150"&gt;
+      &lt;/colgroup&gt;
+      &lt;<code class="important">thead</code>&gt; <code class="annotation">&lt;!-- 表头 --&gt;</code>
+        &lt;tr&gt;
+          &lt;th&gt;编号&lt;/th&gt;
+          &lt;th&gt;类型&lt;/th&gt;
+          &lt;th&gt;数量&lt;/th&gt;
+          &lt;th&gt;重量&lt;/th&gt;
+          &lt;th&gt;金额&lt;/th&gt;
+          &lt;th&gt;日期&lt;/th&gt;
+          &lt;th&gt;备注&lt;/th&gt;
+          &lt;th&gt;操作&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;<code class="important">tbody</code>&gt; <code class="annotation">&lt;!-- 表格内容 --&gt;</code>
+        &lt;tr&gt;
+          &lt;td <code class="important">class="sno"</code>&gt;1&lt;/td&gt; <code class="annotation">&lt;!-- 编号：居中 加粗 --&gt;</code>
+          &lt;td <code class="important">class="text"</code>&gt;鸡肉&lt;/td&gt; <code class="annotation">&lt;!-- 文本：居左 可换行 --&gt;</code>
+          &lt;td <code class="important">class="number"</code>&gt;3&lt;/td&gt; <code class="annotation">&lt;!-- 数字：居右 保持原有精度 千分位加逗号 非数字置零 --&gt;</code>
+          &lt;td class="number" <code class="important">data-fixed="3"</code>&gt;5&lt;/td&gt; <code class="annotation">&lt;!-- 数字：保留三位小数 --&gt;</code>
+          &lt;td <code class="important">class="money"</code>&gt;36.2&lt;/td&gt; <code class="annotation">&lt;!-- 金额：居右 保留两位小数 --&gt;</code>
+          &lt;td <code class="important">class="datetime"</code>&gt;2016/11/15&lt;/td&gt; <code class="annotation">&lt;!-- 时间：居中 --&gt;</code>
+          &lt;td <code class="important">class="long-text"</code>&gt; <code class="annotation">&lt;!-- 长文本：居左 不换行 超出长度显示... --&gt;</code>
+             鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖
+          &lt;/td&gt;
+          &lt;td <code class="important">class="operation"</code>&gt; <code class="annotation">&lt;!-- 按钮：居左 不换行 --&gt;</code>
+            &lt;button type="button" class="btn btn-xs btn-success"&gt;&lt;i class="icon icon-edit"&gt;&lt;/i&gt;&nbsp;&nbsp;编辑&lt;/button&gt;
+          &lt;/td&gt;
+        &lt;/tr&gt;
+        ...
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            分页表格控件
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <h5>实例</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <form>
+                <div class="hdatatable" data-count="79" data-page="1">
+                  <div class="htable-responsive">
+                    <table class="htable">
+                      <colgroup>
+                        <col width="50">
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                        <col width="150">
+                        <col width="200">
+                        <col width="150">
+                      </colgroup>
+                      <thead>
+                      <tr>
+                        <th>编号</th>
+                        <th>类型</th>
+                        <th>数量</th>
+                        <th>重量</th>
+                        <th>金额</th>
+                        <th>日期</th>
+                        <th>备注</th>
+                        <th>操作</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td class="sno">1</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number">3</td>
+                        <td class="number" data-fixed="3">5</td>
+                        <td class="money">1236.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-warning"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">2</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number">2.5</td>
+                        <td class="number" data-fixed="3">4</td>
+                        <td class="money">-2321</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-warning"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">3</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number">2000</td>
+                        <td class="number" data-fixed="3">3</td>
+                        <td class="money">36.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-warning"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">4</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number"></td>
+                        <td class="number" data-fixed="3">2</td>
+                        <td class="money">36.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-warning"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">5</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number"></td>
+                        <td class="number" data-fixed="3">2</td>
+                        <td class="money">36.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-warning"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">6</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number"></td>
+                        <td class="number" data-fixed="3">2</td>
+                        <td class="money">36.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-warning"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">7</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number"></td>
+                        <td class="number" data-fixed="3">2</td>
+                        <td class="money">36.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-warning"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">8</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number"></td>
+                        <td class="number" data-fixed="3">2</td>
+                        <td class="money">36.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-warning"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">9</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number"></td>
+                        <td class="number" data-fixed="3">2</td>
+                        <td class="money">36.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-warning"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      <tr>
+                        <td class="sno">10</td>
+                        <td class="text">鸡肉</td>
+                        <td class="number"></td>
+                        <td class="number" data-fixed="3">2</td>
+                        <td class="money">36.2</td>
+                        <td class="datetime">2016/11/15</td>
+                        <td class="long-text">鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖。</td>
+                        <td class="operation"><button type="button" class="btn btn-xs btn-warning"><i class="icon icon-edit"></i>&nbsp;&nbsp;编辑</button></td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                </form>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <h5>代码</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <pre>
+&lt;<code class="important">form</code>&gt; <code class="annotation">&lt;!-- 表格包裹在表单中，页面跳转时将在表单提交时添加"page=n"的字样 --&gt;</code>
+&lt;div class="hdatatable" <code class="important">data-count="79" data-page="1"</code>&gt; <code class="annotation">&lt;!-- data-count(default: 0): 总共有多少条数据，为0时不分页; data-page(default: 1): 页码 --&gt;</code>
+  &lt;div class="htable-responsive"&gt;
+    &lt;table class="htable"&gt;
+      &lt;colgroup&gt;
+        &lt;col width="50"&gt;
+        &lt;col width="100"&gt;
+        &lt;col width="100"&gt;
+        &lt;col width="100"&gt;
+        &lt;col width="100"&gt;
+        &lt;col width="150"&gt;
+        &lt;col width="200"&gt;
+        &lt;col width="150"&gt;
+      &lt;/colgroup&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th&gt;编号&lt;/th&gt;
+          &lt;th&gt;类型&lt;/th&gt;
+          &lt;th&gt;数量&lt;/th&gt;
+          &lt;th&gt;重量&lt;/th&gt;
+          &lt;th&gt;金额&lt;/th&gt;
+          &lt;th&gt;日期&lt;/th&gt;
+          &lt;th&gt;备注&lt;/th&gt;
+          &lt;th&gt;操作&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td class="sno"&gt;1&lt;/td&gt;
+          &lt;td class="text"&gt;鸡肉&lt;/td&gt;
+          &lt;td class="number"&gt;3&lt;/td&gt;
+          &lt;td class="number" data-fixed="3"&gt;5&lt;/td&gt;
+          &lt;td class="money"&gt;36.2&lt;/td&gt;
+          &lt;td class="datetime"&gt;2016/11/15&lt;/td&gt;
+          &lt;td class="long-text"&gt;
+             鸡肉（chicken），指鸡身上的肉，鸡的肉质细嫩，滋味鲜美，适合多种烹调方法，并富有营养，有滋补养身的作用。鸡肉不但适于热炒、炖汤，而且是比较适合冷食凉拌的肉类。但切忌吃过多的鸡翅等鸡肉类食品，以免引起肥胖
+          &lt;/td&gt;
+          &lt;td class="operation"&gt;
+            &lt;button type="button" class="btn btn-xs btn-success"&gt;&lt;i class="icon icon-edit"&gt;&lt;/i&gt;&nbsp;&nbsp;编辑&lt;/button&gt;
+          &lt;/td&gt;
+        &lt;/tr&gt;
+        ...
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;/form&gt;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="jquery.js"></script>
+  <script src="../dist/js/bootstrap.js"></script>
+</body>
+</html>

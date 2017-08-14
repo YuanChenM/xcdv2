@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.puch.fms.dao.FmsAgentBidOrderDao">
+    <select id="findAgentBidOrder" parameterType="com.bms.puch.fms.bean.FmsOrderParam"
+            resultType="com.bms.puch.fms.bean.FmsAgentBidOrderBean">
+        SELECT
+        puchReceive.DELIVER_CODE AS orgSystemId,
+        puchReceive.DELIVER_CODE AS omsOrderNumber,
+        puchReceive.DELIVER_ID AS omsOrderId,
+        puchReceive.OWNER_ID AS customerOrgNumber,
+        puchReceive.OWNER_NAME AS soldTo
+        FROM PUCH_RECEIVE puchReceive
+        WHERE puchReceive.DEL_FLG = FALSE
+        <if test="pushOrderId != null and pushOrderId != ''">
+            AND puchReceive.DELIVER_ID = #{pushOrderId}
+        </if>
+        <if test="pushOrderCode != null and pushOrderCode != ''">
+            AND puchReceive.DELIVER_CODE = #{pushOrderCode}
+        </if>
+        <if test="backNo != null and backNo != ''">
+            AND puchReceive.DELIVER_CODE = #{backNo}
+        </if>
+        ORDER BY puchReceive.DELIVER_ID
+    </select>
+    <select id="findAgentBidOrderDetail" parameterType="com.bms.puch.fms.bean.FmsAgentBidOrderBean"
+            resultType="com.bms.puch.fms.bean.FmsAgentBidOrderDetail">
+        SELECT
+            (@rownum :=@rownum + 1) AS lineNum,
+            puchDetail.ORDER_CODE AS orgOrderCode,
+            puchDetail.COMMODITY_ID AS productId,
+            puchDetail.RECEIVE_QTY AS orderedQuantity,
+            puchDetail.UNIT AS orderQuantityUom,
+            puchDetail.RECEIVE_PRICE AS unitSellingPriceDsp,
+            puchDetail.ORDER_TYPE AS orderType,
+            puchDetail.INBOUND_DATE AS inboundDate
+        FROM
+            (SELECT @rownum := 0) AS SEQ,
+            PUCH_DETAIL puchDetail
+        WHERE
+            puchDetail.DELIVER_ID = #{omsOrderId}
+        ORDER BY puchDetail.COMMODITY_ID
+    </select>
+</mapper>

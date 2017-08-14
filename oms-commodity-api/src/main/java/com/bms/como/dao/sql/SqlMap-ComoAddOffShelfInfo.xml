@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.como.dao.ComoAddOffShelfInfoDao">
+    <!-- 查询销售商品的上下架信息 -->
+    <select id="findPageList" resultType="com.bms.como.bean.result.ComoAddOffShelfInfoRsResult" parameterType="com.bms.como.bean.param.ComoAddOffShelfInfoRsParam" >
+        SELECT
+        commodityInfo.COMMODITY_ID AS commodityId,
+        commodityInfo.SALE_STATUS_DESC AS saleStatusDesc,
+        commodityInfo.COMMODITY_CODE AS commodityCode,
+        commodityInfo.COMMODITY_NAME AS commodityName,
+        commodityInfo.IS_DEFAULT AS isDefault,
+        commodityInfo.CRT_ID AS crtId,
+        commodityInfo.CRT_TIME AS crtTime,
+        commodityInfo.UPD_ID AS updId,
+        commodityInfo.UPD_TIME AS updTime,
+        commodityInfo.VERSION AS ver,
+        shelfList.LGCS_AREA_ID AS lgcsAreaId,
+        shelfList.LGCS_AREA_CODE AS lgcsAreaCode,
+        shelfList.LGCS_AREA_NAME AS lgcsAreaName,
+        shelfList.ADD_SHELF_TIME AS addShelfTime,
+        shelfList.OFF_SHELF_TIME AS offShelfTime,
+        saleStatus.SALE_STATUS_ID AS saleStatusId,
+        saleStatus.SALE_STATUS_CODE AS saleStatusCode,
+        saleStatus.SALE_STATUS_NAME AS saleStatusName,
+        commodityDetail.INVENTORY_STU AS inventoryStu,
+        productInfo.PRODUCT_PID AS productPid,
+        productInfo.PRODUCT_ID AS productId,
+        productInfo.CLASSES_ID AS classesId,
+        productInfo.CLASSES_CODE AS classesCode,
+        productInfo.CLASSES_NAME AS classesName,
+        productInfo.MACHINING_ID AS machiningId,
+        productInfo.MACHINING_CODE AS machiningCode,
+        productInfo.MACHINING_NAME AS machiningName,
+        productInfo.BREED_ID AS breedId,
+        productInfo.BREED_CODE AS breedCode,
+        productInfo.BREED_SALES_NAME AS breedName,
+        productInfo.ITEM_ID AS itemId,
+        productInfo.ITEM_SKU AS itemCode,
+        productInfo.ITEM_NAME AS itemName,
+        productInfo.BRAND_ID AS brandId,
+        productInfo.BRAND_CODE AS brandCode,
+        productInfo.BRAND_NAME AS brandName,
+        productInfo.QUALITY_GRADE_TYPE_CODE AS qualityGradeTypeCode,
+        productInfo.QUALITY_GRADE_TYPE AS qualityGradeType,
+        productInfo.GROSS_WEIGHT AS grossWeight,
+        productInfo.NET_WEIGHT_CODE AS netWeightCode,
+        productInfo.NET_WEIGHT AS netWeight,
+        productInfo.PACKAGE_SPECIFICATION AS packageSpecification,
+        productInfo.PACKAGE_QUANTITY AS packageQuantity,
+        productInfo.CARTON_DIMENSION AS cartonDimension,
+        productInfo.PALLET_STACKING_LIMIT AS palletStackingLimit,
+        productInfo.BRAND_ITEM_PROPERTY_SKU AS brandItemPropertySku,
+        productInfo.ITEM_PROPERTY_CODE AS itemPropertyCode
+        FROM
+        COMO_COMMODITY_INFO commodityInfo,
+        COMO_COMMODITY_DETAIL commodityDetail,
+        COMO_PRODUCT_INFO productInfo,
+        COMO_SALE_STATUS saleStatus,
+        COMO_SHELF_LIST shelfList
+        WHERE commodityInfo.DEL_FLG = 0
+        AND commodityDetail.DEL_FLG = 0
+        AND productInfo.DEL_FLG = 0
+        AND saleStatus.DEL_FLG = 0
+        AND shelfList.DEL_FLG = 0
+        AND commodityInfo.COMMODITY_ID = shelfList.COMMODITY_ID
+        AND commodityInfo.SALE_STATUS_ID = saleStatus.SALE_STATUS_ID
+        AND commodityInfo.PRODUCT_PID = productInfo.PRODUCT_PID
+        AND commodityInfo.COMMODITY_ID = commodityDetail.COMMODITY_ID
+        AND commodityDetail.COMMODITY_ID = shelfList.COMMODITY_ID
+        AND commodityDetail.LGCS_AREA_ID = shelfList.LGCS_AREA_ID
+        <if test="commodityId != null and commodityId.size()>0">
+            AND commodityInfo.COMMODITY_ID IN
+            <foreach collection="commodityId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="saleStatusId != null and saleStatusId.size()>0">
+            AND commodityInfo.SALE_STATUS_ID IN
+            <foreach collection="saleStatusId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test = "inventoryStu != null and inventoryStu != ''">
+            AND commodityDetail.INVENTORY_STU = #{inventoryStu}
+        </if>
+        <if test = "commodityName != null and commodityName != ''">
+            AND commodityInfo.COMMODITY_NAME = #{commodityName}
+        </if>
+        <if test="classesId != null and classesId.size()>0">
+            AND productInfo.CLASSES_ID IN
+            <foreach collection="classesId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="machiningId != null and machiningId.size()>0">
+            AND productInfo.MACHINING_ID IN
+            <foreach collection="machiningId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="breedId != null and breedId.size()>0">
+            AND productInfo.BREED_ID IN
+            <foreach collection="breedId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test = "breedName != null and breedName != ''">
+            AND productInfo.BREED_SALES_NAME LIKE #{breedName}
+        </if>
+        <if test="brandId != null and brandId.size()>0">
+            AND productInfo.BRAND_ID IN
+            <foreach collection="brandId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="itemId != null and itemId.size()>0">
+            AND productInfo.ITEM_ID IN
+            <foreach collection="itemId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test = "itemName != null and itemName != ''">
+            AND productInfo.ITEM_NAME LIKE #{itemName}
+        </if>
+        <if test = "qualityGradeType != null and qualityGradeType != ''">
+            AND productInfo.QUALITY_GRADE_TYPE = #{qualityGradeType}
+        </if>
+        <if test="lgcsAreaId != null and lgcsAreaId.size()>0">
+            AND shelfList.LGCS_AREA_ID IN
+            <foreach collection="lgcsAreaId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test = "onShelfEnd != null and onShelfEnd != ''">
+            <![CDATA[ AND shelfList.ADD_SHELF_TIME <= #{onShelfEnd}  ]]>
+        </if>
+        <if test = "onShelfStart != null and onShelfStart != ''">
+            <![CDATA[ AND shelfList.OFF_SHELF_TIME >= #{onShelfStart} ]]>
+        </if>
+    </select>
+
+    <!-- 新增商品上下架操作记录 -->
+    <insert id="save" parameterType="com.bms.como.bean.entity.ComoShelfListRecord">
+        INSERT INTO como_shelf_list_record (
+        RECORD_ID,
+        HANDLE_TYPE,
+        HANDLE_REMARK,
+        ADD_SHELF_TIME,
+        OFF_SHELF_TIME,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES (
+        #{recordId},
+        #{handleType},
+        #{handleRemark},
+        #{addShelfTime},
+        #{offShelfTime},
+        0,
+        #{crtId},
+        #{crtTime},
+        #{updId},
+        #{updTime},
+        1
+        )
+    </insert>
+
+    <!-- 修改物流区商品的上下架状态 -->
+    <update id="modify" parameterType="com.bms.como.bean.param.ComoShelfListRsParam">
+        UPDATE como_shelf_list
+        SET
+        <if test="addShelfTime != null">
+            ADD_SHELF_TIME = #{addShelfTime},
+        </if>
+        <if test="offShelfTimeFlg != null">
+            OFF_SHELF_TIME = NULL ,
+        </if>
+        <if test="offShelfTimeFlg == null and offShelfTime != null">
+            OFF_SHELF_TIME = #{offShelfTime},
+        </if>
+        <if test="delFlg != null">
+            DEL_FLG = #{delFlg},
+        </if>
+        UPD_ID = #{updId},
+        UPD_TIME = #{updTime},
+        VERSION = VERSION + 1
+        WHERE
+        COMMODITY_ID = #{commodityId}
+        AND LGCS_AREA_ID = #{lgcsAreaId}
+        AND VERSION = #{ver}
+        AND DEL_FLG = 0
+    </update>
+</mapper>

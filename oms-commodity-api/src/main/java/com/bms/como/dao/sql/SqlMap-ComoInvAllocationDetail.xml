@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.como.dao.ComoInvAllocationDetailDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		ALLOCATION_DETAIL_ID AS allocationDetailId,
+		ALLOCATION_ID AS allocationId,
+		TARGET_COMMODITY_ID AS targetCommodityId,
+		ORIGINAL_COMMODITY_ID AS originalCommodityId,
+		OWNER_TYPE AS ownerType,
+		OWNER_ID AS ownerId,
+		OWNER_CODE AS ownerCode,
+		OWNER_NAME AS ownerName,
+		SKU_CODE AS skuCode,
+		LOT_NO AS lotNo,
+		UOM AS uom,
+		INVENTORY_STU AS inventoryStu,
+		INVENTORY_QTY AS inventoryQty,
+		PLAN_QTY AS planQty,
+		FACT_QTY AS factQty
+	</sql>
+
+    <sql id="selectDetailColumns">
+        ALLOCATION_DETAIL_ID AS allocationDetailId,
+        TARGET_COMMODITY_ID AS targetCommodityId,
+        ORIGINAL_COMMODITY_ID AS originalCommodityId,
+        commodity.COMMODITY_CODE AS commodityCode,
+        saleStatus.SALE_STATUS_NAME AS saleStatusName,
+        OWNER_TYPE AS ownerType,
+        OWNER_ID AS ownerId,
+        OWNER_CODE AS ownerCode,
+        OWNER_NAME AS ownerName,
+        SKU_CODE AS skuCode,
+        LOT_NO AS lotNo,
+        UOM AS uom,
+        INVENTORY_STU AS inventoryStu,
+        INVENTORY_QTY AS inventoryQty,
+        PLAN_QTY AS planQty,
+        FACT_QTY AS factQty,
+        detail.CRT_ID AS crtId,
+        detail.CRT_TIME AS crtTime,
+        detail.UPD_ID AS updId,
+        detail.UPD_TIME AS updTime,
+        detail.VERSION AS version
+    </sql>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO como_inv_allocation_detail (
+        ALLOCATION_DETAIL_ID,
+        ALLOCATION_ID,
+        TARGET_COMMODITY_ID,
+        ORIGINAL_COMMODITY_ID,
+        OWNER_TYPE,
+        OWNER_ID,
+        OWNER_CODE,
+        OWNER_NAME,
+        SKU_CODE,
+        LOT_NO,
+        UOM,
+        INVENTORY_STU,
+        INVENTORY_QTY,
+        PLAN_QTY,
+        FACT_QTY,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="param" index="index" separator=",">
+            (
+            #{param.allocationDetailId},
+            #{param.allocationId},
+            #{param.targetCommodityId},
+            #{param.originalCommodityId},
+            #{param.ownerType},
+            #{param.ownerId},
+            #{param.ownerCode},
+            #{param.ownerName},
+            #{param.skuCode},
+            #{param.lotNo},
+            #{param.uom},
+            #{param.inventoryStu},
+            #{param.inventoryQty},
+            #{param.planQty},
+            #{param.factQty},
+            #{param.delFlg},
+            #{param.crtId},
+            #{param.crtTime},
+            #{param.updId},
+            #{param.updTime},
+            #{param.version}
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.como.bean.entity.ComoInvAllocationDetail">
+		UPDATE como_inv_allocation_detail 
+		SET 
+			ALLOCATION_ID = #{allocationId},
+			TARGET_COMMODITY_ID = #{targetCommodityId},
+			ORIGINAL_COMMODITY_ID = #{originalCommodityId},
+			OWNER_TYPE = #{ownerType},
+			OWNER_ID = #{ownerId},
+			OWNER_CODE = #{ownerCode},
+			OWNER_NAME = #{ownerName},
+			SKU_CODE = #{skuCode},
+			LOT_NO = #{lotNo},
+			UOM = #{uom},
+			INVENTORY_STU = #{inventoryStu},
+			INVENTORY_QTY = #{inventoryQty}
+			PLAN_QTY = #{planQty},
+			FACT_QTY = #{factQty}
+		WHERE
+			ALLOCATION_DETAIL_ID = #{allocationDetailId}		
+	</update>
+
+    <update id="modifyFactQty" parameterType="com.bms.como.bean.entity.ComoInvAllocationDetail">
+        UPDATE como_inv_allocation_detail a
+        INNER JOIN como_inv_allocation_detail b ON a.ALLOCATION_DETAIL_ID = b.ALLOCATION_DETAIL_ID
+        AND a.ALLOCATION_ID = b.ALLOCATION_ID
+        SET
+        a.FACT_QTY = b.PLAN_QTY,
+        a.UPD_ID = #{updId},
+        a.UPD_TIME = #{updTime}
+        WHERE
+        a.DEL_FLG = FALSE
+        AND a.ALLOCATION_ID = #{allocationId}
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.como.bean.param.ComoInvAllocationDetailRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        como_inv_allocation_detail
+        WHERE
+        ALLOCATION_DETAIL_ID = #{allocationDetailId}
+    </select>
+
+    <select id="findAll" parameterType="com.bms.como.bean.param.ComoInvAllocationDetailRsParam"
+            resultType="com.bms.como.bean.result.ComoInvAllocationDetailRsResult">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        como_inv_allocation_detail
+        WHERE
+        DEL_FLG = FALSE
+        AND ALLOCATION_ID = #{allocationId}
+        AND OWNER_CODE = #{ownerCode}
+        AND SKU_CODE = #{skuCode}
+        AND LOT_NO = #{lotNo}
+        AND UOM = #{uom}
+    </select>
+
+    <select id="findInvAllocationDetails" parameterType="com.bms.como.bean.param.ComoInvAllocationDetailRsParam"
+            resultType="com.bms.como.bean.result.ComoInvAllocationDetailRsResult">
+        SELECT
+        <include refid="selectDetailColumns"/>
+        FROM
+        como_inv_allocation_detail detail
+        LEFT JOIN COMO_COMMODITY_INFO commodity ON commodity.COMMODITY_ID = detail.ORIGINAL_COMMODITY_ID
+        AND commodity.DEL_FLG = FALSE
+        LEFT JOIN COMO_SALE_STATUS saleStatus ON saleStatus.SALE_STATUS_ID = commodity.SALE_STATUS_ID
+        AND saleStatus.DEL_FLG = FALSE
+        WHERE
+        detail.DEL_FLG = FALSE
+        <!--<if test="targetCommodityIds != null and targetCommodityIds != ''">
+            AND TARGET_COMMODITY_ID IN
+            <foreach item="item" index="index" collection="targetCommodityIds" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>-->
+        <if test="allocationId != null and allocationId != ''">
+            AND ALLOCATION_ID = #{allocationId}
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.bms.como.bean.param.ComoInvAllocationDetailRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        como_inv_allocation_detail
+        WHERE
+        1 = 1
+        <if test="delFlg != null and delFlg != ''">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+    </select>
+
+    <select id="checkDetailRepeat" resultType="int"
+            parameterType="com.bms.como.bean.param.ComoInvAllocationDetailRsParam">
+		SELECT
+			COUNT(1)
+		FROM
+			como_inv_allocation_detail
+		WHERE
+		DEL_FLG = FALSE
+		AND TARGET_COMMODITY_ID = #{targetCommodityId}
+		AND ORIGINAL_COMMODITY_ID = #{originalCommodityId}
+		AND SKU_CODE = #{skuCode}
+		AND LOT_NO = #{lotNo}
+    </select>
+
+</mapper>

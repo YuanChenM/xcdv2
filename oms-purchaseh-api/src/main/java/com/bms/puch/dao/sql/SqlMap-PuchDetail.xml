@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.puch.dao.PuchDetailDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		DELIVER_DETAIL_ID AS deliverDetailId,
+		DELIVER_ID AS deliverId,
+		ORDER_CODE AS orderCode,
+		ORDER_TYPE AS orderType,
+		SCHEDULE_CODE AS scheduleCode,
+		SCHEDULE_DATE AS scheduleDate,
+		WH_ID AS whId,
+		WH_CODE AS whCode,
+		WH_NAME AS whName,
+		MATERIAL_CODE AS materialCode,
+		MATERIAL_NAME AS materialName,
+		COMMODITY_ID AS commodityId,
+		COMMODITY_CODE AS commodityCode,
+		COMMODITY_NAME AS commodityName,
+		UNIT AS unit,
+		LOT_NO AS lotNo,
+		SALES_LABEL AS salesLabel,
+		INVENTORY_STATUS AS inventoryStatus,
+		RECEIVE_QTY AS receiveQty,
+		RECEIVE_PRICE AS receivePrice,
+		INBOUND_DATE AS inboundDate
+	</sql>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO PUCH_DETAIL (
+        DELIVER_DETAIL_ID,
+        DELIVER_ID,
+        ORDER_CODE,
+        ORDER_TYPE,
+        SCHEDULE_CODE,
+        SCHEDULE_DATE,
+        WH_ID,
+        WH_CODE,
+        WH_NAME,
+        MATERIAL_CODE,
+        MATERIAL_NAME,
+        COMMODITY_ID,
+        COMMODITY_CODE,
+        COMMODITY_NAME,
+        UNIT,
+        LOT_NO,
+        SALES_LABEL,
+        INVENTORY_STATUS,
+        RECEIVE_QTY,
+        RECEIVE_PRICE,
+        INBOUND_DATE,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.deliverDetailId},
+            #{item.deliverId},
+            #{item.orderCode},
+            #{item.orderType},
+            #{item.scheduleCode},
+            #{item.scheduleDate},
+            #{item.whId},
+            #{item.whCode},
+            #{item.whName},
+            #{item.materialCode},
+            #{item.materialName},
+            #{item.commodityId},
+            #{item.commodityCode},
+            #{item.commodityName},
+            #{item.unit},
+            #{item.lotNo},
+            #{item.salesLabel},
+            #{item.inventoryStatus},
+            #{item.receiveQty},
+            #{item.receivePrice},
+            #{item.inboundDate},
+            false,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.updId},
+            #{item.updTime},
+            1
+            )
+        </foreach>
+
+    </insert>
+
+    <insert id="save" parameterType="com.bms.puch.bean.entity.PuchDetail">
+		INSERT INTO puch_detail (
+			DELIVER_DETAIL_ID,
+			DELIVER_ID,
+			ORDER_CODE,
+			ORDER_TYPE,
+			SCHEDULE_CODE,
+			SCHEDULE_DATE,
+			WH_ID,
+			WH_CODE,
+			WH_NAME,
+			MATERIAL_CODE,
+			MATERIAL_NAME,
+			COMMODITY_ID,
+			COMMODITY_CODE,
+			COMMODITY_NAME,
+			UNIT,
+			LOT_NO,
+			SALES_LABEL,
+			INVENTORY_STATUS,
+			RECEIVE_QTY,
+			RECEIVE_PRICE,
+			INBOUND_DATE,
+            DEL_FLG,
+            CRT_ID,
+            CRT_TIME,
+            UPD_ID,
+            UPD_TIME,
+            VERSION
+		)
+		VALUES (
+			#{deliverDetailId},
+			#{deliverId},
+			#{orderCode},
+			#{orderType},
+			#{scheduleCode},
+			#{scheduleDate},
+			#{whId},
+			#{whCode},
+			#{whName},
+			#{materialCode},
+			#{materialName},
+			#{commodityId},
+			#{commodityCode},
+			#{commodityName},
+			#{unit},
+			#{lotNo},
+			#{salesLabel},
+			#{inventoryStatus},
+			#{receiveQty},
+			#{receivePrice},
+			#{inboundDate},
+            false,
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            1
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.puch.bean.entity.PuchDetail">
+		UPDATE puch_detail 
+		SET 
+			DELIVER_ID = #{deliverId},
+			ORDER_CODE = #{orderCode},
+			ORDER_TYPE = #{orderType},
+			SCHEDULE_CODE = #{scheduleCode},
+			SCHEDULE_DATE = #{scheduleDate},
+			WH_ID = #{whId},
+			WH_CODE = #{whCode},
+			WH_NAME = #{whName},
+			MATERIAL_CODE = #{materialCode},
+			MATERIAL_NAME = #{materialName},
+			COMMODITY_ID = #{commodityId},
+			COMMODITY_CODE = #{commodityCode},
+			COMMODITY_NAME = #{commodityName},
+			UNIT = #{unit},
+			LOT_NO = #{lotNo},
+			SALES_LABEL = #{salesLabel},
+			INVENTORY_STATUS = #{inventoryStatus},
+			RECEIVE_QTY = #{receiveQty},
+			RECEIVE_PRICE = #{receivePrice},
+			INBOUND_DATE = #{inboundDate}
+		WHERE
+			DELIVER_DETAIL_ID = #{deliverDetailId}		
+	</update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.puch.bean.entity.PuchDetail">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        puch_detail
+        WHERE
+        DELIVER_DETAIL_ID = #{deliverDetailId}
+    </select>
+
+    <select id="findAll" parameterType="com.framework.base.rest.param.BaseRestParam"
+            resultType="com.bms.puch.bean.entity.PuchDetail">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        puch_detail
+        WHERE
+        DEL_FLG = false
+        <if test="filterMap.DELIVER_DETAIL_ID!= null and filterMap.DELIVER_DETAIL_ID!= ''">
+            AND A.DELIVER_DETAIL_ID = #{filterMap.DELIVER_DETAIL_ID}
+        </if>
+        <if test="filterMap.DELIVER_ID!= null and filterMap.DELIVER_ID!= ''">
+            AND A.DELIVER_ID = #{filterMap.DELIVER_ID}
+        </if>
+        <if test="filterMap.ORDER_CODE!= null and filterMap.ORDER_CODE!= ''">
+            AND A.ORDER_CODE = #{filterMap.ORDER_CODE}
+        </if>
+        <if test="filterMap.ORDER_TYPE!= null and filterMap.ORDER_TYPE!= ''">
+            AND A.ORDER_TYPE = #{filterMap.ORDER_TYPE}
+        </if>
+        <if test="filterMap.SCHEDULE_CODE!= null and filterMap.SCHEDULE_CODE!= ''">
+            AND A.SCHEDULE_CODE = #{filterMap.SCHEDULE_CODE}
+        </if>
+        <if test="filterMap.SCHEDULE_DATE!= null and filterMap.SCHEDULE_DATE!= ''">
+            AND A.SCHEDULE_DATE = #{filterMap.SCHEDULE_DATE}
+        </if>
+        <if test="filterMap.WH_ID!= null and filterMap.WH_ID!= ''">
+            AND A.WH_ID = #{filterMap.WH_ID}
+        </if>
+        <if test="filterMap.WH_CODE!= null and filterMap.WH_CODE!= ''">
+            AND A.WH_CODE = #{filterMap.WH_CODE}
+        </if>
+        <if test="filterMap.WH_NAME!= null and filterMap.WH_NAME!= ''">
+            AND A.WH_NAME = #{filterMap.WH_NAME}
+        </if>
+        <if test="filterMap.MATERIAL_CODE!= null and filterMap.MATERIAL_CODE!= ''">
+            AND A.MATERIAL_CODE = #{filterMap.MATERIAL_CODE}
+        </if>
+        <if test="filterMap.MATERIAL_NAME!= null and filterMap.MATERIAL_NAME!= ''">
+            AND A.MATERIAL_NAME = #{filterMap.MATERIAL_NAME}
+        </if>
+        <if test="filterMap.COMMODITY_ID!= null and filterMap.COMMODITY_ID!= ''">
+            AND A.COMMODITY_ID = #{filterMap.COMMODITY_ID}
+        </if>
+        <if test="filterMap.COMMODITY_CODE!= null and filterMap.COMMODITY_CODE!= ''">
+            AND A.COMMODITY_CODE = #{filterMap.COMMODITY_CODE}
+        </if>
+        <if test="filterMap.COMMODITY_NAME!= null and filterMap.COMMODITY_NAME!= ''">
+            AND A.COMMODITY_NAME = #{filterMap.COMMODITY_NAME}
+        </if>
+        <if test="filterMap.UNIT!= null and filterMap.UNIT!= ''">
+            AND A.UNIT = #{filterMap.UNIT}
+        </if>
+        <if test="filterMap.LOT_NO!= null and filterMap.LOT_NO!= ''">
+            AND A.LOT_NO = #{filterMap.LOT_NO}
+        </if>
+        <if test="filterMap.SALES_LABEL!= null and filterMap.SALES_LABEL!= ''">
+            AND A.SALES_LABEL = #{filterMap.SALES_LABEL}
+        </if>
+        <if test="filterMap.INVENTORY_STATUS!= null and filterMap.INVENTORY_STATUS!= ''">
+            AND A.INVENTORY_STATUS = #{filterMap.INVENTORY_STATUS}
+        </if>
+        <if test="filterMap.RECEIVE_QTY!= null and filterMap.RECEIVE_QTY!= ''">
+            AND A.RECEIVE_QTY = #{filterMap.RECEIVE_QTY}
+        </if>
+        <if test="filterMap.RECEIVE_PRICE!= null and filterMap.RECEIVE_PRICE!= ''">
+            AND A.RECEIVE_PRICE = #{filterMap.RECEIVE_PRICE}
+        </if>
+        <if test="filterMap.INBOUND_DATE!= null and filterMap.INBOUND_DATE!= ''">
+            AND A.INBOUND_DATE = #{filterMap.INBOUND_DATE}
+        </if>
+
+        <if test="filterMap.DEL_FLG != null and filterMap.DEL_FLG != ''">
+            AND A.DEL_FLG = #{filterMap.DEL_FLG}
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.framework.base.rest.param.BaseRestParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        puch_detail
+        WHERE
+        DEL_FLG = false
+        <if test="filterMap.DELIVER_DETAIL_ID!= null and filterMap.DELIVER_DETAIL_ID!= ''">
+            AND A.DELIVER_DETAIL_ID = #{filterMap.DELIVER_DETAIL_ID}
+        </if>
+        <if test="filterMap.DELIVER_ID!= null and filterMap.DELIVER_ID!= ''">
+            AND A.DELIVER_ID = #{filterMap.DELIVER_ID}
+        </if>
+        <if test="filterMap.ORDER_CODE!= null and filterMap.ORDER_CODE!= ''">
+            AND A.ORDER_CODE = #{filterMap.ORDER_CODE}
+        </if>
+        <if test="filterMap.ORDER_TYPE!= null and filterMap.ORDER_TYPE!= ''">
+            AND A.ORDER_TYPE = #{filterMap.ORDER_TYPE}
+        </if>
+        <if test="filterMap.SCHEDULE_CODE!= null and filterMap.SCHEDULE_CODE!= ''">
+            AND A.SCHEDULE_CODE = #{filterMap.SCHEDULE_CODE}
+        </if>
+        <if test="filterMap.SCHEDULE_DATE!= null and filterMap.SCHEDULE_DATE!= ''">
+            AND A.SCHEDULE_DATE = #{filterMap.SCHEDULE_DATE}
+        </if>
+        <if test="filterMap.WH_ID!= null and filterMap.WH_ID!= ''">
+            AND A.WH_ID = #{filterMap.WH_ID}
+        </if>
+        <if test="filterMap.WH_CODE!= null and filterMap.WH_CODE!= ''">
+            AND A.WH_CODE = #{filterMap.WH_CODE}
+        </if>
+        <if test="filterMap.WH_NAME!= null and filterMap.WH_NAME!= ''">
+            AND A.WH_NAME = #{filterMap.WH_NAME}
+        </if>
+        <if test="filterMap.MATERIAL_CODE!= null and filterMap.MATERIAL_CODE!= ''">
+            AND A.MATERIAL_CODE = #{filterMap.MATERIAL_CODE}
+        </if>
+        <if test="filterMap.MATERIAL_NAME!= null and filterMap.MATERIAL_NAME!= ''">
+            AND A.MATERIAL_NAME = #{filterMap.MATERIAL_NAME}
+        </if>
+        <if test="filterMap.COMMODITY_ID!= null and filterMap.COMMODITY_ID!= ''">
+            AND A.COMMODITY_ID = #{filterMap.COMMODITY_ID}
+        </if>
+        <if test="filterMap.COMMODITY_CODE!= null and filterMap.COMMODITY_CODE!= ''">
+            AND A.COMMODITY_CODE = #{filterMap.COMMODITY_CODE}
+        </if>
+        <if test="filterMap.COMMODITY_NAME!= null and filterMap.COMMODITY_NAME!= ''">
+            AND A.COMMODITY_NAME = #{filterMap.COMMODITY_NAME}
+        </if>
+        <if test="filterMap.UNIT!= null and filterMap.UNIT!= ''">
+            AND A.UNIT = #{filterMap.UNIT}
+        </if>
+        <if test="filterMap.LOT_NO!= null and filterMap.LOT_NO!= ''">
+            AND A.LOT_NO = #{filterMap.LOT_NO}
+        </if>
+        <if test="filterMap.SALES_LABEL!= null and filterMap.SALES_LABEL!= ''">
+            AND A.SALES_LABEL = #{filterMap.SALES_LABEL}
+        </if>
+        <if test="filterMap.INVENTORY_STATUS!= null and filterMap.INVENTORY_STATUS!= ''">
+            AND A.INVENTORY_STATUS = #{filterMap.INVENTORY_STATUS}
+        </if>
+        <if test="filterMap.RECEIVE_QTY!= null and filterMap.RECEIVE_QTY!= ''">
+            AND A.RECEIVE_QTY = #{filterMap.RECEIVE_QTY}
+        </if>
+        <if test="filterMap.RECEIVE_PRICE!= null and filterMap.RECEIVE_PRICE!= ''">
+            AND A.RECEIVE_PRICE = #{filterMap.RECEIVE_PRICE}
+        </if>
+        <if test="filterMap.INBOUND_DATE!= null and filterMap.INBOUND_DATE!= ''">
+            AND A.INBOUND_DATE = #{filterMap.INBOUND_DATE}
+        </if>
+
+        <if test="filterMap.DEL_FLG != null and filterMap.DEL_FLG != ''">
+            AND A.DEL_FLG = #{filterMap.DEL_FLG}
+        </if>
+    </select>
+
+</mapper>

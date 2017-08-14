@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.como.dao.ComoInvAllocationResultDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		RESULT_ID AS resultId,
+		ALLOCATION_ID AS allocationId,
+		CONSIGNEE AS consignee,
+		SUPPLIER_ID AS supplierId,
+		SUPPLIER_CODE AS supplierCode,
+		SUPPLIER_NAME AS supplierName,
+		WH_ID AS whId,
+		WH_CODE AS whCode,
+		WH_NAME AS whName,
+		SKU_CODE AS skuCode,
+		UOM AS uom,
+		OLD_SALE_STATUS AS oldSaleStatus,
+		NEW_SALE_STATUS AS newSaleStatus,
+		INVENTORY_STU AS inventoryStu,
+		FAIL_REASON AS failReason,
+		PLAN_QTY AS planQty,
+		FACT_QTY AS factQty
+	</sql>
+
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO como_inv_allocation_result (
+        RESULT_ID,
+        ALLOCATION_ID,
+        CONSIGNEE,
+        SUPPLIER_ID,
+        SUPPLIER_CODE,
+        SUPPLIER_NAME,
+        WH_ID,
+        WH_CODE,
+        WH_NAME,
+        SKU_CODE,
+        UOM,
+        OLD_SALE_STATUS,
+        NEW_SALE_STATUS,
+        LOT_NO,
+        INVENTORY_STU,
+        FAIL_REASON,
+        PLAN_QTY,
+        FACT_QTY,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="param" index="index" separator=",">
+            (
+            #{param.resultId},
+            #{param.allocationId},
+            #{param.consignee},
+            #{param.supplierId},
+            #{param.supplierCode},
+            #{param.supplierName},
+            #{param.whId},
+            #{param.whCode},
+            #{param.whName},
+            #{param.skuCode},
+            #{param.uom},
+            #{param.oldSaleStatus},
+            #{param.newSaleStatus},
+            #{param.lotNo},
+            #{param.inventoryStu},
+            #{param.failReason},
+            #{param.planQty},
+            #{param.factQty},
+            0,
+            #{param.crtId},
+            #{param.crtTime},
+            #{param.updId},
+            #{param.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <update id="modify" parameterType="com.bms.como.bean.entity.ComoInvAllocationResult">
+		UPDATE como_inv_allocation_result 
+		SET 
+			ALLOCATION_ID = #{allocationId},
+			CONSIGNEE = #{consignee},
+			SUPPLIER_ID = #{supplierId},
+			SUPPLIER_CODE = #{supplierCode},
+			SUPPLIER_NAME = #{supplierName},
+			WH_ID = #{whId},
+			WH_CODE = #{whCode},
+			WH_NAME = #{whName},
+			SKU_CODE = #{skuCode},
+			UOM = #{uom},
+			OLD_SALE_STATUS = #{oldSaleStatus},
+			NEW_SALE_STATUS = #{newSaleStatus},
+			INVENTORY_STU = #{inventoryStu},
+			PLAN_QTY = #{planQty},
+			FACT_QTY = #{factQty}
+		WHERE
+			RESULT_ID = #{resultId}		
+	</update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.como.bean.entity.ComoInvAllocationResult">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        como_inv_allocation_result
+        WHERE
+        RESULT_ID = #{resultId}
+    </select>
+
+    <select id="findAll" parameterType="com.bms.como.bean.entity.ComoInvAllocationResult"
+            resultType="com.bms.como.bean.entity.ComoInvAllocationResult">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        como_inv_allocation_result
+        WHERE
+        1 = 1
+        <if test="delFlg != null and delFlg != ''">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.bms.como.bean.entity.ComoInvAllocationResult" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        como_inv_allocation_result
+        WHERE
+        1 = 1
+        <if test="delFlg != null and delFlg != ''">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+    </select>
+
+</mapper>

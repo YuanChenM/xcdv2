@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.como.dao.ComoProductInfoDao">
+
+    <select id="findAll" parameterType="list" resultType="com.bms.como.bean.entity.ComoProductInfo">
+        SELECT
+        PRODUCT_PID AS productPid,
+        PRODUCT_ID AS productId,
+        CLASSES_ID AS classesId,
+        CLASSES_CODE AS classesCode,
+        CLASSES_NAME AS classesName,
+        MACHINING_ID AS machiningId,
+        MACHINING_CODE AS machiningCode,
+        MACHINING_NAME AS machiningName,
+        BREED_ID AS breedId,
+        BREED_CODE AS breedCode,
+        BREED_SALES_NAME AS breedSalesName,
+        ITEM_ID AS itemId,
+        ITEM_CODE AS itemCode,
+        ITEM_NAME AS itemName,
+        ITEM_SKU AS itemSku,
+        BRAND_ID AS brandId,
+        BRAND_CODE AS brandCode,
+        BRAND_NAME AS brandName,
+        QUALITY_GRADE_TYPE AS qualityGradeType,
+        GROSS_WEIGHT AS grossWeight,
+        NET_WEIGHT AS netWeight,
+        PACKAGE_SPECIFICATION AS packageSpecification,
+        PACKAGE_QUANTITY AS packageQuantity,
+        CARTON_DIMENSION AS cartonDimension,
+        PALLET_STACKING_LIMIT AS palletStackingLimit,
+        BRAND_ITEM_PROPERTY_SKU AS brandItemPropertySku,
+        ITEM_PROPERTY_CODE AS itemPropertyCode,
+        DEL_FLG AS delFlg,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS version
+        FROM como_product_info
+        WHERE DEL_FLG = 0
+        <if test="list != null and list.size() > 0">
+            AND PRODUCT_PID IN
+            <foreach collection="list" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+
+    <select id="findPageList" parameterType="com.bms.como.bean.param.ProductInfoRsParam" resultType="com.bms.como.bean.result.ProductInfoResult">
+        SELECT
+        PRODUCT_PID AS productPid,
+        PRODUCT_ID AS productId,
+        CLASSES_ID AS classesId,
+        CLASSES_CODE AS classesCode,
+        CLASSES_NAME AS classesName,
+        MACHINING_ID AS machiningId,
+        MACHINING_CODE AS machiningCode,
+        MACHINING_NAME AS machiningName,
+        BREED_ID AS breedId,
+        BREED_CODE AS breedCode,
+        BREED_SALES_NAME AS breedSalesName,
+        ITEM_ID AS itemId,
+        ITEM_CODE AS itemCode,
+        ITEM_NAME AS itemName,
+        ITEM_SKU AS itemSku,
+        BRAND_ID AS brandId,
+        BRAND_CODE AS brandCode,
+        BRAND_NAME AS brandName,
+        QUALITY_GRADE_TYPE AS qualityGradeType,
+        QUALITY_GRADE_TYPE_CODE AS qualityGradeTypeName,
+        GROSS_WEIGHT AS grossWeight,
+        NET_WEIGHT AS netWeight,
+        PACKAGE_SPECIFICATION AS packageSpecification,
+        PACKAGE_QUANTITY AS packageQuantity,
+        CARTON_DIMENSION AS cartonDimension,
+        PALLET_STACKING_LIMIT AS palletStackingLimit,
+        BRAND_ITEM_PROPERTY_SKU AS brandItemPropertySku,
+        ITEM_PROPERTY_CODE AS itemPropertyCode,
+        DEL_FLG AS delFlg,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS version
+        FROM como_product_info
+        WHERE DEL_FLG = 0
+        <if test="productPids != null and productPids.size() > 0">
+            AND PRODUCT_PID IN
+            <foreach collection="productPids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="productIds != null and productIds.size() > 0">
+            AND PRODUCT_ID IN
+            <foreach collection="productIds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="classesIds != null and classesIds.size() > 0">
+            AND CLASSES_ID IN
+            <foreach collection="classesIds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="machiningIds != null and machiningIds.size() > 0">
+            AND MACHINING_ID IN
+            <foreach collection="machiningIds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="breedIds != null and breedIds.size() > 0">
+            AND BREED_ID IN
+            <foreach collection="breedIds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="breedName != null and breedName != ''">
+            AND BREED_SALES_NAME LIKE #{breedName}
+        </if>
+        <if test="brandIds != null and brandIds.size() > 0">
+            AND BRAND_ID IN
+            <foreach collection="brandIds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="itemIds != null and itemIds.size() > 0">
+            AND ITEM_ID IN
+            <foreach collection="itemIds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="itemName != null and itemName != ''">
+            AND ITEM_NAME LIKE #{itemName}
+        </if>
+        <if test="qualityGradeType != null and qualityGradeType != ''">
+            AND QUALITY_GRADE_TYPE = #{qualityGradeType}
+        </if>
+    </select>
+
+
+
+    <insert id="batchInsert" parameterType="com.bms.como.bean.entity.ComoProductInfo">
+        INSERT INTO como_product_info (
+        PRODUCT_PID,
+        PRODUCT_ID,
+        CLASSES_ID,
+        CLASSES_CODE,
+        CLASSES_NAME,
+        MACHINING_ID,
+        MACHINING_CODE,
+        MACHINING_NAME,
+        BREED_ID,
+        BREED_CODE,
+        BREED_SALES_NAME,
+        ITEM_ID,
+        ITEM_CODE,
+        ITEM_NAME,
+        ITEM_SKU,
+        BRAND_ID,
+        BRAND_CODE,
+        BRAND_NAME,
+        QUALITY_GRADE_TYPE_CODE,
+        QUALITY_GRADE_TYPE,
+        GROSS_WEIGHT,
+        NET_WEIGHT_CODE,
+        NET_WEIGHT,
+        PACKAGE_SPECIFICATION,
+        PACKAGE_QUANTITY,
+        CARTON_DIMENSION,
+        PALLET_STACKING_LIMIT,
+        BRAND_ITEM_PROPERTY_SKU,
+        ITEM_PROPERTY_CODE,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.productPid},
+            #{item.productId},
+            #{item.classesId},
+            #{item.classesCode},
+            #{item.classesName},
+            #{item.machiningId},
+            #{item.machiningCode},
+            #{item.machiningName},
+            #{item.breedId},
+            #{item.breedCode},
+            #{item.breedSalesName},
+            #{item.itemId},
+            #{item.itemCode},
+            #{item.itemName},
+            #{item.itemSku},
+            #{item.brandId},
+            #{item.brandCode},
+            #{item.brandName},
+            #{item.qualityGradeTypeCode},
+            #{item.qualityGradeType},
+            #{item.grossWeight},
+            #{item.netWeightCode},
+            #{item.netWeight},
+            #{item.packageSpecification},
+            #{item.packageQuantity},
+            #{item.cartonDimension},
+            #{item.palletStackingLimit},
+            #{item.brandItemPropertySku},
+            #{item.itemPropertyCode},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.updId},
+            #{item.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!-- 修改产品信息  暂不使用 -->
+    <update id="modify" parameterType="com.bms.como.bean.param.BaseBean">
+        UPDATE como_product_info
+        SET
+        <if test="target.delFlg != null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime},
+        VERSION = VERSION + 1
+        WHERE
+        PRODUCT_ID = #{filter.productId}
+        AND DEL_FLG = 0
+        AND VERSION = #{filter.version}
+    </update>
+
+</mapper>

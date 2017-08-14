@@ -1,0 +1,101 @@
+.leftnav *::selection {
+    color: white;
+}
+.leftnav *::-moz-selection {
+    color: white;
+}
+.leftnav *::-webkit-selection {
+    color: white;
+}
+.leftnav{
+    color: white;
+    margin: 0px;
+    padding: 0px;
+    font-family: "Helvetica Neue", Helvetica, Tahoma, Arial, 'Microsoft Yahei', 'PingFang SC', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', sans-serif;
+}
+.leftnav ul{
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+.leftul::-webkit-scrollbar {
+  display: none
+ /* 隐藏滚动条，但依旧具备可以滚动的功能 */
+}
+.leftnav {
+    width: 180px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background: url("../../img/left-bg.png") no-repeat;
+    background-size: 100% 100%;
+    overflow: hidden;
+}
+.logo-bg {
+    height: 100px;
+    line-height: 100px;
+    text-align:center;
+}
+.logo-bg img {
+    display: inline-block;
+    width: 90%;
+    margin: auto;
+    background-size: 90%;
+    position: relative;
+}
+.leftul{
+     height: 100%;
+     overflow-y: auto;
+      overflow-x:hidden;
+      width: 210px;
+}
+.leftul li {
+   
+    line-height: 40px;
+    cursor: pointer;
+    background-color: #004480;
+    border-bottom: 2px solid #203d67;
+    position: relative;
+}
+.parent-li>ul>li {
+    background-color: #0f2b5a;
+}
+.down {
+    border-bottom: none !important;
+    background-color: #83b738 !important;
+}
+.seconddown {
+    background-color: #064179 !important;
+}
+.leftul img {
+    display: inline-block;
+    margin: 0 8px 0 10px;
+    width: auto;
+    vertical-align: middle;
+}
+.shrink {
+    font-size: 15px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    width: 180px;
+    background-color: #004480;
+    border-bottom: 2px solid #203d67;
+    cursor: pointer;
+}
+.leftmenu-text {
+    color: #222222;
+    position: absolute;
+    left: 42px;
+    top: 0;
+    height: 40px;
+    line-height: 38px;
+    background-color: lightgray;
+    z-index: 2;
+    -webkit-box-shadow: 2px 1px 2px 0 rgba(0,0,0,0.2);
+    box-shadow: 2px 1px 2px 0 rgba(0,0,0,0.2);
+    border: 1px solid #ccc;
+    padding-left: 12px;
+    padding-right: 12px;
+}

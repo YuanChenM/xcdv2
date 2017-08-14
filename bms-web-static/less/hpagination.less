@@ -1,0 +1,101 @@
+//
+// HPagination (multiple pages)
+// --------------------------------------------------
+.hpagination {
+  // Layout
+  display: block;
+  padding-top: @pagination-padding-vertical;
+  margin: @line-height-computed 0;
+  border-radius: @border-radius-base;
+  text-align: right;
+
+  // Description
+  > span {
+    display: inline-block;
+    margin-bottom:@line-height-computed;
+  }
+
+  // Pagination
+  > ul {
+    display: inline-block;
+    padding-left: @pagination-padding-horizontal;
+    margin-bottom:@line-height-computed;
+    > li {
+      display: inline-block;
+      > span {
+        padding: @pagination-padding-vertical @pagination-padding-horizontal;
+        line-height: @line-height-base;
+        text-decoration: none;
+        color: @pagination-color;
+        background-color: @pagination-bg;
+        border: 1px solid @pagination-border;
+        border-right: none;
+        cursor: pointer;
+      }
+
+      // input box
+      > span > input[type="text"] {
+        margin: -@pagination-padding-vertical -@pagination-input-padding-horizontal;
+        width: @pagination-input-width;
+        height: @pagination-input-height;
+        border: 1px solid @pagination-border;
+        text-align: center;
+        &:hover,
+        &:focus {
+          color: @pagination-hover-color;
+        }
+      }
+
+      &:first-child {
+        > span {
+          margin-left: 0;
+          .border-left-radius(@border-radius-base);
+        }
+      }
+      &:last-child {
+        > span {
+          .border-right-radius(@border-radius-base);
+          border-right: 1px solid @pagination-border;
+        }
+      }
+    }
+
+
+    // hover focus
+    > li > span {
+      &:hover,
+      &:focus {
+        color: @pagination-hover-color;
+        background-color: @pagination-hover-bg;
+        border-color: @pagination-hover-border;
+      }
+    }
+
+    // active
+    > li.active > span {
+      &,
+      &:hover,
+      &:focus {
+        z-index: 2;
+        color: @pagination-active-color;
+        background-color: @pagination-active-bg;
+        border-color: @pagination-active-border;
+        cursor: default;
+      }
+    }
+
+    // disable
+    > li.disabled > span {
+      &,
+      &:hover,
+      &:focus {
+        color: @pagination-disabled-color;
+        background-color: @pagination-disabled-bg;
+        border-color: @pagination-disabled-border;
+        cursor: default;
+      }
+    }
+
+  }
+}
+

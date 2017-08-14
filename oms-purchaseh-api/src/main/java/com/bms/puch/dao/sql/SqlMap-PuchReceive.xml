@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.puch.dao.PuchReceiveDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		DELIVER_ID AS deliverId,
+		DELIVER_CODE AS deliverCode,
+		OWNER_TYPE AS ownerType,
+		OWNER_ID AS ownerId,
+		OWNER_CODE AS ownerCode,
+		OWNER_NAME AS ownerName,
+		LGCS_AREA_ID AS lgcsAreaId,
+		LGCS_AREA_CODE AS lgcsAreaCode,
+		LGCS_AREA_NAME AS lgcsAreaName,
+		SUPPLIER_ID AS supplierId,
+		SUPPLIER_CODE AS supplierCode,
+		SUPPLIER_NAME AS supplierName
+	</sql>
+
+    <insert id="save" parameterType="com.bms.puch.bean.entity.PuchReceive">
+		INSERT INTO puch_receive (
+			DELIVER_ID,
+			DELIVER_CODE,
+			OWNER_TYPE,
+			OWNER_ID,
+			OWNER_CODE,
+			OWNER_NAME,
+			LGCS_AREA_ID,
+			LGCS_AREA_CODE,
+			LGCS_AREA_NAME,
+			SUPPLIER_ID,
+			SUPPLIER_CODE,
+			SUPPLIER_NAME,
+            DEL_FLG,
+            CRT_ID,
+            CRT_TIME,
+            UPD_ID,
+            UPD_TIME,
+            VERSION
+		)
+		VALUES (
+			#{deliverId},
+			#{deliverCode},
+			#{ownerType},
+			#{ownerId},
+			#{ownerCode},
+			#{ownerName},
+			#{lgcsAreaId},
+			#{lgcsAreaCode},
+			#{lgcsAreaName},
+			#{supplierId},
+			#{supplierCode},
+			#{supplierName},
+            false,
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            1
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.puch.bean.entity.PuchReceive">
+		UPDATE puch_receive 
+		SET 
+			DELIVER_CODE = #{deliverCode},
+			OWNER_TYPE = #{ownerType},
+			OWNER_ID = #{ownerId},
+			OWNER_CODE = #{ownerCode},
+			OWNER_NAME = #{ownerName},
+			LGCS_AREA_ID = #{lgcsAreaId},
+			LGCS_AREA_CODE = #{lgcsAreaCode},
+			LGCS_AREA_NAME = #{lgcsAreaName},
+			SUPPLIER_ID = #{supplierId},
+			SUPPLIER_CODE = #{supplierCode},
+			SUPPLIER_NAME = #{supplierName}
+		WHERE
+			DELIVER_ID = #{deliverId}		
+	</update>
+
+
+
+
+
+
+    <select id="findLevelPageListCount" parameterType="com.bms.puch.bean.param.PuchReceivePageParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        puch_receive r
+        <if test="pagingLevel>=2">
+            INNER JOIN puch_detail d on r.DELIVER_ID = d.DELIVER_ID and r.DEL_FLG = d.DEL_FLG
+        </if>
+        <where>
+            <include refid="Where"/>
+        </where>
+    </select>
+
+
+
+    <resultMap id="LevelResultOne" type="com.bms.puch.bean.result.PuchReceiveRestResult">
+        <id property="deliverId" column="deliverId"/>
+        <result property="deliverCode" column="deliverCode"/>
+        <result property="ownerType" column="ownerType"/>
+        <result property="ownerId" column="ownerId"/>
+        <result property="ownerCode" column="ownerCode"/>
+        <result property="ownerName" column="ownerName"/>
+        <result property="lgcsAreaId" column="lgcsAreaId"/>
+        <result property="lgcsAreaCode" column="lgcsAreaCode"/>
+        <result property="lgcsAreaName" column="lgcsAreaName"/>
+        <result property="supplierId" column="supplierId"/>
+        <result property="supplierCode" column="supplierCode"/>
+        <result property="supplierName" column="supplierName"/>
+
+        <result property="crtId" column="crtId"/>
+        <result property="crtTime" column="crtTime"/>
+        <result property="updId" column="updId"/>
+        <result property="updTime" column="updTime"/>
+        <result property="version" column="version"/>
+        <collection property="details" resultMap="LevelResultTwo"/>
+    </resultMap>
+    <resultMap id="LevelResultTwo" type="com.bms.puch.bean.result.PuchDetailRestResult">
+        <id property="buyerOrderId" column="L1_buyerOrderId"/>
+        <result property="deliverDetailId" column="deliverDetailId"/>
+        <result property="orderCode" column="orderCode"/>
+        <result property="orderType" column="orderType"/>
+        <result property="scheduleCode" column="scheduleCode"/>
+        <result property="scheduleDate" column="scheduleDate"/>
+        <result property="whId" column="whId"/>
+        <result property="whCode" column="whCode"/>
+        <result property="whName" column="whName"/>
+        <result property="materialCode" column="materialCode"/>
+        <result property="materialName" column="materialName"/>
+        <result property="commodityId" column="commodityId"/>
+        <result property="commodityCode" column="commodityCode"/>
+        <result property="commodityName" column="commodityName"/>
+        <result property="unit" column="unit"/>
+        <result property="lotNo" column="lotNo"/>
+        <result property="salesLabel" column="salesLabel"/>
+        <result property="inventoryStatus" column="inventoryStatus"/>
+        <result property="receiveQty" column="receiveQty"/>
+        <result property="receivePrice" column="receivePrice"/>
+        <result property="inboundDate" column="inboundDate"/>
+    </resultMap>
+
+    <sql id="Where">
+        AND r.DEL_FLG = FALSE
+        <if test="deliverId!= null and deliverId!= ''">
+            AND r.DELIVER_ID = #{deliverId}
+        </if>
+        <if test="deliverCode!= null and deliverCode!= ''">
+            AND r.DELIVER_CODE = #{deliverCode}
+        </if>
+        <if test="ownerType!= null and ownerType!= ''">
+            AND r.OWNER_TYPE = #{ownerType}
+        </if>
+        <if test="ownerId!= null and ownerId!= ''">
+            AND r.OWNER_ID = #{ownerId}
+        </if>
+        <if test="ownerCode!= null and ownerCode!= ''">
+            AND r.OWNER_CODE = #{ownerCode}
+        </if>
+        <if test="ownerName!= null and ownerName!= ''">
+            AND r.OWNER_NAME = #{ownerName}
+        </if>
+        <if test="lgcsAreaId!= null and lgcsAreaId!= ''">
+            AND r.LGCS_AREA_ID = #{lgcsAreaId}
+        </if>
+        <if test="lgcsAreaCode!= null and lgcsAreaCode!= ''">
+            AND r.LGCS_AREA_CODE = #{lgcsAreaCode}
+        </if>
+        <if test="lgcsAreaName!= null and lgcsAreaName!= ''">
+            AND r.LGCS_AREA_NAME = #{lgcsAreaName}
+        </if>
+        <if test="supplierId!= null and supplierId!= ''">
+            AND r.SUPPLIER_ID = #{supplierId}
+        </if>
+        <if test="supplierCode!= null and supplierCode!= ''">
+            AND r.SUPPLIER_CODE = #{supplierCode}
+        </if>
+        <if test="supplierName!= null and supplierName!= ''">
+            AND r.SUPPLIER_NAME = #{supplierName}
+        </if>
+        <if test="crtTimeFrom!= null and crtTimeFrom != ''">
+            AND r.CRT_TIME <![CDATA[ >= ]]>  #{crtTimeFrom}
+        </if>
+        <if test="crtTimeTo!= null and crtTimeTo != ''">
+            AND r.CRT_TIME <![CDATA[ <= ]]>  #{crtTimeTo}
+        </if>
+    </sql>
+
+    <select id="findPageList" parameterType="com.bms.puch.bean.param.PuchReceivePageParam"
+            resultMap="LevelResultOne">
+        SELECT
+            r.DELIVER_ID AS deliverId,
+            r.DELIVER_CODE AS deliverCode,
+            r.OWNER_TYPE AS ownerType,
+            r.OWNER_ID AS ownerId,
+            r.OWNER_CODE AS ownerCode,
+            r.OWNER_NAME AS ownerName,
+            r.LGCS_AREA_ID AS lgcsAreaId,
+            r.LGCS_AREA_CODE AS lgcsAreaCode,
+            r.LGCS_AREA_NAME AS lgcsAreaName,
+            r.SUPPLIER_ID AS supplierId,
+            r.SUPPLIER_CODE AS supplierCode,
+            r.SUPPLIER_NAME AS supplierName,
+            r.CRT_ID AS crtId,
+            r.CRT_TIME AS crtTime,
+            r.UPD_ID AS updId,
+            r.UPD_TIME AS updTime,
+            r.VERSION AS version
+            <if test="pagingLevel>=2">
+                ,d.DELIVER_DETAIL_ID AS deliverDetailId
+                ,d.DELIVER_ID AS deliverId
+                ,d.ORDER_CODE AS orderCode
+                ,d.ORDER_TYPE AS orderType
+                ,d.SCHEDULE_CODE AS scheduleCode
+                ,d.SCHEDULE_DATE AS scheduleDate
+                ,d.WH_ID AS whId
+                ,d.WH_CODE AS whCode
+                ,d.WH_NAME AS whName
+                ,d.MATERIAL_CODE AS materialCode
+                ,d.MATERIAL_NAME AS materialName
+                ,d.COMMODITY_ID AS commodityId
+                ,d.COMMODITY_CODE AS commodityCode
+                ,d.COMMODITY_NAME AS commodityName
+                ,d.UNIT AS unit
+                ,d.LOT_NO AS lotNo
+                ,d.SALES_LABEL AS salesLabel
+                ,d.INVENTORY_STATUS AS inventoryStatus
+                ,d.RECEIVE_QTY AS receiveQty
+                ,d.RECEIVE_PRICE AS receivePrice
+                ,d.INBOUND_DATE AS inboundDate
+            </if>
+        FROM
+        puch_receive r
+        <if test="pagingLevel>=2">
+            INNER JOIN puch_detail d on r.DELIVER_ID = d.DELIVER_ID and r.DEL_FLG = d.DEL_FLG
+        </if>
+        <where>
+            <include refid="Where"/>
+        </where>
+        order by r.crt_time desc
+    </select>
+
+
+</mapper>

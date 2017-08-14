@@ -1,0 +1,18 @@
+<html>
+
+<body>
+<p>
+    此信为系统自动发送的买家订单batch失败统计，请不要回复。
+    <br>
+    -------------------------------------------------------------
+    <br>
+    <br>
+    #foreach($order in $orders)
+        <p>订单ID：$order.orderId</p>
+        <p>订单编码：$order.orderCode</p>
+		<p>batch编号：$order.batchNo</p>
+		<p>错误message：$order.errorMessage</p>
+    #end
+</p>
+</body>
+</html>

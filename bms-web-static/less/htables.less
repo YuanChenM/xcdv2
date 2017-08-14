@@ -1,0 +1,196 @@
+//
+// HTables
+// --------------------------------------------------
+
+// Baseline styles
+
+.htable {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+  background-color: @table-bg;
+  // Cells
+  > thead,
+  > tbody,
+  > tfoot {
+    > tr {
+      > th,
+      > td {
+        padding: @table-cell-padding;
+        line-height: @line-height-base;
+        vertical-align: middle;
+        text-align: left;
+      }
+    }
+  }
+
+  // Background
+  > thead {
+    background-color: @table-bg-accent;
+  }
+  // Striped
+  > tbody > tr:nth-child(even) {
+    background-color: @table-bg-accent;
+  }
+  // Nesting
+  .htable {
+    background-color: @body-bg;
+  }
+
+  // Align
+  > thead > tr > th {
+    text-align: center;
+  }
+
+  // Border
+  > thead,
+  > tbody,
+  > tfoot {
+    border:1px solid @table-border-color;
+    > tr {
+      > th,
+      > td {
+        border-left: 1px solid @table-border-color;
+        border-right:1px solid @table-border-color;
+      }
+    }
+  }
+  > thead,
+  > tfoot {
+    > tr {
+      > th,
+      > td {
+        border-top: 1px solid @table-border-color;
+        border-bottom: 1px solid @table-border-color;
+      }
+    }
+  }
+
+  // Hover effect
+  > tbody > tr:hover {
+    background-color: @table-bg-hover;
+  }
+
+  // Special Cells
+  > tbody,
+  > tfoot {
+    > tr {
+      >td.sno {
+        font-weight: bold;
+        text-align: center;
+      }
+      >td.text {
+      }
+      >td.long-text {
+        overflow:hidden;
+        -ms-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space:nowrap;
+      }
+      >td.datetime {
+        text-align: center;
+      }
+      >td.number {
+        text-align: right;
+      }
+      >td.money {
+        text-align: right;
+      }
+      >td.opration {
+        white-space: nowrap;
+      }
+      >td.label {
+        font-weight: bold;
+        font-size: 90%;
+        display: table-cell;
+        white-space: normal;
+        text-align: right;
+        background-color: #F5FFFA;
+        color: #000;
+      }
+    }
+  }
+}
+
+// Table backgrounds
+//
+// Exact selectors below required to override `.htable-striped` and prevent
+// inheritance to nested tables.
+
+// Generate the contextual variants
+.htable-row-variant(active; @table-bg-active);
+.htable-row-variant(success; @state-success-bg);
+.htable-row-variant(info; @state-info-bg);
+.htable-row-variant(warning; @state-warning-bg);
+.htable-row-variant(danger; @state-danger-bg);
+
+
+// Responsive tables
+//
+// Wrap your tables in `.htable-responsive` and we'll make them mobile friendly
+// by enabling horizontal scrolling. Only applies <768px. Everything above that
+// will display normally.
+
+.htable-responsive {
+  overflow-x: auto;
+  min-height: 0.01%; // Workaround for IE9 bug (see https://github.com/twbs/bootstrap/issues/14837)
+
+  @media screen and (max-width: @screen-xs-max) {
+    width: 100%;
+    margin-bottom: (@line-height-computed * 0.75);
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    border: 1px solid @table-border-color;
+
+    // Tighten up spacing
+    > .htable {
+      margin-bottom: 0;
+
+      // Ensure the content doesn't wrap
+      > thead,
+      > tbody,
+      > tfoot {
+        > tr {
+          > th,
+          > td {
+          }
+        }
+      }
+    }
+
+    // Special overrides for the bordered tables
+    > .htable-bordered {
+      border: 0;
+
+      // Nuke the appropriate borders so that the parent can handle them
+      > thead,
+      > tbody,
+      > tfoot {
+        > tr {
+          > th:first-child,
+          > td:first-child {
+            border-left: 0;
+          }
+          > th:last-child,
+          > td:last-child {
+            border-right: 0;
+          }
+        }
+      }
+
+      // Only nuke the last row's bottom-border in `tbody` and `tfoot` since
+      // chances are there will be only one `tr` in a `thead` and that would
+      // remove the border altogether.
+      > tbody,
+      > tfoot {
+        > tr:last-child {
+          > th,
+          > td {
+            border-bottom: 0;
+          }
+        }
+      }
+
+    }
+  }
+}

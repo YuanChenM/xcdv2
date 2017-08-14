@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.como.dao.ComoAddOffShelfDao">
+    <!-- 查询商品ID和物流区 -->
+    <select id="findShelfList" resultType="com.bms.como.bean.param.ComoShelfListRsParam" parameterType="com.bms.como.bean.param.ComoAddOffShelfRsParam" >
+        SELECT DISTINCT
+            shelfList.SHELF_DETAIL_ID shelfDetailId,
+            commodityInfo.COMMODITY_ID commodityId,
+            shelfList.LGCS_AREA_ID lgcsAreaid,
+            shelfList.ADD_SHELF_TIME addShelfTime,
+            shelfList.OFF_SHELF_TIME offShelfTime,
+            shelfList.VERSION ver
+        FROM
+            COMO_COMMODITY_INFO commodityInfo,
+        <if test = "inventoryStu != null and inventoryStu != ''">
+            COMO_COMMODITY_DETAIL commodityDetail,
+        </if>
+            COMO_PRODUCT_INFO productInfo,
+            COMO_SHELF_LIST shelfList
+        WHERE commodityInfo.DEL_FLG = 0
+            AND productInfo.DEL_FLG = 0
+            AND shelfList.DEL_FLG = 0
+            AND commodityInfo.COMMODITY_ID = shelfList.COMMODITY_ID
+            AND commodityInfo.PRODUCT_PID = productInfo.PRODUCT_PID
+        <if test = "inventoryStu != null and inventoryStu != ''">
+            AND commodityDetail.DEL_FLG = 0
+            AND commodityInfo.COMMODITY_ID = commodityDetail.COMMODITY_ID
+            AND commodityDetail.COMMODITY_ID = shelfList.COMMODITY_ID
+            AND commodityDetail.LGCS_AREA_ID = shelfList.LGCS_AREA_ID
+        </if>
+        <if test="commodityId != null and commodityId.size()>0">
+            AND commodityInfo.COMMODITY_ID IN
+            <foreach collection="commodityId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="saleStatusId != null and saleStatusId.size()>0">
+            AND commodityInfo.SALE_STATUS_ID IN
+            <foreach collection="saleStatusId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test = "inventoryStu != null and inventoryStu != ''">
+            AND commodityDetail.INVENTORY_STU = #{inventoryStu}
+        </if>
+        <if test = "commodityName != null and commodityName != ''">
+            AND commodityInfo.COMMODITY_NAME = #{commodityName}
+        </if>
+        <if test="classesId != null and classesId.size()>0">
+            AND productInfo.CLASSES_ID IN
+            <foreach collection="classesId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="machiningId != null and machiningId.size()>0">
+            AND productInfo.MACHINING_ID IN
+            <foreach collection="machiningId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="breedId != null and breedId.size()>0">
+            AND productInfo.BREED_ID IN
+            <foreach collection="breedId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test = "breedName != null and breedName != ''">
+            AND productInfo.BREED_SALES_NAME LIKE #{breedName}
+        </if>
+        <if test="brandId != null and brandId.size()>0">
+            AND productInfo.BRAND_ID IN
+            <foreach collection="brandId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="itemId != null and itemId.size()>0">
+            AND productInfo.ITEM_ID IN
+            <foreach collection="itemId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test = "itemName != null and itemName != ''">
+            AND productInfo.ITEM_NAME LIKE #{itemName}
+        </if>
+        <if test = "qualityGradeType != null and qualityGradeType != ''">
+            AND productInfo.QUALITY_GRADE_TYPE = #{qualityGradeType}
+        </if>
+        <if test="lgcsAreaId != null and lgcsAreaId.size()>0">
+            AND shelfList.LGCS_AREA_ID IN
+            <foreach collection="lgcsAreaId" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test = "onShelfEnd != null and onShelfEnd != ''">
+            <![CDATA[ AND shelfList.ADD_SHELF_TIME <= #{onShelfEnd}  ]]>
+        </if>
+        <if test = "onShelfStart != null and onShelfStart != ''">
+            <![CDATA[ AND (shelfList.OFF_SHELF_TIME >= #{onShelfStart}  OR shelfList.OFF_SHELF_TIME IS NULL) ]]>
+        </if>
+    </select>
+
+    <!-- 新增商品上下架操作记录 -->
+    <insert id="save" parameterType="com.bms.como.bean.entity.ComoShelfListRecord">
+        INSERT INTO como_shelf_list_record (
+        RECORD_ID,
+        HANDLE_TYPE,
+        HANDLE_REMARK,
+        ADD_SHELF_TIME,
+        OFF_SHELF_TIME,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES (
+        #{recordId},
+        #{handleType},
+        #{handleRemark},
+        #{addShelfTime},
+        #{offShelfTime},
+        0,
+        #{crtId},
+        #{crtTime},
+        #{updId},
+        #{updTime},
+        1
+        )
+    </insert>
+
+    <!-- 批量新增商品上架操作 -->
+    <insert id="insertShelfList" parameterType="com.bms.como.bean.entity.ComoShelfList">
+        INSERT INTO como_shelf_list (
+        SHELF_DETAIL_ID,
+        LGCS_AREA_ID,
+        LGCS_AREA_CODE,
+        LGCS_AREA_NAME,
+        COMMODITY_ID,
+        ADD_SHELF_TIME,
+        OFF_SHELF_TIME,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES (
+        #{shelfDetailId},
+        #{lgcsAreaId},
+        #{lgcsAreaCode},
+        #{lgcsAreaName},
+        #{commodityId},
+        #{addShelfTime},
+        #{offShelfTime},
+        0,
+        #{crtId},
+        #{crtTime},
+        #{updId},
+        #{updTime},
+        1
+        )
+    </insert>
+
+    <!-- 修改物流区商品的上下架状态 -->
+    <update id="modify" parameterType="com.bms.como.bean.param.ComoShelfListRsParam">
+        UPDATE como_shelf_list
+        SET
+        <if test="addShelfTime != null">
+            ADD_SHELF_TIME = #{addShelfTime},
+        </if>
+        <if test="offShelfTimeFlg != null">
+            OFF_SHELF_TIME = NULL ,
+        </if>
+        <if test="offShelfTimeFlg == null and offShelfTime != null">
+            OFF_SHELF_TIME = #{offShelfTime},
+        </if>
+        <if test="delFlg != null">
+            DEL_FLG = #{delFlg},
+        </if>
+        UPD_ID = #{updId},
+        UPD_TIME = #{updTime},
+        VERSION = VERSION + 1
+        WHERE
+        COMMODITY_ID = #{commodityId}
+        AND LGCS_AREA_ID = #{lgcsAreaId}
+        AND VERSION = #{ver}
+        AND DEL_FLG = 0
+    </update>
+</mapper>

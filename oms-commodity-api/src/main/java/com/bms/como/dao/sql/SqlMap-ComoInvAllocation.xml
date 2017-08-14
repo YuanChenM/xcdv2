@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.como.dao.ComoInvAllocationDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		allocation.ALLOCATION_ID AS allocationId,
+		ALLOCATION_CODE AS allocationCode,
+		LGCS_AREA_ID AS lgcsAreaId,
+		LGCS_AREA_CODE AS lgcsAreaCode,
+		ASSIGN_LOT_NO AS assignLotNo,
+		ALLOCATION_REMARK AS allocationRemark,
+		ALLOCATION_STU AS allocationStu,
+		ALLOCATION_RESULT AS allocationResult,
+		APPLY_TIME AS applyTime,
+		APPLY_MAN AS applyMan,
+		COMPLETED_TIME AS completedTime,
+		COMPLETED_MAN AS completedMan,
+        allocation.CRT_ID AS crtId,
+        allocation.CRT_TIME AS crtTime,
+        allocation.UPD_ID AS updId,
+        allocation.UPD_TIME AS updTime,
+        allocation.VERSION AS version
+	</sql>
+
+    <sql id="selectDetailColumns">
+		,ALLOCATION_DETAIL_ID AS allocationDetailId,
+		TARGET_COMMODITY_ID AS targetCommodityId,
+		ORIGINAL_COMMODITY_ID AS originalCommodityId,
+        commodity.COMMODITY_CODE AS commodityCode,
+        saleStatus.SALE_STATUS_NAME AS saleStatusName,
+		OWNER_TYPE AS ownerType,
+		OWNER_ID AS ownerId,
+		OWNER_CODE AS ownerCode,
+		OWNER_NAME AS ownerName,
+		SKU_CODE AS skuCode,
+		LOT_NO AS lotNo,
+		UOM AS uom,
+		INVENTORY_STU AS inventoryStu,
+		INVENTORY_QTY AS inventoryQty,
+		PLAN_QTY AS planQty,
+		FACT_QTY AS factQty,
+        detail.CRT_ID AS crtId,
+        detail.CRT_TIME AS crtTime,
+        detail.UPD_ID AS updId,
+        detail.UPD_TIME AS updTime,
+        detail.VERSION AS version
+	</sql>
+
+    <resultMap id="entityResult" type="com.bms.como.bean.result.ComoInvAllocationRsResult">
+        <id property="allocationId" column="allocationId"/>
+        <result property="allocationCode" column="allocationCode"/>
+        <result property="lgcsAreaId" column="lgcsAreaId"/>
+        <result property="lgcsAreaCode" column="lgcsAreaCode"/>
+        <result property="assignLotNo" column="assignLotNo"/>
+        <result property="allocationRemark" column="allocationRemark"/>
+        <result property="allocationStu" column="allocationStu"/>
+        <result property="allocationResult" column="allocationResult"/>
+        <result property="applyTime" column="applyTime"/>
+        <result property="applyMan" column="applyMan"/>
+        <result property="completedTime" column="completedTime"/>
+        <result property="completedMan" column="completedMan"/>
+        <result property="crtId" column="crtId"/>
+        <result property="crtTime" column="crtTime"/>
+        <result property="updId" column="updId"/>
+        <result property="updTime" column="updTime"/>
+        <result property="version" column="version"/>
+        <collection property="details" javaType="java.util.List"
+                    ofType="com.bms.como.bean.result.ComoInvAllocationDetailRsResult">
+            <id property="allocationDetailId" column="allocationDetailId"/>
+            <result property="targetCommodityId" column="targetCommodityId"/>
+            <result property="originalCommodityId" column="originalCommodityId"/>
+            <result property="commodityCode" column="commodityCode"/>
+            <result property="saleStatusName" column="saleStatusName"/>
+            <result property="ownerType" column="ownerType"/>
+            <result property="ownerId" column="ownerId"/>
+            <result property="ownerCode" column="ownerCode"/>
+            <result property="ownerName" column="ownerName"/>
+            <result property="skuCode" column="skuCode"/>
+            <result property="lotNo" column="lotNo"/>
+            <result property="uom" column="uom"/>
+            <result property="inventoryStu" column="inventoryStu"/>
+            <result property="inventoryQty" column="inventoryQty"/>
+            <result property="planQty" column="planQty"/>
+            <result property="factQty" column="factQty"/>
+            <result property="crtId" column="crtId"/>
+            <result property="crtTime" column="crtTime"/>
+            <result property="updId" column="updId"/>
+            <result property="updTime" column="updTime"/>
+            <result property="version" column="version"/>
+        </collection>
+    </resultMap>
+
+    <insert id="save" parameterType="com.bms.como.bean.entity.ComoInvAllocation">
+		INSERT INTO como_inv_allocation (
+			ALLOCATION_ID,
+			ALLOCATION_CODE,
+			LGCS_AREA_ID,
+			LGCS_AREA_CODE,
+			LGCS_AREA_NAME,
+			ASSIGN_LOT_NO,
+			ALLOCATION_REMARK,
+			ALLOCATION_STU,
+			ALLOCATION_RESULT,
+			APPLY_TIME,
+			APPLY_MAN,
+			COMPLETED_TIME,
+			COMPLETED_MAN,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{allocationId},
+			#{allocationCode},
+			#{lgcsAreaId},
+			#{lgcsAreaCode},
+			#{lgcsAreaName},
+			#{assignLotNo},
+			#{allocationRemark},
+			#{allocationStu},
+			#{allocationResult},
+			#{applyTime},
+			#{applyMan},
+			#{completedTime},
+			#{completedMan},
+            #{delFlg},
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            #{version}
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.como.bean.entity.ComoInvAllocation">
+		UPDATE como_inv_allocation 
+		SET
+			ALLOCATION_STU = #{allocationStu},
+			ALLOCATION_RESULT = #{allocationResult},
+			COMPLETED_TIME = #{completedTime},
+			COMPLETED_MAN = #{completedMan},
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime}
+		WHERE
+		    DEL_FLG = FALSE
+		AND ALLOCATION_ID = #{allocationId}
+	</update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.como.bean.entity.ComoInvAllocation">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        como_inv_allocation
+        WHERE
+        ALLOCATION_ID = #{allocationId}
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.como.bean.param.ComoInvAllocationRsParam"
+            resultType="com.bms.como.bean.result.ComoInvAllocationRsResult">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        como_inv_allocation allocation
+        INNER JOIN como_inv_allocation_detail detail ON detail.ALLOCATION_ID = allocation.ALLOCATION_ID
+        AND detail.DEL_FLG = FALSE
+        LEFT JOIN COMO_COMMODITY_INFO commodity ON commodity.COMMODITY_ID = detail.ORIGINAL_COMMODITY_ID
+        AND commodity.DEL_FLG = FALSE
+        LEFT JOIN COMO_SALE_STATUS saleStatus ON saleStatus.SALE_STATUS_ID = commodity.SALE_STATUS_ID
+        AND saleStatus.DEL_FLG = FALSE
+        WHERE
+        allocation.DEL_FLG = FALSE
+        <if test="allocationIds != null and allocationIds != ''">
+            AND allocation.ALLOCATION_ID IN
+            <foreach item="item" index="index" collection="allocationIds" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="allocationCode != null and allocationCode != ''">
+            AND ALLOCATION_CODE LIKE #{allocationCode}
+        </if>
+        <if test="lgcsAreaIds != null and lgcsAreaIds != ''">
+            AND LGCS_AREA_ID IN
+            <foreach item="item" index="index" collection="lgcsAreaIds" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="targetCommodityIds != null and targetCommodityIds != ''">
+            AND TARGET_COMMODITY_ID IN
+            <foreach item="item" index="index" collection="targetCommodityIds" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="allocationStu != null and allocationStu != ''">
+            AND ALLOCATION_STU = #{allocationStu}
+        </if>
+        <if test="allocationResult != null and allocationResult != ''">
+            AND ALLOCATION_RESULT = #{allocationResult}
+        </if>
+        GROUP BY allocation.ALLOCATION_ID
+        ORDER BY allocation.CRT_TIME DESC
+    </select>
+
+    <select id="countAll" parameterType="com.bms.como.bean.entity.ComoInvAllocation" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        como_inv_allocation
+        WHERE
+        1 = 1
+        <if test="delFlg != null and delFlg != ''">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+    </select>
+
+
+    <select id="findInvAllocationCodeCount" resultType="int" parameterType="java.lang.String">
+      SELECT count(1) AS count
+      FROM como_inv_allocation
+      WHERE DEL_FLG = 0
+      AND ALLOCATION_CODE LIKE  #{allocationCode}
+    </select>
+
+</mapper>

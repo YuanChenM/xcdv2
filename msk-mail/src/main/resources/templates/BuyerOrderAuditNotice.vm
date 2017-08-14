@@ -1,0 +1,16 @@
+<html>
+
+<body>
+<p>
+    此信为系统自动发送的买家订单审核通知，请不要回复。
+    <br>
+    -------------------------------------------------------------
+    <br>
+    <br>
+    #foreach($order in $orders)
+        <p>订单ID：$order.orderId</p>
+        <p>订单编码：$order.orderCode</p>
+    #end
+</p>
+</body>
+</html>

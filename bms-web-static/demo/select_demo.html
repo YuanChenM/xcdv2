@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bootstrap-select page</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../dist/css/bootstrap.css">
+  <style>
+    .important {
+      color: #f00;
+      background-color: #fdd;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" style="padding-top:20px">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            html规定的单选框
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <h5>实例</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <select>
+                  <option value="1">买家</option>
+                  <option value="2">卖家</option>
+                  <option value="3">买手</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <h5>代码</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <pre>
+&lt;select&gt;
+  &lt;option value="1"&gt;买家&lt;/option&gt;
+  &lt;option value="2"&gt;卖家&lt;/option&gt;
+  &lt;option value="3"&gt;买手&lt;/option&gt;
+&lt;/select&gt;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+          <div class="panel panel-success">
+            <div class="panel-heading">
+              Bootstrap Select的写法
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <h5>实例</h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <select class="selectpicker">
+                    <option value="1">买家</option>
+                    <option value="2">卖家</option>
+                    <option value="3">买手</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <h5>代码</h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                <pre>
+&lt;select <code class="important">class="selectpicker"</code>&gt;
+  &lt;option value="1"&gt;买家&lt;/option&gt;
+  &lt;option value="2"&gt;卖家&lt;/option&gt;
+  &lt;option value="3"&gt;买手&lt;/option&gt;
+&lt;/select&gt;</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            html规定的多选框
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <h5>实例</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <select multiple>
+                  <option value="1">买家</option>
+                  <option value="2">卖家</option>
+                  <option value="3">买手</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <h5>代码</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <pre>
+&lt;select multiple&gt;
+  &lt;option value="1"&gt;买家&lt;/option&gt;
+  &lt;option value="2"&gt;卖家&lt;/option&gt;
+  &lt;option value="3"&gt;买手&lt;/option&gt;
+&lt;/select&gt;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            Bootstrap Select的写法
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12">
+                <h5>实例</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <select multiple class="selectpicker">
+                  <option value="1">买家</option>
+                  <option value="2">卖家</option>
+                  <option value="3">买手</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <h5>代码</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <pre>
+&lt;select multiple <code class="important">class="selectpicker"</code>&gt;
+  &lt;option value="1"&gt;买家&lt;/option&gt;
+  &lt;option value="2"&gt;卖家&lt;/option&gt;
+  &lt;option value="3"&gt;买手&lt;/option&gt;
+&lt;/select&gt;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="jquery.js"></script>
+  <script src="../dist/js/bootstrap.js"></script>
+</body>
+</html>

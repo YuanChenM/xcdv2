@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.como.dao.ComoUomDao">
+
+    <insert id="batchInsert" parameterType="com.bms.como.bean.entity.ComoCommodityUom">
+        INSERT INTO como_commodity_uom (
+        UOM_SID,
+        COMMODITY_ID,
+        UOM,
+        IS_DEFAULT,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.uomSid},
+            #{item.commodityId},
+            #{item.uom},
+            #{item.isDefault},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.updId},
+            #{item.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+
+    <update id="delUomByComoIds" parameterType="list">
+        UPDATE como_commodity_uom
+        SET DEL_FLG = 1
+        WHERE UOM_SID IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+    <select id="findUomByComoIds" parameterType="list" resultType="com.bms.como.bean.entity.ComoCommodityUom">
+        SELECT
+        UOM_SID AS uomSid,
+        COMMODITY_ID AS commodityId,
+        UOM AS uom,
+        IS_DEFAULT AS isDefault
+        FROM COMO_COMMODITY_UOM
+        WHERE DEL_FLG = 0
+        AND COMMODITY_ID IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

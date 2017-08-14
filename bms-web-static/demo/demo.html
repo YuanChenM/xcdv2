@@ -1,0 +1,116 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="../dist/css/bootstrap.css">
+  <style>
+    .table-container {
+      margin: 10px;
+      padding: 15px;
+      width: 95%;
+      border: 1px solid black;
+      overflow: visible;
+    }
+  </style>
+</head>
+<body style="color:black;font-size:14px">
+<form>
+  <div class="hdatatable" style="width:90%;margin:auto" data-toggle="hdatatable" data-count="69" data-page="7">
+    <div style="text-align:right;margin-bottom:20px">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default">excel</button>
+        <button type="button" class="btn btn-default">pdf</button>
+        <button type="button" class="btn btn-default">filter</button>
+      </div>
+    </div>
+    <table class="htable">
+      <colgroup>
+        <col width="50"/>
+        <col width="200"/>
+        <col width="150"/>
+        <col width="150"/>
+        <col width="100"/>
+        <col width="300"/>
+        <col width="300"/>
+      </colgroup>
+      <thead>
+      <tr>
+        <th rowspan="2">編號</th>
+        <th colspan="3">个人信息</th>
+        <th colspan="2">业务信息</th>
+        <th rowspan="2">操作</th>
+      </tr>
+      <tr>
+        <th>姓名</th>
+        <th>年龄</th>
+        <th>生日</th>
+        <th>費用</th>
+        <th>備註</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="sno">1</td>
+        <td class="text">张三李四王五赵六</td>
+        <td class="number" data-fixed="1">-24324323.1542</td>
+        <td class="datetime">1990/12/12</td>
+        <td class="money">abc</td>
+        <td class="long-text">一到十的顺序排下来的.“张三李四王五赵六”最早说的是杭州的四姓18家。
+          杭州先后曾作为五代吴越国和南宋都城。一度成为全国政治、经济、文化的中心，城市繁荣、人口来自四面八方。以后，历经战乱变迁，人口流动频繁。相传杭人只有留下18家才是真正的杭州人，即俗所谓“张三李四王五赵六”，共计为四姓18家
+        </td>
+        <td><button type="button" class="btn btn-sm btn-warning">搜索</button> </td>
+      </tr>
+      <tr>
+        <td class="sno">2</td>
+        <td class="text">李四</td>
+        <td class="number" data-fixed="0">26.43</td>
+        <td class="datetime">1990/12/12</td>
+        <td class="money">-200.0</td>
+        <td class="long-text">一到十的顺序排下来的.“张三李四王五赵六”最早说的是杭州的四姓18家。
+          杭州先后曾作为五代吴越国和南宋都城。一度成为全国政治、经济、文化的中心，城市繁荣、人口来自四面八方。以后，历经战乱变迁，人口流动频繁。相传杭人只有留下18家才是真正的杭州人，即俗所谓“张三李四王五赵六”，共计为四姓18家
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="sno">3</td>
+        <td class="text">王五</td>
+        <td class="number" data-fixed="1">-260</td>
+        <td class="datetime">1990/12/12</td>
+        <td class="money">2000</td>
+        <td class="long-text">一到十的顺序排下来的.“张三李四王五赵六”最早说的是杭州的四姓18家。
+          杭州先后曾作为五代吴越国和南宋都城。一度成为全国政治、经济、文化的中心，城市繁荣、人口来自四面八方。以后，历经战乱变迁，人口流动频繁。相传杭人只有留下18家才是真正的杭州人，即俗所谓“张三李四王五赵六”，共计为四姓18家
+        </td>
+        <td><button type="button" class="btn btn-sm">btn</button> </td>
+      </tr>
+      <tr>
+        <td class="sno">4</td>
+        <td class="text">趙六</td>
+        <td class="number">-2096</td>
+        <td class="datetime">1990/12/12</td>
+        <td class="money">0020.00</td>
+        <td class="long-text">一到十的顺序排下来的.“张三李四王五赵六”最早说的是杭州的四姓18家。
+          杭州先后曾作为五代吴越国和南宋都城。一度成为全国政治、经济、文化的中心，城市繁荣、人口来自四面八方。以后，历经战乱变迁，人口流动频繁。相传杭人只有留下18家才是真正的杭州人，即俗所谓“张三李四王五赵六”，共计为四姓18家
+        </td>
+        <td><button type="button" class="btn btn-sm">btn</button> </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td class="label" colspan="2">当前页合计</td>
+        <td class="number"></td>
+        <td class="number"></td>
+        <td class="number"></td>
+        <td class="number"></td>
+        <td class="number"></td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+</form>
+
+<script src="jquery.js"></script>
+<script src="../dist/js/bootstrap.js"></script>
+<script>
+</script>
+</body>
+</html>

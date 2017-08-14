@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.como.dao.ComoSaleStatusDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		SALE_STATUS_ID AS saleStatusId,
+		SALE_STATUS_CODE AS saleStatusCode,
+		SALE_STATUS_NAME AS saleStatusName,
+		IS_DEFAULT AS isDefault,
+		IS_VALID AS isValid,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS version
+	</sql>
+
+    <insert id="save" parameterType="com.bms.como.bean.entity.ComoSaleStatus">
+		INSERT INTO como_sale_status (
+			SALE_STATUS_ID,
+			SALE_STATUS_CODE,
+			SALE_STATUS_NAME,
+			IS_DEFAULT,
+			IS_VALID,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{saleStatusId},
+			#{saleStatusCode},
+			#{saleStatusName},
+			#{isDefault},
+			#{isValid},
+            #{delFlg},
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            #{version}
+		)
+	</insert>
+
+    <update id="modify" parameterType="com.bms.como.bean.param.BaseBean">
+        UPDATE como_sale_status
+        SET
+        <if test="target.saleStatusCode != null">
+            SALE_STATUS_CODE = #{target.saleStatusCode},
+        </if>
+        <if test="target.saleStatusName != null">
+            SALE_STATUS_NAME = #{target.saleStatusName},
+        </if>
+        <if test="target.isDefault != null">
+            IS_DEFAULT = #{target.isDefault},
+        </if>
+        <if test="target.isValid != null">
+            IS_VALID = #{target.isValid},
+        </if>
+        <if test="target.version != null">
+            VERSION = #{target.version},
+        </if>
+        <if test="target.delFlg != null">
+            DEL_FLG = #{target.delFlg},
+        </if>
+        UPD_ID = #{target.updId},
+        UPD_TIME = #{target.updTime},
+        VERSION = #{target.version}
+        WHERE
+        SALE_STATUS_ID = #{filter.saleStatusId}
+        AND DEL_FLG = FALSE
+        <if test="filter.saleStatusCode != null and filter.saleStatusCode != ''">
+            AND SALE_STATUS_CODE = #{filter.saleStatusCode}
+        </if>
+    </update>
+
+    <select id="findOne" parameterType="long" resultType="com.bms.como.bean.entity.ComoSaleStatus">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        como_sale_status
+        WHERE
+        SALE_STATUS_ID = #{saleStatusId}
+    </select>
+
+    <select id="findDefault" resultType="int">
+        SELECT
+        COUNT(1)
+        FROM
+        como_sale_status
+        WHERE
+        IS_DEFAULT = TRUE
+        AND DEL_FLG = FALSE
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.como.bean.param.SaleStatusRsParam"
+            resultType="com.bms.como.bean.param.SaleStatusRsParam">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+        como_sale_status
+        WHERE
+        DEL_FLG = FALSE
+        <if test="saleStatusIds != null and saleStatusIds != ''">
+            AND SALE_STATUS_ID IN
+            <foreach item="item" index="index" collection="saleStatusIds" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="saleStatusCode != null and saleStatusCode != ''">
+            AND SALE_STATUS_CODE LIKE #{saleStatusCode}
+        </if>
+        <if test="saleStatusName != null and saleStatusName != ''">
+            AND SALE_STATUS_NAME LIKE #{saleStatusName}
+        </if>
+        <if test="isValid != null and isValid != ''">
+            AND IS_VALID = #{isValid}
+        </if>
+    </select>
+
+    <select id="countAll" parameterType="com.bms.como.bean.param.SaleStatusRsParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        como_sale_status
+        WHERE
+        1 = 1
+        <if test="delFlg != null and delFlg != ''">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+    </select>
+
+    <select id="checkCode" resultType="int" parameterType="com.bms.como.bean.param.SaleStatusRsParam">
+        SELECT
+        count(1)
+        FROM
+        como_sale_status
+        WHERE
+        DEL_FLG = FALSE
+        AND SALE_STATUS_CODE = #{saleStatusCode}
+        <if test="saleStatusId != null and saleStatusId != ''">
+            AND SALE_STATUS_ID != #{saleStatusId}
+        </if>
+    </select>
+
+    <select id="checkName" resultType="int" parameterType="com.bms.como.bean.param.SaleStatusRsParam">
+        SELECT
+        count(1)
+        FROM
+        como_sale_status
+        WHERE
+        DEL_FLG = FALSE
+        AND SALE_STATUS_NAME = #{saleStatusName}
+        <if test="saleStatusId != null and saleStatusId != ''">
+            AND SALE_STATUS_ID != #{saleStatusId}
+        </if>
+    </select>
+
+    <update id="modifyDefault" parameterType="com.bms.como.bean.entity.ComoSaleStatus">
+        UPDATE como_sale_status
+        SET
+        IS_DEFAULT = #{isDefault},
+        UPD_ID = #{updId}
+        WHERE
+        SALE_STATUS_ID != #{saleStatusId}
+        AND DEL_FLG = FALSE
+    </update>
+</mapper>

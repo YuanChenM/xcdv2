@@ -1,0 +1,103 @@
+.head ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.head *::selection {
+    color: white;
+}
+.head *::-moz-selection {
+    color: white;
+}
+.head *::-webkit-selection {
+    color: white;
+}
+.head,
+.leftnav,
+.main,
+.logo-bg,
+.shrink ,
+.headrotetrue,
+.headrotefalse{
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    -ms-transition: all 0.4s;
+    transition: all 0.4s;
+}
+.head {
+    position: absolute;
+    top: 0;
+    left: 180px;
+    right: 0;
+    height: 50px;
+    line-height: 50px;
+    background-color: #004280;
+    background: url("../../img/head-bg.png") no-repeat;
+    background-size: auto 100%;
+    font-family: "Helvetica Neue", Helvetica, Tahoma, Arial, 'Microsoft Yahei', 'PingFang SC', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', sans-serif;
+}
+.headleft {
+    float: left;
+}
+.headright {
+    float: right;
+    font-size: 10px;
+}
+.headbtn {
+    display: inline-block;
+    padding: 0 10px;
+    line-height: 50px;
+    color: #fff;
+    cursor: pointer;
+}
+.icon {
+    color: white;
+    font-size: 15px;
+}
+.prompt {
+    padding: 3px 5px;
+    border-radius: 10px;
+    background: lightcoral;
+    color: white;
+}
+.parent-span ul {
+    position: absolute;
+    right: 0;
+    z-index: 10;
+}
+.parent-span ul li {
+    width: 148px;
+    line-height: 40px;
+    border: 1px solid lightgray;
+    border-top: none;
+    background-color: white !important;
+}
+.parent-span ul li:hover {
+    background-color: #ddd !important;
+}
+.parent-span ul span {
+    font-size: 13px;
+    padding-left: 11px;
+    padding-right: 11px;
+    color: darkslategrey;
+}
+.divider {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #e5e5e5 !important;
+}
+.headrotetrue {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+}
+.headrotefalse {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+}
