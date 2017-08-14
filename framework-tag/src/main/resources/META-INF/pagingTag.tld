@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+    <tlib-version>1.0</tlib-version>
+    <short-name>framework-tag</short-name>
+    <uri>/msk</uri>
+
+    <tag>
+        <name>paging</name>
+        <tag-class>com.framework.tag.PagingTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>pageCount</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>page</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>pageSize</name>
+            <required>false</required>
+            <fragment>false</fragment>
+        </attribute>
+        <attribute>
+            <name>param</name>
+            <required>false</required>
+            <fragment>false</fragment>
+        </attribute>
+        <attribute>
+            <name>needAuth</name>
+            <required>false</required>
+            <fragment>false</fragment>
+        </attribute>
+    </tag>
+
+</taglib>

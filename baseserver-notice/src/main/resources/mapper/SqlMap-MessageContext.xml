@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.msk.dao.MessageContextMapperDao">
+       <insert id="createMessageContext" parameterType="com.msk.bean.CreateNoticeBean">
+              INSERT INTO nt_message_context
+              (
+              ID,
+              MESSAGE_CONTEXT,
+              DEL_FLG,
+              CRT_ID,
+              CRT_TIME,
+              TITLE,
+              VER
+              ) VALUES (
+              #{messageId},
+              #{messageContext},
+              0,
+              #{crtId},
+              #{crtTime},
+              #{title},
+              1
+              )
+       </insert>
+
+       <select id="querySenderNoticeList" parameterType="com.msk.bean.param.QueryNoticeSenderParam"
+               resultType="com.msk.bean.result.SenderNoticeResult">
+              SELECT
+              ID AS id,
+              MESSAGE_CONTEXT AS messageContext,
+              CRT_ID AS crtId,
+              TITLE AS title,
+              CRT_TIME AS crtTime
+              FROM nt_message_context
+              WHERE
+              DEL_FLG=0 AND CRT_ID = #{senderCode}
+              <if test="messageContext !=null and messageContext !=''">
+                     AND MESSAGE_CONTEXT LIKE #{messageContext}
+              </if>
+              <if test="title !=null and title !=''">
+                     AND TITLE LIKE #{title}
+              </if>
+       </select>
+</mapper>

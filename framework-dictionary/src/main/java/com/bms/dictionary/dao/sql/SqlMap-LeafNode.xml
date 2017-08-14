@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bms.dictionary.dao.LeafNodeDao">
+    <resultMap id="nodeResultMap" type="com.bms.dictionary.bean.result.FindNodeResult">
+        <id property="dictId" column="DICT_ID"/>
+        <result property="dictCode" column="DICT_CODE"/>
+        <result property="dictEn" column="DICT_EN"/>
+        <result property="dictCn" column="DICT_CN"/>
+        <collection property="values" column="DICT_CODE" ofType="com.bms.dictionary.bean.entity.DictNodeValue">
+            <id property="dataId" column="DATA_ID"/>
+            <result property="dataValue" column="DATA_VALUE"/>
+            <result property="dataCn" column="DATA_CN"/>
+            <result property="dataEn" column="DATA_EN"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="leafNodeMap" type="com.bms.dictionary.bean.result.LoadNodeResult">
+        <id property="dictId" column="DICT_ID"/>
+        <result property="dictCode" column="DICT_CODE"/>
+        <result property="dictEn" column="DICT_EN"/>
+        <result property="dictCn" column="DICT_CN"/>
+        <result property="fullpath" column="FULLPATH"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <collection property="values" column="DICT_CODE" ofType="com.bms.dictionary.bean.result.LoadNodeResult">
+            <id property="dictId" column="DICT_ID1"/>
+            <result property="dictCode" column="DICT_CODE1"/>
+            <result property="dictCn" column="DATA_CN1"/>
+            <result property="dictEn" column="DATA_EN1"/>
+            <result property="fullpath" column="FULLPATH1"/>
+            <result property="parentId" column="PARENT_ID1"/>
+        </collection>
+    </resultMap>
+
+    <select id="getSubNode" parameterType="com.bms.dictionary.bean.param.FindSubNodeParam" resultMap="nodeResultMap">
+        SELECT
+        dict_node.DICT_ID,
+        dict_node.DICT_CODE,
+        dict_node.DICT_EN,
+        dict_node.DICT_CN,
+        v.DATA_ID,
+        v.DATA_VALUE,
+        v.DATA_CN,
+        v.DATA_EN
+        FROM
+        dict_leaf_node dict_node
+        LEFT JOIN  dict_node_value v on dict_node.DICT_ID = v.DICT_ID AND v.DEL_FLG = 0
+        WHERE
+        dict_node.DEL_FLG = 0 AND
+        dict_node.FULLPATH LIKE CONCAT(
+        (
+        SELECT node.FULLPATH FROM dict_leaf_node node
+        WHERE
+        node.DICT_CODE = #{parentCode} AND node.DEL_FLG = 0
+        <choose>
+            <when test="parentCode == rootCode">
+                AND IS_ROOT=1
+            </when>
+            <otherwise>
+                AND node.FULLPATH LIKE CONCAT((SELECT FULLPATH FROM dict_leaf_node WHERE  DEL_FLG = 0 AND IS_ROOT = 1 AND DICT_CODE = #{rootCode}),',','%')
+            </otherwise>
+        </choose>
+
+        ),',','%'
+        )
+    </select>
+
+    <select id="getNode" parameterType="com.bms.dictionary.bean.param.FindNodeParam" resultMap="nodeResultMap">
+        SELECT
+        node.DICT_ID,
+        node.DICT_CODE,
+        node.DICT_EN,
+        node.DICT_CN,
+        v.DATA_ID,
+        v.DATA_VALUE,
+        v.DATA_CN,
+        v.DATA_EN
+        FROM
+        dict_leaf_node node
+        LEFT JOIN  dict_node_value v on node.DICT_ID = v.DICT_ID AND v.DEL_FLG = 0
+        WHERE
+        node.DICT_CODE=#{dictCode} AND  node.DEL_FLG = 0
+        <choose>
+            <when test="dictCode == rootCode">
+                AND IS_ROOT=1
+            </when>
+            <otherwise>
+                AND node.FULLPATH like CONCAT((SELECT FULLPATH from dict_leaf_node where DEL_FLG = 0 AND  IS_ROOT=1 and DICT_CODE=#{rootCode}),',','%')
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <select id="findAll" resultType="com.bms.dictionary.bean.entity.DictLeafNode">
+        SELECT
+        node.DICT_ID AS dictId,
+        node.DICT_CODE AS dictCode,
+        node.DICT_EN AS dictEn,
+        node.DICT_CN AS dictCn,
+        node.IS_ROOT AS isRoot,
+        node.PARENT_ID AS parentId,
+        node.FULLPATH AS fullpath
+        FROM  dict_leaf_node node
+        WHERE node.IS_ROOT = 1 AND node.DEL_FLG = 0
+    </select>
+
+
+    <insert id="save" parameterType="com.bms.dictionary.bean.entity.DictLeafNode">
+        INSERT INTO dict_leaf_node(
+        DICT_ID,
+        DICT_CODE,
+        PARENT_ID,
+        IS_ROOT,
+        FULLPATH,
+        DEL_FLG,
+        DICT_EN,
+        DICT_CN,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        (
+            #{dictId},
+            #{dictCode},
+            #{parentId},
+            #{isRoot},
+            #{fullpath},
+            0,
+            #{dictEn},
+            #{dictCn},
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            0
+         )
+    </insert>
+
+    <!--新增子目录时需要知道父目录的DICT_ID-->
+    <select id="findOne" parameterType="com.bms.dictionary.bean.param.CreateDictParam" resultType="com.bms.dictionary.bean.entity.DictLeafNode">
+        SELECT
+             FULLPATH  AS  fullpath,
+             DICT_ID  AS  parentId
+			FROM
+				dict_leaf_node
+			WHERE
+              DEL_FLG = 0
+        <choose>
+            <when test="parentCode == rootCode">
+                AND IS_ROOT=1 AND  DICT_CODE = #{rootCode}
+            </when>
+            <otherwise>
+               AND DICT_CODE = #{parentCode}
+                AND FULLPATH like CONCAT((SELECT FULLPATH from dict_leaf_node where  DEL_FLG = 0 AND IS_ROOT=1 and DICT_CODE=#{rootCode}),",","%")
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <!--校验某个目录下是否有重复的目录数据-->
+    <select id="checkDictLeafNode" parameterType="com.bms.dictionary.bean.param.CreateDictParam" resultType="Integer">
+        SELECT COUNT(1) from dict_leaf_node where FULLPATH LIKE CONCAT(
+            (SELECT FULLPATH from dict_leaf_node where DEL_FLG = 0 AND DICT_CODE =#{rootCode} and IS_ROOT = 1),",","%") AND DICT_CODE =#{dictCode}
+            AND DEL_FLG = 0
+    </select>
+
+
+    <select id="selectFullPath" resultType="com.bms.dictionary.bean.entity.DictLeafNode" parameterType="java.util.List">
+        SELECT
+            FULLPATH  AS  fullpath,
+            DICT_ID  AS  dictId
+        FROM dict_leaf_node WHERE FULLPATH LIKE CONCAT(
+        (SELECT FULLPATH
+          from dict_leaf_node where DICT_ID IN
+            <foreach collection="list" item="item" open="(" separator="," close=")">
+                #{item}
+        </foreach>
+          AND DEL_FLG = 0),
+        ',','%')
+    </select>
+
+     <update id="delSubNode" parameterType="java.util.HashMap">
+        UPDATE dict_leaf_node SET  DEL_FLG =1,UPD_TIME = #{updTime},UPD_ID=#{updId}
+        WHERE
+        FULLPATH IN
+         <foreach collection="fullPathList" item="item" open="(" separator="," close=")">
+             #{item}
+         </foreach>
+         AND DEL_FLG = 0
+    </update>
+
+    <update id="deleteLeafNode" parameterType="java.util.HashMap">
+        UPDATE
+        dict_leaf_node SET DEL_FLG =1,UPD_TIME = #{updTime},UPD_ID=#{updId}
+        WHERE
+        DEL_FLG = 0
+        AND DICT_ID IN
+        <foreach collection="dictIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+    <select id="findPageList" parameterType="com.bms.dictionary.bean.param.SubNodeLoadParam" resultMap="leafNodeMap">
+        SELECT
+        node.DICT_ID,
+        node.DICT_CODE,
+        node.DICT_EN,
+        node.DICT_CN,
+        node.FULLPATH,
+        node.PARENT_ID,
+        node1.DICT_ID AS DICT_ID1,
+        node1.DICT_CODE AS DICT_CODE1,
+        node1.DICT_EN AS DATA_EN1,
+        node1.DICT_CN AS DATA_CN1,
+        node1.FULLPATH AS FULLPATH1,
+        node1.PARENT_ID AS PARENT_ID1
+        FROM
+        (
+        SELECT  DICT_ID, DICT_CODE, DICT_EN, DICT_CN,FULLPATH,PARENT_ID FROM
+        dict_leaf_node
+        WHERE
+        DEL_FLG = 0 AND DICT_ID =#{dictId}
+        ) node LEFT JOIN
+        (
+        SELECT DICT_ID, DICT_CODE,DICT_EN,DICT_CN,FULLPATH,PARENT_ID FROM
+        dict_leaf_node
+        WHERE
+        DEL_FLG = 0 AND  FULLPATH like CONCAT(
+        (SELECT FULLPATH FROM dict_leaf_node where DICT_ID = #{dictId} AND  DEL_FLG = 0)
+        ,',','%')
+        <if test="multilevelFlag==true">
+            AND  PARENT_ID = #{dictId}
+        </if>
+        )node1 ON  node1.FULLPATH like CONCAT((SELECT FULLPATH FROM dict_leaf_node where DICT_ID = #{dictId} AND  DEL_FLG = 0),',','%')
+    </select>
+
+
+    <update id="modify" parameterType="com.bms.dictionary.bean.param.ModifyDictParam">
+        UPDATE dict_leaf_node
+        <set>
+            <if test="dictCode!=null and dictCode!=''">
+                DICT_CODE = #{dictCode},
+            </if>
+            <if test="dictCn!=null and dictCn!=''">
+                DICT_CN = #{dictCn},
+            </if>
+            <if test="dictEn!=null and dictEn!=''">
+                DICT_EN = #{dictEn},
+            </if>
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime}
+        </set>
+        WHERE
+        DICT_ID = #{dictId} AND DEL_FLG = 0
+    </update>
+
+</mapper>

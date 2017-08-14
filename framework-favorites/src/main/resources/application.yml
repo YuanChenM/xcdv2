@@ -1,0 +1,20 @@
+spring:
+  aop:
+    auto: true
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  redis:
+    database: 9
+    host: 10.30.10.14
+    password: Admin123#
+    port: 6379
+    pool:
+      max-idle: 1024
+      max-active: 200
+      max-wait: 1000
+server:
+  port: 9091
+  context-path: /framework-favorites/

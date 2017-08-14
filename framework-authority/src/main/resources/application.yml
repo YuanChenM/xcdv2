@@ -1,0 +1,42 @@
+spring:
+  aop:
+    auto: true
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+###Config Server相关配置###########
+config:
+    server:
+      ifSwagger: true
+      ifDataSource: false
+      ifDataSourceClassName:
+
+mybatis:
+  mapperLocations: classpath*:com/bms/sample/dao/sql/SqlMap-*.xml
+  configPath: classpath:mybatis-config.xml
+  daoBasePackagePath: com.bms.**/dao/**
+
+api:
+  contact:
+    name: zhangjian3
+    url:
+    email: zhangjian3@hoperun.com
+  title: authority
+  description: authority-Detail
+  version: 1.0
+  termsOfServiceUrl:
+  license:
+  licenseUrl:
+  groupName: authority
+
+context:
+    listener:
+      classes: com.framework.base.listener.ApplicationEventListener
+
+server:
+  port: 8887
+  context-path: /framework-authority/
+
+

@@ -1,0 +1,331 @@
+table.dataTable {
+    border-top: 2px solid #8FC31F;
+    border-right: 1px solid #B1B1B1;
+    margin-left: -1px;
+    border-collapse: collapse;
+    min-width: 545px;
+/*     table-layout:fixed; */
+}
+
+table.dataTable.no-footer {
+    border-bottom: 1px solid #B1B1B1;
+}
+
+table.footer {
+    border-bottom: 1px solid #B1B1B1;
+    border-right: 1px solid #B1B1B1;
+    border-top: 0px solid #B1B1B1;
+    border-left: 0px solid #B1B1B1;
+}
+
+table.footer td {
+    background-color: #DBDBDB;
+}
+
+table.dataTable tfoot th,table.dataTable tfoot td {
+    border-top: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover
+.dataTables_wrapper .dataTables_paginate .paginate_button:active,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{
+    border: 1px solid #B1B1B1;
+    vertical-align: middle;
+    padding: 0.3em;
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:active{
+    background: url("images/ui-bg_glass_65_69b40f_1x400.png") repeat-x scroll 50% 50% #69b40f;
+    color: #ffffff !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.first:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.last:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.first,
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next,
+.dataTables_wrapper .dataTables_paginate .paginate_button.last{
+    background: none;
+    border: 1px solid #B1B1B1;
+}
+
+div.pagesize {
+}
+
+table.dataTable thead.filterHeader tr td {
+    border-bottom: 1px solid #B1B1B1;
+}
+
+table.dataTable thead th,
+table.dataTable thead td,
+table.dataTable tfoot th,
+table.dataTable tfoot td,
+table.dataTable tbody td{
+    border-left: 1px solid #B1B1B1;
+    border-top: 1px solid #B1B1B1;
+}
+
+table.dataTable tr.even {
+    background-color: #EEEEEE;
+}
+
+table.dataTable tr.odd {
+    background-color: #FFFFFF;
+}
+
+table.dataTable tbody tr:hover,
+table.dataTable tbody tr.even:hover,
+table.dataTable tbody tr.odd:hover {
+    background-color: #F3FFF3;
+}
+table.dataTable tbody tr:hover table td {
+    background-color: #F3FFF3;
+}
+
+table.dataTable thead th, 
+table.dataTable thead td {
+    border-bottom: none;
+    background-color: #DBDBDB;
+}
+
+table.dataTable thead td {
+    text-align: center;
+    vertical-align: bottom;
+}
+
+table.dataTable thead th,
+table.dataTable thead td,
+table.dataTable tbody td{
+    padding: 4px 10px 4px 4px;
+}
+
+table.dataTable thead th{
+    white-space: nowrap;
+}
+table.dataTable tbody td{
+    white-space: nowrap;
+}
+
+table.dataTable.cell-border tbody th, table.dataTable.cell-border tbody td{
+    border-right: none;
+}
+
+table.dataTable input.cellEditText,input.cellFilterText {
+/*     margin-left:2px;
+    margin-right:2px; */
+    width: 100%;
+}
+
+table.dataTable input.cellEditDate,input.cellFilterDate {
+/* 	margin-left:2px;
+	margin-right:2px; */
+    width: 100%;
+    ime-mode: disabled;
+}
+
+table.dataTable input.cellEditMoney,input.cellFilterMoney {
+/*     margin-left:2px;
+    margin-right:2px; */
+    width: 100%;
+    ime-mode: disabled;
+}
+
+table.dataTable input.cellEditNumber,input.cellFilterNumber {
+/*     margin-left:2px;
+    margin-right:2px; */
+    width: 100%;
+    ime-mode: disabled;
+}
+
+table.dataTable select.cellEditSelect,select.cellFilterSelect {
+/*     margin-left:2px;
+    margin-right:2px; */
+    width: 100%;
+    ime-mode: disabled;
+}
+
+table.dataTable td.sno,td.checkbox,td.radio {
+    width: 24px;
+    white-space:nowrap;
+    text-align: center;
+    font-weight: bold;
+}
+
+table.dataTable td.action {
+    width: 72px;
+    white-space:nowrap;
+    text-align: left;
+}
+
+table.dataTable td.date {
+    width: 72px;
+    min-width: 72px;
+    text-align: center;
+}
+
+table.dataTable td.datetime {
+    width: 120px;
+    min-width: 120px;
+    text-align: center;
+}
+
+table.dataTable td.link,td.text,td.select {
+    text-align: left;
+}
+
+table.dataTable td.alignLeft {
+    text-align: left;
+}
+
+table.dataTable td.alignRight {
+    text-align: right;
+}
+
+table.dataTable td.ellipsis{
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+}
+
+table.dataTable td.number,td.money {
+    text-align: right;
+}
+
+table.dataTable td.action a {
+    /*color:#FFFFFF;*/
+    text-decoration: none;
+}
+
+table.dataTable a.gridLink {
+    font-style: italic;
+    color: blue;
+    text-decoration: none;
+}
+
+table.dataTable tr.even td.action a.cellButton {
+    color: #EEEEEE;
+    background-color: #EEEEEE;
+}
+table.dataTable tr.odd td.action a.cellButton {
+    color: #FFFFFF;
+    background-color: #FFFFFF;
+}
+table.dataTable tr.even:hover td.action a.cellButton,
+table.dataTable tr.odd:hover td.action a.cellButton {
+    background-color: #F3FFF3;
+}
+
+table.dataTable tbody a.cellButton,span.cellSpan {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 3px;
+    vertical-align: middle;
+}
+
+table.dataTable tbody a.cellButton img {
+    width: 16px;
+    height: 16px;
+    border-color: transparent;
+}
+table.dataTable tbody a.cellButton img:hover {
+	margin-left: -1px;
+	margin-top: -1px;
+    width: 18px;
+    height: 18px;
+}
+
+table.dataTable tr.errorRow {
+    color: red;
+}
+
+table.dataTable td.errorCell {
+    color: red;
+    font-weight: bold;
+}
+
+table.dataTable tbody tr.rowEdit {
+    background-color: #93DB70;
+}
+
+table.dataTable tbody tr.rowAdd {
+    background-color: #EAADEA;
+}
+
+table.dataTable tbody tr.rowDelete {
+    background-color: #CDCDCD;
+}
+
+table.dataTable td.editable {
+    background: url("images/editable.png") no-repeat 2px 6px;
+    padding-left: 20px;
+}
+
+table.dataTable td.markGreen {
+    background: url("images/mark_green.png") no-repeat 2px 5px;
+    padding-left: 24px;
+}
+table.dataTable td.markRed {
+    background: url("images/mark_red.png") no-repeat 2px 5px;
+    padding-left: 24px;
+}
+table.dataTable td.markYellow {
+    background: url("images/mark_yellow.png") no-repeat 2px 5px;
+    padding-left: 24px;
+}
+
+table.detailTable {
+    width: 100%;
+    border-top: 3px solid #69b40f;
+}
+
+table.detailTable thead {
+    background-color: #DBDBDB;
+}
+
+table.detailTable thead th, 
+table.detailTable thead td{
+    border-bottom: none;
+}
+
+table.detailTable thead td {
+    text-align: center;
+    vertical-align: bottom;
+}
+
+table.detailTable thead th, 
+table.detailTable thead td,
+table.detailTable tbody td{
+    padding: 1px 6px 2px 3px;
+    border-left: 1px solid #dddddd;
+}
+
+table.detailTable thead th{
+    white-space: nowrap;
+}
+table.detailTable tbody td{
+    white-space: nowrap;
+}
+
+table.detailTable.cell-border tbody th, table.detailTable.cell-border tbody td{
+    border-right: none;
+}
+.pagesize {
+	min-width: 545px;
+}
+.pagesize .dataTables_info {
+	float: left;
+}
+.pagesize .dataTables_paginate {
+    float: right;
+}

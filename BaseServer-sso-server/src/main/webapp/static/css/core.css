@@ -1,0 +1,308 @@
+@CHARSET "UTF-8";
+
+html {
+	padding: 0;
+}
+
+body {
+	font-family: "宋体","微软雅黑","Microsoft YaHei","Arial Unicode MS","Helvetica Neue",Helvetica,sans-serif;
+	font-size: 12px;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden; /* when page gets too small */
+}
+
+input[type=text], input[type=password] {
+/*    background-color: #fefefe;
+    border-top-color: #abadb3;
+    border-right-color: #dbdfe6;
+    border-bottom-color: #e3e9ef;
+    border-left-color: #e2e3ea; */
+    border-color: #888888;
+    border-style: solid;
+    border-width: 1px;
+    line-height: 16.8px;
+    height: 18px;
+    vertical-align:middle;
+    font-family: "宋体","微软雅黑","Microsoft YaHei","Arial Unicode MS","Helvetica Neue",Helvetica,sans-serif;
+    font-size: 12px;
+    padding: 0.1em 0.2em 0em 0.2em;
+}
+input[type=text]:hover, input[type=password]:hover {
+/*     border-top-color: #3d7bad;
+    border-right-color: #a4c9e3;
+    border-bottom-color: #b7d9ed;
+    border-left-color: #b5cfe7; */
+    border-color: #3d7bad;
+}
+input[type=text][editmodel=false], textarea[editmodel=false] {
+    background-color: #e5e5e5;
+}
+textarea {
+    border-color: #888888;
+    border-style: solid;
+    border-width: 1px;
+    vertical-align:middle;
+    font-family: "宋体","微软雅黑","Microsoft YaHei","Arial Unicode MS","Helvetica Neue",Helvetica,sans-serif;
+    font-size: 12px;
+    padding: 0.1em 0.2em 0em 0.2em;
+}
+textarea:hover {
+    border-color: #3d7bad;
+}
+
+.nowrap {
+    white-space: nowrap !important;
+}
+.wrap {
+	white-space: normal !important;
+}
+
+.ui-selectmenu-button {
+    height:20px;    
+    border-color: #888888 !important;
+}
+.ui-selectmenu-button:hover {
+    border-color: #3d7bad;
+}
+.ui-selectmenu-button .ui-selectmenu-text {
+    padding: 0.1em 1.6em 0em 0.2em !important;
+    line-height: 16.8px;
+    color: #000000;
+}
+.ui-selectmenu-button.ui-state-default {
+    background: none #ffffff;
+}
+/* .ui-menu-item.ui-state-focus {
+    background: none;
+} */
+
+.main-header {
+    padding: 0;
+    min-width:910px;
+    overflow: hidden;
+    moz-user-select: -moz-none;
+	-moz-user-select: none;
+	-o-user-select:none;
+	-khtml-user-select:none;
+	-webkit-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+}
+
+.main-menu {
+    padding: 0;
+    overflow:   hidden;
+}
+
+/* .sys-menu .ui-state-focus {
+    background-color: #e8e8e8;
+}
+
+.sys-menu .ui-state-active {
+    background-color: #69b40f;
+    color: #ffffff;
+} */
+
+.main-container {
+    padding: 0;
+}
+
+.main-content {
+    overflow: hidden;
+    padding: 0;
+    border-width: 0;
+    background: #ffffff url(../images/main/menu-bk.png) no-repeat fixed 101% 97%;
+}
+
+/* .sys-message {
+    padding: 10px;
+    border-width: 0;
+    background-color: #ebebeb;
+} */
+
+.main-copyright {
+    padding-top: 6px;
+    border-width: 0;
+    min-width: 910px;
+    overflow: hidden;
+    font-size: 11px;
+    color: #777777;
+    height: 12px;
+    line-height:10px; 
+    text-align: center;
+}
+.menu_content .ui-accordion-header {
+    white-space: nowrap;
+}
+.menu_content .ui-accordion-content {
+    margin: 0;
+    padding: 1px 4px 1px 2px;
+}
+.menu_content .ui-accordion-content .ui-menu {
+    white-space: nowrap;
+}
+.menu_content .sub_menu .ui-menu-item[selected=selected] span.ui-icon {
+    background-color: #8FC31F;
+}
+
+/*
+ *  WEST-PANE TABS
+ *
+ *  These tabs 'fill' the pane,
+ *  so the pane-border acts as the tab-border
+ */
+.main-menu .ui-tabs-nav {
+    /* don't need border or rounded corners - tabs 'fill' the pane */
+    border-top:     0;
+    border-left:    0;
+    border-right:   0;
+    padding-bottom: 0 !important;
+    -moz-border-radius:     0;
+    -webkit-border-radius:  0;
+}
+
+.barcodeImg{margin:10px 0px}
+
+/* .ui-accordion .ui-accordion-content {
+	padding: 4px 4px;
+} */
+
+/* .ui-layout-content {
+	overflow: auto; add scrolling to content-divs (panel-wrappers)
+	border-top: 0 !important;
+	tab-buttons above this DIV already has a border-bottom
+} */
+
+.page-header {
+	height: 20px;
+	background-color: #ebebeb;
+	padding: 5px 10px;
+	font-size: 1.3em;
+	font-weight:bold;
+	border-bottom-color: #bbbbbb;
+	border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+.page-title {
+	float: left;
+	margin: 0;
+	color: #003972;
+    white-space: nowrap;
+}
+
+/* .page-nav {
+	margin-top: 4px;
+	float: right;
+} */
+
+.page-content {
+	padding: 10px;
+	overflow: auto;
+}
+
+.group-accordion {
+	padding-bottom: 4px;
+    min-width: 300px;
+}
+.group-accordion .ui-accordion-content {
+    padding-bottom: 16px;
+}
+
+div.detail-page form label {
+    white-space: nowrap;
+    text-align: right;
+}
+
+div.detail-page form table tr td {
+    padding: 4px 10px;
+    white-space: nowrap;
+}
+
+.check_error {
+	border: 1px solid red;
+}
+
+.h-button {
+	background: url("images/ui-bg_glass_65_69b40f_1x400.png") repeat-x scroll 50% 50% #8FC31F !important;
+    color: #ffffff !important;
+    white-space: nowrap;
+}
+
+.icon-button {
+    cursor: pointer;
+    border-color: #383838;
+    border-style: solid;
+    border-width: 1px;
+    width: 32px;
+    height: 32px;
+}
+
+.icon-button:hover {
+/*     background-color: #69b40f;
+    border-color: #999;
+    border-style: solid;
+    border-width: 1px; */
+}
+.icon-button img {
+    width: 31px;
+    height: 30px;
+}
+.icon-button img:hover {
+    width: 32px;
+    height: 31px;
+}
+
+.ui-selectmenu-menu .ui-menu {
+	overflow-y: auto;
+	max-height: 240px;
+} 
+
+.ui-autocomplete {
+	max-height: 240px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+}
+
+input.h-button[coltype=download] {
+    background: url("images/download.png") no-repeat scroll 50% 50% #69b40f !important;
+    height: 24px;
+    width: 24px;
+}
+
+div#alertMessageId {
+	max-height: 540px;
+}
+
+.notice-message {
+	font-size: 1em;
+}
+.error-message {
+    font-size: 1.0em;
+    color:red;
+}
+
+/* tooltip */
+#tooltip {
+ position: absolute;
+ border: 1px solid #333;
+ background: #f7f5d1;
+ padding: 3px 3px 3px 3px;
+ color: #333;
+ display: none;
+}
+
+/* MM01S19 */
+.mark-menu-role {
+	background-color: #69b40f;
+	color: #fdfdfd;
+	font-size: 8px;
+	border-color: #aaaaaa;
+	border-style: solid;
+	border-width: 1px;
+	margin-left: 4px;
+}

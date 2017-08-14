@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-fragment id="WebFragment_ID" version="3.0"
+              xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd">
+    <servlet>
+        <servlet-name>switchSystemServlet</servlet-name>
+        <servlet-class>com.msk.sso.client.servlet.SwitchSystemServlet</servlet-class>
+        <async-supported>true</async-supported>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>switchSystemServlet</servlet-name>
+        <url-pattern>/switch/system</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>logoutServlet</servlet-name>
+        <servlet-class>com.msk.sso.client.servlet.LogoutServlet</servlet-class>
+        <async-supported>true</async-supported>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>logoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>mainServlet</servlet-name>
+        <servlet-class>com.msk.sso.client.servlet.MainServlet</servlet-class>
+        <async-supported>true</async-supported>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mainServlet</servlet-name>
+        <url-pattern>/main/init</url-pattern>
+    </servlet-mapping>
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>mainServlet</servlet-name>-->
+        <!--<url-pattern>/by/main</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>mainServlet</servlet-name>-->
+        <!--<url-pattern>/so/main</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>mainServlet</servlet-name>-->
+        <!--<url-pattern>/ds/main</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>mainServlet</servlet-name>-->
+        <!--<url-pattern>/gs/main</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>mainServlet</servlet-name>-->
+        <!--<url-pattern>/ms/main</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>mainServlet</servlet-name>-->
+        <!--<url-pattern>/pd/main</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>mainServlet</servlet-name>-->
+        <!--<url-pattern>/sl/main</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>mainServlet</servlet-name>-->
+        <!--<url-pattern>/sp/main</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>mainServlet</servlet-name>-->
+        <!--<url-pattern>/ssc/main</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <servlet>
+        <servlet-name>ChangePasswordServlet</servlet-name>
+        <servlet-class>com.msk.sso.client.servlet.ChangePasswordServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChangePasswordServlet</servlet-name>
+        <url-pattern>/change/password</url-pattern>
+    </servlet-mapping>
+    <!-- ========================单点登录开始 ======================== -->
+    <!--用于单点退出，该过滤器用于实现单点登出功能，可选配置 -->
+    <listener>
+        <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
+    </listener>
+    
+    <!--该过滤器用于实现单点登出功能，可选配置。 -->
+    <filter>
+        <filter-name>CASSingle Sign OutFilter</filter-name>
+        <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+    <filter-mapping>
+        <filter-name>CASSingle Sign OutFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>CASFilter</filter-name>
+        <filter-class>com.msk.sso.client.filter.AuthenticationFilter</filter-class>
+        <async-supported>true</async-supported>
+        <init-param>
+            <param-name>ignorePattern</param-name>
+            <param-value>(\/api\/)|(\/static\/)</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ignoreUrlPatternType</param-name>
+            <param-value>REGEX</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CASFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--该过滤器负责对Ticket的校验工作，必须启用它 -->
+    <filter>
+        <filter-name>CASValidationFilter</filter-name>
+        <filter-class>
+            com.msk.sso.client.filter.TicketValidationFilter
+        </filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+    <filter-mapping>
+        <filter-name>CASValidationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- 该过滤器负责实现HttpServletRequest请求的包裹， 比如允许开发者通过HttpServletRequest的getRemoteUser()方法获得SSO登录用户的登录名，可选配置。 -->
+    <filter>
+        <filter-name>CASHttpServletRequest WrapperFilter</filter-name>
+        <filter-class>
+            org.jasig.cas.client.util.HttpServletRequestWrapperFilter
+        </filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+    <filter-mapping>
+        <filter-name>CASHttpServletRequest WrapperFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- 该过滤器使得开发者可以通过org.jasig.cas.client.util.AssertionHolder来获取用户的登录名。 比如AssertionHolder.getAssertion().getPrincipal().getName()。 -->
+    <filter>
+        <filter-name>CASAssertion Thread LocalFilter</filter-name>
+        <filter-class>org.jasig.cas.client.util.AssertionThreadLocalFilter</filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+    <filter-mapping>
+        <filter-name>CASAssertion Thread LocalFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- ========================单点登录结束 ======================== -->
+
+
+</web-fragment>

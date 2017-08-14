@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bms.dictionary.dao.NodeValueDao">
+    <resultMap id="nodeResultMap" type="com.bms.dictionary.bean.result.FindNodeResult">
+        <id property="dictId" column="DICT_ID"/>
+        <result property="dictCode" column="DICT_CODE"/>
+        <result property="dictEn" column="DICT_EN"/>
+        <result property="dictCn" column="DICT_CN"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <collection property="values" column="DICT_CODE" ofType="com.bms.dictionary.bean.entity.DictNodeValue">
+            <id property="dataId" column="DATA_ID"/>
+            <result property="dataValue" column="DATA_VALUE"/>
+            <result property="dataCn" column="DATA_CN"/>
+            <result property="dataEn" column="DATA_EN"/>
+        </collection>
+    </resultMap>
+
+    <insert id="save" parameterType="com.bms.dictionary.bean.param.CreateDataParam">
+        INSERT INTO dict_node_value (
+        DATA_ID,
+        DICT_ID,
+        DATA_VALUE,
+        DATA_EN,
+        DATA_CN,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="values" item="item" separator=",">
+        (
+            #{item.dataId}
+            ,#{item.dictId}
+            ,#{item.dataValue}
+            ,#{item.dataEn}
+            ,#{item.dataCn}
+            ,0
+            ,#{item.crtId}
+            ,#{item.crtTime}
+            ,#{item.updId}
+            ,#{item.updTime}
+            ,0
+        )
+        </foreach>
+    </insert>
+
+
+
+    <!--新增dict_node_value时需要知道dict_leaf_node表中对应的DICT_ID-->
+    <select id="findDictId" parameterType="com.bms.dictionary.bean.param.CreateDataParam" resultType="com.bms.dictionary.bean.entity.DictLeafNode">
+        SELECT
+        DICT_ID  AS  dictId
+        FROM
+        dict_leaf_node
+        WHERE
+        DEL_FLG = 0
+        <choose>
+            <when test="dictCode == rootCode">
+                AND IS_ROOT=1 AND  DICT_CODE = #{rootCode}
+            </when>
+            <otherwise>
+                AND DICT_CODE = #{dictCode}
+                AND FULLPATH like CONCAT((SELECT FULLPATH from dict_leaf_node where DEL_FLG = 0 AND IS_ROOT=1 and DICT_CODE=#{rootCode}),",","%")
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <update id="deletePartNodeValue" parameterType="java.util.HashMap">
+        UPDATE dict_node_value SET DEL_FLG =1,UPD_TIME = #{updTime},UPD_ID=#{updId}
+        WHERE
+        DEL_FLG = 0
+        AND DICT_ID IN
+        <foreach collection="dictIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="remove" parameterType="java.util.HashMap">
+        UPDATE  dict_node_value SET DEL_FLG =1,UPD_TIME = #{updTime},UPD_ID=#{updId}
+        WHERE
+          DATA_ID in
+        <foreach collection="dataIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND DEL_FLG = 0
+    </update>
+
+    <select id="findPageList" parameterType="com.bms.dictionary.bean.param.SubNodeLoadParam" resultMap="nodeResultMap">
+        SELECT
+        node.DICT_ID,
+        node.DICT_CODE,
+        node.DICT_EN,
+        node.DICT_CN,
+        node.PARENT_ID,
+        v.DATA_ID,
+        v.DATA_VALUE,
+        v.DATA_CN,
+        v.DATA_EN
+        FROM
+        dict_leaf_node node
+        LEFT JOIN  dict_node_value v on node.DICT_ID = v.DICT_ID AND v.DEL_FLG = 0
+        WHERE
+        node.DEL_FLG = 0 AND  node.DICT_ID = #{dictId}
+    </select>
+
+
+    <update id="modify" parameterType="com.bms.dictionary.bean.param.ModifyDataParam">
+        UPDATE dict_node_value
+        <set>
+            <if test="dataValue!=null and dataValue!=''">
+                DATA_VALUE = #{dataValue},
+            </if>
+            <if test="dataCn!=null and dataCn!=''">
+                DATA_CN = #{dataCn},
+            </if>
+            <if test="dataEn!=null and dataEn !=''">
+                DATA_EN = #{dataEn},
+            </if>
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime}
+        </set>
+        where  DATA_ID = #{dataId} AND DEL_FLG = 0
+    </update>
+</mapper>

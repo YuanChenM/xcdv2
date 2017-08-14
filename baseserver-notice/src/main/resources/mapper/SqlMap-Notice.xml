@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.msk.dao.NoticeMapperDao">
+
+    <select id="queryNoticeList" parameterType="com.msk.bean.param.QueryNoticeListParam"
+            resultType="com.msk.bean.result.NoticeResult">
+        SELECT
+        notice.ID AS id,
+        notice.MESSAGE_ID AS messageId,
+        notice.SENDER_CODE AS senderCode,
+        notice.RECEIVER_CODE AS receiverCode,
+        notice.SEND_DATA_TIME AS sendDateTime,
+        notice.LOOK_UP_TIME AS lookUpTime,
+        notice.TYPE AS type,
+        notice.CRT_ID AS crtId,
+        notice.CRT_TIME AS crtTime,
+        notice.UPD_ID AS updId,
+        notice.UPD_TIME AS updTime,
+        notice.DEL_FLG AS delFlg,
+        notice.STATUS AS status,
+        notice.VER AS ver,
+        notice.MESSAGE_CONTEXT AS messageContext,
+        notice.TITLE AS title
+        FROM (
+            SELECT
+            rel.ID,
+            rel.MESSAGE_ID,
+            rel.SENDER_CODE,
+            rel.RECEIVER_CODE,
+            rel.SEND_DATA_TIME,
+            rel.LOOK_UP_TIME,
+            rel.TYPE,
+            rel.CRT_ID,
+            rel.CRT_TIME,
+            rel.UPD_ID,
+            rel.UPD_TIME,
+            rel.DEL_FLG,
+            rel.STATUS,
+            rel.VER,
+            context.MESSAGE_CONTEXT,
+            context.TITLE
+            FROM
+            nt_message_relation rel
+            LEFT JOIN nt_message_context context
+            ON rel.MESSAGE_ID = context.ID
+            <where>
+                rel.DEL_FLG =0 AND context.DEL_FLG=0
+                <if test="status!=null and status !=''">
+                    AND rel.STATUS = #{status}
+                </if>
+                <if test="type!=null and type !=''">
+                    AND rel.TYPE = #{type}
+                </if>
+                <if test="title!=null and title !=''">
+                    AND context.TITLE LIKE #{title}
+                </if>
+                <if test="senderCode!=null and senderCode !=''">
+                    AND rel.SENDER_CODE = #{senderCode}
+                </if>
+                <if test="receiverCode!=null and receiverCode !=''">
+                    AND rel.RECEIVER_CODE = #{receiverCode}
+                </if>
+                <if test="messageId!=null and messageId !=''">
+                    AND rel.MESSAGE_ID = #{messageId}
+                </if>
+                <if test="id!=null and id !=''">
+                    AND rel.ID = #{id}
+                </if>
+            </where>
+
+            <if test="historyFlag == true">
+                UNION ALL
+                SELECT
+                his.ID,
+                his.MESSAGE_ID,
+                his.SENDER_CODE,
+                his.RECEIVER_CODE,
+                his.SEND_DATA_TIME,
+                his.LOOK_UP_TIME,
+                his.TYPE,
+                his.CRT_ID,
+                his.CRT_TIME,
+                his.UPD_ID,
+                his.UPD_TIME,
+                his.DEL_FLG,
+                his.STATUS,
+                his.VER,
+                context.MESSAGE_CONTEXT,
+                context.TITLE
+                FROM
+                nt_message_history his
+                LEFT JOIN nt_message_context context
+                ON his.MESSAGE_ID = context.ID
+                <where>
+                    his.DEL_FLG =0 AND context.DEL_FLG=0
+                    <if test="status!=null and status !=''">
+                        AND his.STATUS = #{status}
+                    </if>
+                    <if test="type!=null and type !=''">
+                        AND his.TYPE = #{type}
+                    </if>
+                    <if test="title!=null and title !=''">
+                        AND context.TITLE LIKE #{title}
+                    </if>
+                    <if test="senderCode!=null and senderCode !=''">
+                        AND his.SENDER_CODE = #{senderCode}
+                    </if>
+                    <if test="receiverCode!=null and receiverCode !=''">
+                        AND his.RECEIVER_CODE = #{receiverCode}
+                    </if>
+                    <if test="messageId!=null and messageId !=''">
+                        AND his.MESSAGE_ID = #{messageId}
+                    </if>
+                    <if test="id!=null and id !=''">
+                        AND his.ID = #{id}
+                    </if>
+                </where>
+            </if>
+          ) notice
+    </select>
+
+    <select id="queryNoticeDetail" parameterType="com.msk.bean.param.QueryNoticeDetailParam"
+            resultType="com.msk.bean.result.NoticeResult">
+        SELECT
+        rel.ID AS id,
+        rel.MESSAGE_ID AS messageId,
+        rel.SENDER_CODE AS senderCode,
+        rel.RECEIVER_CODE AS receiverCode,
+        rel.SEND_DATA_TIME AS sendDateTime,
+        rel.LOOK_UP_TIME AS lookUpTime,
+        rel.TYPE AS type,
+        rel.STATUS AS status,
+        rel.CRT_ID AS crtId,
+        rel.CRT_TIME AS crtTime,
+        rel.UPD_ID AS updId,
+        rel.UPD_TIME AS updTime,
+        rel.VER AS ver,
+        context.MESSAGE_CONTEXT AS messageContext,
+        context.TITLE AS title
+        FROM
+        nt_message_relation rel
+        LEFT JOIN nt_message_context context
+        ON rel.MESSAGE_ID = context.ID
+        WHERE
+        rel.DEL_FLG =0 AND context.DEL_FLG=0
+        <if test="id !=null and id !=''">
+            AND rel.ID = #{id}
+        </if>
+        <if test="messageId !=null and messageId !=''">
+            AND rel.MESSAGE_ID = #{messageId}
+        </if>
+        <if test="title!=null and title !=''">
+            AND context.TITLE LIKE #{title}
+        </if>
+        <if test="senderCode!=null and senderCode !=''">
+            AND rel.SENDER_CODE = #{senderCode}
+        </if>
+        <if test="receiverCode!=null and receiverCode !=''">
+            AND rel.RECEIVER_CODE = #{receiverCode}
+        </if>
+
+    </select>
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+        <tlib-version>1.0</tlib-version>
+        <short-name>msk-CodeMaster</short-name>
+        <uri>/CodeMaster</uri>
+        <tag>
+            <name>CodeMaster</name>
+            <tag-class>com.framework.tag.CodeMasterTag</tag-class>
+            <body-content>empty</body-content>
+            <!--Code Master展现的方式：label,select,json -->
+            <attribute>
+                <name>viewType</name>
+                <required>true</required>
+                <fragment>true</fragment>
+            </attribute>
+            <!-- Code Master数据中的Code Type-->
+            <attribute>
+                <name>codeType</name>
+                <required>true</required>
+                <fragment>true</fragment>
+            </attribute>
+            <!-- Code Master数据中的Code Value,根据Code Type + Code Value可以获得对应的描述 -->
+            <attribute>
+                <name>codeValue</name>
+                <required>false</required>
+                <fragment>true</fragment>
+            </attribute>
+            <!--select下拉框第一个option -->
+            <attribute>
+                <name>emptyText</name>
+                <required>false</required>
+                <fragment>true</fragment>
+            </attribute>
+            <!-- select标签或者label标签生成的时候对应的ID -->
+            <attribute>
+                <name>id</name>
+                <required>false</required>
+                <fragment>true</fragment>
+            </attribute>
+            <!-- select标签或者label标签生成的时候对应的Name -->
+            <attribute>
+                <name>name</name>
+                <required>false</required>
+                <fragment>true</fragment>
+            </attribute>
+            <!--是否需要校验（校验规则）-->
+            <attribute>
+                <name>validate</name>
+                <required>false</required>
+                <fragment>true</fragment>
+            </attribute>
+            <dynamic-attributes>true</dynamic-attributes>
+        </tag>
+
+        <tag>
+            <name>area</name>
+            <tag-class>com.framework.tag.AreaTag</tag-class>
+            <body-content>JSP</body-content>
+            <attribute>
+                <name>areaCode</name>
+                <required>true</required>
+                <rtexprvalue>true</rtexprvalue>
+            </attribute>
+            <attribute>
+                <name>param</name>
+                <required>false</required>
+                <rtexprvalue>true</rtexprvalue>
+            </attribute>
+            <attribute>
+                <name>needAuth</name>
+                <required>false</required>
+                <rtexprvalue>false</rtexprvalue>
+            </attribute>
+        </tag>
+</taglib>

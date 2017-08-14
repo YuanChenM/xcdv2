@@ -1,0 +1,23 @@
+/*.icon-news {*/
+  /*font-size: 35px;*/
+/*}*/
+
+.icon-login {
+  font-size: 20px;
+  color: #aaa;
+}
+
+/*.ICON_ADMIN, .ICON_CASES_DRAFT, .ICON_TRIGGER, .ICON_CASES_TO_REVISE, .ICON_CASES_PAUSED, .ICON_CASES_SEARCH, .ICON_CASES_TO_REASSIGN, .ICON_CASES_FOLDERS, .ICON_CASES_SELFSERVICE, .ICON_CASES_SENT, .ICON_SEARCHS, .ICON_FOLDERS, .ICON_CASES_INBOX, .ICON_CATEGORY, .ICON_CASES_START_CASE, .img_agent, .img_insure, .img_alter, .img_setting, .ICON_USERS, .ICON_GROUPS, .ICON_DEPARTAMENTS, .ICON_ROLES, .ICON_AUTHSOURCES, .ICON_UX {*/
+  /*font-size: 18px;*/
+  /*color: #666;*/
+/*}*/
+
+/*.ICON_CASES_TO_REASSIGN_ACTION{*/
+  /*font-size: 17px;*/
+  /*color: #666*/
+/*}*/
+
+/*.ICON_CASES_START_CASE, .ICON_CASES_FOLDERS, .ICON_SEARCHS{*/
+  /*font-weight: bold;*/
+/*}*/
+

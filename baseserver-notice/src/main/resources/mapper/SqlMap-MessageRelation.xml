@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.msk.dao.MessageRelationMapperDao">
+
+    <insert id="createMessageRelation" parameterType="java.util.List">
+        INSERT INTO nt_message_relation
+        (
+        ID,
+        MESSAGE_ID,
+        SENDER_CODE,
+        RECEIVER_CODE,
+        STATUS,
+        SEND_DATA_TIME,
+        TYPE,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        VER
+        ) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.messageId},
+            #{item.senderCode},
+            #{item.receiverCode},
+            #{item.status},
+            #{item.sendDateTime},
+            #{item.type},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            1
+            )
+        </foreach>
+    </insert>
+    <update id="updateMessageRelationById" parameterType="com.msk.bean.UpdateMessRelBean">
+        UPDATE nt_message_relation
+        SET
+        STATUS = #{status},
+        UPD_ID = #{updId},
+        UPD_TIME = #{updTime},
+        LOOK_UP_TIME = #{lookUpTime}
+        WHERE
+        DEL_FLG = 0
+        <if test="messageRelationId !=null and messageRelationId.size>0">
+            AND ID IN
+            <foreach collection="messageRelationId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="messageIds !=null and messageIds.size>0">
+            AND MESSAGE_ID IN
+            <foreach collection="messageIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+    </update>
+
+    <update id="updateMessageRelationByEmploy" parameterType="com.msk.bean.UpdateMessRelBean">
+         UPDATE nt_message_relation
+        SET
+        STATUS = #{status},
+        UPD_ID = #{updId},
+        UPD_TIME = #{updTime},
+        LOOK_UP_TIME = #{lookUpTime}
+        WHERE
+        RECEIVER_CODE = #{receiverCode}
+        AND DEL_FLG = 0
+    </update>
+
+    <delete id="deleteMessageRelationById" parameterType="com.msk.bean.DeleteMessRelBean">
+        DELETE FROM nt_message_relation
+        WHERE
+        <if test="ids !=null and ids.size() > 0">
+            ID IN
+            <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
+
+    <delete id="deleteMessageRelationByEmploy" parameterType="com.msk.bean.DeleteMessRelBean">
+        DELETE FROM nt_message_relation
+        WHERE
+        RECEIVER_CODE = #{userCode}
+    </delete>
+
+</mapper>
