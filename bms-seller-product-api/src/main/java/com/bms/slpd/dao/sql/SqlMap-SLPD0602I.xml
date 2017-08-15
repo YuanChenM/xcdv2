@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0602IDao">
+
+	<!-- 查询原种种源标准指标 -->
+
+	<!-- 查询字段 -->
+	<sql id="selectColumns">
+		A.ORG_STD_ID AS orgStdId,
+		A.ORG_STD_TYPE AS orgStdType,
+		A.BREED_ID AS breedId,
+		A.ORG_GOOD_VAL AS orgGoodVal,
+		A.ORG_NORMAL_VAL AS orgNormalVal,
+		A.ORG_OK_VAL AS orgOkVal,
+		A.REMARK AS remark,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+		<if test="productIds != null and productIds.size()>0">
+			,C.ORG_DIF_STD_ID AS orgDifStdId,
+			C.ORG_STD_TYPE  AS orgStdType,
+			C.PRODUCT_ID AS productId,
+			C.ORG_GOOD_DIF_VAL AS orgGoodDifVal,
+			C.ORG_NORMAL_DIF_VAL AS orgNormalDifVal,
+			C.ORG_OK_DIF_VAL AS orgOkDifVal,
+			C.REMARK AS difRemark,
+			C.DEL_FLG AS difDelFlg,
+			C.CRT_ID AS difCrtId,
+			C.CRT_TIME AS difCrtTime,
+			C.UPD_ID AS difUpdId,
+			C.UPD_TIME AS difUpdTime,
+			C.VERSION AS difVersion
+		</if>
+	</sql>
+
+	<select id="findPageList" parameterType="com.bms.slpd.bean.param.SLPD0501IParam" resultType="com.bms.slpd.bean.result.SLPD0501IResult">
+		SELECT
+		<include refid="selectColumns" />
+		FROM
+		SLPD_ORG_STD
+		WHERE
+		1 = 1
+		<!--<if test="filterMap.delFlg != null and filterMap.delFlg != ''">
+            AND A.DEL_FLG = #{filterMap.delFlg}
+        </if>-->
+	</select>
+
+	<select id="findAll" parameterType="com.bms.slpd.bean.param.SLPD0602IParam" resultType="com.bms.slpd.bean.result.field.SLPD0602IDifOrgStdResult">
+		SELECT
+		<include refid="selectColumns" />
+		FROM
+		SLPD_ORG_STD A
+		<if test="productIds != null and productIds.size()>0">
+			LEFT JOIN SLPD_DIF_ORG_STD C ON A.BREED_ID = C.BREED_ID
+			AND A.ORG_STD_TYPE = C.ORG_STD_TYPE
+		</if>
+		WHERE 1=1
+		<if test="breedIds != null and breedIds.size()>0">
+			AND A.BREED_ID IN (
+			<foreach collection="breedIds" item="breedId" separator=",">
+				#{breedId}
+			</foreach>
+			)
+		</if>
+		<if test="productIds != null and productIds.size()>0">
+			AND C.PRODUCT_ID IN (
+			<foreach collection="productIds" item="productId" separator=",">
+				#{productId}
+			</foreach>
+			)
+			AND C.DEL_FLG=0
+		</if>
+		AND A.DEL_FLG=0
+	</select>
+
+	<select id="batchSearch" parameterType="com.bms.slpd.bean.param.SLPD0602IParam" resultType="com.bms.slpd.bean.result.field.SLPD0602IDifOrgStdResult">
+		SELECT
+		A.ORG_DIF_STD_ID AS orgDifStdId,
+		A.ORG_STD_TYPE  AS orgStdType,
+		A.BREED_ID AS breedId,
+		A.PRODUCT_ID AS productId,
+		A.ORG_GOOD_DIF_VAL AS orgGoodDifVal,
+		A.ORG_NORMAL_DIF_VAL AS orgNormalDifVal,
+		A.ORG_OK_DIF_VAL AS orgOkDifVal,
+		A.REMARK AS remark,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+		FROM
+		SLPD_DIF_ORG_STD A
+		WHERE 1=1
+		<if test="breedIds != null and breedIds.size()>0">
+			AND A.BREED_ID IN (
+			<foreach collection="breedIds" item="breedId" separator=",">
+				#{breedId}
+			</foreach>
+			)
+		</if>
+		AND A.DEL_FLG=0
+	</select>
+
+	<select id="searchStd" parameterType="com.bms.slpd.bean.param.SLPD0602IParam" resultType="com.bms.slpd.bean.result.field.SLPD0602IOrgStdResult">
+		SELECT
+		A.ORG_STD_ID AS orgStdId,
+		A.ORG_STD_TYPE AS orgStdType,
+		A.BREED_ID AS breedId,
+		A.ORG_GOOD_VAL AS orgGoodVal,
+		A.ORG_NORMAL_VAL AS orgNormalVal,
+		A.ORG_OK_VAL AS orgOkVal,
+		A.REMARK AS remark,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+		FROM
+		SLPD_ORG_STD A
+		WHERE 1=1
+		<if test="breedIds != null and breedIds.size()>0">
+			AND A.BREED_ID IN (
+			<foreach collection="breedIds" item="breedId" separator=",">
+				#{breedId}
+			</foreach>
+			)
+		</if>
+		AND A.DEL_FLG=0
+	</select>
+
+	<select id="searchDif" parameterType="com.bms.slpd.bean.param.SLPD0602IParam" resultType="com.bms.slpd.bean.result.field.SLPD0602IDifOrgStdResult">
+		SELECT
+		A.ORG_DIF_STD_ID AS orgDifStdId,
+		A.ORG_STD_TYPE  AS orgStdType,
+		A.BREED_ID AS breedId,
+		A.PRODUCT_ID AS productId,
+		A.ORG_GOOD_DIF_VAL AS orgGoodDifVal,
+		A.ORG_NORMAL_DIF_VAL AS orgNormalDifVal,
+		A.ORG_OK_DIF_VAL AS orgOkDifVal,
+		A.REMARK AS remark,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+		FROM
+		SLPD_DIF_ORG_STD A
+		WHERE 1=1
+		<if test="productIds != null and productIds.size()>0">
+			AND A.PRODUCT_ID IN (
+			<foreach collection="productIds" item="productId" separator=",">
+				#{productId}
+			</foreach>
+			)
+		</if>
+		<if test="breedIds != null and breedIds.size()>0">
+			AND A.BREED_ID IN
+			<foreach collection="breedIds" item="breedId" open="(" separator="," close=")">
+				#{breedId}
+			</foreach>
+		</if>
+		AND A.DEL_FLG=0
+	</select>
+
+</mapper>

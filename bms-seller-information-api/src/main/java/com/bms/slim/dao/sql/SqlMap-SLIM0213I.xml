@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0213IDao">
+
+    <!--新增生产商生产资质-进沪(京、津)登记信息 -->
+    <insert id="saveShBjTjRegistrations" parameterType="map">
+        INSERT INTO SLIM_SH_BJ_TJ_REGISTRATION(
+        SBT_REG_ID,
+        SELLER_ROLE_ID,
+        WORKUNIT_NAME,
+        PRODUCT_CATEGORY_NAME,
+        REG_DATE,
+        SBT_REG_URL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="relation" separator=",">
+            (
+            #{relation.sbtRegId},
+            #{relation.sellerRoleId},
+            #{relation.workunitName},
+            #{relation.productCategoryName},
+            #{relation.regDate},
+            #{relation.sbtRegUrl},
+            0,
+            #{relation.crtId},
+            #{relation.crtTime},
+            #{relation.updId},
+            #{relation.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0223IDao">
+
+    <!-- 查询生产商荣誉证书 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0223IParam"
+            resultType="com.bms.slim.bean.result.field.SLIM0223ProducerHonorCertificateResult">
+        SELECT
+            HONOR_CERT_ID AS honorCertId,
+            SELLER_ROLE_ID AS sellerRoleId,
+            ISSUE_AUTHORITY AS issueAuthority,
+            ISSUE_DATE AS issueDate,
+            HONOR_CERT_URL AS honorCertUrl,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+            SLIM_PRODUCER_HONOR_CERTIFICATE
+        <where>
+            <if test="delFlg != null">
+                DEL_FLG = #{delFlg}
+            </if>
+            <if test="honorCertificateIds != null and honorCertificateIds.size() > 0">
+                AND HONOR_CERT_ID IN
+                <foreach collection="honorCertificateIds" item="honorCertificateId" open="(" separator="," close=")">
+                    #{honorCertificateId}
+                </foreach>
+            </if>
+            <if test="sellerRoleIds != null and sellerRoleIds.size() > 0">
+                AND SELLER_ROLE_ID IN
+                <foreach collection="sellerRoleIds" item="sellerRoleId" open="(" separator="," close=")">
+                    #{sellerRoleId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

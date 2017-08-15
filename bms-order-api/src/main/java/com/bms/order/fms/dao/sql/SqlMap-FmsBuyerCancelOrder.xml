@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.fms.dao.FmsBuyerCancelOrderDao">
+    <select id="findBuyerCancelOrder" parameterType="com.bms.order.fms.bean.FmsOrderParam"
+            resultType="com.bms.order.fms.bean.FmsBuyerCancelOrderBean">
+        SELECT
+          buyerOrder.BUYER_ORDER_ID AS omsOrderId
+        , buyerOrder.BUYER_ORDER_CODE AS omsOrderNumber
+        , buyerOrder.BACK_NO AS orgsystemId
+        , buyerOrder.ORDER_TYPE AS orderType
+        , buyerOrder.ORDER_PLACE_DATETIME AS orderedDateMir
+        FROM
+             ORDR_BUYER_ORDER buyerOrder
+        WHERE buyerOrder.DEL_FLG = FALSE
+        <if test="pushOrderId != null and pushOrderId != ''">
+            AND buyerOrder.BUYER_ORDER_ID = #{pushOrderId}
+        </if>
+        <if test="pushOrderCode != null and pushOrderCode != ''">
+            AND buyerOrder.BUYER_ORDER_CODE = #{pushOrderCode}
+        </if>
+        <if test="backNo != null and backNo != ''">
+            AND buyerOrder.BACK_NO = #{backNo}
+        </if>
+        ORDER BY buyerOrder.BUYER_ORDER_ID
+    </select>
+
+    <select id="findBuyerCancelOrderDetail" parameterType="com.bms.order.fms.bean.FmsBuyerCancelOrderBean"
+            resultType="com.bms.order.fms.bean.FmsBuyerCancelOrderDetail">
+        SELECT
+            (@rownum :=@rownum + 1) AS lineNum,
+            orderDetail.GOODS_ID AS productId,
+            orderDetail.CANCEL_QUANTITY AS cancelQuantity,
+            deliverDetail.SKU AS itemSku,
+            deliverDetailAttached.MAKER_CODE AS producerCode,
+            deliverDetailAttached.MAKER_NAME AS producerName,
+            deliverDetailAttached.MANUFACTURER_CODE AS manufacturerCode,
+            deliverDetailAttached.MANUFACTURER_NAME AS manufacturerName,
+            '已输入' AS lineStatus
+        FROM
+            (SELECT @rownum := 0) AS SEQ,
+            ORDR_BUYER_BATCH_ORDER_DETAIL orderDetail
+        LEFT JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL deliverDetail
+        ON deliverDetail.BUYER_BATCH_ORDER_DETAIL_ID = orderDetail.BUYER_BATCH_ORDER_DETAIL_ID
+        LEFT JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED deliverDetailAttached
+        ON deliverDetailAttached.BUYER_FORCAST_DELIVER_DETAIL_ID = deliverDetail.BUYER_FORCAST_DELIVER_DETAIL_ID
+        WHERE
+            orderDetail.BUYER_ORDER_ID = #{omsOrderId}
+        AND orderDetail.CANCEL_QUANTITY > 0
+        ORDER BY orderDetail.PRODUCT_ID
+    </select>
+</mapper>

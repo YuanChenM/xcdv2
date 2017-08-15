@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0202IDao">
+
+    <!-- 获取一级分类最大编码 -->
+    <select id="getMaxClassesCode" resultType="String">
+        SELECT
+        MAX(CAST(CLASSES_CODE AS SIGNED))
+        FROM
+        SLPD_CLASSES
+        WHERE
+        DEL_FLG = 0
+    </select>
+
+    <!-- 新增一级分类 -->
+    <insert id="saveClasses" parameterType="java.util.List">
+        INSERT INTO SLPD_CLASSES (
+        CLASSES_ID,
+        CLASSES_CODE,
+        CLASSES_NAME,
+        AUDIT_STU,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="classes" separator=",">
+            (
+            #{classes.classesId},
+            #{classes.classesCode},
+            #{classes.classesName},
+            #{classes.auditStu},
+            0,
+            #{classes.crtId},
+            #{classes.crtTime},
+            #{classes.updId},
+            #{classes.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!-- 获取二级分类最大编码 -->
+    <select id="getMaxMachiningCode" parameterType="java.util.List" resultType="Map">
+        SELECT
+        CLASSES_ID AS classesId,
+        MAX(CAST(MACHINING_CODE AS SIGNED)) AS maxMachiningCode
+        FROM SLPD_MACHINING
+        WHERE DEL_FLG = 0
+        <if test="list != null and list.size()>0">
+            AND CLASSES_ID IN (
+            <foreach collection="list" item="classeId" separator=",">
+                #{classeId}
+            </foreach>
+            )
+        </if>
+        GROUP BY CLASSES_ID
+    </select>
+
+    <!-- 新增二级分类 -->
+    <insert id="saveMachinings" parameterType="java.util.List">
+        INSERT INTO SLPD_MACHINING (
+        MACHINING_ID,
+        CLASSES_ID,
+        MACHINING_CODE,
+        MACHINING_NAME,
+        AUDIT_STU,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="machining" separator=",">
+            (
+            #{machining.machiningId},
+            #{machining.classesId},
+            #{machining.machiningCode},
+            #{machining.machiningName},
+            #{machining.auditStu},
+            0,
+            #{machining.crtId},
+            #{machining.crtTime},
+            #{machining.updId},
+            #{machining.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!-- 获取品种最大编码 -->
+    <select id="getMaxBreedCode" parameterType="com.bms.slpd.bean.param.SLPD0104IParam" resultType="Map">
+        SELECT
+        CLASSES_ID AS classesId,
+        MACHINING_ID AS machiningId,
+        MAX(CAST(BREED_CODE AS SIGNED)) AS maxBreedCode
+        FROM SLPD_BREED
+        WHERE DEL_FLG = 0
+        <if test="classesIds != null and classesIds.size() > 0">
+            AND CLASSES_ID IN
+            <foreach collection="classesIds" item="classesId" open="(" separator="," close=")">
+                #{classesId}
+            </foreach>
+        </if>
+        <if test="machiningIds != null and machiningIds.size() > 0">
+            AND MACHINING_ID IN
+            <foreach collection="machiningIds" item="machiningId" open="(" separator="," close=")">
+                #{machiningId}
+            </foreach>
+        </if>
+        GROUP BY CLASSES_ID,MACHINING_ID
+    </select>
+
+    <!-- 新增品种 -->
+    <insert id="saveBreeds" parameterType="java.util.List">
+        INSERT INTO SLPD_BREED (
+        BREED_ID,
+        CLASSES_ID,
+        MACHINING_ID,
+        BREED_CODE,
+        BREED_SKU,
+        BREED_SALES_NAME,
+        BREED_SCIENTIFIC_NAME,
+        BREED_LOCAL_NAME,
+        AUDIT_STU,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="breed" separator=",">
+            (
+            #{breed.breedId},
+            #{breed.classesId},
+            #{breed.machiningId},
+            #{breed.breedCode},
+            #{breed.breedSku},
+            #{breed.breedSalesName},
+            #{breed.breedScientificName},
+            #{breed.breedLocalName},
+            #{breed.auditStu},
+            0,
+            #{breed.crtId},
+            #{breed.crtTime},
+            #{breed.updId},
+            #{breed.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!-- 新增品种与档案卡关系 -->
+    <insert id="saveBreedStdRelations" parameterType="java.util.List">
+        INSERT INTO SLPD_BREED_STD_RELATION (
+        BREED_STD_ID,
+        BREED_ID,
+        ORG_STD_FLG,
+        FED_STD_FLG,
+        MCT_STD_FLG,
+        TNC_STD_FLG,
+        GNQ_STD_FLG,
+        SFT_STD_FLG,
+        TSP_STD_FLG,
+        PKG_STD_FLG,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="stdRelation" separator=",">
+            (
+            #{stdRelation.breedStdId},
+            #{stdRelation.breedId},
+            #{stdRelation.orgStdFlg},
+            #{stdRelation.fedStdFlg},
+            #{stdRelation.mctStdFlg},
+            #{stdRelation.tncStdFlg},
+            #{stdRelation.gnqStdFlg},
+            #{stdRelation.sftStdFlg},
+            #{stdRelation.tspStdFlg},
+            #{stdRelation.pkgStdFlg},
+            0,
+            #{stdRelation.crtId},
+            #{stdRelation.crtTime},
+            #{stdRelation.updId},
+            #{stdRelation.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!-- 新增一级分类排他 -->
+    <select id="checkClassesNames" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdClasses">
+        SELECT
+          CLASSES_ID AS classesId,
+          CLASSES_NAME AS classesName
+        FROM
+          SLPD_CLASSES
+        WHERE
+          DEL_FLG = 0
+        AND
+          <foreach collection="list" item="classes" open="(" separator="or" close=")">
+              (
+                CLASSES_NAME = #{classes.classesName}
+              )
+          </foreach>
+    </select>
+
+    <!-- 新增二级分类排他 -->
+    <select id="checkMachiningNames" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdMachining">
+        SELECT
+        CLASSES_ID AS classesId,
+        MACHINING_NAME AS machiningName
+        FROM
+        SLPD_MACHINING
+        WHERE
+        DEL_FLG = 0
+        AND
+        <foreach collection="list" item="machining" open="(" separator="or" close=")">
+            (
+            MACHINING_NAME = #{machining.machiningName}
+            AND
+            CLASSES_ID = #{machining.classesId}
+            )
+        </foreach>
+    </select>
+
+    <!-- 新增品种分类排他 -->
+    <select id="checkBreedNames" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdBreed">
+        SELECT
+        MACHINING_ID AS machiningId,
+        BREED_SALES_NAME AS breedSalesName
+        FROM
+        SLPD_BREED
+        WHERE
+        DEL_FLG = 0
+        AND
+        <foreach collection="list" item="breed" open="(" separator="or" close=")">
+            (
+            BREED_SALES_NAME = #{breed.breedSalesName}
+            AND
+            MACHINING_ID = #{breed.machiningId}
+            )
+        </foreach>
+    </select>
+
+    <!-- 新增一级分类CODE排他 -->
+    <select id="checkClassesCodes" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdClasses">
+        SELECT
+        CLASSES_ID AS classesId,
+        CLASSES_CODE AS classesCode
+        FROM
+        SLPD_CLASSES
+        WHERE
+        DEL_FLG = 0
+        AND CLASSES_CODE IN
+        <foreach collection="list" item="classes" open="(" separator="," close=")">
+            #{classes.classesCode}
+        </foreach>
+    </select>
+
+    <!-- 新增二级分类CODE排他 -->
+    <select id="checkMachiningCodes" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdMachining">
+        SELECT
+        MACHINING_ID AS machiningId,
+        MACHINING_CODE AS machiningCode
+        FROM
+        SLPD_MACHINING
+        WHERE
+        DEL_FLG = 0
+        AND
+        <foreach collection="list" item="machining" open="(" separator="or" close=")">
+            (
+            MACHINING_CODE = #{machining.machiningCode}
+            AND CLASSES_ID = #{machining.classesId}
+            )
+
+        </foreach>
+    </select>
+
+    <!-- 新增品种CODE排他 -->
+    <select id="checkBreedCodes" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdBreed">
+        SELECT
+        BREED_ID AS breedId,
+        BREED_CODE AS breedCode
+        FROM
+        SLPD_BREED
+        WHERE
+        DEL_FLG = 0
+        AND
+        <foreach collection="list" item="breed" open="(" separator="or" close=")">
+            BREED_CODE = #{breed.breedCode}
+            AND MACHINING_ID = #{breed.machiningId}
+        </foreach>
+    </select>
+
+</mapper>

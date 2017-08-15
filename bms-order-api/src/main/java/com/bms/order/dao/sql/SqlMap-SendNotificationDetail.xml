@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.SendNotificationDetailDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.SendNotificationDetailEntity">
+INSERT INTO
+ORDR_SEND_NOTIFICATION_DETAIL
+(
+SEND_NOTIFICATION_DETAIL_ID
+, SEND_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID
+, GOODS_ID
+, SKU
+, BATCH
+, REAL_SEND_QUANTITY
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{sendNotificationDetailId}
+, #{sendNotificationId}
+, #{distributionNotificationDetailId}
+, #{goodsId}
+, #{sku}
+, #{batch}
+, #{realSendQuantity}
+, #{transactionSequence}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_SEND_NOTIFICATION_DETAIL
+(
+SEND_NOTIFICATION_DETAIL_ID
+, SEND_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID
+, GOODS_ID
+, SKU
+, BATCH
+, REAL_SEND_QUANTITY
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.sendNotificationDetailId}
+, #{entity.sendNotificationId}
+, #{entity.distributionNotificationDetailId}
+, #{entity.goodsId}
+, #{entity.sku}
+, #{entity.batch}
+, #{entity.realSendQuantity}
+, #{entity.transactionSequence}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.SendNotificationDetailEntity">
+UPDATE ORDR_SEND_NOTIFICATION_DETAIL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+SEND_NOTIFICATION_DETAIL_ID = #{sendNotificationDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_SEND_NOTIFICATION_DETAIL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+SEND_NOTIFICATION_DETAIL_ID = #{entity.sendNotificationDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.SendNotificationDetailEntity">
+UPDATE ORDR_SEND_NOTIFICATION_DETAIL
+SET
+SEND_NOTIFICATION_DETAIL_ID = #{sendNotificationDetailId}
+, SEND_NOTIFICATION_ID = #{sendNotificationId}
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{distributionNotificationDetailId}
+, GOODS_ID = #{goodsId}
+, SKU = #{sku}
+, BATCH = #{batch}
+, REAL_SEND_QUANTITY = #{realSendQuantity}
+, TRANSACTION_SEQUENCE = #{transactionSequence}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+SEND_NOTIFICATION_DETAIL_ID = #{sendNotificationDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_SEND_NOTIFICATION_DETAIL
+SET
+SEND_NOTIFICATION_DETAIL_ID = #{entity.sendNotificationDetailId}
+, SEND_NOTIFICATION_ID = #{entity.sendNotificationId}
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{entity.distributionNotificationDetailId}
+, GOODS_ID = #{entity.goodsId}
+, SKU = #{entity.sku}
+, BATCH = #{entity.batch}
+, REAL_SEND_QUANTITY = #{entity.realSendQuantity}
+, TRANSACTION_SEQUENCE = #{entity.transactionSequence}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+SEND_NOTIFICATION_DETAIL_ID = #{entity.sendNotificationDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.SendNotificationDetailEntity" resultType="com.bms.order.bean.entity.SendNotificationDetailEntity">
+SELECT
+SEND_NOTIFICATION_DETAIL_ID AS sendNotificationDetailId
+, SEND_NOTIFICATION_ID AS sendNotificationId
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID AS distributionNotificationDetailId
+, GOODS_ID AS goodsId
+, SKU AS sku
+, BATCH AS batch
+, REAL_SEND_QUANTITY AS realSendQuantity
+, TRANSACTION_SEQUENCE AS transactionSequence
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_SEND_NOTIFICATION_DETAIL
+<where>
+<if test="sendNotificationDetailId!=null">
+AND SEND_NOTIFICATION_DETAIL_ID = #{sendNotificationDetailId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.SendNotificationDetailEntity">
+SELECT
+SEND_NOTIFICATION_DETAIL_ID AS sendNotificationDetailId
+, SEND_NOTIFICATION_ID AS sendNotificationId
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID AS distributionNotificationDetailId
+, GOODS_ID AS goodsId
+, SKU AS sku
+, BATCH AS batch
+, REAL_SEND_QUANTITY AS realSendQuantity
+, TRANSACTION_SEQUENCE AS transactionSequence
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_SEND_NOTIFICATION_DETAIL
+<where>
+<if test="ids!=null">
+AND SEND_NOTIFICATION_DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="distributionNotificationDetails!=null">
+AND DISTRIBUTION_NOTIFICATION_DETAIL_ID IN (<foreach item="item" collection="distributionNotificationDetails" separator=",">#{item.entity.distributionNotificationDetailId}</foreach>)
+</if>
+<if test="sendNotifications!=null">
+AND SEND_NOTIFICATION_ID IN (<foreach item="item" collection="sendNotifications" separator=",">#{item.entity.sendNotificationId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.SendNotificationDetailHistoryEntity">
+INSERT INTO
+ORDR_SEND_NOTIFICATION_DETAIL_HISTORY
+(
+HISTORY_ID
+, SEND_NOTIFICATION_DETAIL_ID
+, SEND_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID
+, GOODS_ID
+, SKU
+, BATCH
+, REAL_SEND_QUANTITY
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{sendNotificationDetailId}
+, #{sendNotificationId}
+, #{distributionNotificationDetailId}
+, #{goodsId}
+, #{sku}
+, #{batch}
+, #{realSendQuantity}
+, #{transactionSequence}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_SEND_NOTIFICATION_DETAIL_HISTORY
+(
+HISTORY_ID
+, SEND_NOTIFICATION_DETAIL_ID
+, SEND_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID
+, GOODS_ID
+, SKU
+, BATCH
+, REAL_SEND_QUANTITY
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.sendNotificationDetailId}
+, #{entity.sendNotificationId}
+, #{entity.distributionNotificationDetailId}
+, #{entity.goodsId}
+, #{entity.sku}
+, #{entity.batch}
+, #{entity.realSendQuantity}
+, #{entity.transactionSequence}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

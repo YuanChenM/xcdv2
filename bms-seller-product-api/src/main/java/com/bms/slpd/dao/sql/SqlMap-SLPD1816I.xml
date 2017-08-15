@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD1816IDao">
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO SLPD_PRODUCT (
+        ID,
+        PRODUCT_ID,
+        QUALITY_GRADE_TYPE,
+        NET_WEIGHT,
+        NET_WEIGHT_CODE,
+        AUDIT_STU,
+        AUDIT_REMARK,
+        AUDIT_HISTORY,
+        ITEM_PROPERTY_ID,
+        BRAND_ITEM_PROPERTY_SKU,
+        BRAND_ITEM_ID,
+        BRAND_ITEM_SKU,
+        BRAND_ID,
+        BRAND_CODE,
+        BRAND_NAME,
+        BRAND_TYPE,
+        ITEM_ID,
+        ITEM_SKU,
+        ITEM_CODE,
+        ITEM_NAME,
+        SPECIFICATION,
+        PROCESSING_METHOD,
+        TASTE,
+        BREED_ID,
+        BREED_CODE,
+        BREED_SKU,
+        BREED_SALES_NAME,
+        BREED_SCIENTIFIC_NAME,
+        BREED_LOCAL_NAME,
+        MACHINING_ID,
+        MACHINING_CODE,
+        MACHINING_NAME,
+        CLASSES_ID,
+        CLASSES_CODE,
+        CLASSES_NAME,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">(
+            #{item.id},
+            #{item.productId},
+            #{item.qualityGradeType},
+            #{item.netWeight},
+            #{item.netWeightCode},
+            #{item.auditStu},
+            #{item.auditRemark},
+            #{item.auditHistory},
+            #{item.itemPropertyId},
+            #{item.brandItemPropertySku},
+            #{item.brandItemId},
+            #{item.brandItemSku},
+            #{item.brandId},
+            #{item.brandCode},
+            #{item.brandName},
+            #{item.brandType},
+            #{item.itemId},
+            #{item.itemSku},
+            #{item.itemCode},
+            #{item.itemName},
+            #{item.specification},
+            #{item.processingMethod},
+            #{item.taste},
+            #{item.breedId},
+            #{item.breedCode},
+            #{item.breedSku},
+            #{item.breedSalesName},
+            #{item.breedScientificName},
+            #{item.breedLocalName},
+            #{item.machiningId},
+            #{item.machiningCode},
+            #{item.machiningName},
+            #{item.classesId},
+            #{item.classesCode},
+            #{item.classesName},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.crtId},
+            #{item.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <select id="searchProductInfo" parameterType="com.bms.slpd.bean.param.field.SLPD1816ISearchProductParam"
+            resultType="com.bms.slpd.bean.result.field.SLPD1816IProductResult">
+        SELECT
+        A.ITEM_PROPERTY_ID AS itemPropertyId,
+        A.ITEM_PROPERTY_CODE AS itemPropertyCode,
+        A.ITEM_ID AS itemId,
+        A.GROSS_WEIGHT AS grossWeight,
+        A.PACKAGE_SPECIFICATION AS packageSpecification,
+        A.PACKAGE_QUANTITY AS packageQuantity,
+        A.CARTON_DIMENSION AS cartonDimension,
+        A.PALLET_STACKING_LIMIT AS palletStackingLimit,
+        B.BRAND_ITEM_ID AS brandItemId,
+        B.BRAND_ITEM_SKU AS brandItemSku,
+        C.BRAND_ID AS brandId,
+        C.BRAND_CODE AS brandCode,
+        C.BRAND_NAME AS brandName,
+        C.BRAND_TYPE AS brandType,
+        D.ITEM_SKU AS itemSku,
+        D.ITEM_CODE AS itemCode,
+        D.ITEM_NAME AS itemName,
+        D.SPECIFICATION AS specification,
+        D.PROCESSING_METHOD AS processingMethod,
+        D.TASTE AS taste,
+        F.BREED_ID AS breedId,
+        F.BREED_CODE AS breedCode,
+        F.BREED_SKU AS breedSku,
+        F.BREED_SALES_NAME AS breedSalesName,
+        F.BREED_SCIENTIFIC_NAME AS breedScientificName,
+        F.BREED_LOCAL_NAME AS breedLocalName,
+        G.MACHINING_ID AS machiningId,
+        G.MACHINING_CODE AS machiningCode,
+        G.MACHINING_NAME AS machiningName,
+        H.CLASSES_ID AS classesId,
+        H.CLASSES_CODE AS classesCode,
+        H.CLASSES_NAME AS classesName,
+        A.CRT_ID AS crtId,
+        A.CRT_TIME AS crtTime,
+        A.UPD_ID AS updId,
+        A.UPD_TIME AS updTime,
+        A.VERSION AS version
+        FROM SLPD_ITEM_PROPERTY A
+        LEFT JOIN SLPD_ITEM D ON D.ITEM_ID IN (
+        <foreach collection="itemIds" item="itemId" separator=",">
+            #{itemId}
+        </foreach>
+        )
+        AND A.ITEM_ID = D.ITEM_ID
+        LEFT JOIN SLPD_BRAND_ITEM B ON B.ITEM_ID IN (
+        <foreach collection="itemIds" item="itemId" separator=",">
+            #{itemId}
+        </foreach>
+        )
+        AND B.BRAND_ID IN (
+        <foreach collection="brandIds" item="brandId" separator=",">
+            #{brandId}
+        </foreach>
+        )
+        AND B.ITEM_ID = D.ITEM_ID
+        LEFT JOIN SLPD_BRAND C ON C.BRAND_ID IN (
+        <foreach collection="brandIds" item="brandId" separator=",">
+            #{brandId}
+        </foreach>
+        )
+        AND B.BRAND_ID = C.BRAND_ID
+        LEFT JOIN SLPD_BREED F ON D.BREED_ID=F.BREED_ID
+        LEFT JOIN SLPD_MACHINING G ON D.MACHINING_ID=G.MACHINING_ID
+        LEFT JOIN SLPD_CLASSES H ON D.CLASSES_ID=H.CLASSES_ID
+        WHERE 1=1
+        AND A.ITEM_PROPERTY_ID IN (
+        <foreach collection="itemPropertyIds" item="itemPropertyId" separator=",">
+            #{itemPropertyId}
+        </foreach>
+        );
+    </select>
+
+    <!-- 查询产品是否已经存在 -->
+    <select id="findExistProducts" parameterType="java.util.List"
+            resultType="com.bms.slpd.bean.entity.SlpdProduct">
+        SELECT
+        PRODUCT_ID AS productId,
+        ITEM_ID AS itemId,
+        ITEM_PROPERTY_ID AS itemPropertyId,
+        NET_WEIGHT AS netWeight,
+        QUALITY_GRADE_TYPE AS qualityGradeType,
+        BRAND_ID AS brandId
+        FROM
+        SLPD_PRODUCT
+        <include refid="whereConditions"/>
+    </select>
+
+    <sql id="whereConditions">
+        <where>
+            <foreach collection="list" item="product" open="(" separator="or" close=")">
+                (
+                ITEM_ID = #{product.itemId}
+                AND NET_WEIGHT = #{product.netWeight}
+                AND QUALITY_GRADE_TYPE = #{product.qualityGradeType}
+                AND ITEM_PROPERTY_ID = #{product.itemPropertyId}
+                AND BRAND_ID = #{product.brandId}
+                )
+            </foreach>
+
+        </where>
+    </sql>
+
+    <!-- 查询产品表产品Id最大值 -->
+    <select id="findMaxProductId" resultType="String">
+        SELECT
+        MAX(CAST(PRODUCT_ID AS SIGNED)) AS productId
+        FROM SLPD_PRODUCT
+    </select>
+
+</mapper>

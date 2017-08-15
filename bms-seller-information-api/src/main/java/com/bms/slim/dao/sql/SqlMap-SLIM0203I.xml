@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0203IDao">
+    <!--修改卖家生产商信息 -->
+    <update id="udpateSellerProducer" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_PRODUCER
+        <set>
+            <if test="target.fullNameFlg != null and target.fullNameFlg">
+                FULL_NAME = #{entity.fullName},
+            </if>
+            <if test="target.shortNameFlg != null and target.shortNameFlg">
+                SHORT_NAME = #{entity.shortName},
+            </if>
+            <if test="target.countryCodeFlg != null and target.countryCodeFlg">
+                COUNTRY_CODE = #{entity.countryCode},
+            </if>
+            <if test="target.countryNameFlg != null and target.countryNameFlg">
+                COUNTRY_NAME = #{entity.countryName},
+            </if>
+            <if test="target.provinceCodeFlg != null and target.provinceCodeFlg">
+                PROVINCE_CODE = #{entity.provinceCode},
+            </if>
+            <if test="target.provinceNameFlg != null and target.provinceNameFlg">
+                PROVINCE_NAME = #{entity.provinceName},
+            </if>
+            <if test="target.cityCodeFlg != null and target.cityCodeFlg">
+                CITY_CODE = #{entity.cityCode},
+            </if>
+            <if test="target.cityNameFlg != null and target.cityNameFlg">
+                CITY_NAME = #{entity.cityName},
+            </if>
+            <if test="target.addressFlg != null and target.addressFlg">
+                ADDRESS = #{entity.address},
+            </if>
+            <if test="target.telFlg != null and target.telFlg">
+                TEL = #{entity.tel},
+            </if>
+            <if test="target.faxFlg != null and target.faxFlg">
+                FAX = #{entity.fax},
+            </if>
+            <if test="target.mediaPlatformFlg != null and target.mediaPlatformFlg">
+                MEDIA_PLATFORM = #{entity.mediaPlatform},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+            PRODUCER_ID = #{entity.producerId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+    <update id="updateSellerProducerRelation" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_SELLER_PRODUCER SET
+        <if test="target.delFlgFlg != null and target.delFlgFlg">
+            DEL_FLG = #{entity.delFlg},
+        </if>
+        VERSION = VERSION + 1,
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime}
+        WHERE
+        PRODUCER_ID = #{entity.producerId} AND ENTITY_SELLER_ID = #{entity.entitySellerId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+    <update id="updateProducerContact" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_CONTACT
+        <set>
+            <if test="target.contactNameFlg != null and target.contactNameFlg">
+                CONTACT_NAME = #{entity.contactName},
+            </if>
+            <if test="target.emailFlg != null and target.emailFlg">
+                EMAIL = #{entity.email},
+            </if>
+            <if test="target.qqFlg != null and target.qqFlg">
+                QQ = #{entity.qq},
+            </if>
+            <if test="target.mobileFlg != null and target.mobileFlg">
+                MOBILE = #{entity.mobile},
+            </if>
+            <if test="target.wechatFlg != null and target.wechatFlg">
+                WECHAT = #{entity.wechat},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+        CONTACT_ID = #{entity.contactId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+    <select id="findSellerProducerRelation" parameterType="com.bms.slim.bean.param.SLIM0203IParam" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        SLIM_SELLER_PRODUCER RE
+        LEFT JOIN SLIM_ENTITY_SELLER ES ON RE.ENTITY_SELLER_ID = ES.ENTITY_SELLER_ID
+        LEFT JOIN SLIM_PRODUCER SP ON RE.PRODUCER_ID = SP.PRODUCER_ID
+        WHERE
+        RE.DEL_FLG = 0
+        AND ES.DEL_FLG = 0
+        AND SP.DEL_FLG = 0
+        <if test="beans != null and beans.size() > 0">
+            AND SP.PRODUCER_ID IN
+            <foreach collection="beans" item="item" open="(" separator="," close=")">
+                #{item.producerId}
+            </foreach>
+        </if>
+    </select>
+
+</mapper>

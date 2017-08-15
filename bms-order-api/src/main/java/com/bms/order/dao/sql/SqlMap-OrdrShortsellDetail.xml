@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.OrdrShortsellDetailDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		DETAIL_ID AS detailId,
+		ORDER_ID AS orderId,
+		MATERIAL_DATA_TYPE AS materialDataType,
+		MATERIAL_CODE AS materialCode,
+		MATERIAL_NAME AS materialName,
+		COMMODITY_ID AS commodityId,
+		COMMODITY_CODE AS commodityCode,
+		COMMODITY_NAME AS commodityName,
+		UOM AS uom,
+		TRADE_QTY AS tradeQty,
+		TRADE_PRICE AS tradePrice
+	</sql>
+
+    <insert id="save" parameterType="com.bms.order.bean.entity.OrdrShortsellDetail">
+		INSERT INTO ordr_shortsell_detail (order.bean
+			DETAIL_ID,
+			ORDER_ID,
+			MATERIAL_DATA_TYPE,
+			MATERIAL_CODE,
+			MATERIAL_NAME,
+			COMMODITY_ID,
+			COMMODITY_CODE,
+			COMMODITY_NAME,
+			UOM,
+			TRADE_QTY,
+			TRADE_PRICE	,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{detailId},
+			#{orderId},
+			#{materialDataType},
+			#{materialCode},
+			#{materialName},
+			#{commodityId},
+			#{commodityCode},
+			#{commodityName},
+			#{uom},
+			#{tradeQty},
+			#{tradePrice},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO ordr_shortsell_detail (
+		DETAIL_ID,
+		ORDER_ID,
+		MATERIAL_DATA_TYPE,
+		MATERIAL_CODE,
+		MATERIAL_NAME,
+		COMMODITY_ID,
+		COMMODITY_CODE,
+		COMMODITY_NAME,
+		UOM,
+		TRADE_QTY,
+		TRADE_PRICE,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		UPD_ID,
+		UPD_TIME,
+		VERSION
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+			#{item.detailId},
+			#{item.orderId},
+			#{item.materialDataType},
+			#{item.materialCode},
+			#{item.materialName},
+			#{item.commodityId},
+			#{item.commodityCode},
+			#{item.commodityName},
+			#{item.uom},
+			#{item.tradeQty},
+			#{item.tradePrice},
+			0,
+			#{item.crtId},
+			#{item.crtTime},
+			#{item.updId},
+			#{item.updTime},
+			1
+			)
+		</foreach>
+	</insert>
+
+</mapper>

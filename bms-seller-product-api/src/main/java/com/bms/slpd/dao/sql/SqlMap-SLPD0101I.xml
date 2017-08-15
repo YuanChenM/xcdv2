@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0101IDao">
+    <!-- 查询产品一级分类 -->
+    <select id="findClasses" parameterType="com.bms.slpd.bean.param.SLPD0101IParam"
+            resultType="com.bms.slpd.bean.entity.SlpdClasses">
+        SELECT
+        CLASSES_ID AS classesId,
+        CLASSES_CODE AS classesCode,
+        CLASSES_NAME AS classesName,
+        AUDIT_STU AS auditStu,
+        DEL_FLG AS delFlg,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS version
+        FROM
+        SLPD_CLASSES
+        <where>
+            <if test="delFlg != null">
+                DEL_FLG = #{delFlg}
+            </if>
+            <if test="auditStu != null">
+                AND AUDIT_STU = #{auditStu}
+            </if>
+            <if test="classesIds != null and classesIds.size() > 0">
+                AND CLASSES_ID IN
+                <foreach collection="classesIds" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="classesCodes != null and classesCodes.size() > 0">
+                AND CLASSES_CODE IN
+                <foreach collection="classesCodes" item="code" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </if>
+            <if test="classesName != null and classesName != ''">
+                AND CLASSES_NAME LIKE #{classesName}
+            </if>
+        </where>
+        ORDER BY CONVERT(CLASSES_CODE,SIGNED)
+    </select>
+</mapper>

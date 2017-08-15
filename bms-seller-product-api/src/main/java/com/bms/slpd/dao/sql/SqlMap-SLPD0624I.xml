@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0624IDao">
+    <!-- 查询安全标准档案卡-->
+    <select id="findPkgStds" parameterType="com.bms.slpd.bean.param.SLPD0624IParam"
+            resultType="com.bms.slpd.bean.result.field.SLPD0624IPkgStdResult">
+        SELECT
+        pkgStd.PKG_STD_ID AS pkgStdId,
+        pkgStd.ITEM_ID AS itemId,
+        pkgStd.PKG_IN_SUTTLE AS pkgInSuttle,
+        pkgStd.PKG_IN_ERROR AS pkgInError,
+        pkgStd.PKG_IN_NUMBER AS pkgInNumber,
+        pkgStd.PKG_IN_SIZE AS pkgInSize,
+        pkgStd.PKG_IN_TEXTURE AS pkgInTexture,
+        pkgStd.PKG_OUT_ERROR AS pkgOutError,
+        pkgStd.PKG_OUT_NUMBER AS pkgOutNumber,
+        pkgStd.PKG_OUT_SIZE AS pkgOutSize,
+        pkgStd.PKG_OUT_TEXTURE AS pkgOutTexture,
+        pkgStd.REMARK AS remark,
+        pkgStd.DEL_FLG AS delFlg,
+        pkgStd.CRT_ID AS crtId,
+        pkgStd.CRT_TIME AS crtTime,
+        pkgStd.UPD_ID AS updId,
+        pkgStd.UPD_TIME AS updTime,
+        pkgStd.VERSION AS version
+        FROM
+        SLPD_PKG_STD AS pkgStd
+        WHERE
+        pkgStd.DEL_FLG = 0
+        <if test="itemIds != null and itemIds.size() > 0">
+            AND pkgStd.ITEM_ID IN
+            <foreach collection="itemIds" item="itemId" open="(" separator="," close=")">
+                #{itemId}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 查询安全标准差异卡-->
+    <select id="findPkgDifStds" parameterType="com.bms.slpd.bean.param.SLPD0624IParam"
+            resultType="com.bms.slpd.bean.result.field.SLPD0624IDifPkgStdResult">
+        SELECT
+        pkgDifStd.PKG_DIF_STD_ID AS pkgDifStdId,
+        pkgDifStd.ITEM_ID AS itemId,
+        pkgDifStd.PRODUCT_ID AS productId,
+        pkgDifStd.PKG_DIF_IN_SUTTLE AS pkgDifInSuttle,
+        pkgDifStd.PKG_DIF_IN_ERROR AS pkgDifInError,
+        pkgDifStd.PKG_DIF_IN_NUMBER AS pkgDifInNumber,
+        pkgDifStd.PKG_DIF_IN_SIZE AS pkgDifInSize,
+        pkgDifStd.PKG_DIF_IN_TEXTURE AS pkgDifInTexture,
+        pkgDifStd.PKG_DIF_OUT_ERROR AS pkgDifOutError,
+        pkgDifStd.PKG_DIF_OUT_NUMBER AS pkgDifOutNumber,
+        pkgDifStd.PKG_DIF_OUT_SIZE AS pkgDifOutSize,
+        pkgDifStd.PKG_DIF_OUT_TEXTURE AS pkgDifOutTexture,
+        pkgDifStd.REMARK AS remark,
+        pkgDifStd.DEL_FLG AS delFlg,
+        pkgDifStd.CRT_ID AS crtId,
+        pkgDifStd.CRT_TIME AS crtTime,
+        pkgDifStd.UPD_ID AS updId,
+        pkgDifStd.UPD_TIME AS updTime,
+        pkgDifStd.VERSION AS version
+        FROM SLPD_DIF_PKG_STD pkgDifStd
+        WHERE
+        pkgDifStd.DEL_FLG = 0
+        <choose>
+            <when test="productIds != null and productIds.size() > 0">
+                AND pkgDifStd.PRODUCT_ID IN
+                <foreach collection="productIds" item="productId" open="(" separator="," close=")">
+                    #{productId}
+                </foreach>
+            </when>
+            <when test="itemIds != null and itemIds.size() > 0">
+                AND pkgDifStd.ITEM_ID IN
+                <foreach collection="itemIds" item="itemId" open="(" separator="," close=")">
+                    #{itemId}
+                </foreach>
+            </when>
+        </choose>
+    </select>
+</mapper>

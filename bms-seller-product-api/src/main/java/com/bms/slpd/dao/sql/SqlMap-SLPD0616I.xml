@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0616IDao">
+	<!-- 新增安全标准档案卡-->
+	<insert id="saveSftStds" parameterType="java.util.List">
+		INSERT INTO SLPD_SFT_STD (
+		SFT_STD_ID,
+		SFT_STD_TYPE,
+		BREED_ID,
+		SFT_OK_VAL,
+		SFT_NG_VAL,
+		REMARK,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		UPD_ID,
+		UPD_TIME,
+		VERSION
+		)
+		VALUES
+		<foreach collection ="list" item="item" separator =",">(
+			#{item.sftStdId},
+			#{item.sftStdType},
+			#{item.breedId},
+			#{item.sftOkVal},
+			#{item.sftNgVal},
+			#{item.remark},
+			0,
+			#{item.crtId},
+			#{item.crtTime},
+			#{item.updId},
+			#{item.updTime},
+			1
+			)
+		</foreach>
+	</insert>
+</mapper>

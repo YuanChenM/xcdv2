@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0114IDao">
+
+    <!-- 查询卖家制造商供应资质 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0114IParam"
+            resultType="com.bms.slim.bean.result.field.SLIM0114ManufacturerSupplyQualificationResult">
+        SELECT
+            MSQ_ID AS msqId,
+            ENTITY_SELLER_ID AS entitySellerId,
+            ENTRUSTED_PRODUCER_NAME AS entrustedProducerName,
+            OEM_PRODUCER_NAME AS oemProducerName,
+            OEM_VALID_PERIOD AS oemValidPeriod,
+            OEM_PROTOCOL_URL AS oemProtocolUrl,
+            FOOD_BIZ_LIC_NO AS foodBizLicNo,
+            FBL_VALID_PERIOD AS fblValidPeriod,
+            FOOD_BIZ_LIC_URL AS foodBizLicUrl,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+        SLIM_MANUFACTURER_SUPPLY_QUALIFICATION
+        <where>
+            <if test="delFlg != null">
+                DEL_FLG = #{delFlg}
+            </if>
+            <if test="msqIds != null and msqIds.size() > 0">
+                AND MSQ_ID IN
+                <foreach collection="msqIds" item="msqId" open="(" separator="," close=")">
+                    #{msqId}
+                </foreach>
+            </if>
+            <if test="entitySellerIds != null and entitySellerIds.size() > 0">
+                AND ENTITY_SELLER_ID IN
+                <foreach collection="entitySellerIds" item="entitySellerId" open="(" separator="," close=")">
+                    #{entitySellerId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

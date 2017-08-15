@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0217IDao">
+
+    <!-- 查询生产商生产资质-食品生产许可证 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0217IParam"
+            resultType="com.bms.slim.bean.result.field.SLIM0217FoodProductionLicenseResult">
+        SELECT
+            FPL_ID AS fplId,
+            SELLER_ROLE_ID AS sellerRoleId,
+            CERT_NO AS certNo,
+            CATEGORY_RANGE AS categoryRange,
+            VALID_PERIOD AS validPeriod,
+            FOOD_PROD_LIC_URL AS foodProdLicUrl,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+        SLIM_FOOD_PRODUCTION_LICENSE
+        <where>
+            <if test="delFlg != null">
+                DEL_FLG = #{delFlg}
+            </if>
+            <if test="fplIds != null and fplIds.size() > 0">
+                AND FPL_ID IN
+                <foreach collection="fplIds" item="fplId" open="(" separator="," close=")">
+                    #{fplId}
+                </foreach>
+            </if>
+            <if test="sellerRoleIds != null and sellerRoleIds.size() > 0">
+                AND SELLER_ROLE_ID IN
+                <foreach collection="sellerRoleIds" item="sellerRoleId" open="(" separator="," close=")">
+                    #{sellerRoleId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0104IDao">
+
+    <!-- 新增卖家经营资质 -->
+    <insert id="saveSBQs" parameterType="java.util.List">
+        INSERT INTO SLIM_SELLER_BUSINESS_QUALIFICATION (
+        SBQ_ID,
+        ENTITY_SELLER_ID,
+        THREE_IN_ONE_FLG,
+        THREE_IN_ONE_NO,
+        THREE_IN_ONE_URL,
+        ORGANIZATION_CODE,
+        ORG_CODE_CERT_URL,
+        TAX_REG_CERT_NO,
+        TAX_REG_CERT_URL,
+        VAT_TAXPAYER_QUAL_URL,
+        BUSINESS_LICENSE_NO,
+        BUSINESS_LICENSE_URL,
+        COMPANY_NAME,
+        COMPANY_NATURE,
+        COMPANY_ADDRESS,
+        LEGAL_PERSON,
+        REGISTERED_CAPITAL,
+        PAID_IN_CAPITAL,
+        FOUNDING_DATE,
+        OPERATION_PERIOD,
+        BUSINESS_SCOPE,
+        DEPOSIT_BANK,
+        BANK_ACCOUNT,
+        BANK_LEGAL_PERSON,
+        ACC_PERMIT_CERT_URL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="sbq" separator="," >
+            (
+                #{sbq.sbqId},
+                #{sbq.entitySellerId},
+                #{sbq.threeInOneFlg},
+                #{sbq.threeInOneNo},
+                #{sbq.threeInOneUrl},
+                #{sbq.organizationCode},
+                #{sbq.orgCodeCertUrl},
+                #{sbq.taxRegCertNo},
+                #{sbq.taxRegCertUrl},
+                #{sbq.vatTaxpayerQualUrl},
+                #{sbq.businessLicenseNo},
+                #{sbq.businessLicenseUrl},
+                #{sbq.companyName},
+                #{sbq.companyNature},
+                #{sbq.companyAddress},
+                #{sbq.legalPerson},
+                #{sbq.registeredCapital},
+                #{sbq.paidInCapital},
+                #{sbq.foundingDate},
+                #{sbq.operationPeriod},
+                #{sbq.businessScope},
+                #{sbq.depositBank},
+                #{sbq.bankAccount},
+                #{sbq.bankLegalPerson},
+                #{sbq.accPermitCertUrl},
+                0,
+                #{sbq.crtId},
+                #{sbq.crtTime},
+                #{sbq.updId},
+                #{sbq.updTime},
+                1
+            )
+        </foreach>
+    </insert>
+
+    <select id="findSellerEntityId" parameterType="java.util.List" resultType="com.bms.slim.bean.entity.SlimSellerBusinessQualification">
+        SELECT
+            SBQ_ID AS sbqId,
+            ENTITY_SELLER_ID AS entitySellerId,
+            THREE_IN_ONE_FLG AS threeInOneFlg,
+            THREE_IN_ONE_NO AS threeInOneNo,
+            THREE_IN_ONE_URL AS threeInOneUrl,
+            ORGANIZATION_CODE AS organizationCode,
+            ORG_CODE_CERT_URL AS orgCodeCertUrl,
+            TAX_REG_CERT_NO AS taxRegCertNo,
+            TAX_REG_CERT_URL AS taxRegCertUrl,
+            VAT_TAXPAYER_QUAL_URL AS vatTaxpayerQualUrl,
+            BUSINESS_LICENSE_NO AS businessLicenseNo,
+            BUSINESS_LICENSE_URL AS businessLicenseUrl,
+            COMPANY_NAME AS companyName,
+            COMPANY_NATURE AS companyNature,
+            COMPANY_ADDRESS AS companyAddress,
+            LEGAL_PERSON AS legalPerson,
+            REGISTERED_CAPITAL AS registeredCapital,
+            PAID_IN_CAPITAL AS paidInCapital,
+            FOUNDING_DATE AS foundingDate,
+            OPERATION_PERIOD AS operationPeriod,
+            BUSINESS_SCOPE AS businessScope,
+            DEPOSIT_BANK AS depositBank,
+            BANK_ACCOUNT AS bankAccount,
+            BANK_LEGAL_PERSON AS bankLegalPerson,
+            ACC_PERMIT_CERT_URL AS accPermitCertUrl,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+            SLIM_SELLER_BUSINESS_QUALIFICATION
+        WHERE
+            DEL_FLg = 0
+        AND
+            ENTITY_SELLER_ID IN
+        <foreach collection="list" item="entityId" open="(" separator="," close=")">
+            #{entityId}
+        </foreach>
+    </select>
+</mapper>

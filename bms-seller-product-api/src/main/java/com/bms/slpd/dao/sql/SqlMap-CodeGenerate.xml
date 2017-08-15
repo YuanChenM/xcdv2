@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.CodeGenerateDao">
+    <!-- 获取当前单品品牌规格净重Code最大值 -->
+    <select id="maxNetWeightAndPropertyCode" parameterType="com.bms.slpd.bean.param.CodeGenerateParam"
+            resultType="com.bms.slpd.bean.entity.SlpdItemProperty">
+        SELECT
+          BRAND_ITEM_ID AS brandItemId,
+          max(cast(NET_WEIGHT_CODE AS SIGNED)) AS netWeightCode,
+          max(cast(BRAND_ITEM_PROPERTY_CODE AS SIGNED)) AS brandItemPropertyCode
+        FROM
+          SLPD_ITEM_PROPERTY
+        WHERE
+          DEL_FLG = 0
+        AND
+        BRAND_ITEM_ID IN
+        <foreach collection="brandItemIds" item="brandItemId" open="(" separator="," close=")">
+            #{brandItemId}
+        </foreach>
+        GROUP BY BRAND_ITEM_ID
+
+    </select>
+
+    <!-- 获取当前产品净重Code最大值 -->
+    <select id="maxNetWeightCode" parameterType="com.bms.slpd.bean.param.CodeGenerateParam"
+            resultType="com.bms.slpd.bean.entity.SlpdProduct">
+        SELECT
+        ITEM_ID AS itemId,
+        max(cast(NET_WEIGHT_CODE AS SIGNED)) AS netWeightCode
+        FROM
+        SLPD_PRODUCT
+        WHERE
+        DEL_FLG = 0
+        AND
+        ITEM_ID IN
+        <foreach collection="itemIds" item="itemId" open="(" separator="," close=")">
+            #{itemId}
+        </foreach>
+        GROUP BY ITEM_ID
+    </select>
+
+    <!-- 获取当前单品规格规格Code最大值 -->
+    <select id="maxPropertyCode" parameterType="com.bms.slpd.bean.param.CodeGenerateParam"
+            resultType="com.bms.slpd.bean.entity.SlpdItemProperty">
+        SELECT
+        ITEM_ID AS itemId,
+        max(cast(ITEM_PROPERTY_CODE AS SIGNED)) AS itemPropertyCode
+        FROM
+        SLPD_ITEM_PROPERTY
+        WHERE
+        DEL_FLG = 0
+        AND
+        ITEM_ID IN
+        <foreach collection="itemIds" item="itemId" open="(" separator="," close=")">
+            #{itemId}
+        </foreach>
+        GROUP BY ITEM_ID
+    </select>
+
+    <!-- 获取单品品牌规格净重Code -->
+    <select id="getNetWeightCode" parameterType="com.bms.slpd.bean.param.CodeGenerateParam"
+            resultType="com.bms.slpd.bean.entity.SlpdItemProperty">
+        SELECT
+          BRAND_ITEM_ID AS brandItemId,
+          NET_WEIGHT_CODE AS netWeightCode,
+          NET_WEIGHT AS netWeight
+        FROM
+          SLPD_ITEM_PROPERTY
+        WHERE
+          DEL_FLG = 0
+        <if test="null != netWeightCodeParams and netWeightCodeParams.size() > 0">
+            AND
+            <foreach collection="netWeightCodeParams" item="netWeightCodeParam" open="(" separator="or" close=")">
+                (
+                BRAND_ITEM_ID = #{netWeightCodeParam.brandItemId}
+                AND
+                NET_WEIGHT = #{netWeightCodeParam.netWeight}
+                )
+            </foreach>
+        </if>
+
+    </select>
+
+    <!-- 获取产品净重Code -->
+    <select id="getProductNetWeightCode" parameterType="com.bms.slpd.bean.param.CodeGenerateParam"
+            resultType="com.bms.slpd.bean.entity.SlpdProduct">
+        SELECT
+        ITEM_ID AS itemId,
+        NET_WEIGHT_CODE AS netWeightCode,
+        NET_WEIGHT AS netWeight
+        FROM
+        SLPD_PRODUCT
+        WHERE
+        DEL_FLG = 0
+        <if test="null != netWeightCodeParams and netWeightCodeParams.size() > 0">
+            AND
+            <foreach collection="netWeightCodeParams" item="netWeightCodeParam" open="(" separator="or" close=")">
+                (
+                ITEM_ID = #{netWeightCodeParam.itemId}
+                AND
+                NET_WEIGHT = #{netWeightCodeParam.netWeight}
+                )
+            </foreach>
+        </if>
+
+    </select>
+
+
+    <!-- 获取品牌CODE -->
+    <select id="getBrandCode" parameterType="java.util.List" resultType="com.bms.slpd.bean.result.wrapper.SlpdBrandResult">
+        SELECT
+        A.BRAND_ID AS brandId,
+        A.BRAND_CODE AS brandCode,
+        A.BRAND_NAME AS brandName,
+        A.BRAND_TYPE AS brandType,
+        A.TRADEMARK_REG_NO AS trademarkRegNo,
+        A.START_VALID_DATE AS startValidDate,
+        A.END_VALID_DATE AS endValidDate,
+        A.BRAND_CERT_URL AS brandCertUrl,
+        A.PRODUCT_PACKAGE_URL AS productPackageUrl,
+        A.HONOR_CERT_NO AS honorCertNo,
+        A.HONOR_CERT_DATE AS honorCertDate,
+        A.HONOR_CERT_UNIT AS honorCertUnit,
+        A.HONOR_CERT_URL AS honorCertUrl,
+        A.AUDIT_STU AS auditStu,
+        A.DEL_FLG AS delFlg,
+        A.CRT_ID AS crtId,
+        A.CRT_TIME AS crtTime,
+        A.UPD_ID AS updId,
+        A.UPD_TIME AS updTime,
+        A.VERSION AS version
+        FROM SLPD_BRAND A
+        WHERE
+        A.DEL_FLG=0
+        AND
+        A.BRAND_ID IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <!-- 查询单品品牌SKU -->
+    <select id="getBrandItemSku" parameterType="com.bms.slpd.bean.param.CodeGenerateParam" resultType="com.bms.slpd.bean.result.wrapper.SlpdBrandItemResult">
+      SELECT
+      BRAND_ITEM_ID AS brandItemId,
+      BRAND_ITEM_SKU AS brandItemSku,
+      ITEM_ID AS itemId,
+      BRAND_ID AS brandId
+      FROM SLPD_BRAND_ITEM
+      WHERE
+      DEL_FLG=0
+      AND BRAND_ITEM_ID IN
+      <foreach collection="brandItemIds" item="item" open="(" separator="," close=")">
+          #{item}
+      </foreach>
+    </select>
+
+
+    <!-- 查询产品生产商、制造商、代理商的最大SKU -->
+    <select id="getRoleSku" parameterType="list" resultType="com.bms.slpd.bean.result.field.SLPDRoleSkuResult">
+        SELECT
+        MAX(sku) as sku,entitySellerId
+        FROM
+        (
+        SELECT MAX(CAST(PRODUCER_PRODUCT_SKU AS SIGNED)) AS sku,ENTITY_SELLER_ID AS entitySellerId FROM slpd_producer_product
+        WHERE ENTITY_SELLER_ID IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        GROUP BY ENTITY_SELLER_ID
+        UNION
+        SELECT MAX(CAST(MANUFACTURER_PRODUCT_SKU AS SIGNED)) AS sku,ENTITY_SELLER_ID AS entitySellerId FROM slpd_manufacturer_product
+        WHERE ENTITY_SELLER_ID IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        GROUP BY ENTITY_SELLER_ID
+        UNION
+        SELECT MAX(CAST(AS_PRODUCT_SKU AS SIGNED)) AS sku,ENTITY_SELLER_ID AS entitySellerId FROM slpd_agent_supply_product
+        WHERE ENTITY_SELLER_ID IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        GROUP BY ENTITY_SELLER_ID
+        ) a
+        GROUP BY entitySellerId
+    </select>
+
+    <!-- 根据producerProductId获取对应的产品生产商信息 -->
+    <select id="getProducerProductsByIds" parameterType="com.bms.slpd.bean.param.CodeGenerateParam" resultType="com.bms.slpd.bean.entity.SlpdProducerProduct">
+        SELECT
+        PRODUCER_PRODUCT_ID AS producerProductId,
+        PRODUCER_PRODUCT_CODE AS producerProductCode,
+        PRODUCER_PRODUCT_SKU AS producerProductSku
+        FROM SLPD_PRODUCER_PRODUCT
+        WHERE
+        DEL_FLG = 0
+        <if test="null != producerProductIds and producerProductIds.size() > 0">
+            AND PRODUCER_PRODUCT_ID IN
+            <foreach collection="producerProductIds" item="producerProductId" open="(" separator="," close=")">
+                #{producerProductId}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getMaxItemCode" resultType="java.lang.String">
+        SELECT
+          max(cast(ITEM_CODE AS SIGNED))
+        FROM
+          SLPD_ITEM
+        WHERE
+          DEL_FLG = 0
+    </select>
+
+    <!-- 根据manufacturerProductId获取对应的制造商产品信息 -->
+    <select id="getManufacturerProductsByIds" parameterType="com.bms.slpd.bean.param.CodeGenerateParam" resultType="com.bms.slpd.bean.entity.SlpdManufacturerProduct">
+        SELECT
+        MANUFACTURER_PRODUCT_ID AS manufacturerProductId,
+        MANUFACTURER_PRODUCT_CODE AS manufacturerProductCode,
+        MANUFACTURER_PRODUCT_SKU AS manufacturerProductSku,
+        MANUFACTURER_PRODUCT_BAR_CODE AS manufacturerProductBarCode
+        FROM SLPD_MANUFACTURER_PRODUCT
+        WHERE
+        DEL_FLG = 0
+        <if test="null != manufacturerProductIds and manufacturerProductIds.size() > 0">
+            AND MANUFACTURER_PRODUCT_ID IN
+            <foreach collection="manufacturerProductIds" item="manufacturerProductId" open="(" separator="," close=")">
+                #{manufacturerProductId}
+            </foreach>
+        </if>
+    </select>
+
+</mapper>

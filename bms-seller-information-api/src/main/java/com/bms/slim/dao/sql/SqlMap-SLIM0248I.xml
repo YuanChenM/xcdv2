@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0248IDao">
+
+    <!-- 查询卖方单位角色 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0248IParam"
+            resultType="com.bms.slim.bean.result.field.SLIM0248SellerRoleResult">
+        SELECT
+        SELLER_ROLE_ID AS sellerRoleId,
+        ENTITY_SELLER_ID AS entitySellerId,
+        ROLE_ID AS roleId,
+        ROLE_NAME AS roleName,
+        DEL_FLG AS delFlg,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS version
+        FROM
+        SLIM_SELLER_ROLE
+        <where>
+            <if test="delFlg != null">
+                DEL_FLG = #{delFlg}
+            </if>
+            <if test="sellerRoleIds != null and sellerRoleIds.size() > 0">
+                AND ENTITY_SELLER_ID IN
+                <foreach collection="sellerRoleIds" item="sellerRoleId" open="(" separator="," close=")">
+                    #{sellerRoleId}
+                </foreach>
+            </if>
+            <if test="entitySellerIds != null and entitySellerIds.size() > 0">
+                AND ENTITY_SELLER_ID IN
+                <foreach collection="entitySellerIds" item="entitySellerId" open="(" separator="," close=")">
+                    #{entitySellerId}
+                </foreach>
+            </if>
+            <if test="roleIds != null and roleIds.size() > 0">
+                AND ROLE_ID IN
+                <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+                    #{roleId}
+                </foreach>
+            </if>
+            <if test="roleName != null and roleName != ''">
+                AND ROLE_NAME LIKE #{roleName}
+            </if>
+        </where>
+    </select>
+
+</mapper>

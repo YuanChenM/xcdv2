@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0303IDao">
+
+    <!-- 修改单品规格-->
+    <update id="updateFeature" parameterType="com.bms.slpd.bean.UpdateEntity">
+        UPDATE SLPD_ITEM
+        SET
+        <if test="target.itemNameFlg != null and target.itemNameFlg">
+            ITEM_NAME = #{entity.itemName},
+        </if>
+        <if test="target.specificationFlg != null and target.specificationFlg">
+            SPECIFICATION = #{entity.specification},
+        </if>
+        <if test="target.processingMethodFlg != null and target.processingMethodFlg">
+            PROCESSING_METHOD = #{entity.processingMethod},
+        </if>
+        <if test="target.tasteFlg != null and target.tasteFlg">
+            TASTE = #{entity.taste},
+        </if>
+        <if test="target.delFlgFlg != null and target.delFlgFlg">
+            DEL_FLG = #{entity.delFlg},
+        </if>
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        WHERE
+        DEL_FLG = 0
+        AND
+        ITEM_ID = #{entity.itemId}
+        AND
+        VERSION = #{entity.version}
+    </update>
+
+    <!-- 查询所有breedId和itemName -->
+    <select id="findBreedIdsAndItemNames" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdItem">
+        SELECT
+          item.ITEM_ID AS itemId,
+          item.BREED_ID AS breedId,
+          item.ITEM_NAME AS itemName
+        FROM
+          SLPD_ITEM AS item
+        WHERE
+          DEL_FLG = 0
+        AND
+          BREED_ID IN (
+            SELECT DISTINCT
+              itemBreed.BREED_ID AS breedId
+            FROM SLPD_ITEM as itemBreed
+            WHERE
+              DEL_FLG = 0
+            AND itemBreed.ITEM_ID IN
+            <foreach collection="list" item="item" open="(" separator="," close=")">
+              #{item.itemId}
+          </foreach>)
+    </select>
+
+    <!-- 修改产品-->
+    <update id="updateProduct" parameterType="com.bms.slpd.bean.entity.SlpdProduct">
+        UPDATE SLPD_PRODUCT
+        SET
+        ITEM_NAME = #{itemName},
+        SPECIFICATION = #{specification},
+        UPD_ID = #{updId},
+        UPD_TIME = #{updTime},
+        VERSION = VERSION + 1
+        WHERE
+        DEL_FLG = 0
+        AND
+        ITEM_ID = #{itemId}
+    </update>
+
+</mapper>

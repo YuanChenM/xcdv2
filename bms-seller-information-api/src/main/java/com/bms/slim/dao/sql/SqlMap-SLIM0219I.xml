@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0219IDao">
+
+    <!--新增生产商生产资质-管理体系认证证书 -->
+    <insert id="saveIsoManagementSystemCertification" parameterType="map">
+        INSERT INTO SLIM_ISO_MANAGEMENT_SYSTEM_CERTIFICATION(
+        ISO_MSC_ID,
+        SELLER_ROLE_ID,
+        CERT_TYPE,
+        ISO_TYPE,
+        CERT_NO,
+        CERTIFICATION_STANDARD,
+        CERTIFICATION_SCOPE,
+        ISSUE_DATE_VALID_PERIOD,
+        CERTIFICATION_AUTHORITY,
+        CERT_URL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="relation" separator=",">
+            (
+            #{relation.isoMscId},
+            #{relation.sellerRoleId},
+            #{relation.certType},
+            #{relation.isoType},
+            #{relation.certNo},
+            #{relation.certificationStandard},
+            #{relation.certificationScope},
+            #{relation.issueDateValidPeriod},
+            #{relation.certificationAuthority},
+            #{relation.certUrl},
+            0,
+            #{relation.crtId},
+            #{relation.crtTime},
+            #{relation.updId},
+            #{relation.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

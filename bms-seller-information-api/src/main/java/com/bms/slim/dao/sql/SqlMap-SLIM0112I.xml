@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0112IDao">
+    
+    <!--修改卖家代理商供应资质 -->
+    <update id="updateAgentSupplyQualification" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_AGENT_SUPPLY_QUALIFICATION
+        <set>
+            <if test="target.entitySellerIdFlg != null and target.entitySellerIdFlg">
+                ENTITY_SELLER_ID = #{entity.entitySellerId},
+            </if>
+            <if test="target.agentNameFlg != null and target.agentNameFlg">
+                AGENT_NAME = #{entity.agentName},
+            </if>
+            <if test="target.agentAreaFlg != null and target.agentAreaFlg">
+                AGENT_AREA = #{entity.agentArea},
+            </if>
+            <if test="target.agentProductRangeFlg != null and target.agentProductRangeFlg">
+                AGENT_PRODUCT_RANGE = #{entity.agentProductRange},
+            </if>
+            <if test="target.asaValidPeriodFlg != null and target.asaValidPeriodFlg">
+                ASA_VALID_PERIOD = #{entity.asaValidPeriod},
+            </if>
+            <if test="target.asaUrlFlg != null and target.asaUrlFlg">
+                ASA_URL = #{entity.asaUrl},
+            </if>
+            <if test="target.authorizerNameFlg != null and target.authorizerNameFlg">
+                AUTHORIZER_NAME = #{entity.authorizerName},
+            </if>
+            <if test="target.authorizeeNameFlg != null and target.authorizeeNameFlg">
+                AUTHORIZEE_NAME = #{entity.authorizeeName},
+            </if>
+            <if test="target.authorizedProductRangeFlg != null and target.authorizedProductRangeFlg">
+                AUTHORIZED_PRODUCT_RANGE = #{entity.authorizedProductRange},
+            </if>
+            <if test="target.authorizedBusinessAreaFlg != null and target.authorizedBusinessAreaFlg">
+                AUTHORIZED_BUSINESS_AREA = #{entity.authorizedBusinessArea},
+            </if>
+            <if test="target.authorizedValidPeriodFlg != null and target.authorizedValidPeriodFlg">
+                AUTHORIZED_VALID_PERIOD = #{entity.authorizedValidPeriod},
+            </if>
+            <if test="target.authCertUrlFlg != null and target.authCertUrlFlg">
+                AUTH_CERT_URL = #{entity.authCertUrl},
+            </if>
+            <if test="target.foodBizLicNoFlg != null and target.foodBizLicNoFlg">
+                FOOD_BIZ_LIC_NO = #{entity.foodBizLicNo},
+            </if>
+            <if test="target.fblValidPeriodFlg != null and target.fblValidPeriodFlg">
+                FBL_VALID_PERIOD = #{entity.fblValidPeriod},
+            </if>
+            <if test="target.foodBizLicUrlFlg != null and target.foodBizLicUrlFlg">
+                FOOD_BIZ_LIC_URL = #{entity.foodBizLicUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+        ASQ_ID = #{entity.asqId} AND DEL_FLG = 0
+    </update>
+
+</mapper>

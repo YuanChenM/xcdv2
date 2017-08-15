@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0508IDao">
+    <!-- 根据制造商Id查询未准入生产商 -->
+    <select id="findProducerProducts" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdProducerProduct">
+        SELECT
+        product.PRODUCER_PRODUCT_ID AS producerProductId,
+        product.VERSION AS version
+        FROM
+          SLPD_MANUFACTURER_PRODUCT AS manufacturer
+        LEFT JOIN
+        SLPD_PRODUCER_PRODUCT AS product ON manufacturer.PRODUCER_PRODUCT_ID = product.PRODUCER_PRODUCT_ID
+          AND product.DEL_FLG =0
+        WHERE
+          manufacturer.DEL_FLG = 0
+        AND
+        product.AUDIT_STU NOT IN (1)
+        AND manufacturer.MANUFACTURER_PRODUCT_ID IN
+        <foreach collection="list" item="manufacturerId" open="(" separator="," close=")">
+            #{manufacturerId}
+        </foreach>
+    </select>
+
+    <!-- 根据制造商Id查询未禁止代理商 -->
+    <select id="findAgentProducts" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdAgentSupplyProduct">
+        SELECT
+        agent.AS_PRODUCT_ID AS asProductId,
+        agent.VERSION AS version
+        FROM
+        SLPD_MANUFACTURER_PRODUCT AS manufacturer
+        LEFT JOIN
+        SLPD_AGENT_SUPPLY_PRODUCT AS agent ON manufacturer.MANUFACTURER_PRODUCT_ID = agent.MANUFACTURER_PRODUCT_ID
+        AND agent.DEL_FLG =0
+        WHERE
+        manufacturer.DEL_FLG = 0
+        AND
+        agent.AUDIT_STU NOT IN (2)
+        AND manufacturer.MANUFACTURER_PRODUCT_ID IN
+        <foreach collection="list" item="manufacturerId" open="(" separator="," close=")">
+            #{manufacturerId}
+        </foreach>
+    </select>
+
+    <!-- 修改制造商产品的审核状态 -->
+    <update id="updateManufacturerProductAuditStu" parameterType="com.bms.slpd.bean.entity.SlpdManufacturerProduct">
+        UPDATE SLPD_MANUFACTURER_PRODUCT
+        SET
+            AUDIT_STU = #{auditStu},
+            AUDIT_REMARK = #{auditRemark},
+            AUDIT_HISTORY = #{auditHistory},
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime},
+            VERSION = VERSION + 1
+        WHERE
+            VERSION = #{version}
+        AND MANUFACTURER_PRODUCT_ID = #{manufacturerProductId}
+    </update>
+
+</mapper>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.CancelDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.CancelEntity">
+INSERT INTO
+ORDR_CANCEL
+(
+CANCEL_ID
+, CANCEL_MODEL_TYPE
+, CANCEL_MODEL_ID
+, CANCEL_TYPE
+, CANCEL_PERSON_TYPE
+, CANCEL_PERSON_ID
+, CANCEL_PERSON_CODE
+, CANCEL_PERSON_NAME
+, CANCEL_DATETIME
+, CANCEL_REASON
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{cancelId}
+, #{cancelModelType}
+, #{cancelModelId}
+, #{cancelType}
+, #{cancelPersonType}
+, #{cancelPersonId}
+, #{cancelPersonCode}
+, #{cancelPersonName}
+, #{cancelDatetime}
+, #{cancelReason}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_CANCEL
+(
+CANCEL_ID
+, CANCEL_MODEL_TYPE
+, CANCEL_MODEL_ID
+, CANCEL_TYPE
+, CANCEL_PERSON_TYPE
+, CANCEL_PERSON_ID
+, CANCEL_PERSON_CODE
+, CANCEL_PERSON_NAME
+, CANCEL_DATETIME
+, CANCEL_REASON
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.cancelId}
+, #{entity.cancelModelType}
+, #{entity.cancelModelId}
+, #{entity.cancelType}
+, #{entity.cancelPersonType}
+, #{entity.cancelPersonId}
+, #{entity.cancelPersonCode}
+, #{entity.cancelPersonName}
+, #{entity.cancelDatetime}
+, #{entity.cancelReason}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.CancelEntity">
+UPDATE ORDR_CANCEL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+CANCEL_ID = #{cancelId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_CANCEL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+CANCEL_ID = #{entity.cancelId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.CancelEntity">
+UPDATE ORDR_CANCEL
+SET
+CANCEL_ID = #{cancelId}
+, CANCEL_MODEL_TYPE = #{cancelModelType}
+, CANCEL_MODEL_ID = #{cancelModelId}
+, CANCEL_TYPE = #{cancelType}
+, CANCEL_PERSON_TYPE = #{cancelPersonType}
+, CANCEL_PERSON_ID = #{cancelPersonId}
+, CANCEL_PERSON_CODE = #{cancelPersonCode}
+, CANCEL_PERSON_NAME = #{cancelPersonName}
+, CANCEL_DATETIME = #{cancelDatetime}
+, CANCEL_REASON = #{cancelReason}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+CANCEL_ID = #{cancelId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_CANCEL
+SET
+CANCEL_ID = #{entity.cancelId}
+, CANCEL_MODEL_TYPE = #{entity.cancelModelType}
+, CANCEL_MODEL_ID = #{entity.cancelModelId}
+, CANCEL_TYPE = #{entity.cancelType}
+, CANCEL_PERSON_TYPE = #{entity.cancelPersonType}
+, CANCEL_PERSON_ID = #{entity.cancelPersonId}
+, CANCEL_PERSON_CODE = #{entity.cancelPersonCode}
+, CANCEL_PERSON_NAME = #{entity.cancelPersonName}
+, CANCEL_DATETIME = #{entity.cancelDatetime}
+, CANCEL_REASON = #{entity.cancelReason}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+CANCEL_ID = #{entity.cancelId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.CancelEntity" resultType="com.bms.order.bean.entity.CancelEntity">
+SELECT
+CANCEL_ID AS cancelId
+, CANCEL_MODEL_TYPE AS cancelModelType
+, CANCEL_MODEL_ID AS cancelModelId
+, CANCEL_TYPE AS cancelType
+, CANCEL_PERSON_TYPE AS cancelPersonType
+, CANCEL_PERSON_ID AS cancelPersonId
+, CANCEL_PERSON_CODE AS cancelPersonCode
+, CANCEL_PERSON_NAME AS cancelPersonName
+, CANCEL_DATETIME AS cancelDatetime
+, CANCEL_REASON AS cancelReason
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_CANCEL
+<where>
+<if test="cancelId!=null">
+AND CANCEL_ID = #{cancelId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.CancelEntity">
+SELECT
+CANCEL_ID AS cancelId
+, CANCEL_MODEL_TYPE AS cancelModelType
+, CANCEL_MODEL_ID AS cancelModelId
+, CANCEL_TYPE AS cancelType
+, CANCEL_PERSON_TYPE AS cancelPersonType
+, CANCEL_PERSON_ID AS cancelPersonId
+, CANCEL_PERSON_CODE AS cancelPersonCode
+, CANCEL_PERSON_NAME AS cancelPersonName
+, CANCEL_DATETIME AS cancelDatetime
+, CANCEL_REASON AS cancelReason
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_CANCEL
+<where>
+<if test="ids!=null">
+AND CANCEL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+</mapper>

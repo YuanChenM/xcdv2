@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.ORDR0605IDao">
+    <resultMap id="L1Result" type="com.bms.order.bean.result.ORDR0605IL1RestResult">
+        <id property="bsOrderId" column="L1_bsOrderId"/>
+        <result property="bsOrderCode" column="L1_bsOrderCode"/>
+        <result property="backNo" column="L1_backNo"/>
+        <result property="orderType" column="L1_orderType"/>
+        <result property="salePlatformType" column="L1_salePlatformType"/>
+        <result property="orderSourceType" column="L1_orderSourceType"/>
+        <result property="orderPlacerId" column="L1_orderPlacerId"/>
+        <result property="orderPlacerType" column="L1_orderPlacerType"/>
+        <result property="orderPlaceDatetime" column="L1_orderPlaceDatetime"/>
+        <result property="orderCreateDatetime" column="L1_orderCreateDatetime"/>
+        <result property="logisticsZoneId" column="L1_logisticsZoneId"/>
+        <result property="bsId" column="L1_bsId"/>
+        <result property="paymentStu" column="L1_paymentStu"/>
+        <result property="invoiceFlg" column="L1_invoiceFlg"/>
+        <result property="useNetFlg" column="L1_useNetFlg"/>
+        <result property="orderAmount" column="L1_orderAmount"/>
+        <result property="preferentialAmount" column="L1_preferentialAmount"/>
+        <result property="receiveAmount" column="L1_receiveAmount"/>
+        <result property="earnestPercent" column="L1_earnestPercent"/>
+        <result property="earnestAmount" column="L1_earnestAmount"/>
+        <result property="advancePaymentPercent" column="L1_advancePaymentPercent"/>
+        <result property="advancePaymentAmount" column="L1_advancePaymentAmount"/>
+        <result property="bsOrderStu" column="L1_bsOrderStu"/>
+        <result property="orderPlacerCode" column="L1A_orderPlacerCode"/>
+        <result property="orderPlacerName" column="L1A_orderPlacerName"/>
+        <result property="logisticsZoneCode" column="L1A_logisticsZoneCode"/>
+        <result property="logisticsZoneName" column="L1A_logisticsZoneName"/>
+        <result property="countryId" column="L1A_countryId"/>
+        <result property="countryName" column="L1A_countryName"/>
+        <result property="cityId" column="L1A_cityId"/>
+        <result property="cityName" column="L1A_cityName"/>
+        <result property="bsCode" column="L1A_bsCode"/>
+        <result property="bsName" column="L1A_bsName"/>
+        <result property="bsType" column="L1A_bsType"/>
+        <result property="sortSeq" column="L1_sortSeq"/>
+        <result property="version" column="L1_version"/>
+        <collection property="bsOrderDetails" resultMap="L2Result"/>
+    </resultMap>
+    <resultMap id="L2Result" type="com.bms.order.bean.result.ORDR0605IL2RestResult">
+        <id property="bsOrderDetailId" column="L2_bsOrderDetailId"/>
+        <result property="bsOrderId" column="L2_bsOrderId"/>
+        <result property="goodsUnit" column="L2_goodsUnit"/>
+        <result property="goodsQuantity" column="L2_goodsQuantity"/>
+        <result property="cancelQuantity" column="L2_cancelQuantity"/>
+        <result property="realUnitPrice" column="L2_realUnitPrice"/>
+        <result property="realKgPrice" column="L2_realKgPrice"/>
+        <result property="priceCreateTime" column="L2_priceCreateTime"/>
+        <result property="priceWay" column="L2_priceWay"/>
+        <result property="goodsId" column="L2_goodsId"/>
+        <result property="productId" column="L2_productId"/>
+        <result property="manufacturerId" column="L2_manufacturerId"/>
+        <result property="sellerId" column="L2_sellerId"/>
+        <result property="batchId" column="L2_batchId"/>
+        <result property="saleLabelId" column="L2_saleLabelId"/>
+        <result property="itemCode" column="L2A_itemCode"/>
+        <result property="itemName" column="L2A_itemName"/>
+        <result property="brandCode" column="L2A_brandCode"/>
+        <result property="brandName" column="L2A_brandName"/>
+        <result property="itemBrandCode" column="L2A_itemBrandCode"/>
+        <result property="manufacturerCode" column="L2A_manufacturerCode"/>
+        <result property="manufacturerName" column="L2A_manufacturerName"/>
+        <result property="sellerCode" column="L2A_sellerCode"/>
+        <result property="sellerName" column="L2A_sellerName"/>
+        <result property="batchCode" column="L2A_batchCode"/>
+        <result property="goodsCode" column="L2A_goodsCode"/>
+        <result property="goodsName" column="L2A_goodsName"/>
+        <result property="saleLabelCode" column="L2A_saleLabelCode"/>
+        <result property="saleLabelName" column="L2A_saleLabelName"/>
+        <result property="smallPackageFeature" column="L2A_smallPackageFeature"/>
+        <result property="quantityPerPackage" column="L2A_quantityPerPackage"/>
+        <result property="netWeight" column="L2A_netWeight"/>
+        <result property="grossWeight" column="L2A_grossWeight"/>
+        <result property="cartonSize" column="L2A_cartonSize"/>
+        <result property="productLevel" column="L2A_productLevel"/>
+        <result property="palletStandardStackQuantity" column="L2A_palletStandardStackQuantity"/>
+        <result property="sortSeq" column="L2_sortSeq"/>
+        <result property="version" column="L2_version"/>
+        <collection property="bsStockpileSplitDetails" resultMap="L3Result"/>
+    </resultMap>
+    <resultMap id="L3Result" type="com.bms.order.bean.result.ORDR0605IL3RestResult">
+        <id property="bsStockpileSplitDetailId" column="L3_bsStockpileSplitDetailId"/>
+        <result property="bsOrderDetailId" column="L3_bsOrderDetailId"/>
+        <result property="sellSideId" column="L3_sellSideId"/>
+        <result property="goodsId" column="L3_goodsId"/>
+        <result property="productId" column="L3_productId"/>
+        <result property="manufacturerId" column="L3_manufacturerId"/>
+        <result property="sellerId" column="L3_sellerId"/>
+        <result property="sku" column="L3_sku"/>
+        <result property="batchId" column="L3_batchId"/>
+        <result property="saleLabelId" column="L3_saleLabelId"/>
+        <result property="planSendQuantity" column="L3_planSendQuantity"/>
+        <result property="returnQuantity" column="L3_returnQuantity"/>
+        <result property="sellSideName" column="L3A_sellSideName"/>
+        <result property="sellSideCode" column="L3A_sellSideCode"/>
+        <result property="itemCode" column="L3A_itemCode"/>
+        <result property="itemName" column="L3A_itemName"/>
+        <result property="brandCode" column="L3A_brandCode"/>
+        <result property="brandName" column="L3A_brandName"/>
+        <result property="itemBrandCode" column="L3A_itemBrandCode"/>
+        <result property="manufacturerCode" column="L3A_manufacturerCode"/>
+        <result property="manufacturerName" column="L3A_manufacturerName"/>
+        <result property="sellerCode" column="L3A_sellerCode"/>
+        <result property="sellerName" column="L3A_sellerName"/>
+        <result property="batchCode" column="L3A_batchCode"/>
+        <result property="goodsCode" column="L3A_goodsCode"/>
+        <result property="goodsName" column="L3A_goodsName"/>
+        <result property="saleLabelCode" column="L3A_saleLabelCode"/>
+        <result property="saleLabelName" column="L3A_saleLabelName"/>
+        <result property="smallPackageFeature" column="L3A_smallPackageFeature"/>
+        <result property="quantityPerPackage" column="L3A_quantityPerPackage"/>
+        <result property="netWeight" column="L3A_netWeight"/>
+        <result property="grossWeight" column="L3A_grossWeight"/>
+        <result property="cartonSize" column="L3A_cartonSize"/>
+        <result property="productLevel" column="L3A_productLevel"/>
+        <result property="palletStandardStackQuantity" column="L3A_palletStandardStackQuantity"/>
+        <result property="sortSeq" column="L3_sortSeq"/>
+        <result property="version" column="L3_version"/>
+        <result property="saleQuantity" column="L3_saleQuantity"/>
+    </resultMap>
+
+    <sql id="L1Select">
+		  L1.BS_ORDER_ID AS L1_bsOrderId
+		, L1.BS_ORDER_CODE AS L1_bsOrderCode
+		, L1.BACK_NO AS L1_backNo
+		, L1.ORDER_TYPE AS L1_orderType
+		, L1.SALE_PLATFORM_TYPE AS L1_salePlatformType
+		, L1.ORDER_SOURCE_TYPE AS L1_orderSourceType
+		, L1.ORDER_PLACER_ID AS L1_orderPlacerId
+		, L1.ORDER_PLACER_TYPE AS L1_orderPlacerType
+		, L1.ORDER_PLACE_DATETIME AS L1_orderPlaceDatetime
+		, L1.LOGISTICS_ZONE_ID AS L1_logisticsZoneId
+		, L1.BS_ID AS L1_bsId
+		, L1.PAYMENT_STU AS L1_paymentStu
+		, L1.INVOICE_FLG AS L1_invoiceFlg
+		, L1.USE_NET_FLG AS L1_useNetFlg
+		, L1.ORDER_AMOUNT AS L1_orderAmount
+		, L1.PREFERENTIAL_AMOUNT AS L1_preferentialAmount
+		, L1.RECEIVE_AMOUNT AS L1_receiveAmount
+		, L1.EARNEST_PERCENT AS L1_earnestPercent
+		, L1.EARNEST_AMOUNT AS L1_earnestAmount
+		, L1.ADVANCE_PAYMENT_PERCENT AS L1_advancePaymentPercent
+		, L1.ADVANCE_PAYMENT_AMOUNT AS L1_advancePaymentAmount
+		, L1.BS_ORDER_STU AS L1_bsOrderStu
+		, L1.CRT_TIME AS L1_orderCreateDatetime
+		, L1.VERSION AS L1_version
+    </sql>
+    <sql id="L1ASelect">
+		, L1A.ORDER_PLACER_CODE AS L1A_orderPlacerCode
+		, L1A.ORDER_PLACER_NAME AS L1A_orderPlacerName
+		, L1A.LOGISTICS_ZONE_CODE AS L1A_logisticsZoneCode
+		, L1A.LOGISTICS_ZONE_NAME AS L1A_logisticsZoneName
+		, L1A.COUNTRY_ID AS L1A_countryId
+		, L1A.COUNTRY_NAME AS L1A_countryName
+		, L1A.CITY_ID AS L1A_cityId
+		, L1A.CITY_NAME AS L1A_cityName
+		, L1A.BS_CODE AS L1A_bsCode
+		, L1A.BS_NAME AS L1A_bsName
+		, L1A.BS_TYPE AS L1A_bsType
+    </sql>
+    <sql id="L2Select">
+		, L2.BS_ORDER_DETAIL_ID AS L2_bsOrderDetailId
+		, L2.BS_ORDER_ID AS L2_bsOrderId
+		, L2.GOODS_UNIT AS L2_goodsUnit
+		, L2.GOODS_QUANTITY AS L2_goodsQuantity
+		, L2.CANCEL_QUANTITY AS L2_cancelQuantity
+		, L2.REAL_UNIT_PRICE AS L2_realUnitPrice
+		, L2.REAL_KG_PRICE AS L2_realKgPrice
+		, L2.PRICE_CREATE_TIME AS L2_priceCreateTime
+		, L2.PRICE_WAY AS L2_priceWay
+		, L2.GOODS_ID AS L2_goodsId
+		, L2.PRODUCT_ID AS L2_productId
+		, L2.MANUFACTURER_ID AS L2_manufacturerId
+		, L2.SELLER_ID AS L2_sellerId
+		, L2.BATCH_ID AS L2_batchId
+		, L2.SALE_LABEL_ID AS L2_saleLabelId
+		, L2.VERSION AS L2_version
+    </sql>
+    <sql id="L2ASelect">
+		, L2A.ITEM_CODE AS L2A_itemCode
+		, L2A.ITEM_NAME AS L2A_itemName
+		, L2A.BRAND_CODE AS L2A_brandCode
+		, L2A.BRAND_NAME AS L2A_brandName
+		, L2A.ITEM_BRAND_CODE AS L2A_itemBrandCode
+		, L2A.MANUFACTURER_CODE AS L2A_manufacturerCode
+		, L2A.MANUFACTURER_NAME AS L2A_manufacturerName
+		, L2A.SELLER_CODE AS L2A_sellerCode
+		, L2A.SELLER_NAME AS L2A_sellerName
+		, L2A.BATCH_CODE AS L2A_batchCode
+		, L2A.GOODS_CODE AS L2A_goodsCode
+		, L2A.GOODS_NAME AS L2A_goodsName
+		, L2A.SALE_LABEL_CODE AS L2A_saleLabelCode
+		, L2A.SALE_LABEL_NAME AS L2A_saleLabelName
+		, L2A.SMALL_PACKAGE_FEATURE AS L2A_smallPackageFeature
+		, L2A.QUANTITY_PER_PACKAGE AS L2A_quantityPerPackage
+		, L2A.NET_WEIGHT AS L2A_netWeight
+		, L2A.GROSS_WEIGHT AS L2A_grossWeight
+		, L2A.CARTON_SIZE AS L2A_cartonSize
+		, L2A.PRODUCT_LEVEL AS L2A_productLevel
+		, L2A.PALLET_STANDARD_STACK_QUANTITY AS L2A_palletStandardStackQuantity
+    </sql>
+    <sql id="L3Select">
+		, L3.BS_STOCKPILE_SPLIT_DETAIL_ID AS L3_bsStockpileSplitDetailId
+		, L3.BS_ORDER_DETAIL_ID AS L3_bsOrderDetailId
+		, L3.SELL_SIDE_ID AS L3_sellSideId
+		, L3.GOODS_ID AS L3_goodsId
+		, L3.PRODUCT_ID AS L3_productId
+		, L3.MANUFACTURER_ID AS L3_manufacturerId
+		, L3.SELLER_ID AS L3_sellerId
+		, L3.SKU AS L3_sku
+		, L3.BATCH_ID AS L3_batchId
+		, L3.SALE_LABEL_ID AS L3_saleLabelId
+		, L3.RETURN_QUANTITY AS L3_returnQuantity
+		, L3.VERSION AS L3_version
+		, L3.GOODS_QUANTITY AS L3_planSendQuantity
+		, L3.SALE_QUANTITY AS L3_saleQuantity
+    </sql>
+    <sql id="L3ASelect">
+		, L3A.SELL_SIDE_NAME AS L3A_sellSideName
+		, L3A.SELL_SIDE_CODE AS L3A_sellSideCode
+		, L3A.ITEM_CODE AS L3A_itemCode
+		, L3A.ITEM_NAME AS L3A_itemName
+		, L3A.BRAND_CODE AS L3A_brandCode
+		, L3A.BRAND_NAME AS L3A_brandName
+		, L3A.ITEM_BRAND_CODE AS L3A_itemBrandCode
+		, L3A.MANUFACTURER_CODE AS L3A_manufacturerCode
+		, L3A.MANUFACTURER_NAME AS L3A_manufacturerName
+		, L3A.SELLER_CODE AS L3A_sellerCode
+		, L3A.SELLER_NAME AS L3A_sellerName
+		, L3A.BATCH_CODE AS L3A_batchCode
+		, L3A.GOODS_CODE AS L3A_goodsCode
+		, L3A.GOODS_NAME AS L3A_goodsName
+		, L3A.SALE_LABEL_CODE AS L3A_saleLabelCode
+		, L3A.SALE_LABEL_NAME AS L3A_saleLabelName
+		, L3A.SMALL_PACKAGE_FEATURE AS L3A_smallPackageFeature
+		, L3A.QUANTITY_PER_PACKAGE AS L3A_quantityPerPackage
+		, L3A.NET_WEIGHT AS L3A_netWeight
+		, L3A.GROSS_WEIGHT AS L3A_grossWeight
+		, L3A.CARTON_SIZE AS L3A_cartonSize
+		, L3A.PRODUCT_LEVEL AS L3A_productLevel
+		, L3A.PALLET_STANDARD_STACK_QUANTITY AS L3A_palletStandardStackQuantity
+    </sql>
+
+    <select id="findPageList" parameterType="com.bms.order.common.rest.SearchRestParam" resultMap="L1Result">
+        SELECT
+        <if test="pagingLevel>=1">
+            <include refid="L1Select"/>
+            <include refid="L1ASelect"/>
+        </if>
+        <if test="pagingLevel>=2">
+            <include refid="L2Select"/>
+            <include refid="L2ASelect"/>
+        </if>
+        <if test="pagingLevel>=3">
+            <include refid="L3Select"/>
+            <include refid="L3ASelect"/>
+        </if>
+        <if test="pagingLevel==1">
+            , (@sortSeq := @sortSeq + 1) AS L1_sortSeq
+        </if>
+        <if test="pagingLevel==2">
+            , (@sortSeq := @sortSeq + 1) AS L2_sortSeq
+        </if>
+        <if test="pagingLevel==3">
+            , (@sortSeq := @sortSeq + 1) AS L3_sortSeq
+        </if>
+        FROM
+        <include refid="From"/>
+        <where>
+            <include refid="Where"/>
+        </where>
+        <!-- GROUP BY -->
+        <include refid="GroupBy"/>
+    </select>
+
+
+    <select id="findBsOrdersInfo" parameterType="com.bms.order.common.rest.SearchRestParam" resultMap="L1Result">
+        SELECT
+        <if test="pagingLevel>=1">
+            <include refid="L1Select"/>
+            <include refid="L1ASelect"/>
+        </if>
+        <if test="pagingLevel>=2">
+            <include refid="L2Select"/>
+            <include refid="L2ASelect"/>
+        </if>
+        <if test="pagingLevel>=3">
+            <include refid="L3Select"/>
+            <include refid="L3ASelect"/>
+        </if>
+        <if test="pagingLevel==1">
+            , (@sortSeq := @sortSeq + 1) AS L1_sortSeq
+        </if>
+        <if test="pagingLevel==2">
+            , (@sortSeq := @sortSeq + 1) AS L2_sortSeq
+        </if>
+        <if test="pagingLevel==3">
+            , (@sortSeq := @sortSeq + 1) AS L3_sortSeq
+        </if>
+        FROM
+        <include refid="From"/>
+        <where>
+            <include refid="Where"/>
+        </where>
+        <!-- GROUP BY -->
+        <include refid="GroupBy"/>
+        <if test="null != sort">
+            <include refid="Sort"/>
+        </if>
+        <if test="null != pagination">
+			LIMIT #{pagination.startPos},#{pagination.pageSize}
+		</if>
+    </select>
+
+    <select id="getCount" parameterType="com.bms.order.common.rest.SearchRestParam" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        <include refid="CountFrom"/>
+        <where>
+            <include refid="Where"/>
+        </where>
+    </select>
+
+    <sql id="CountFrom">
+        <if test="searchLevel>=1">
+            ORDR_BS_ORDER AS L1
+            INNER JOIN ORDR_BS_ORDER_ATTACHED AS L1A ON L1A.BS_ORDER_ID = L1.BS_ORDER_ID AND L1A.DEL_FLG = 0
+        </if>
+        <if test="searchLevel>=2">
+            INNER JOIN ORDR_BS_ORDER_DETAIL AS L2 ON L2.BS_ORDER_ID = L1.BS_ORDER_ID AND L2.DEL_FLG = 0
+            INNER JOIN ORDR_BS_ORDER_DETAIL_ATTACHED AS L2A ON L2A.BS_ORDER_DETAIL_ID = L2.BS_ORDER_DETAIL_ID AND
+            L2A.DEL_FLG = 0
+        </if>
+        <if test="searchLevel==3"><!-- 分页层级为3，查询第三层时，不存在的信息不能被查出来 -->
+            INNER JOIN (
+            SELECT T1.*,SUM(IFNULL(T2.SALE_QUANTITY, 0)) AS SALE_QUANTITY
+            FROM  ORDR_BS_STOCKPILE_SPLIT_DETAIL T1
+            LEFT JOIN ordr_bs_stockpile_sale_detail T2
+            ON T1.BS_STOCKPILE_SPLIT_DETAIL_ID = T2.BS_STOCKPILE_SPLIT_DETAIL_ID
+            AND T2.DEL_FLG = 0
+            WHERE T1.DEL_FLG = 0
+            GROUP BY T1.BS_STOCKPILE_SPLIT_DETAIL_ID
+            ) AS L3 ON L3.BS_ORDER_DETAIL_ID = L2.BS_ORDER_DETAIL_ID AND
+            L3.DEL_FLG = 0
+            INNER JOIN ORDR_BS_STOCKPILE_SPLIT_DETAIL_ATTACHED AS L3A ON L3A.BS_STOCKPILE_SPLIT_DETAIL_ID =
+            L3.BS_STOCKPILE_SPLIT_DETAIL_ID AND L3A.DEL_FLG = 0
+        </if>
+        <if test="searchLevel>3"><!-- 不分页，查询第四层时，第三层可以为空 -->
+            LEFT JOIN (
+            SELECT T1.*,SUM(IFNULL(T2.SALE_QUANTITY, 0)) AS SALE_QUANTITY
+            FROM  ORDR_BS_STOCKPILE_SPLIT_DETAIL T1
+            LEFT JOIN ordr_bs_stockpile_sale_detail T2
+            ON T1.BS_STOCKPILE_SPLIT_DETAIL_ID = T2.BS_STOCKPILE_SPLIT_DETAIL_ID
+            AND T2.DEL_FLG = 0
+            WHERE T1.DEL_FLG = 0
+            GROUP BY T1.BS_STOCKPILE_SPLIT_DETAIL_ID
+            ) AS L3 ON L3.BS_ORDER_DETAIL_ID = L2.BS_ORDER_DETAIL_ID AND
+            L3.DEL_FLG = 0
+            LEFT JOIN ORDR_BS_STOCKPILE_SPLIT_DETAIL_ATTACHED AS L3A ON L3A.BS_STOCKPILE_SPLIT_DETAIL_ID =
+            L3.BS_STOCKPILE_SPLIT_DETAIL_ID AND L3A.DEL_FLG = 0
+        </if>
+    </sql>
+
+    <sql id="From">
+        (select @sortSeq := 0) AS SEQ,
+        <if test="searchLevel>=1">
+            ORDR_BS_ORDER AS L1
+            INNER JOIN ORDR_BS_ORDER_ATTACHED AS L1A ON L1A.BS_ORDER_ID = L1.BS_ORDER_ID AND L1A.DEL_FLG = 0
+        </if>
+        <if test="searchLevel>=2">
+            INNER JOIN ORDR_BS_ORDER_DETAIL AS L2 ON L2.BS_ORDER_ID = L1.BS_ORDER_ID AND L2.DEL_FLG = 0
+            INNER JOIN ORDR_BS_ORDER_DETAIL_ATTACHED AS L2A ON L2A.BS_ORDER_DETAIL_ID = L2.BS_ORDER_DETAIL_ID AND
+            L2A.DEL_FLG = 0
+        </if>
+        <if test="searchLevel==3"><!-- 分页层级为3，查询第三层时，不存在的信息不能被查出来 -->
+            INNER JOIN (SELECT T1.*,SUM(IFNULL(T2.SALE_QUANTITY, 0)) AS SALE_QUANTITY
+            FROM  ORDR_BS_STOCKPILE_SPLIT_DETAIL T1
+            LEFT JOIN ordr_bs_stockpile_sale_detail T2
+            ON T1.BS_STOCKPILE_SPLIT_DETAIL_ID = T2.BS_STOCKPILE_SPLIT_DETAIL_ID
+            AND T2.DEL_FLG = 0
+            WHERE T1.DEL_FLG = 0
+            GROUP BY T1.BS_STOCKPILE_SPLIT_DETAIL_ID) AS L3 ON L3.BS_ORDER_DETAIL_ID = L2.BS_ORDER_DETAIL_ID AND
+            L3.DEL_FLG = 0
+            INNER JOIN ORDR_BS_STOCKPILE_SPLIT_DETAIL_ATTACHED AS L3A ON L3A.BS_STOCKPILE_SPLIT_DETAIL_ID =
+            L3.BS_STOCKPILE_SPLIT_DETAIL_ID AND L3A.DEL_FLG = 0
+        </if>
+        <if test="searchLevel>3"><!-- 不分页，查询第四层时，第三层可以为空 -->
+            LEFT JOIN (
+            SELECT T1.*,SUM(IFNULL(T2.SALE_QUANTITY, 0)) AS SALE_QUANTITY
+            FROM  ORDR_BS_STOCKPILE_SPLIT_DETAIL T1
+            LEFT JOIN ordr_bs_stockpile_sale_detail T2
+            ON T1.BS_STOCKPILE_SPLIT_DETAIL_ID = T2.BS_STOCKPILE_SPLIT_DETAIL_ID
+            AND T2.DEL_FLG = 0
+            WHERE T1.DEL_FLG = 0
+            GROUP BY T1.BS_STOCKPILE_SPLIT_DETAIL_ID
+            ) AS L3 ON L3.BS_ORDER_DETAIL_ID = L2.BS_ORDER_DETAIL_ID AND
+            L3.DEL_FLG = 0
+            LEFT JOIN ORDR_BS_STOCKPILE_SPLIT_DETAIL_ATTACHED AS L3A ON L3A.BS_STOCKPILE_SPLIT_DETAIL_ID =
+            L3.BS_STOCKPILE_SPLIT_DETAIL_ID AND L3A.DEL_FLG = 0
+        </if>
+    </sql>
+
+    <sql id="Where">
+        AND L1.DEL_FLG = 0
+
+        <if test="filter.bsOrderId!=null">
+            AND L1.BS_ORDER_ID IN
+            <foreach collection="filter.bsOrderId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.bsOrderCode!=null">
+            AND L1.BS_ORDER_CODE LIKE #{filter.bsOrderCode}
+        </if>
+        <if test="filter.backNo!=null">
+            AND L1.BACK_NO LIKE #{filter.backNo}
+        </if>
+        <if test="filter.orderType!=null">
+            AND L1.ORDER_TYPE IN
+            <foreach collection="filter.orderType" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.salePlatformType!=null">
+            AND L1.SALE_PLATFORM_TYPE IN
+            <foreach collection="filter.salePlatformType" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.orderSourceType!=null">
+            AND L1.ORDER_SOURCE_TYPE IN
+            <foreach collection="filter.orderSourceType" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.logisticsZoneId!=null">
+            AND L1.LOGISTICS_ZONE_ID IN
+            <foreach collection="filter.logisticsZoneId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.logisticsZoneCode!=null">
+            AND L1A.LOGISTICS_ZONE_CODE LIKE #{filter.logisticsZoneCode}
+        </if>
+        <if test="filter.logisticsZoneName!=null">
+            AND L1A.LOGISTICS_ZONE_NAME LIKE #{filter.logisticsZoneName}
+        </if>
+        <if test="filter.bsId!=null">
+            AND L1.BS_ID IN
+            <foreach collection="filter.bsId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.bsCode!=null">
+            AND L1A.BS_CODE LIKE #{filter.bsCode}
+        </if>
+        <if test="filter.bsName!=null">
+            AND L1A.BS_NAME LIKE #{filter.bsName}
+        </if>
+        <if test="filter.bsType!=null">
+            AND L1A.BS_TYPE IN
+            <foreach collection="filter.bsType" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.orderPlacerId!=null">
+            AND L1.ORDER_PLACER_ID IN
+            <foreach collection="filter.orderPlacerId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.orderPlacerType!=null">
+            AND L1.ORDER_PLACER_TYPE IN
+            <foreach collection="filter.orderPlacerType" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.orderPlacerCode!=null">
+            AND L1A.ORDER_PLACER_CODE LIKE #{filter.orderPlacerCode}
+        </if>
+        <if test="filter.orderPlacerName!=null">
+            AND L1A.ORDER_PLACER_NAME LIKE #{filter.orderPlacerName}
+        </if>
+        <if test="filter.invoiceFlg!=null">
+            AND L1.INVOICE_FLG =#{filter.invoiceFlg}
+        </if>
+        <if test="filter.bsOrderStatus!=null">
+            AND L1.BS_ORDER_STU IN
+            <foreach collection="filter.bsOrderStatus" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.paymentStatus!=null">
+            AND L1.PAYMENT_STU IN
+            <foreach collection="filter.paymentStatus" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.orderPlaceDateTimeFrom!=null">
+            <![CDATA[ AND DATE_FORMAT(L1.ORDER_PLACE_DATETIME,'%Y-%m-%d') >= #{filter.orderPlaceDateTimeFrom}]]>
+        </if>
+        <if test="filter.orderPlaceDateTimeTo!=null">
+            <![CDATA[ AND DATE_FORMAT(L1.ORDER_PLACE_DATETIME,'%Y-%m-%d') <= #{filter.orderPlaceDateTimeTo}]]>
+        </if>
+        <if test="filter.goodsId !=null">
+            AND L2.GOODS_ID IN
+            <foreach collection="filter.goodsId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.goodsCode!=null">
+            AND L2A.GOODS_CODE LIKE #{filter.goodsCode}
+        </if>
+        <if test="filter.goodsName!=null">
+            AND L2A.GOODS_NAME LIKE #{filter.goodsName}
+        </if>
+        <if test="filter.saleLabelId!=null">
+            AND L2.SALE_LABEL_ID IN
+            <foreach collection="filter.saleLabelId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.saleLabelCode!=null">
+            AND L2A.SALE_LABEL_CODE LIKE #{filter.saleLabelCode}
+        </if>
+        <if test="filter.saleLabelName!=null">
+            AND L2A.SALE_LABEL_NAME LIKE #{filter.saleLabelName}
+        </if>
+        <if test="filter.sku!=null">
+            AND L2A.ITEM_CODE LIKE #{filter.sku}
+        </if>
+        <if test="filter.manufacturerId!=null">
+            AND L3.MANUFACTURER_ID IN
+            <foreach collection="filter.manufacturerId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.manufacturerCode!=null">
+            AND L3A.MANUFACTURER_CODE LIKE #{filter.manufacturerCode}
+        </if>
+        <if test="filter.manufacturerName!=null">
+            AND L3A.MANUFACTURER_NAME LIKE #{filter.manufacturerName}
+        </if>
+        <if test="filter.sellerId!=null">
+            AND L3.SELLER_ID IN
+            <foreach collection="filter.sellerId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.sellerCode!=null">
+            AND L3A.SELLER_CODE LIKE #{filter.sellerCode}
+        </if>
+        <if test="filter.sellerName!=null">
+            AND L3A.SELLER_NAME LIKE #{filter.sellerName}
+        </if>
+        <if test="filter.sellSideId!=null">
+            AND L3.SELL_SIDE_ID IN
+            <foreach collection="filter.sellSideId" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.sellSideCode!=null">
+            AND L3A.SELL_SIDE_CODE LIKE #{filter.sellSideCode}
+        </if>
+        <if test="filter.sellSideName!=null">
+            AND L3A.SELL_SIDE_NAME LIKE #{filter.sellSideName}
+        </if>
+    </sql>
+
+    <sql id="GroupBy">
+        <if test="pagingLevel==1 and searchLevel>1">
+            GROUP BY L1.BS_ORDER_ID
+        </if>
+        <if test="pagingLevel==2 and searchLevel>2">
+            GROUP BY L2.BS_ORDER_DETAIL_ID
+        </if>
+        <if test="pagingLevel==3 and searchLevel>3">
+            GROUP BY L3.BS_STOCKPILE_SPLIT_DETAIL_ID
+        </if>
+    </sql>
+
+    <sql id="Sort">
+        ORDER BY
+        <foreach collection="sort" item="item" separator=",">
+            ${item.sortField}
+            <if test="item.descFlag == true">
+                DESC
+            </if>
+            <if test="item.descFlag == false">
+                ASC
+            </if>
+        </foreach>
+    </sql>
+</mapper>

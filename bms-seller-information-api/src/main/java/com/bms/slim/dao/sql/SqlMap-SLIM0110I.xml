@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0110IDao">
+
+    <!--新增卖家代理商供应资质 -->
+    <insert id="saveAgentSupplyQualification" parameterType="map">
+        INSERT INTO SLIM_AGENT_SUPPLY_QUALIFICATION(
+        ASQ_ID,
+        ENTITY_SELLER_ID,
+        AGENT_NAME,
+        AGENT_AREA,
+        AGENT_PRODUCT_RANGE,
+        ASA_VALID_PERIOD,
+        ASA_URL,
+        AUTHORIZER_NAME,
+        AUTHORIZEE_NAME,
+        AUTHORIZED_PRODUCT_RANGE,
+        AUTHORIZED_BUSINESS_AREA,
+        AUTHORIZED_VALID_PERIOD,
+        AUTH_CERT_URL,
+        FOOD_BIZ_LIC_NO,
+        FBL_VALID_PERIOD,
+        FOOD_BIZ_LIC_URL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="relation" separator=",">
+            (
+            #{relation.asqId},
+            #{relation.entitySellerId},
+            #{relation.agentName},
+            #{relation.agentArea},
+            #{relation.agentProductRange},
+            #{relation.asaValidPeriod},
+            #{relation.asaUrl},
+            #{relation.authorizerName},
+            #{relation.authorizeeName},
+            #{relation.authorizedProductRange},
+            #{relation.authorizedBusinessArea},
+            #{relation.authorizedValidPeriod},
+            #{relation.authCertUrl},
+            #{relation.foodBizLicNo},
+            #{relation.fblValidPeriod},
+            #{relation.foodBizLicUrl},
+            0,
+            #{relation.crtId},
+            #{relation.crtTime},
+            #{relation.updId},
+            #{relation.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

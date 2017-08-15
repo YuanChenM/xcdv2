@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD1808IDao">
+
+    <!-- 查询制造商是否被使用 -->
+    <select id="findUsedManufacturerProducts" parameterType="java.util.List"
+            resultType="java.lang.Long">
+        SELECT
+        MANUFACTURER_PRODUCT_ID AS manufacturerProductId
+        FROM
+        SLPD_AGENT_SUPPLY_PRODUCT
+        WHERE
+        DEL_FLG = 0
+        AND MANUFACTURER_PRODUCT_ID IN
+        <foreach collection="list" item="manufacturer" open="(" separator="," close=")">
+            #{manufacturer.manufacturerProductId}
+        </foreach>
+    </select>
+
+    <!-- 根据制造商产品id查询制造商产品sku -->
+    <select id="findManufacturerProductSku" parameterType="Long" resultType="String">
+        SELECT
+        MANUFACTURER_PRODUCT_SKU AS manufacturerProductSku
+        FROM
+        SLPD_MANUFACTURER_PRODUCT
+        WHERE
+        DEL_FLG = 0
+        AND MANUFACTURER_PRODUCT_ID = #{manufacturerPdId}
+    </select>
+
+    <update id="updateManufacturerProducts" parameterType="com.bms.slpd.bean.entity.SlpdManufacturerProduct">
+        UPDATE SLPD_MANUFACTURER_PRODUCT
+        SET
+        DEL_FLG = 1,
+        UPD_ID = #{updId},
+        UPD_TIME = #{updTime},
+        VERSION = VERSION + 1
+        WHERE
+        DEL_FLG = 0
+        AND
+        MANUFACTURER_PRODUCT_ID = #{manufacturerProductId}
+        AND
+        VERSION = #{version}
+    </update>
+
+
+</mapper>

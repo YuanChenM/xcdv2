@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0204IDao">
+
+    <!--新增生产商生产资质-动物防疫条件合格证 -->
+    <insert id="saveAnimalEpidemicPreventionConditionCertificates" parameterType="map">
+        INSERT INTO SLIM_ANIMAL_EPIDEMIC_PREVENTION_CONDITION_CERTIFICATE(
+        AEPCC_ID,
+        SELLER_ROLE_ID,
+        CERT_NO,
+        VALID_PERIOD,
+        ANI_EPI_PREV_CONT_CERT_URL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="relation" separator=",">
+            (
+            #{relation.aepccId},
+            #{relation.sellerRoleId},
+            #{relation.certNo},
+            #{relation.validPeriod},
+            #{relation.aniEpiPrevContCertUrl},
+            0,
+            #{relation.crtId},
+            #{relation.crtTime},
+            #{relation.updId},
+            #{relation.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

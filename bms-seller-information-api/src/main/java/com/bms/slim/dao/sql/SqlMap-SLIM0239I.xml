@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0239IDao">
+    
+    <!--修改生产商检测设备 -->
+    <update id="updateProducerTestEquipments" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_PRODUCER_TEST_EQUIPMENT
+        <set>
+            <if test="target.sellerRoleIdFlg != null and target.sellerRoleIdFlg">
+                SELLER_ROLE_ID = #{entity.sellerRoleId},
+            </if>
+            <if test="target.testEqpNameFlg != null and target.testEqpNameFlg">
+                TEST_EQP_NAME = #{entity.testEqpName},
+            </if>
+            <if test="target.testEqpUseFlg != null and target.testEqpUseFlg">
+                TEST_EQP_USE = #{entity.testEqpUse},
+            </if>
+            <if test="target.testEqpPicUrlFlg != null and target.testEqpPicUrlFlg">
+                TEST_EQP_PIC_URL = #{entity.testEqpPicUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+            TEST_EQP_ID = #{entity.testEqpId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+</mapper>

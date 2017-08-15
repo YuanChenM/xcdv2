@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0245IDao">
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0245IParam" resultType="com.bms.slim.bean.result.field.SLIM0245IContactResult">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+          SLIM_CONTACT
+        <include refid="whereConditions"/>
+    </select>
+    <sql id="selectColumns">
+        CONTACT_ID AS contactId,
+		CONTACT_NAME AS contactName,
+		CONTACT_TYPE AS contactType,
+		WORKUNIT_ID AS workunitId,
+		WORKUNIT_TYPE AS workunitType,
+		MOBILE AS mobile,
+		WECHAT AS wechat,
+		QQ AS qq,
+		EMAIL AS email,
+		DEL_FLG AS delFlg,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS version
+    </sql>
+    <sql id="whereConditions">
+        <where>
+            <if test="null != delFlg">
+                AND DEL_FLG = #{delFlg}
+            </if>
+            <if test="null != contactIds and contactIds.size() > 0">
+                AND CONTACT_ID IN
+                <foreach collection="contactIds" item="contactId" open="(" separator="," close=")">
+                    #{contactId}
+                </foreach>
+            </if>
+            <if test="null != workunitIds and workunitIds.size() > 0">
+                AND WORKUNIT_ID IN
+                <foreach collection="workunitIds" item="workunitId" open="(" separator="," close=")">
+                    #{workunitId}
+                </foreach>
+            </if>
+            <if test="null != contactName and contactName != ''">
+                AND
+                  CONTACT_NAME LIKE #{contactName}
+            </if>
+            <if test="null != workunitType and workunitType != ''">
+                AND
+                WORKUNIT_TYPE = #{workunitType}
+            </if>
+        </where>
+    </sql>
+</mapper>

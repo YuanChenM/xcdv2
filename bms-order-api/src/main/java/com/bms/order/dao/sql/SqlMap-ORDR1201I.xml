@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.ORDR1201IDao">
+<select id="findPageList" parameterType="com.bms.order.bean.param.ORDR1201IRestParam" resultType="com.bms.order.bean.result.ORDR1201IRestResult">
+  SELECT
+    HISTORY_ID AS historyId
+    , ORDER_ID AS orderId
+    , SHIP_ID AS shipId
+    , ORDER_CODE AS orderCode
+    , ORDER_TYPE AS orderType
+    , ORDER_TIME AS orderTime
+    , ORDER_STATUS AS orderStatus
+    , BUYER_CODE AS buyerCode
+    , BUYER_NAME AS buyerName
+    , BUYER_TYPE AS buyerType
+    , MARKET AS market
+    , RECEIVER_ADDRESS AS receiverAddress
+    , RECEIVER_TEL AS receiverTel
+    , FROZEN_GOODS_HOUSE_KEEP AS frozenGoodsHouseKeep
+    , ORDER_AMOUNT AS orderAmount
+    , ORDER_DETAIL_ID AS orderDetailId
+    , CLASS_CODE AS classCode
+    , CLASS_NAME AS className
+    , BREED_CODE AS breedCode
+    , BREED_NAME AS breedName
+    , FEATURE_CODE AS featureCode
+    , FEATURE_NAME AS featureName
+    , NORMS_NAME AS normsName
+    , PD_CODE AS pdCode
+    , PD_NAME AS pdName
+    , PD_GRADE_NAME AS pdGradeName
+    , PRICE AS price
+    , ORDER_QTY AS orderQty
+    , ORDER_DETAIL_AMOUNT AS orderDetailAmount
+    , SUPPLIER_NAME AS supplierName
+    , SUPP_QTY AS suppQty
+    , SEND_QTY AS sendQty
+    , RECEIVE_QTY AS receiveQty
+    , CANCEL_QTY AS cancelQty
+    , RETURN_QTY AS returnQty
+    , REJECTION_QTY AS rejectionQty
+    , SEND_TIME AS sendTime
+    , RECEIVED_TIME AS receivedTime
+    , SALES_PARTY AS salesParty
+    , ORDER_SOURCE AS orderSource
+    , DEL_FLG AS delFlg
+    , CRT_ID AS crtId
+    , CRT_TIME AS crtTime
+    , UPD_ID AS updId
+    , UPD_TIME AS updTime
+    , VERSION AS version
+    FROM
+    ORDR_HISTORY_ORDER
+    WHERE
+    DEL_FLG = 0
+    <if test="orderId != null and orderId != ''">
+        AND ORDER_ID = #{orderId}
+    </if>
+    <if test="shipId != null and shipId != ''">
+        AND SHIP_ID = #{shipId}
+    </if>
+    <if test="orderCode != null and orderCode != ''">
+        AND ORDER_CODE LIKE #{orderCode}
+    </if>
+    <if test="orderType != null and orderType != ''">
+        AND ORDER_TYPE LIKE #{orderType}
+    </if>
+    <if test="orderTimeStart != null and orderTimeStart != ''">
+        AND ORDER_TIME <![CDATA[ >= ]]> #{orderTimeStart}
+    </if>
+    <if test="orderTimeEnd != null and orderTimeEnd != ''">
+        AND ORDER_TIME <![CDATA[ <= ]]> #{orderTimeEnd}
+    </if>
+    <if test="orderStatus != null and orderStatus != ''">
+        AND ORDER_STATUS LIKE #{orderStatus}
+    </if>
+    <if test="buyerCode != null and buyerCode != ''">
+        AND BUYER_CODE LIKE #{buyerCode}
+    </if>
+    <if test="buyerName != null and buyerName != ''">
+        AND BUYER_NAME LIKE #{buyerName}
+    </if>
+    <if test="buyerType != null and buyerType != ''">
+        AND BUYER_TYPE LIKE #{buyerType}
+    </if>
+    <if test="market != null and market != ''">
+        AND MARKET LIKE #{market}
+    </if>
+    <if test="receiverAddress != null and receiverAddress != ''">
+        AND RECEIVER_ADDRESS LIKE #{receiverAddress}
+    </if>
+    <if test="receiverTel != null and receiverTel != ''">
+        AND RECEIVER_TEL LIKE #{receiverTel}
+    </if>
+    <if test="frozenGoodsHouseKeep != null and frozenGoodsHouseKeep != ''">
+        AND FROZEN_GOODS_HOUSE_KEEP LIKE #{frozenGoodsHouseKeep}
+    </if>
+    <if test="orderDetailId != null and orderDetailId != ''">
+        AND ORDER_DETAIL_ID = #{orderDetailId}
+    </if>
+    <if test="classCode != null and classCode != ''">
+        AND CLASS_CODE LIKE #{classCode}
+    </if>
+    <if test="className != null and className != ''">
+        AND CLASS_NAME LIKE #{className}
+    </if>
+    <if test="breedCode != null and breedCode != ''">
+        AND BREED_CODE LIKE #{breedCode}
+    </if>
+    <if test="breedName != null and breedName != ''">
+        AND BREED_NAME LIKE #{breedName}
+    </if>
+    <if test="featureCode != null and featureCode != ''">
+        AND FEATURE_CODE LIKE #{featureCode}
+    </if>
+    <if test="featureName != null and featureName != ''">
+        AND FEATURE_NAME LIKE #{featureName}
+    </if>
+    <if test="normsName != null and normsName != ''">
+        AND NORMS_NAME LIKE #{normsName}
+    </if>
+    <if test="pdCode != null and pdCode != ''">
+        AND PD_CODE LIKE #{pdCode}
+    </if>
+    <if test="pdName != null and pdName != ''">
+        AND PD_NAME LIKE #{pdName}
+    </if>
+    <if test="pdGradeName != null and pdGradeName != ''">
+        AND PD_GRADE_NAME LIKE #{pdGradeName}
+    </if>
+    <if test="supplierName != null and supplierName != ''">
+        AND SUPPLIER_NAME LIKE #{supplierName}
+    </if>
+    <if test="salesParty != null and salesParty != ''">
+        AND SALES_PARTY LIKE #{salesParty}
+    </if>
+    <if test="orderSource != null and orderSource != ''">
+        AND ORDER_SOURCE LIKE #{orderSource}
+    </if>
+    <if test="sendTimeStart != null and sendTimeStart != ''">
+        AND SEND_TIME <![CDATA[ >= ]]> #{sendTimeStart}
+    </if>
+    <if test="sendTimeEnd != null and sendTimeEnd != ''">
+        AND SEND_TIME <![CDATA[ <= ]]> #{sendTimeEnd}
+    </if>
+    <if test="receivedTimeStart != null and receivedTimeStart != ''">
+        AND RECEIVED_TIME <![CDATA[ >= ]]> #{receivedTimeStart}
+    </if>
+    <if test="receivedTimeEnd != null and receivedTimeEnd != ''">
+        AND RECEIVED_TIME <![CDATA[ <= ]]> #{receivedTimeEnd}
+    </if>
+</select>
+</mapper>

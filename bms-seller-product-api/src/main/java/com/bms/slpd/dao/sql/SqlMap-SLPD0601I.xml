@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0601IDao">
+
+	<!-- 新增原种种源标准指标 -->
+	<insert id="batchInsert" parameterType="List">
+		INSERT INTO SLPD_ORG_STD (
+		ORG_STD_ID,
+		ORG_STD_TYPE,
+		BREED_ID,
+		ORG_GOOD_VAL,
+		ORG_NORMAL_VAL,
+		ORG_OK_VAL,
+		REMARK,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		UPD_ID,
+		UPD_TIME,
+		VERSION
+		)
+		VALUES
+		<foreach collection="list" item="orgStd" index="index" separator=",">
+			(
+			#{orgStd.orgStdId},
+			#{orgStd.orgStdType},
+			#{orgStd.breedId},
+			#{orgStd.orgGoodVal},
+			#{orgStd.orgNormalVal},
+			#{orgStd.orgOkVal},
+			#{orgStd.remark},
+			0,
+			#{orgStd.crtId},
+			#{orgStd.crtTime},
+			#{orgStd.updId},
+			#{orgStd.updTime},
+			1
+			)
+		</foreach>
+	</insert>
+
+</mapper>

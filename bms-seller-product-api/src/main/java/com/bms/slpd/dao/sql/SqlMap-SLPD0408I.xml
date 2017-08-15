@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0408IDao">
+    <update id="updateBrandOwnerRelations" parameterType="com.bms.slpd.bean.UpdateEntity">
+        update SLPD_BRAND_OWNER_RELATION
+        <set>
+            <if test="target.delFlgFlg == true">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime},
+            VERSION = VERSION+1
+        </set>
+        <where>
+        <if test="entity.boRelationId != null">
+            AND BO_RELATION_ID = #{entity.boRelationId}
+        </if>
+        <if test="entity.brandId != null">
+            AND BRAND_ID = #{entity.brandId}
+        </if>
+        <if test="entity.brandOwnerId != null">
+            AND BRAND_OWNER_ID = #{entity.brandOwnerId}
+        </if>
+        </where>
+    </update>
+</mapper>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.ORDR0502IDao">
+
+
+    <select id="findPageInfos" parameterType="com.bms.order.common.rest.SearchRestParam" resultType="com.bms.order.bean.result.ORDR0502IRestResult">
+        SELECT
+        <!-- 买家订单信息-->
+          buyerOrder.BUYER_ORDER_ID AS buyerOrderId
+          ,buyerOrder.BUYER_ORDER_CODE AS buyerOrderCode
+          ,buyerOrderAtt.BUYER_CODE AS buyerCode
+          ,buyerOrderAtt.BUYER_NAME AS buyerName
+          ,buyerOrderAtt.LOGISTICS_ZONE_NAME AS logisticsZoneName
+        <!-- 发货单信息-->
+          ,send.SEND_NOTIFICATION_ID AS sendNotifictionID
+          ,send.SEND_NOTIFICATION_CODE AS sendNotifictionCode
+          ,send.DISTRIBUTION_PERSON_NAME AS distributionPersonName
+          ,send.DISTRIBUTION_PERSON_PHONE AS distributionPersonPhone
+          ,send.DISTRIBUTION_TYPE AS distributionType
+          ,send.DISTRIBUTION_VEHICLE AS distributionVehicle
+          ,send.REAL_DEPART_DATETIME AS realDepartDateTime
+        <!-- 配送单信息-->
+          ,dis.DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+          ,dis.DISTRIBUTION_NOTIFICATION_CODE AS distributionNotificationCode
+          ,dis.DISTRIBUTION_NOTIFICATION_STU AS distributionNotificationStu
+          ,dis.CRT_TIME AS distributionNotificationTime
+          ,dis.EXPECTED_ARRIVAL_DATETIME AS expectedArrivalDateTime
+          ,dis.EXPECTED_SEND_DATETIME AS expectedSendDateTime
+          ,dis.RECEIVER_NAME AS receiverName
+          ,dis.RECEIVER_PHONE AS receiverPhone
+          ,dis.RECEIVER_WECHAT AS receiverWechat
+          ,dis.RECEIVER_PROVINCE AS receiverProvince
+          ,dis.RECEIVER_CITY AS receiverCity
+          ,dis.RECEIVER_DISTRICT AS receiverDistrict
+          ,dis.RECEIVER_ADDRESS AS receiverAddress
+          ,dis.RECEIVER_ASSIST_ADDRESS AS receiverAssistAddress
+          , dis.DELIVERY_AREA AS deliveryArea
+          , dis.PASS_TRAFFIC_MODEL AS passTrafficModel
+          ,dis.RECEIVE_PERIOD AS receivePeriod
+          ,dis.RECEIVE_EARLIEST AS receiveEarliest
+          ,dis.RECEIVE_LATEST AS receiveLatest
+          ,dis.RECEIVE_WAIT_HOUR AS receiveWaitHour
+          ,dis.ADVANCED_NOTIFICATION_HOUR AS advancedNotificationHour
+          ,dis.ANIMAL_QUARANTINE_CERTIFICATION_FLG AS animalQuarantineCertificationFlg
+          ,dis.STEVEDORE_REQUIREMENT AS stevedoreRequirement
+          ,dis.PACKAGE_REQUIREMENT AS packageRequirement
+          ,dis.NEAREST_PARKING_DISTANCE AS nearestParkingDistance
+          ,dis.REMARK AS remark
+          <!--收货单信息-->
+          ,receive.RECEIVE_TIME AS receiveTime
+          ,receive.RECEIVE_NOTIFICATION_ID AS receiveNotificationId
+          ,receive.SIGNATORY AS signatory
+        FROM
+          ORDR_RECEIVE_NOTIFICATION receive
+          INNER JOIN ORDR_SEND_NOTIFICATION send
+          ON receive.SEND_NOTIFICATION_CODE = send.SEND_NOTIFICATION_CODE
+          AND receive.DISTRIBUTION_NOTIFICATION_CODE = send.DISTRIBUTION_NOTIFICATION_CODE
+          INNER JOIN ORDR_DISTRIBUTION_NOTIFICATION dis
+            ON receive.DISTRIBUTION_NOTIFICATION_ID = dis.DISTRIBUTION_NOTIFICATION_ID
+          INNER JOIN ORDR_BUYER_ORDER buyerOrder
+            ON dis.BUYER_ORDER_ID = buyerOrder.BUYER_ORDER_ID
+          INNER JOIN ORDR_BUYER_ORDER_ATTACHED buyerOrderAtt
+            ON buyerOrder.BUYER_ORDER_ID = buyerOrderAtt.BUYER_ORDER_ID
+        WHERE
+        receive.DEL_FLG = 0
+        AND send.DEL_FLG = 0
+        AND buyerOrder.DEL_FLG = 0
+        <!-- AND buyerOrderAtt.DEL_FLG = 0 -->
+        AND dis.DEL_FLG = 0
+        <if test="null!=filter.logisticsZoneId and ''!=filter.logisticsZoneId">
+            AND buyerOrder.LOGISTICS_ZONE_ID = #{filter.logisticsZoneId}
+        </if>
+
+        <if test="null!=filter.buyerOrderCode and ''!=filter.buyerOrderCode">
+            AND buyerOrder.BUYER_ORDER_CODE = #{filter.buyerOrderCode}
+        </if>
+
+        <if test="null!=filter.buyerCode and ''!=filter.buyerCode">
+            AND buyerOrderAtt.BUYER_CODE = #{filter.buyerCode}
+        </if>
+
+        <if test="null!=filter.buyerName and ''!=filter.buyerName">
+            AND buyerOrderAtt.BUYER_NAME = #{filter.buyerName}
+        </if>
+
+        <if test="null!=filter.distributionNotificationCode and ''!=filter.distributionNotificationCode">
+            AND dis.DISTRIBUTION_NOTIFICATION_CODE = #{filter.distributionNotificationCode}
+        </if>
+
+        <if test="null!=filter.expectedSendDateTimeFrom and ''!=filter.expectedSendDateTimeFrom">
+            AND dis.EXPECTED_SEND_DATETIME <![CDATA[ >=  ]]>#{filter.expectedSendDateTimeFrom}
+        </if>
+
+        <if test="null!=filter.expectedSendDateTimeTo and ''!=filter.expectedSendDateTimeTo">
+            AND dis.EXPECTED_SEND_DATETIME <![CDATA[ <=  ]]> #{filter.expectedSendDateTimeTo}
+        </if>
+
+        <if test="null !=filter.receiveTimeFrom and ''!= filter.receiveTimeFrom">
+            AND receive.RECEIVE_TIME <![CDATA[ >=  ]]> #{filter.receiveTimeFrom}
+        </if>
+
+        <if test="null !=filter.receiveTimeTo and ''!= filter.receiveTimeTo">
+          AND receive.RECEIVE_TIME <![CDATA[ <=  ]]> #{filter.receiveTimeTo}
+        </if>
+
+        <if test="null!=filter.distributionNotificationStu and ''!=filter.distributionNotificationStu">
+            AND dis.DISTRIBUTION_NOTIFICATION_STU = #{filter.distributionNotificationStu}
+        </if>
+        ORDER BY receive.RECEIVE_NOTIFICATION_ID DESC
+        <if test="null != pagination">
+            LIMIT #{pagination.startPos},#{pagination.pageSize}
+        </if>
+    </select>
+
+
+    <select id="findAll" parameterType="com.bms.order.bean.param.ORDR0502IDetailFilterParam" resultType="com.bms.order.bean.result.ORDR0502IDetailsRestResult">
+        SELECT
+        receiveDetail.GOODS_ID AS goodsId
+        ,receiveDetail.SKU AS sku
+        ,receiveDetail.RECEIVE_NOTIFICATION_DETAIL_ID AS receiveNotificationDetailId
+        ,receiveDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID AS distributionNotificationDetailId
+        ,receiveDetail.BATCH AS batch
+        ,IFNULL(receiveDetail.RECEIVE_QUANTITY,0)AS receiveQuantity
+        ,IFNULL(receiveDetail.REJECT_QUANTITY,0) AS rejectQuantity
+        ,IFNULL(receiveDetail.DELAY_QUANTITY,0) AS delayQuantity
+        ,receiveDetail.REDISTRIBUTION_DATE AS redistributionDate
+        ,IFNULL(receiveDetail.RETURN_QUANTITY,0) AS returnQuantity
+        ,forcast.BUYER_FORCAST_DELIVER_DETAIL_ID AS buyerForcastDeliverDetailId
+        FROM
+          ORDR_RECEIVE_NOTIFICATION_DETAIL receiveDetail
+        INNER JOIN ORDR_RECEIVE_NOTIFICATION receive
+        ON receiveDetail.RECEIVE_NOTIFICATION_ID = receive.RECEIVE_NOTIFICATION_ID
+            INNER JOIN ORDR_DISTRIBUTION_NOTIFICATION_DETAIL disDetail
+              ON receiveDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID = disDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID
+            INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL forcast
+              ON disDetail.BUYER_FORCAST_DELIVER_DETAIL_ID = forcast.BUYER_FORCAST_DELIVER_DETAIL_ID
+          WHERE
+            receive.RECEIVE_NOTIFICATION_ID = #{receiveNotificationId}
+            AND receive.DEL_FLG = 0
+            AND receiveDetail.DEL_FLG = 0
+            AND disDetail.DEL_FLG = 0
+            AND forcast.DEL_FLG = 0
+    </select>
+
+    <select id="getTotalCount" parameterType="com.bms.order.common.rest.SearchRestParam" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        ORDR_RECEIVE_NOTIFICATION receive
+        INNER JOIN ORDR_SEND_NOTIFICATION send
+        ON receive.SEND_NOTIFICATION_CODE = send.SEND_NOTIFICATION_CODE
+        AND receive.DISTRIBUTION_NOTIFICATION_CODE = send.DISTRIBUTION_NOTIFICATION_CODE
+        INNER JOIN ORDR_DISTRIBUTION_NOTIFICATION dis
+        ON receive.DISTRIBUTION_NOTIFICATION_ID = dis.DISTRIBUTION_NOTIFICATION_ID
+        INNER JOIN ORDR_BUYER_ORDER buyerOrder
+        ON dis.BUYER_ORDER_ID = buyerOrder.BUYER_ORDER_ID
+        INNER JOIN ORDR_BUYER_ORDER_ATTACHED buyerOrderAtt
+        ON buyerOrder.BUYER_ORDER_ID = buyerOrderAtt.BUYER_ORDER_ID
+        WHERE
+        receive.DEL_FLG = 0
+        AND send.DEL_FLG = 0
+        AND buyerOrder.DEL_FLG = 0
+        <!--AND buyerOrderAtt.DEL_FLG = 0-->
+        AND dis.DEL_FLG = 0
+        <if test="null!=filter.logisticsZoneId and ''!=filter.logisticsZoneId">
+            AND buyerOrder.LOGISTICS_ZONE_ID = #{filter.logisticsZoneId}
+        </if>
+
+        <if test="null!=filter.buyerOrderCode and ''!=filter.buyerOrderCode">
+            AND buyerOrder.BUYER_ORDER_CODE = #{filter.buyerOrderCode}
+        </if>
+
+        <if test="null!=filter.buyerCode and ''!=filter.buyerCode">
+            AND buyerOrderAtt.BUYER_CODE = #{filter.buyerCode}
+        </if>
+
+        <if test="null!=filter.buyerName and ''!=filter.buyerName">
+            AND buyerOrderAtt.BUYER_NAME = #{filter.buyerName}
+        </if>
+
+        <if test="null!=filter.distributionNotificationCode and ''!=filter.distributionNotificationCode">
+            AND dis.DISTRIBUTION_NOTIFICATION_CODE = #{filter.distributionNotificationCode}
+        </if>
+
+        <if test="null!=filter.expectedSendDateTimeFrom and ''!=filter.expectedSendDateTimeFrom">
+            AND dis.EXPECTED_SEND_DATETIME <![CDATA[ >=  ]]>#{filter.expectedSendDateTimeFrom}
+        </if>
+
+        <if test="null!=filter.expectedSendDateTimeTo and ''!=filter.expectedSendDateTimeTo">
+            AND dis.EXPECTED_SEND_DATETIME <![CDATA[ <=  ]]> #{filter.expectedSendDateTimeTo}
+        </if>
+
+        <if test="null !=filter.receiveTimeFrom and ''!= filter.receiveTimeFrom">
+            AND receive.RECEIVE_TIME <![CDATA[ >=  ]]> #{filter.receiveTimeFrom}
+        </if>
+
+        <if test="null !=filter.receiveTimeTo and ''!= filter.receiveTimeTo">
+            AND receive.RECEIVE_TIME <![CDATA[ <=  ]]> #{filter.receiveTimeTo}
+        </if>
+
+        <if test="null!=filter.distributionNotificationStu and ''!=filter.distributionNotificationStu">
+            AND dis.DISTRIBUTION_NOTIFICATION_STU = #{filter.distributionNotificationStu}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0111IDao">
+
+    <!-- 查询卖家代理商供应资质 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0111IParam"
+            resultType="com.bms.slim.bean.result.field.SLIM0111AgentSupplyQualificationResult">
+        SELECT
+            ASQ_ID AS asqId,
+            ENTITY_SELLER_ID AS entitySellerId,
+            AGENT_NAME AS agentName,
+            AGENT_AREA AS agentArea,
+            AGENT_PRODUCT_RANGE AS agentProductRange,
+            ASA_VALID_PERIOD AS asaValidPeriod,
+            ASA_URL AS asaUrl,
+            AUTHORIZER_NAME AS authorizerName,
+            AUTHORIZEE_NAME AS authorizeeName,
+            AUTHORIZED_PRODUCT_RANGE AS authorizedProductRange,
+            AUTHORIZED_BUSINESS_AREA AS authorizedBusinessArea,
+            AUTHORIZED_VALID_PERIOD AS authorizedValidPeriod,
+            AUTH_CERT_URL AS authCertUrl,
+            FOOD_BIZ_LIC_NO AS foodBizLicNo,
+            FBL_VALID_PERIOD AS fblValidPeriod,
+            FOOD_BIZ_LIC_URL AS foodBizLicUrl,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+        SLIM_AGENT_SUPPLY_QUALIFICATION
+        <where>
+            <if test="delFlg != null">
+                DEL_FLG = #{delFlg}
+            </if>
+            <if test="asqIds != null and asqIds.size() > 0">
+                AND ASQ_ID IN
+                <foreach collection="asqIds" item="asqId" open="(" separator="," close=")">
+                    #{asqId}
+                </foreach>
+            </if>
+            <if test="entitySellerIds != null and entitySellerIds.size() > 0">
+                AND ENTITY_SELLER_ID IN
+                <foreach collection="entitySellerIds" item="entitySellerId" open="(" separator="," close=")">
+                    #{entitySellerId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

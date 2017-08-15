@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.fms.dao.FmsBuyerReturnOrderDao">
+
+    <select id="findBuyerReturnOrder" parameterType="com.bms.order.fms.bean.FmsOrderParam"
+            resultType="com.bms.order.fms.bean.FmsBuyerReturnOrderBean">
+        SELECT
+        buyerOrder.BACK_NO AS orgsystemId,
+        buyerReturn.RETURN_CODE AS omsOrderNumber,
+        buyerReturn.RETURN_ID AS omsOrderId,
+        buyerOrder.BUYER_ORDER_CODE AS buyerOrderNumber,
+        buyerOrder.BUYER_ORDER_ID AS buyerOrderId,
+        buyerReturn.APPLY_TIME AS orderPlaceDate,
+        buyerReturn.RETURN_AMOUNT AS paymentAmount,
+        buyerReturn.BUYER_NAME AS buyerName,
+        buyerReturn.BUYER_ID AS buyerId,
+        buyerReturn.BUYER_CODE AS accountNo,
+        buyerOrder.BS_ID AS agentId,
+        ordrAttached.REGIONAL_BS_CODE AS bsId,
+        buyerReturn.BUYER_RETURN_SOURCE AS orderSourceType
+        FROM
+        ORDR_BUYER_RETURN buyerReturn
+        LEFT JOIN ORDR_BUYER_ORDER buyerOrder ON buyerOrder.BUYER_ORDER_ID = buyerReturn.ORDER_ID
+        LEFT JOIN ORDR_BUYER_ORDER_ATTACHED ordrAttached ON ordrAttached.BUYER_ORDER_ID = buyerOrder.BUYER_ORDER_ID
+        WHERE buyerOrder.DEL_FLG = FALSE
+        <if test="pushOrderId != null and pushOrderId != ''">
+            AND buyerReturn.RETURN_ID = #{pushOrderId}
+        </if>
+        <if test="pushOrderCode != null and pushOrderCode != ''">
+            AND buyerReturn.RETURN_CODE = #{pushOrderCode}
+        </if>
+        ORDER BY buyerReturn.RETURN_ID
+    </select>
+    <select id="findBuyerReturnOrderDetail" parameterType="com.bms.order.fms.bean.FmsBuyerReturnOrderBean"
+            resultType="com.bms.order.fms.bean.OmsBuyerReturnOrderDetail">
+        SELECT
+            sendDetail.SEND_NOTIFICATION_DETAIL_ID AS buyerOrderLineNum,
+            distributionDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID AS distributionDetailId,
+            distributionDetail.BUYER_FORCAST_DELIVER_DETAIL_ID AS deliverDetailId,
+            sendDetail.SEND_NOTIFICATION_DETAIL_ID AS sendDetailId,
+            deliverDetail.BUYER_BATCH_ORDER_DETAIL_ID AS orderDetailId,
+            deliverDetail.SELL_SIDE_ID AS sellSideId,
+            deliverDetail.SELL_SIDE_TYPE AS sellSideType,
+            buyerReturnDetail.DETAIL_ID AS returnDetailId,
+            buyerReturnDetail.GOODS_ID AS productId,
+            buyerReturnDetail.RETURN_QTY AS orderedQuantity,
+            buyerReturnDetail.REASON_ID AS reasonId,
+            buyerReturnDetail.SALES_UNIT AS salesUnit,
+            buyerOrderDetail.REAL_UNIT_PRICE AS returnPrice,
+            distributionDetail.SKU AS sku,
+            deliverDetailAttached.MAKER_CODE AS pdrsCode,
+            deliverDetailAttached.MAKER_NAME AS prdsName,
+            deliverDetailAttached.MANUFACTURER_CODE AS mfrsCode,
+            deliverDetailAttached.MANUFACTURER_NAME AS mfrsName
+        FROM
+             ORDR_BUYER_RETURN_DETAIL buyerReturnDetail
+        INNER JOIN ORDR_DISTRIBUTION_NOTIFICATION_DETAIL distributionDetail
+        ON distributionDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID = buyerReturnDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID
+        INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL deliverDetail
+        ON deliverDetail.BUYER_FORCAST_DELIVER_DETAIL_ID = distributionDetail.BUYER_FORCAST_DELIVER_DETAIL_ID
+        INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED deliverDetailAttached
+        ON deliverDetailAttached.BUYER_FORCAST_DELIVER_DETAIL_ID = distributionDetail.BUYER_FORCAST_DELIVER_DETAIL_ID
+        INNER JOIN ORDR_SEND_NOTIFICATION_DETAIL sendDetail
+        ON sendDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID = distributionDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID
+        LEFT JOIN ORDR_BUYER_BATCH_ORDER_DETAIL buyerOrderDetail
+        ON buyerOrderDetail.BUYER_BATCH_ORDER_ID = deliverDetail.BUYER_BATCH_ORDER_ID
+        AND buyerOrderDetail.BUYER_BATCH_ORDER_DETAIL_ID = deliverDetail.BUYER_BATCH_ORDER_DETAIL_ID
+        WHERE
+            buyerReturnDetail.RETURN_ID = #{omsOrderId}
+        ORDER BY buyerReturnDetail.GOODS_ID
+    </select>
+</mapper>

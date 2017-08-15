@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0244IDao">
+
+    <!--新增卖家合同联系人信息 -->
+    <insert id="saveContacts" parameterType="java.util.List">
+        INSERT INTO SLIM_CONTACT(
+        CONTACT_ID,
+        CONTACT_NAME,
+        CONTACT_TYPE,
+        WORKUNIT_ID,
+        WORKUNIT_TYPE,
+        MOBILE,
+        WECHAT,
+        QQ,
+        EMAIL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="contact" index="index" separator=",">
+            (
+            #{contact.contactId},
+            #{contact.contactName},
+            #{contact.contactType},
+            #{contact.workunitId},
+            #{contact.workunitType},
+            #{contact.mobile},
+            #{contact.wechat},
+            #{contact.qq},
+            #{contact.email},
+            0,
+            #{contact.crtId},
+            #{contact.crtTime},
+            #{contact.updId},
+            #{contact.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+</mapper>

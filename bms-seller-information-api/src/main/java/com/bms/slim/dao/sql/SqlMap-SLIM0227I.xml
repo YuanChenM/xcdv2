@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0227IDao">
+    
+    <!--修改生产商工厂 -->
+    <update id="updateProducerFactory" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_PRODUCER_FACTORY
+        <set>
+            <if test="target.sellerRoleIdFlg != null and target.sellerRoleIdFlg">
+                SELLER_ROLE_ID = #{entity.sellerRoleId},
+            </if>
+            <if test="target.totalAssetFlg != null and target.totalAssetFlg">
+                TOTAL_ASSET = #{entity.totalAsset},
+            </if>
+            <if test="target.registeredCapitalFlg != null and target.registeredCapitalFlg">
+                REGISTERED_CAPITAL = #{entity.registeredCapital},
+            </if>
+            <if test="target.coveredAreaFlg != null and target.coveredAreaFlg">
+                COVERED_AREA = #{entity.coveredArea},
+            </if>
+            <if test="target.workshopAreaFlg != null and target.workshopAreaFlg">
+                WORKSHOP_AREA = #{entity.workshopArea},
+            </if>
+            <if test="target.majorEquipmentFlg != null and target.majorEquipmentFlg">
+                MAJOR_EQUIPMENT = #{entity.majorEquipment},
+            </if>
+            <if test="target.designCapacityFlg != null and target.designCapacityFlg">
+                DESIGN_CAPACITY = #{entity.designCapacity},
+            </if>
+            <if test="target.exportSalePercentFlg != null and target.exportSalePercentFlg">
+                EXPORT_SALE_PERCENT = #{entity.exportSalePercent},
+            </if>
+            <if test="target.selfSalePercentFlg != null and target.selfSalePercentFlg">
+                SELF_SALE_PERCENT = #{entity.selfSalePercent},
+            </if>
+            <if test="target.agentSalePercentFlg != null and target.agentSalePercentFlg">
+                AGENT_SALE_PERCENT = #{entity.agentSalePercent},
+            </if>
+            <if test="target.factoryPicUrlFlg != null and target.factoryPicUrlFlg">
+                FACTORY_PIC_URL = #{entity.factoryPicUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+        FACTORY_ID = #{entity.factoryId} AND DEL_FLG = 0
+    </update>
+
+</mapper>

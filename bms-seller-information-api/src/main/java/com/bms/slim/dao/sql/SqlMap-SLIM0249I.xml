@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0249IDao">
+    
+    <!--修改卖方单位角色 -->
+    <update id="udpateSellerRoles" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_SELLER_ROLE
+        <set>
+            <if test="target.entitySellerIdFlg != null and target.entitySellerIdFlg">
+                ENTITY_SELLER_ID = #{entity.entitySellerId},
+            </if>
+            <if test="target.roleIdFlg != null and target.roleIdFlg">
+                ROLE_ID = #{entity.roleId},
+            </if>
+            <if test="target.roleNameFlg != null and target.roleNameFlg">
+                ROLE_NAME = #{entity.roleName},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+            SELLER_ROLE_ID = #{entity.sellerRoleId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+</mapper>

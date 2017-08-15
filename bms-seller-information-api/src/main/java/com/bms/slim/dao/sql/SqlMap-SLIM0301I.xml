@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0301IDao">
+    <!-- 新增卖家品牌 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO SLIM_SELLER_BRAND (
+        SELLER_BRAND_ID,
+        ENTITY_SELLER_ID,
+        BRAND_ID,
+        COPYRIGHT_TYPE,
+        AGCY_DIST_AUZ_CONT_NO,
+        AGCY_DIST_AUZ_CONT_URL,
+        START_AUZ_DATE,
+        END_AUZ_DATE,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="sellBrand" separator=",">
+            (
+            #{sellBrand.sellerBrandId},
+            #{sellBrand.entitySellerId},
+            #{sellBrand.brandId},
+            #{sellBrand.copyrightType},
+            #{sellBrand.agcyDistAuzContNo},
+            #{sellBrand.agcyDistAuzContUrl},
+            #{sellBrand.startAuzDate},
+            #{sellBrand.endAuzDate},
+            0,
+            #{sellBrand.crtId},
+            #{sellBrand.crtTime},
+            #{sellBrand.updId},
+            #{sellBrand.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+
+</mapper>

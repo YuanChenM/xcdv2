@@ -1,0 +1,770 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.DistributionNotificationDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.DistributionNotificationEntity">
+INSERT INTO
+ORDR_DISTRIBUTION_NOTIFICATION
+(
+DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, BUYER_ORDER_ID
+, BUYER_ORDER_CODE
+, ORDER_TYPE
+, BUYER_ID
+, BUYER_TYPE
+, BUYER_TYPE_NAME
+, BUYER_CODE
+, BUYER_NAME
+, PAYMENT_TYPE
+, RECEIVER_NAME
+, RECEIVER_PHONE
+, RECEIVER_QQ
+, RECEIVER_WECHAT
+, RECEIVER_MAIL
+, RECEIVER_PROVINCE
+, RECEIVER_CITY
+, RECEIVER_DISTRICT
+, RECEIVER_ADDRESS
+, RECEIVER_ASSIST_ADDRESS
+, DELIVERY_AREA
+, PASS_TRAFFIC_MODEL
+, DISTRIBUTION_TYPE
+, REQUIRED_DISTRIBUTION_DATE
+, RECEIVE_PERIOD
+, RECEIVE_EARLIEST
+, RECEIVE_LATEST
+, RECEIVE_WAIT_HOUR
+, ADVANCED_NOTIFICATION_HOUR
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG
+, STEVEDORE_REQUIREMENT
+, PACKAGE_REQUIREMENT
+, NEAREST_PARKING_DISTANCE
+, REMARK
+, EXPECTED_SEND_DATETIME
+, EXPECTED_ARRIVAL_DATETIME
+, DISTRIBUTION_NOTIFICATION_STU
+, SEND_FLG
+, WH_ID
+, WH_CODE
+, WH_NAME
+, FACT_WH_ID
+, FACT_WH_CODE
+, FACT_WH_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{distributionNotificationId}
+, #{distributionNotificationCode}
+, #{buyerOrderId}
+, #{buyerOrderCode}
+, #{orderType}
+, #{buyerId}
+, #{buyerType}
+, #{buyerTypeName}
+, #{buyerCode}
+, #{buyerName}
+, #{paymentType}
+, #{receiverName}
+, #{receiverPhone}
+, #{receiverQq}
+, #{receiverWechat}
+, #{receiverMail}
+, #{receiverProvince}
+, #{receiverCity}
+, #{receiverDistrict}
+, #{receiverAddress}
+, #{receiverAssistAddress}
+, #{deliveryArea}
+, #{passTrafficModel}
+, #{distributionType}
+, #{requiredDistributionDate}
+, #{receivePeriod}
+, #{receiveEarliest}
+, #{receiveLatest}
+, #{receiveWaitHour}
+, #{advancedNotificationHour}
+, #{animalQuarantineCertificationFlg}
+, #{stevedoreRequirement}
+, #{packageRequirement}
+, #{nearestParkingDistance}
+, #{remark}
+, #{expectedSendDatetime}
+, #{expectedArrivalDatetime}
+, #{distributionNotificationStu}
+, #{sendFlg}
+, #{whId}
+, #{whCode}
+, #{whName}
+, #{factWhId}
+, #{factWhCode}
+, #{factWhName}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_DISTRIBUTION_NOTIFICATION
+(
+DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, BUYER_ORDER_ID
+, BUYER_ORDER_CODE
+, ORDER_TYPE
+, BUYER_ID
+, BUYER_TYPE
+, BUYER_TYPE_NAME
+, BUYER_CODE
+, BUYER_NAME
+, PAYMENT_TYPE
+, RECEIVER_NAME
+, RECEIVER_PHONE
+, RECEIVER_QQ
+, RECEIVER_WECHAT
+, RECEIVER_MAIL
+, RECEIVER_PROVINCE
+, RECEIVER_CITY
+, RECEIVER_DISTRICT
+, RECEIVER_ADDRESS
+, RECEIVER_ASSIST_ADDRESS
+, DELIVERY_AREA
+, PASS_TRAFFIC_MODEL
+, DISTRIBUTION_TYPE
+, REQUIRED_DISTRIBUTION_DATE
+, RECEIVE_PERIOD
+, RECEIVE_EARLIEST
+, RECEIVE_LATEST
+, RECEIVE_WAIT_HOUR
+, ADVANCED_NOTIFICATION_HOUR
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG
+, STEVEDORE_REQUIREMENT
+, PACKAGE_REQUIREMENT
+, NEAREST_PARKING_DISTANCE
+, REMARK
+, EXPECTED_SEND_DATETIME
+, EXPECTED_ARRIVAL_DATETIME
+, DISTRIBUTION_NOTIFICATION_STU
+, SEND_FLG
+, WH_ID
+, WH_CODE
+, WH_NAME
+, FACT_WH_ID
+, FACT_WH_CODE
+, FACT_WH_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.distributionNotificationId}
+, #{entity.distributionNotificationCode}
+, #{entity.buyerOrderId}
+, #{entity.buyerOrderCode}
+, #{entity.orderType}
+, #{entity.buyerId}
+, #{entity.buyerType}
+, #{entity.buyerTypeName}
+, #{entity.buyerCode}
+, #{entity.buyerName}
+, #{entity.paymentType}
+, #{entity.receiverName}
+, #{entity.receiverPhone}
+, #{entity.receiverQq}
+, #{entity.receiverWechat}
+, #{entity.receiverMail}
+, #{entity.receiverProvince}
+, #{entity.receiverCity}
+, #{entity.receiverDistrict}
+, #{entity.receiverAddress}
+, #{entity.receiverAssistAddress}
+, #{entity.deliveryArea}
+, #{entity.passTrafficModel}
+, #{entity.distributionType}
+, #{entity.requiredDistributionDate}
+, #{entity.receivePeriod}
+, #{entity.receiveEarliest}
+, #{entity.receiveLatest}
+, #{entity.receiveWaitHour}
+, #{entity.advancedNotificationHour}
+, #{entity.animalQuarantineCertificationFlg}
+, #{entity.stevedoreRequirement}
+, #{entity.packageRequirement}
+, #{entity.nearestParkingDistance}
+, #{entity.remark}
+, #{entity.expectedSendDatetime}
+, #{entity.expectedArrivalDatetime}
+, #{entity.distributionNotificationStu}
+, #{entity.sendFlg}
+, #{entity.whId}
+, #{entity.whCode}
+, #{entity.whName}
+, #{entity.factWhId}
+, #{entity.factWhCode}
+, #{entity.factWhName}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.DistributionNotificationEntity">
+UPDATE ORDR_DISTRIBUTION_NOTIFICATION
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_DISTRIBUTION_NOTIFICATION
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+DISTRIBUTION_NOTIFICATION_ID = #{entity.distributionNotificationId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.DistributionNotificationEntity">
+UPDATE ORDR_DISTRIBUTION_NOTIFICATION
+SET
+DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+, DISTRIBUTION_NOTIFICATION_CODE = #{distributionNotificationCode}
+, BUYER_ORDER_ID = #{buyerOrderId}
+, BUYER_ORDER_CODE = #{buyerOrderCode}
+, ORDER_TYPE = #{orderType}
+, BUYER_ID = #{buyerId}
+, BUYER_TYPE = #{buyerType}
+, BUYER_TYPE_NAME = #{buyerTypeName}
+, BUYER_CODE = #{buyerCode}
+, BUYER_NAME = #{buyerName}
+, PAYMENT_TYPE = #{paymentType}
+, RECEIVER_NAME = #{receiverName}
+, RECEIVER_PHONE = #{receiverPhone}
+, RECEIVER_QQ = #{receiverQq}
+, RECEIVER_WECHAT = #{receiverWechat}
+, RECEIVER_MAIL = #{receiverMail}
+, RECEIVER_PROVINCE = #{receiverProvince}
+, RECEIVER_CITY = #{receiverCity}
+, RECEIVER_DISTRICT = #{receiverDistrict}
+, RECEIVER_ADDRESS = #{receiverAddress}
+, RECEIVER_ASSIST_ADDRESS = #{receiverAssistAddress}
+, DELIVERY_AREA = #{deliveryArea}
+, PASS_TRAFFIC_MODEL = #{passTrafficModel}
+, DISTRIBUTION_TYPE = #{distributionType}
+, REQUIRED_DISTRIBUTION_DATE = #{requiredDistributionDate}
+, RECEIVE_PERIOD = #{receivePeriod}
+, RECEIVE_EARLIEST = #{receiveEarliest}
+, RECEIVE_LATEST = #{receiveLatest}
+, RECEIVE_WAIT_HOUR = #{receiveWaitHour}
+, ADVANCED_NOTIFICATION_HOUR = #{advancedNotificationHour}
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG = #{animalQuarantineCertificationFlg}
+, STEVEDORE_REQUIREMENT = #{stevedoreRequirement}
+, PACKAGE_REQUIREMENT = #{packageRequirement}
+, NEAREST_PARKING_DISTANCE = #{nearestParkingDistance}
+, REMARK = #{remark}
+, EXPECTED_SEND_DATETIME = #{expectedSendDatetime}
+, EXPECTED_ARRIVAL_DATETIME = #{expectedArrivalDatetime}
+, DISTRIBUTION_NOTIFICATION_STU = #{distributionNotificationStu}
+, SEND_FLG = #{sendFlg}
+, WH_ID = #{whId}
+, WH_CODE = #{whCode}
+, WH_NAME = #{whName}
+, FACT_WH_ID = #{factWhId}
+, FACT_WH_CODE = #{factWhCode}
+, FACT_WH_NAME = #{factWhName}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_DISTRIBUTION_NOTIFICATION
+SET
+DISTRIBUTION_NOTIFICATION_ID = #{entity.distributionNotificationId}
+, DISTRIBUTION_NOTIFICATION_CODE = #{entity.distributionNotificationCode}
+, BUYER_ORDER_ID = #{entity.buyerOrderId}
+, BUYER_ORDER_CODE = #{entity.buyerOrderCode}
+, ORDER_TYPE = #{entity.orderType}
+, BUYER_ID = #{entity.buyerId}
+, BUYER_TYPE = #{entity.buyerType}
+, BUYER_TYPE_NAME = #{entity.buyerTypeName}
+, BUYER_CODE = #{entity.buyerCode}
+, BUYER_NAME = #{entity.buyerName}
+, PAYMENT_TYPE = #{entity.paymentType}
+, RECEIVER_NAME = #{entity.receiverName}
+, RECEIVER_PHONE = #{entity.receiverPhone}
+, RECEIVER_QQ = #{entity.receiverQq}
+, RECEIVER_WECHAT = #{entity.receiverWechat}
+, RECEIVER_MAIL = #{entity.receiverMail}
+, RECEIVER_PROVINCE = #{entity.receiverProvince}
+, RECEIVER_CITY = #{entity.receiverCity}
+, RECEIVER_DISTRICT = #{entity.receiverDistrict}
+, RECEIVER_ADDRESS = #{entity.receiverAddress}
+, RECEIVER_ASSIST_ADDRESS = #{entity.receiverAssistAddress}
+, DELIVERY_AREA = #{entity.deliveryArea}
+, PASS_TRAFFIC_MODEL = #{entity.passTrafficModel}
+, DISTRIBUTION_TYPE = #{entity.distributionType}
+, REQUIRED_DISTRIBUTION_DATE = #{entity.requiredDistributionDate}
+, RECEIVE_PERIOD = #{entity.receivePeriod}
+, RECEIVE_EARLIEST = #{entity.receiveEarliest}
+, RECEIVE_LATEST = #{entity.receiveLatest}
+, RECEIVE_WAIT_HOUR = #{entity.receiveWaitHour}
+, ADVANCED_NOTIFICATION_HOUR = #{entity.advancedNotificationHour}
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG = #{entity.animalQuarantineCertificationFlg}
+, STEVEDORE_REQUIREMENT = #{entity.stevedoreRequirement}
+, PACKAGE_REQUIREMENT = #{entity.packageRequirement}
+, NEAREST_PARKING_DISTANCE = #{entity.nearestParkingDistance}
+, REMARK = #{entity.remark}
+, EXPECTED_SEND_DATETIME = #{entity.expectedSendDatetime}
+, EXPECTED_ARRIVAL_DATETIME = #{entity.expectedArrivalDatetime}
+, DISTRIBUTION_NOTIFICATION_STU = #{entity.distributionNotificationStu}
+, SEND_FLG = #{entity.sendFlg}
+, WH_ID = #{entity.whId}
+, WH_CODE = #{entity.whCode}
+, WH_NAME = #{entity.whName}
+, FACT_WH_ID = #{entity.factWhId}
+, FACT_WH_CODE = #{entity.factWhCode}
+, FACT_WH_NAME = #{entity.factWhName}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+DISTRIBUTION_NOTIFICATION_ID = #{entity.distributionNotificationId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.DistributionNotificationEntity" resultType="com.bms.order.bean.entity.DistributionNotificationEntity">
+SELECT
+DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, DISTRIBUTION_NOTIFICATION_CODE AS distributionNotificationCode
+, BUYER_ORDER_ID AS buyerOrderId
+, BUYER_ORDER_CODE AS buyerOrderCode
+, ORDER_TYPE AS orderType
+, BUYER_ID AS buyerId
+, BUYER_TYPE AS buyerType
+, BUYER_TYPE_NAME AS buyerTypeName
+, BUYER_CODE AS buyerCode
+, BUYER_NAME AS buyerName
+, PAYMENT_TYPE AS paymentType
+, RECEIVER_NAME AS receiverName
+, RECEIVER_PHONE AS receiverPhone
+, RECEIVER_QQ AS receiverQq
+, RECEIVER_WECHAT AS receiverWechat
+, RECEIVER_MAIL AS receiverMail
+, RECEIVER_PROVINCE AS receiverProvince
+, RECEIVER_CITY AS receiverCity
+, RECEIVER_DISTRICT AS receiverDistrict
+, RECEIVER_ADDRESS AS receiverAddress
+, RECEIVER_ASSIST_ADDRESS AS receiverAssistAddress
+, DELIVERY_AREA AS deliveryArea
+, PASS_TRAFFIC_MODEL AS passTrafficModel
+, DISTRIBUTION_TYPE AS distributionType
+, REQUIRED_DISTRIBUTION_DATE AS requiredDistributionDate
+, RECEIVE_PERIOD AS receivePeriod
+, RECEIVE_EARLIEST AS receiveEarliest
+, RECEIVE_LATEST AS receiveLatest
+, RECEIVE_WAIT_HOUR AS receiveWaitHour
+, ADVANCED_NOTIFICATION_HOUR AS advancedNotificationHour
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG AS animalQuarantineCertificationFlg
+, STEVEDORE_REQUIREMENT AS stevedoreRequirement
+, PACKAGE_REQUIREMENT AS packageRequirement
+, NEAREST_PARKING_DISTANCE AS nearestParkingDistance
+, REMARK AS remark
+, EXPECTED_SEND_DATETIME AS expectedSendDatetime
+, EXPECTED_ARRIVAL_DATETIME AS expectedArrivalDatetime
+, DISTRIBUTION_NOTIFICATION_STU AS distributionNotificationStu
+, SEND_FLG AS sendFlg
+, WH_ID AS whId
+, WH_CODE AS whCode
+, WH_NAME AS whName
+, FACT_WH_ID AS factWhId
+, FACT_WH_CODE AS factWhCode
+, FACT_WH_NAME AS factWhName
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_DISTRIBUTION_NOTIFICATION
+<where>
+<if test="distributionNotificationId!=null">
+AND DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+</if>
+<if test="distributionNotificationCode!=null">
+AND DISTRIBUTION_NOTIFICATION_CODE = #{distributionNotificationCode}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.DistributionNotificationEntity">
+SELECT
+DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, DISTRIBUTION_NOTIFICATION_CODE AS distributionNotificationCode
+, BUYER_ORDER_ID AS buyerOrderId
+, BUYER_ORDER_CODE AS buyerOrderCode
+, ORDER_TYPE AS orderType
+, BUYER_ID AS buyerId
+, BUYER_TYPE AS buyerType
+, BUYER_TYPE_NAME AS buyerTypeName
+, BUYER_CODE AS buyerCode
+, BUYER_NAME AS buyerName
+, PAYMENT_TYPE AS paymentType
+, RECEIVER_NAME AS receiverName
+, RECEIVER_PHONE AS receiverPhone
+, RECEIVER_QQ AS receiverQq
+, RECEIVER_WECHAT AS receiverWechat
+, RECEIVER_MAIL AS receiverMail
+, RECEIVER_PROVINCE AS receiverProvince
+, RECEIVER_CITY AS receiverCity
+, RECEIVER_DISTRICT AS receiverDistrict
+, RECEIVER_ADDRESS AS receiverAddress
+, RECEIVER_ASSIST_ADDRESS AS receiverAssistAddress
+, DELIVERY_AREA AS deliveryArea
+, PASS_TRAFFIC_MODEL AS passTrafficModel
+, DISTRIBUTION_TYPE AS distributionType
+, REQUIRED_DISTRIBUTION_DATE AS requiredDistributionDate
+, RECEIVE_PERIOD AS receivePeriod
+, RECEIVE_EARLIEST AS receiveEarliest
+, RECEIVE_LATEST AS receiveLatest
+, RECEIVE_WAIT_HOUR AS receiveWaitHour
+, ADVANCED_NOTIFICATION_HOUR AS advancedNotificationHour
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG AS animalQuarantineCertificationFlg
+, STEVEDORE_REQUIREMENT AS stevedoreRequirement
+, PACKAGE_REQUIREMENT AS packageRequirement
+, NEAREST_PARKING_DISTANCE AS nearestParkingDistance
+, REMARK AS remark
+, EXPECTED_SEND_DATETIME AS expectedSendDatetime
+, EXPECTED_ARRIVAL_DATETIME AS expectedArrivalDatetime
+, DISTRIBUTION_NOTIFICATION_STU AS distributionNotificationStu
+, SEND_FLG AS sendFlg
+, WH_ID AS whId
+, WH_CODE AS whCode
+, WH_NAME AS whName
+, FACT_WH_ID AS factWhId
+, FACT_WH_CODE AS factWhCode
+, FACT_WH_NAME AS factWhName
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_DISTRIBUTION_NOTIFICATION
+<where>
+<if test="ids!=null">
+AND DISTRIBUTION_NOTIFICATION_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="codes!=null">
+AND DISTRIBUTION_NOTIFICATION_CODE IN (<foreach collection="codes" item="code" separator=",">#{code}</foreach>)
+</if>
+<if test="buyerOrders!=null">
+AND BUYER_ORDER_ID IN (<foreach item="item" collection="buyerOrders" separator=",">#{item.entity.buyerOrderId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.DistributionNotificationHistoryEntity">
+INSERT INTO
+ORDR_DISTRIBUTION_NOTIFICATION_HISTORY
+(
+HISTORY_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, BUYER_ORDER_ID
+, BUYER_ORDER_CODE
+, ORDER_TYPE
+, BUYER_ID
+, BUYER_TYPE
+, BUYER_TYPE_NAME
+, BUYER_CODE
+, BUYER_NAME
+, PAYMENT_TYPE
+, RECEIVER_NAME
+, RECEIVER_PHONE
+, RECEIVER_QQ
+, RECEIVER_WECHAT
+, RECEIVER_MAIL
+, RECEIVER_PROVINCE
+, RECEIVER_CITY
+, RECEIVER_DISTRICT
+, RECEIVER_ADDRESS
+, RECEIVER_ASSIST_ADDRESS
+, DELIVERY_AREA
+, PASS_TRAFFIC_MODEL
+, DISTRIBUTION_TYPE
+, REQUIRED_DISTRIBUTION_DATE
+, RECEIVE_PERIOD
+, RECEIVE_EARLIEST
+, RECEIVE_LATEST
+, RECEIVE_WAIT_HOUR
+, ADVANCED_NOTIFICATION_HOUR
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG
+, STEVEDORE_REQUIREMENT
+, PACKAGE_REQUIREMENT
+, NEAREST_PARKING_DISTANCE
+, REMARK
+, EXPECTED_SEND_DATETIME
+, EXPECTED_ARRIVAL_DATETIME
+, DISTRIBUTION_NOTIFICATION_STU
+, SEND_FLG
+, WH_ID
+, WH_CODE
+, WH_NAME
+, FACT_WH_ID
+, FACT_WH_CODE
+, FACT_WH_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{distributionNotificationId}
+, #{distributionNotificationCode}
+, #{buyerOrderId}
+, #{buyerOrderCode}
+, #{orderType}
+, #{buyerId}
+, #{buyerType}
+, #{buyerTypeName}
+, #{buyerCode}
+, #{buyerName}
+, #{paymentType}
+, #{receiverName}
+, #{receiverPhone}
+, #{receiverQq}
+, #{receiverWechat}
+, #{receiverMail}
+, #{receiverProvince}
+, #{receiverCity}
+, #{receiverDistrict}
+, #{receiverAddress}
+, #{receiverAssistAddress}
+, #{deliveryArea}
+, #{passTrafficModel}
+, #{distributionType}
+, #{requiredDistributionDate}
+, #{receivePeriod}
+, #{receiveEarliest}
+, #{receiveLatest}
+, #{receiveWaitHour}
+, #{advancedNotificationHour}
+, #{animalQuarantineCertificationFlg}
+, #{stevedoreRequirement}
+, #{packageRequirement}
+, #{nearestParkingDistance}
+, #{remark}
+, #{expectedSendDatetime}
+, #{expectedArrivalDatetime}
+, #{distributionNotificationStu}
+, #{sendFlg}
+, #{whId}
+, #{whCode}
+, #{whName}
+, #{factWhId}
+, #{factWhCode}
+, #{factWhName}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_DISTRIBUTION_NOTIFICATION_HISTORY
+(
+HISTORY_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, BUYER_ORDER_ID
+, BUYER_ORDER_CODE
+, ORDER_TYPE
+, BUYER_ID
+, BUYER_TYPE
+, BUYER_TYPE_NAME
+, BUYER_CODE
+, BUYER_NAME
+, PAYMENT_TYPE
+, RECEIVER_NAME
+, RECEIVER_PHONE
+, RECEIVER_QQ
+, RECEIVER_WECHAT
+, RECEIVER_MAIL
+, RECEIVER_PROVINCE
+, RECEIVER_CITY
+, RECEIVER_DISTRICT
+, RECEIVER_ADDRESS
+, RECEIVER_ASSIST_ADDRESS
+, DELIVERY_AREA
+, PASS_TRAFFIC_MODEL
+, DISTRIBUTION_TYPE
+, REQUIRED_DISTRIBUTION_DATE
+, RECEIVE_PERIOD
+, RECEIVE_EARLIEST
+, RECEIVE_LATEST
+, RECEIVE_WAIT_HOUR
+, ADVANCED_NOTIFICATION_HOUR
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG
+, STEVEDORE_REQUIREMENT
+, PACKAGE_REQUIREMENT
+, NEAREST_PARKING_DISTANCE
+, REMARK
+, EXPECTED_SEND_DATETIME
+, EXPECTED_ARRIVAL_DATETIME
+, DISTRIBUTION_NOTIFICATION_STU
+, SEND_FLG
+, WH_ID
+, WH_CODE
+, WH_NAME
+, FACT_WH_ID
+, FACT_WH_CODE
+, FACT_WH_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.distributionNotificationId}
+, #{entity.distributionNotificationCode}
+, #{entity.buyerOrderId}
+, #{entity.buyerOrderCode}
+, #{entity.orderType}
+, #{entity.buyerId}
+, #{entity.buyerType}
+, #{entity.buyerTypeName}
+, #{entity.buyerCode}
+, #{entity.buyerName}
+, #{entity.paymentType}
+, #{entity.receiverName}
+, #{entity.receiverPhone}
+, #{entity.receiverQq}
+, #{entity.receiverWechat}
+, #{entity.receiverMail}
+, #{entity.receiverProvince}
+, #{entity.receiverCity}
+, #{entity.receiverDistrict}
+, #{entity.receiverAddress}
+, #{entity.receiverAssistAddress}
+, #{entity.deliveryArea}
+, #{entity.passTrafficModel}
+, #{entity.distributionType}
+, #{entity.requiredDistributionDate}
+, #{entity.receivePeriod}
+, #{entity.receiveEarliest}
+, #{entity.receiveLatest}
+, #{entity.receiveWaitHour}
+, #{entity.advancedNotificationHour}
+, #{entity.animalQuarantineCertificationFlg}
+, #{entity.stevedoreRequirement}
+, #{entity.packageRequirement}
+, #{entity.nearestParkingDistance}
+, #{entity.remark}
+, #{entity.expectedSendDatetime}
+, #{entity.expectedArrivalDatetime}
+, #{entity.distributionNotificationStu}
+, #{entity.sendFlg}
+, #{entity.whId}
+, #{entity.whCode}
+, #{entity.whName}
+, #{entity.factWhId}
+, #{entity.factWhCode}
+, #{entity.factWhName}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+    <update id="I0305modify" parameterType="com.bms.order.bean.entity.DistributionNotificationEntity">
+        UPDATE ORDR_DISTRIBUTION_NOTIFICATION
+        SET WH_ID = #{whId}
+        , WH_CODE = #{whCode}
+        , WH_NAME = #{whName}
+        , DISTRIBUTION_NOTIFICATION_STU = #{distributionNotificationStu}
+        , UPD_ID = #{updId}
+        , UPD_TIME = #{updTime}
+        , VERSION = VERSION + 1
+        WHERE
+        DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+    </update>
+</mapper>

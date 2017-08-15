@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0603IDao">
+
+	<!-- 修改原种种源标准指标 -->
+	<update id="modifyOrgStds" parameterType="com.bms.slpd.bean.UpdateEntity">
+		UPDATE SLPD_ORG_STD
+		SET
+			<if test="target.orgGoodValFlg == true">
+				ORG_GOOD_VAL = #{entity.orgGoodVal},
+			</if>
+			<if test="target.orgNormalValFlg == true">
+				ORG_NORMAL_VAL = #{entity.orgNormalVal},
+			</if>
+			<if test="target.orgOkValFlg == true">
+				ORG_OK_VAL = #{entity.orgOkVal},
+			</if>
+			<if test="target.remarkFlg == true">
+				REMARK = #{entity.remark},
+			</if>
+			<if test="target.delFlgFlg == true">
+				DEL_FLG = #{entity.delFlg},
+			</if>
+			UPD_ID = #{entity.updId},
+			UPD_TIME = #{entity.updTime},
+			VERSION = VERSION + 1
+		WHERE
+			ORG_STD_ID = #{entity.orgStdId}
+		AND VERSION = #{entity.version}
+	</update>
+
+</mapper>

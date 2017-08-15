@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.ORDR0904IDao">
+
+    <resultMap id="L1Result" type="com.bms.order.bean.result.ORDR0904IRestResult">
+        <id property="returnId" column="L1_returnId"/>
+        <result property="returnCode" column="L1_returnCode"/>
+        <result property="orderId" column="L1_orderId"/>
+        <result property="orderCode" column="L1_orderCode"/>
+        <result property="bsId" column="L1_bsId"/>
+        <result property="bsCode" column="L1_bsCode"/>
+        <result property="bsName" column="L1_bsName"/>
+        <result property="returnSource" column="L1_returnSource"/>
+        <result property="returnType" column="L1_returnType"/>
+        <result property="returnAmount" column="L1_returnAmount"/>
+        <result property="returnReasonId" column="L1_returnReasonId"/>
+        <result property="returnReasonName" column="L1_returnReasonName"/>
+        <result property="applyUserType" column="L1_applyUserType"/>
+        <result property="applyUid" column="L1_applyUid"/>
+        <result property="applyUname" column="L1_applyUname"/>
+        <result property="applyTime" column="L1_applyTime"/>
+        <result property="applyRemark" column="L1_applyRemark"/>
+        <result property="confirmUserType" column="L1_confirmUserType"/>
+        <result property="confirmUid" column="L1_confirmUid"/>
+        <result property="confirmUname" column="L1_confirmUname"/>
+        <result property="confirmTime" column="L1_confirmTime"/>
+        <result property="confirmRemark" column="L1_confirmRemark"/>
+        <result property="returnStatus" column="L1_returnStatus"/>
+        <result property="delFlg" column="L1_delFlg"/>
+        <result property="crtId" column="L1_crtId"/>
+        <result property="crtTime" column="L1_crtTime"/>
+        <result property="updId" column="L1_updId"/>
+        <result property="updTime" column="L1_updTime"/>
+        <result property="ver" column="L1_ver"/>
+        <collection property="details" resultMap="L2Result" />
+    </resultMap>
+
+    <resultMap id="L2Result" type="com.bms.order.bean.result.ORDR0904IDetailRestResult">
+        <id property="detailId" column="L2_detailId"/>
+        <result property="bsStockpileSplitDetailId" column="L2_bsStockpileSplitDetailId"/>
+        <result property="goodsId" column="L2_goodsId"/>
+        <result property="goodsUnit" column="L2_goodsUnit"/>
+        <result property="returnQty" column="L2_returnQty"/>
+        <result property="detailReasonId" column="L2_detailReasonId"/>
+        <result property="detailReasonName" column="L2_detailReasonName"/>
+        <result property="delFlg" column="L2_delFlg"/>
+        <result property="crtId" column="L2_crtId"/>
+        <result property="crtTime" column="L2_crtTime"/>
+        <result property="updId" column="L2_updId"/>
+        <result property="updTime" column="L2_updTime"/>
+        <result property="ver" column="L2_ver"/>
+    </resultMap>
+
+
+    <sql id="L1Select">
+        L1.RETURN_ID AS L1_returnId
+        ,L1.RETURN_CODE AS L1_returnCode
+        ,L1.ORDER_ID AS L1_orderId
+        ,L1.BS_ID AS L1_bsId
+        ,L1.BS_CODE AS L1_bsCode
+        ,L1.BS_NAME AS L1_bsName
+        ,L1.BS_RETURN_SOURCE AS L1_returnSource
+        ,L1.BS_RETURN_TYPE AS L1_returnType
+        ,L1.RETURN_AMOUNT AS L1_returnAmount
+        ,L1.RETURN_REASON_ID AS L1_returnReasonId
+        ,returnReason.REASON_NAME AS L1_returnReasonName
+        ,L1.BS_APPLY_USER_TYPE AS L1_applyUserType
+        ,L1.APPLY_UID AS L1_applyUid
+        ,L1.APPLY_UNAME AS L1_applyUname
+        ,DATE_FORMAT(L1.APPLY_TIME,'%Y-%m-%d %T') AS L1_applyTime
+        ,L1.APPLY_REMARK AS L1_applyRemark
+        ,L1.CONFIRM_UID AS L1_confirmUid
+        ,L1.CONFIRM_UNAME AS L1_confirmUname
+        ,DATE_FORMAT(L1.CONFIRM_TIME,'%Y-%m-%d %T') AS L1_confirmTime
+        ,L1.CONFIRM_REMARK AS L1_confirmRemark
+        ,L1.BS_RETURN_STU AS L1_returnStatus
+        ,L1.DEL_FLG AS L1_delFlg
+        ,L1.CRT_ID AS L1_crtId
+        ,DATE_FORMAT(L1.CRT_TIME,'%Y-%m-%d %T') AS L1_crtTime
+        ,L1.UPD_ID AS L1_updId
+        ,DATE_FORMAT(L1.UPD_TIME,'%Y-%m-%d %T') AS L1_updTime
+        ,L1.VERSION AS L1_ver
+    </sql>
+
+    <sql id="L2Select">
+        ,L2.DETAIL_ID AS L2_detailId
+        ,L2.BS_STOCKPILE_SPLIT_DETAIL_ID AS L2_bsStockpileSplitDetailId
+        ,L2.GOODS_ID AS L2_goodsId
+        ,L2.SALES_UNIT AS L2_goodsUnit
+        ,L2.RETURN_QTY AS L2_returnQty
+        ,L2.INBOUND_QTY AS L2_inboundQty
+        ,detilReturnReason.REASON_ID AS L2_detailReasonId
+        ,detilReturnReason.REASON_NAME AS L2_detailReasonName
+        ,L2.DEL_FLG AS L2_delFlg
+        ,L2.CRT_ID AS L2_crtId
+        ,DATE_FORMAT(L2.CRT_TIME,'%Y-%m-%d %T') AS L2_crtTime
+        ,L2.UPD_ID AS L2_updId
+        ,DATE_FORMAT(L2.UPD_TIME,'%Y-%m-%d %T') AS L2_updTime
+        ,L2.VERSION AS L2_ver
+    </sql>
+
+    <select id="getCount" parameterType="com.bms.order.common.rest.SearchRestParam" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM (
+        SELECT
+        1
+        FROM
+        <include refid="From"/>
+        <where>
+            <include refid="Where"/>
+        </where>
+        <include refid="GroupBy"/>
+        )AS count
+    </select>
+
+    <select id="findReturnInfo" parameterType="com.bms.order.common.rest.SearchRestParam" resultMap="L1Result">
+        SELECT
+        <if test="pagingLevel>=1">
+            <include refid="L1Select"/>
+        </if>
+        <if test="pagingLevel>=2">
+            <include refid="L2Select"/>
+        </if>
+        <if test="pagingLevel==1">
+            , (@sortSeq := @sortSeq + 1) AS L1_sortSeq
+        </if>
+        <if test="pagingLevel==2">
+            , (@sortSeq := @sortSeq + 1) AS L2_sortSeq
+        </if>
+        FROM
+        <include refid="From"/>
+        <where>
+            <include refid="Where"/>
+        </where>
+        <include refid="GroupBy"/>
+        <if test="null != sort">
+            <include refid="Sort"/>
+        </if>
+        <if test="null != pagination">
+            <include refid="PagingNation"/>
+        </if>
+    </select>
+
+    <sql id="From">
+        (select @sortSeq := 0) AS SEQ,
+        <if test="searchLevel>=1">
+            ORDR_BS_RETURN AS L1
+            LEFT JOIN ORDR_RETURN_REASON AS returnReason
+            ON L1.RETURN_REASON_ID = returnReason.REASON_ID
+            AND returnReason.DEL_FLG = 0
+            INNER JOIN ORDR_BS_ORDER AS bsOrder
+            ON L1.ORDER_ID = bsOrder.BS_ORDER_ID
+            AND bsOrder.DEL_FLG = 0
+            INNER JOIN ORDR_BS_ORDER_ATTACHED AS attached
+            ON bsOrder.BS_ORDER_ID = attached.BS_ORDER_ID
+            AND attached.DEL_FLG = 0
+        </if>
+        <if test="searchLevel>=2">
+            INNER JOIN ORDR_BS_RETURN_DETAIL AS L2
+            ON L2.RETURN_ID = L1.RETURN_ID
+            AND L2.DEL_FLG = 0
+            LEFT JOIN ORDR_RETURN_REASON AS detilReturnReason
+            ON L2.REASON_ID = detilReturnReason.REASON_ID
+            AND detilReturnReason.DEL_FLG = 0
+        </if>
+    </sql>
+
+    <sql id="Where">
+        AND L1.DEL_FLG = 0
+        <if test="null != filter">
+          <if test="null != filter.returnId">
+              AND L1.RETURN_ID IN
+              <foreach collection="filter.returnId" item="item" open="(" separator="," close=")">
+                  #{item}
+              </foreach>
+          </if>
+          <if test="null != filter.returnCode">
+              AND L1.RETURN_CODE LIKE #{filter.returnCode}
+          </if>
+          <if test="null != filter.orderId">
+              AND L1.ORDER_ID = #{filter.orderId}
+          </if>
+          <if test="null != filter.orderCode">
+              AND bsOrder.BS_ORDER_CODE LIKE #{filter.orderCode}
+          </if>
+          <if test="null != filter.logisticsZoneId">
+              AND bsOrder.LOGISTICS_ZONE_ID IN
+              <foreach collection="filter.logisticsZoneId" item="item" open="(" separator="," close=")">
+                  #{item}
+              </foreach>
+          </if>
+          <if test="null != filter.logisticsZoneCode">
+              AND attached.LOGISTICS_ZONE_CODE = #{filter.logisticsZoneCode}
+          </if>
+          <if test="null != filter.bsId">
+              AND L1.BS_ID IN
+              <foreach collection="filter.bsId" item="item" open="(" separator="," close=")">
+                  #{item}
+              </foreach>
+          </if>
+          <if test="null != filter.bsCode">
+              AND L1.BS_CODE = #{filter.bsCode}
+          </if>
+          <if test="null != filter.bsName">
+              AND L1.BS_NAME LIKE #{filter.bsName}
+          </if>
+
+            <if test="null != filter.applyUserId">
+                AND L1.APPLY_UID = #{filter.applyUserId}
+            </if>
+
+            <if test="null != filter.applyUserName">
+                AND L1.APPLY_UNAME LIKE #{filter.applyUserName}
+            </if>
+
+            <if test="null != filter.applyTimeFrom">
+                AND DATE_FORMAT(L1.APPLY_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{filter.applyTimeFrom},'%Y-%m-%d')
+            </if>
+
+            <if test="null != filter.applyTimeTo">
+                AND DATE_FORMAT(L1.APPLY_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{filter.applyTimeTo},'%Y-%m-%d')
+            </if>
+
+            <if test="null != filter.returnType">
+                AND L1.BS_RETURN_TYPE = #{filter.returnType}
+            </if>
+
+            <if test="null != filter.returnStatus">
+                AND L1.BS_RETURN_STU = #{filter.returnStatus}
+            </if>
+        </if>
+    </sql>
+
+    <sql id="Sort">
+        ORDER BY
+        <foreach collection="sort" item="item" separator=",">
+            ${item.sortField}
+            <if test="item.descFlag == true">
+                DESC
+            </if>
+            <if test="item.descFlag == false">
+                ASC
+            </if>
+        </foreach>
+    </sql>
+
+    <sql id="PagingNation">
+        LIMIT #{pagination.startPos},#{pagination.pageSize}
+    </sql>
+    <sql id="GroupBy"></sql>
+</mapper>

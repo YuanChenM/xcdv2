@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0611IDao">
+
+    <!-- 查询加工质量标准 -->
+    <select id="batchSearch" parameterType="com.bms.slpd.bean.param.SLPD0611IParam" resultType="com.bms.slpd.bean.result.field.SLPD0611IDifTncStdResult">
+        SELECT
+        A.TNC_DIF_STD_ID AS tncDifStdId,
+        A.TNC_STD_TYPE AS tncStdType,
+        A.BREED_ID AS breedId,
+        A.PRODUCT_ID AS productId,
+        A.TNC_STD_DIF_VAL_A AS tncStdDifValA,
+        A.TNC_STD_DIF_VAL_B AS tncStdDifValB,
+        A.TNC_STD_DIF_VAL_C AS tncStdDifValC,
+        A.REMARK AS remark,
+        A.DEL_FLG AS delFlg,
+        A.CRT_ID AS crtId,
+        A.CRT_TIME AS crtTime,
+        A.UPD_ID AS updId,
+        A.UPD_TIME AS updTime,
+        A.VERSION AS version
+        FROM
+        SLPD_DIF_TNC_STD A
+        WHERE 1=1
+        <if test="breedIds != null and breedIds.size()>0">
+            AND A.BREED_ID IN (
+            <foreach collection="breedIds" item="breedId" separator=",">
+                #{breedId}
+            </foreach>
+            )
+        </if>
+        AND A.DEL_FLG=0
+    </select>
+
+    <select id="searchStd" parameterType="com.bms.slpd.bean.param.SLPD0611IParam" resultType="com.bms.slpd.bean.result.field.SLPD0611ITncStdResult">
+        SELECT
+        A.TNC_STD_ID AS tncStdId,
+        A.TNC_STD_TYPE AS tncStdType,
+        A.BREED_ID AS breedId,
+        A.TNC_STD_VAL_A AS tncStdValA,
+        A.TNC_STD_VAL_B AS tncStdValB,
+        A.TNC_STD_VAL_C AS tncStdValC,
+        A.REMARK AS remark,
+        A.DEL_FLG AS delFlg,
+        A.CRT_ID AS crtId,
+        A.CRT_TIME AS crtTime,
+        A.UPD_ID AS updId,
+        A.UPD_TIME AS updTime,
+        A.VERSION AS version
+        FROM
+        SLPD_TNC_STD A
+        WHERE 1=1
+        <if test="breedIds != null and breedIds.size()>0">
+            AND A.BREED_ID IN (
+            <foreach collection="breedIds" item="breedId" separator=",">
+                #{breedId}
+            </foreach>
+            )
+        </if>
+        AND A.DEL_FLG=0
+    </select>
+
+    <select id="searchDif" parameterType="com.bms.slpd.bean.param.SLPD0611IParam" resultType="com.bms.slpd.bean.result.field.SLPD0611IDifTncStdResult">
+        SELECT
+        A.TNC_DIF_STD_ID AS tncDifStdId,
+        A.TNC_STD_TYPE AS tncStdType,
+        A.BREED_ID AS breedId,
+        A.PRODUCT_ID AS productId,
+        A.TNC_STD_DIF_VAL_A AS tncStdDifValA,
+        A.TNC_STD_DIF_VAL_B AS tncStdDifValB,
+        A.TNC_STD_DIF_VAL_C AS tncStdDifValC,
+        A.REMARK AS remark,
+        A.DEL_FLG AS delFlg,
+        A.CRT_ID AS crtId,
+        A.CRT_TIME AS crtTime,
+        A.UPD_ID AS updId,
+        A.UPD_TIME AS updTime,
+        A.VERSION AS version
+        FROM
+        SLPD_DIF_TNC_STD A
+        WHERE 1=1
+        <if test="productIds != null and productIds.size()>0">
+            AND A.PRODUCT_ID IN (
+            <foreach collection="productIds" item="productId" separator=",">
+                #{productId}
+            </foreach>
+            )
+        </if>
+        <if test="breedIds != null and breedIds.size()>0">
+            AND A.BREED_ID IN
+            <foreach collection="breedIds" item="breedId" open="(" separator="," close=")">
+                #{breedId}
+            </foreach>
+        </if>
+        AND A.DEL_FLG=0
+    </select>
+
+    <select id="searchDiscuss" parameterType="com.bms.slpd.bean.result.field.SLPD0611ITncStdResult" resultType="com.bms.slpd.bean.entity.SlpdDiscussStd">
+        SELECT
+        B.DISCUSS_ID AS  discussId,
+        B.STD_TYPE_ID AS  stdTypeId,
+        B.STD_TYPE AS  stdType,
+        B.DISCUSS_TYPE AS  discussType,
+        B.DISCUSS_VAL AS  discussVal,
+        B.RAISE_DATE AS  raiseDate,
+        B.FIX_DATE AS  fixDate,
+        B.PRODUCER_ID AS  producerId,
+        B.REMARK AS  remark,
+        B.DEL_FLG AS  delFlg,
+        B.CRT_ID AS  crtId,
+        B.CRT_TIME AS  crtTime,
+        B.UPD_ID AS  updId,
+        B.UPD_TIME AS  updTime,
+        B.VERSION AS  version
+        FROM
+        SLPD_DISCUSS_STD B
+        WHERE 1=1
+        AND B.STD_TYPE_ID=#{tncStdType}
+        AND B.STD_TYPE='1'
+        AND B.DEL_FLG=0
+    </select>
+    <select id="searchDifDiscuss" parameterType="com.bms.slpd.bean.result.field.SLPD0611IDifTncStdResult" resultType="com.bms.slpd.bean.entity.SlpdDifDiscussStd">
+        SELECT
+        B.DIF_DISCUSS_ID AS  difDiscussId,
+        B.DIF_STD_TYPE_ID AS  difStdTypeId,
+        B.STD_TYPE AS  stdType,
+        B.DISCUSS_TYPE AS  discussType,
+        B.DISCUSS_DIF_VAL AS  discussDifVal,
+        B.RAISE_DATE AS  raiseDate,
+        B.FIX_DATE AS  fixDate,
+        B.PRODUCER_ID AS  producerId,
+        B.REMARK AS  remark,
+        B.DEL_FLG AS  delFlg,
+        B.CRT_ID AS  crtId,
+        B.CRT_TIME AS  crtTime,
+        B.UPD_ID AS  updId,
+        B.UPD_TIME AS  updTime,
+        B.VERSION AS  version
+        FROM
+        SLPD_DIF_DISCUSS_STD B
+        WHERE 1=1
+        AND B.DIF_STD_TYPE_ID=#{tncStdType}
+        AND B.STD_TYPE='1'
+        AND B.DEL_FLG=0
+    </select>
+
+
+</mapper>

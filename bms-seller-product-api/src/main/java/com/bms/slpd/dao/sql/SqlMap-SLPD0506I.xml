@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0506IDao">
+
+    <!-- 查询品牌单品关系 -->
+    <resultMap id = "itemResult" type = "com.bms.slpd.bean.result.wrapper.SlpdBrandItemResult">
+        <id property = "brandId" column = "brandId"/>
+        <collection property = "slpdBrandOwnerList" javaType = "List" ofType="com.bms.slpd.bean.entity.SlpdBrandOwner">
+            <id property = "brandOwnerId" column = "brandOwnerId"/>
+            <result property = "brandOwnerCode" column = "brandOwnerCode"/>
+            <result property = "ownerName" column = "ownerName"/>
+            <result property = "ownerType" column = "ownerType"/>
+            <result property = "delFlg" column = "delFlg"/>
+            <result property = "updId" column = "updId"/>
+            <result property = "updTime" column = "updTime"/>
+            <result property = "version" column = "version"/>
+        </collection>
+    </resultMap>
+    <!-- 产品表字段 -->
+    <sql id="columns">
+        breed.BREED_SALES_NAME AS breedSalesName,
+        item.ITEM_NAME AS itemName,
+        brand.BRAND_TYPE AS brandType,
+        brandItem.BRAND_ITEM_ID AS brandItemId,
+        brandItem.BRAND_ITEM_SKU AS brandItemSku,
+        brandItem.ITEM_ID AS itemId,
+        brandItem.AUDIT_STU AS itemBrandAuditStu,
+        item.ITEM_SKU AS itemSku,
+        item.AUDIT_STU AS itemAuditStu,
+        brandItem.BRAND_ID AS brandId,
+        brand.BRAND_CODE AS brandCode,
+        brand.BRAND_NAME AS brandName,
+        brand.AUDIT_STU AS brandAuditStu,
+        brandItem.DEL_FLG AS delFlg,
+        brandItem.CRT_ID AS crtId,
+        brandItem.CRT_TIME AS crtTime,
+        brandItem.UPD_ID AS updId,
+        brandItem.UPD_TIME AS updTime,
+        brandItem.VERSION AS version
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="whereConditions">
+        1 = 1
+        <if test="delFlg != null">
+            AND brandItem.DEL_FLG = #{delFlg}
+        </if>
+        <if test="brandItemIds != null and brandItemIds.size() > 0">
+            AND brandItem.BRAND_ITEM_ID IN
+            <foreach collection="brandItemIds" index="index" item="brandItemId" open="(" separator="," close=")">
+                #{brandItemId}
+            </foreach>
+        </if>
+        <if test="brandItemSkus != null and brandItemSkus.size() > 0">
+            AND brandItem.BRAND_ITEM_SKU IN
+            <foreach collection="brandItemSkus" index="index" item="brandItemSku" open="(" separator="," close=")">
+                #{brandItemSku}
+            </foreach>
+        </if>
+        <if test="itemIds != null and itemIds.size() > 0">
+            AND brandItem.ITEM_ID IN
+            <foreach collection="itemIds" index="index" item="itemId" open="(" separator="," close=")">
+                #{itemId}
+            </foreach>
+        </if>
+        <if test="itemSkus != null and itemSkus.size() > 0">
+            AND item.ITEM_SKU IN
+            <foreach collection="itemSkus" index="index" item="itemSku" open="(" separator="," close=")">
+                #{itemSku}
+            </foreach>
+        </if>
+        <if test="brandIds != null and brandIds.size() > 0">
+            AND brandItem.BRAND_ID IN
+            <foreach collection="brandIds" index="index" item="brandId" open="(" separator="," close=")">
+                #{brandId}
+            </foreach>
+        </if>
+        <if test="brandCodes != null and brandCodes.size() > 0">
+            AND brand.BRAND_CODE IN
+            <foreach collection="brandCodes" index="index" item="brandCode" open="(" separator="," close=")">
+                #{brandCode}
+            </foreach>
+        </if>
+        <if test="brandName != null and brandName !=''">
+            AND brand.BRAND_NAME LIKE #{brandName}
+        </if>
+        <if test="itemName != null and itemName!=''">
+            AND item.ITEM_NAME LIKE #{itemName}
+        </if>
+        <if test="breedSalesName != null and breedSalesName!=''">
+            AND breed.BREED_SALES_NAME LIKE #{breedSalesName}
+        </if>
+
+    </sql>
+
+    <select id="findPageList" parameterType="com.bms.slpd.bean.param.SLPD0506IParam" resultType="com.bms.slpd.bean.result.wrapper.SlpdBrandItemResult">
+        SELECT
+        <include refid="columns" />
+        FROM
+        SLPD_BRAND_ITEM brandItem
+        LEFT JOIN SLPD_ITEM item ON brandItem.ITEM_ID = item.ITEM_ID
+        LEFT JOIN SLPD_BRAND brand ON brandItem.BRAND_ID = brand.BRAND_ID
+        LEFT JOIN SLPD_BREED breed ON item.BREED_ID = breed.BREED_ID
+
+        WHERE
+        <include refid="whereConditions" />
+    </select>
+
+
+    <!-- 根据品牌ID，批量查询品牌所有人 -->
+    <select id="findBrandOwners" parameterType="List" resultMap="itemResult">
+        SELECT
+        A.BRAND_OWNER_ID AS brandOwnerId,
+        A.BRAND_OWNER_CODE AS brandOwnerCode,
+        A.OWNER_NAME AS ownerName,
+        A.OWNER_TYPE AS ownerType,
+        A.DEL_FLG AS delFlg,
+        A.CRT_ID AS crtId,
+        A.CRT_TIME AS crtTime,
+        A.UPD_ID AS updId,
+        A.UPD_TIME AS updTime,
+        A.VERSION AS version
+        ,B.BRAND_ID AS brandId
+        FROM
+        SLPD_BRAND_OWNER A
+        LEFT Join SLPD_BRAND_OWNER_RELATION B ON A.BRAND_OWNER_ID=B.BRAND_OWNER_ID
+        AND B.DEL_FLG = 0
+        WHERE 1 = 1
+        <if test="list!=null and list.size()>0">
+            AND B.BRAND_ID IN
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- End -->
+
+
+</mapper>

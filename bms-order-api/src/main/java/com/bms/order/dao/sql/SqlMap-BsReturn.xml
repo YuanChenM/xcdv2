@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BsReturnDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BsReturnEntity">
+INSERT INTO
+ORDR_BS_RETURN
+(
+RETURN_ID
+, RETURN_CODE
+, ORDER_ID
+, BS_ID
+, BS_CODE
+, BS_NAME
+, BS_RETURN_SOURCE
+, BS_RETURN_TYPE
+, RETURN_AMOUNT
+, RETURN_REASON_ID
+, BS_APPLY_USER_TYPE
+, APPLY_UID
+, APPLY_UNAME
+, APPLY_TIME
+, APPLY_REMARK
+, CONFIRM_UID
+, CONFIRM_UNAME
+, CONFIRM_TIME
+, CONFIRM_REMARK
+, BS_RETURN_STU
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{returnId}
+, #{returnCode}
+, #{orderId}
+, #{bsId}
+, #{bsCode}
+, #{bsName}
+, #{bsReturnSource}
+, #{bsReturnType}
+, #{returnAmount}
+, #{returnReasonId}
+, #{bsApplyUserType}
+, #{applyUid}
+, #{applyUname}
+, #{applyTime}
+, #{applyRemark}
+, #{confirmUid}
+, #{confirmUname}
+, #{confirmTime}
+, #{confirmRemark}
+, #{bsReturnStu}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_RETURN
+(
+RETURN_ID
+, RETURN_CODE
+, ORDER_ID
+, BS_ID
+, BS_CODE
+, BS_NAME
+, BS_RETURN_SOURCE
+, BS_RETURN_TYPE
+, RETURN_AMOUNT
+, RETURN_REASON_ID
+, BS_APPLY_USER_TYPE
+, APPLY_UID
+, APPLY_UNAME
+, APPLY_TIME
+, APPLY_REMARK
+, CONFIRM_UID
+, CONFIRM_UNAME
+, CONFIRM_TIME
+, CONFIRM_REMARK
+, BS_RETURN_STU
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.returnId}
+, #{entity.returnCode}
+, #{entity.orderId}
+, #{entity.bsId}
+, #{entity.bsCode}
+, #{entity.bsName}
+, #{entity.bsReturnSource}
+, #{entity.bsReturnType}
+, #{entity.returnAmount}
+, #{entity.returnReasonId}
+, #{entity.bsApplyUserType}
+, #{entity.applyUid}
+, #{entity.applyUname}
+, #{entity.applyTime}
+, #{entity.applyRemark}
+, #{entity.confirmUid}
+, #{entity.confirmUname}
+, #{entity.confirmTime}
+, #{entity.confirmRemark}
+, #{entity.bsReturnStu}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BsReturnEntity">
+UPDATE ORDR_BS_RETURN
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+RETURN_ID = #{returnId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_RETURN
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+RETURN_ID = #{entity.returnId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BsReturnEntity">
+UPDATE ORDR_BS_RETURN
+SET
+RETURN_ID = #{returnId}
+, RETURN_CODE = #{returnCode}
+, ORDER_ID = #{orderId}
+, BS_ID = #{bsId}
+, BS_CODE = #{bsCode}
+, BS_NAME = #{bsName}
+, BS_RETURN_SOURCE = #{bsReturnSource}
+, BS_RETURN_TYPE = #{bsReturnType}
+, RETURN_AMOUNT = #{returnAmount}
+, RETURN_REASON_ID = #{returnReasonId}
+, BS_APPLY_USER_TYPE = #{bsApplyUserType}
+, APPLY_UID = #{applyUid}
+, APPLY_UNAME = #{applyUname}
+, APPLY_TIME = #{applyTime}
+, APPLY_REMARK = #{applyRemark}
+, CONFIRM_UID = #{confirmUid}
+, CONFIRM_UNAME = #{confirmUname}
+, CONFIRM_TIME = #{confirmTime}
+, CONFIRM_REMARK = #{confirmRemark}
+, BS_RETURN_STU = #{bsReturnStu}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+RETURN_ID = #{returnId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_RETURN
+SET
+RETURN_ID = #{entity.returnId}
+, RETURN_CODE = #{entity.returnCode}
+, ORDER_ID = #{entity.orderId}
+, BS_ID = #{entity.bsId}
+, BS_CODE = #{entity.bsCode}
+, BS_NAME = #{entity.bsName}
+, BS_RETURN_SOURCE = #{entity.bsReturnSource}
+, BS_RETURN_TYPE = #{entity.bsReturnType}
+, RETURN_AMOUNT = #{entity.returnAmount}
+, RETURN_REASON_ID = #{entity.returnReasonId}
+, BS_APPLY_USER_TYPE = #{entity.bsApplyUserType}
+, APPLY_UID = #{entity.applyUid}
+, APPLY_UNAME = #{entity.applyUname}
+, APPLY_TIME = #{entity.applyTime}
+, APPLY_REMARK = #{entity.applyRemark}
+, CONFIRM_UID = #{entity.confirmUid}
+, CONFIRM_UNAME = #{entity.confirmUname}
+, CONFIRM_TIME = #{entity.confirmTime}
+, CONFIRM_REMARK = #{entity.confirmRemark}
+, BS_RETURN_STU = #{entity.bsReturnStu}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+RETURN_ID = #{entity.returnId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BsReturnEntity" resultType="com.bms.order.bean.entity.BsReturnEntity">
+SELECT
+RETURN_ID AS returnId
+, RETURN_CODE AS returnCode
+, ORDER_ID AS orderId
+, BS_ID AS bsId
+, BS_CODE AS bsCode
+, BS_NAME AS bsName
+, BS_RETURN_SOURCE AS bsReturnSource
+, BS_RETURN_TYPE AS bsReturnType
+, RETURN_AMOUNT AS returnAmount
+, RETURN_REASON_ID AS returnReasonId
+, BS_APPLY_USER_TYPE AS bsApplyUserType
+, APPLY_UID AS applyUid
+, APPLY_UNAME AS applyUname
+, APPLY_TIME AS applyTime
+, APPLY_REMARK AS applyRemark
+, CONFIRM_UID AS confirmUid
+, CONFIRM_UNAME AS confirmUname
+, CONFIRM_TIME AS confirmTime
+, CONFIRM_REMARK AS confirmRemark
+, BS_RETURN_STU AS bsReturnStu
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_RETURN
+<where>
+<if test="returnId!=null">
+AND RETURN_ID = #{returnId}
+</if>
+<if test="returnCode!=null">
+AND RETURN_CODE = #{returnCode}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BsReturnEntity">
+SELECT
+RETURN_ID AS returnId
+, RETURN_CODE AS returnCode
+, ORDER_ID AS orderId
+, BS_ID AS bsId
+, BS_CODE AS bsCode
+, BS_NAME AS bsName
+, BS_RETURN_SOURCE AS bsReturnSource
+, BS_RETURN_TYPE AS bsReturnType
+, RETURN_AMOUNT AS returnAmount
+, RETURN_REASON_ID AS returnReasonId
+, BS_APPLY_USER_TYPE AS bsApplyUserType
+, APPLY_UID AS applyUid
+, APPLY_UNAME AS applyUname
+, APPLY_TIME AS applyTime
+, APPLY_REMARK AS applyRemark
+, CONFIRM_UID AS confirmUid
+, CONFIRM_UNAME AS confirmUname
+, CONFIRM_TIME AS confirmTime
+, CONFIRM_REMARK AS confirmRemark
+, BS_RETURN_STU AS bsReturnStu
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_RETURN
+<where>
+<if test="ids!=null">
+AND RETURN_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="codes!=null">
+AND RETURN_CODE IN (<foreach collection="codes" item="code" separator=",">#{code}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.BsReturnHistoryEntity">
+INSERT INTO
+ORDR_BS_RETURN_HISTORY
+(
+HISTORY_ID
+, RETURN_ID
+, RETURN_CODE
+, ORDER_ID
+, BS_ID
+, BS_CODE
+, BS_NAME
+, BS_RETURN_SOURCE
+, BS_RETURN_TYPE
+, RETURN_AMOUNT
+, RETURN_REASON_ID
+, BS_APPLY_USER_TYPE
+, APPLY_UID
+, APPLY_UNAME
+, APPLY_TIME
+, APPLY_REMARK
+, CONFIRM_UID
+, CONFIRM_UNAME
+, CONFIRM_TIME
+, CONFIRM_REMARK
+, BS_RETURN_STU
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{returnId}
+, #{returnCode}
+, #{orderId}
+, #{bsId}
+, #{bsCode}
+, #{bsName}
+, #{bsReturnSource}
+, #{bsReturnType}
+, #{returnAmount}
+, #{returnReasonId}
+, #{bsApplyUserType}
+, #{applyUid}
+, #{applyUname}
+, #{applyTime}
+, #{applyRemark}
+, #{confirmUid}
+, #{confirmUname}
+, #{confirmTime}
+, #{confirmRemark}
+, #{bsReturnStu}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_RETURN_HISTORY
+(
+HISTORY_ID
+, RETURN_ID
+, RETURN_CODE
+, ORDER_ID
+, BS_ID
+, BS_CODE
+, BS_NAME
+, BS_RETURN_SOURCE
+, BS_RETURN_TYPE
+, RETURN_AMOUNT
+, RETURN_REASON_ID
+, BS_APPLY_USER_TYPE
+, APPLY_UID
+, APPLY_UNAME
+, APPLY_TIME
+, APPLY_REMARK
+, CONFIRM_UID
+, CONFIRM_UNAME
+, CONFIRM_TIME
+, CONFIRM_REMARK
+, BS_RETURN_STU
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.returnId}
+, #{entity.returnCode}
+, #{entity.orderId}
+, #{entity.bsId}
+, #{entity.bsCode}
+, #{entity.bsName}
+, #{entity.bsReturnSource}
+, #{entity.bsReturnType}
+, #{entity.returnAmount}
+, #{entity.returnReasonId}
+, #{entity.bsApplyUserType}
+, #{entity.applyUid}
+, #{entity.applyUname}
+, #{entity.applyTime}
+, #{entity.applyRemark}
+, #{entity.confirmUid}
+, #{entity.confirmUname}
+, #{entity.confirmTime}
+, #{entity.confirmRemark}
+, #{entity.bsReturnStu}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

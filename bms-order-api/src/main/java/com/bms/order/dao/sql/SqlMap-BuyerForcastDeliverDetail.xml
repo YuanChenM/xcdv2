@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BuyerForcastDeliverDetailDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BuyerForcastDeliverDetailEntity">
+INSERT INTO
+ORDR_BUYER_FORCAST_DELIVER_DETAIL
+(
+BUYER_FORCAST_DELIVER_DETAIL_ID
+, BUYER_BATCH_ORDER_ID
+, BUYER_BATCH_ORDER_DETAIL_ID
+, FORCAST_TYPE
+, SELL_SIDE_TYPE
+, SELL_SIDE_ID
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, MAKER_ID
+, SELLER_ID
+, SKU
+, BATCH_ID
+, SALE_LABEL_ID
+, PLAN_SEND_QUANTITY
+, REAL_SEND_QUANTITY
+, RECEIVE_QUANTITY
+, REJECT_QUANTITY
+, DELAY_QUANTITY
+, CANCEL_QUANTITY
+, REDISTRIBUTION_DATE
+, RETURN_QUANTITY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{buyerForcastDeliverDetailId}
+, #{buyerBatchOrderId}
+, #{buyerBatchOrderDetailId}
+, #{forcastType}
+, #{sellSideType}
+, #{sellSideId}
+, #{goodsId}
+, #{productId}
+, #{manufacturerId}
+, #{makerId}
+, #{sellerId}
+, #{sku}
+, #{batchId}
+, #{saleLabelId}
+, #{planSendQuantity}
+, #{realSendQuantity}
+, #{receiveQuantity}
+, #{rejectQuantity}
+, #{delayQuantity}
+, #{cancelQuantity}
+, #{redistributionDate}
+, #{returnQuantity}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_FORCAST_DELIVER_DETAIL
+(
+BUYER_FORCAST_DELIVER_DETAIL_ID
+, BUYER_BATCH_ORDER_ID
+, BUYER_BATCH_ORDER_DETAIL_ID
+, FORCAST_TYPE
+, SELL_SIDE_TYPE
+, SELL_SIDE_ID
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, MAKER_ID
+, SELLER_ID
+, SKU
+, BATCH_ID
+, SALE_LABEL_ID
+, PLAN_SEND_QUANTITY
+, REAL_SEND_QUANTITY
+, RECEIVE_QUANTITY
+, REJECT_QUANTITY
+, DELAY_QUANTITY
+, CANCEL_QUANTITY
+, REDISTRIBUTION_DATE
+, RETURN_QUANTITY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.buyerForcastDeliverDetailId}
+, #{entity.buyerBatchOrderId}
+, #{entity.buyerBatchOrderDetailId}
+, #{entity.forcastType}
+, #{entity.sellSideType}
+, #{entity.sellSideId}
+, #{entity.goodsId}
+, #{entity.productId}
+, #{entity.manufacturerId}
+, #{entity.makerId}
+, #{entity.sellerId}
+, #{entity.sku}
+, #{entity.batchId}
+, #{entity.saleLabelId}
+, #{entity.planSendQuantity}
+, #{entity.realSendQuantity}
+, #{entity.receiveQuantity}
+, #{entity.rejectQuantity}
+, #{entity.delayQuantity}
+, #{entity.cancelQuantity}
+, #{entity.redistributionDate}
+, #{entity.returnQuantity}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BuyerForcastDeliverDetailEntity">
+UPDATE ORDR_BUYER_FORCAST_DELIVER_DETAIL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BUYER_FORCAST_DELIVER_DETAIL_ID = #{buyerForcastDeliverDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_FORCAST_DELIVER_DETAIL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BUYER_FORCAST_DELIVER_DETAIL_ID = #{entity.buyerForcastDeliverDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BuyerForcastDeliverDetailEntity">
+UPDATE ORDR_BUYER_FORCAST_DELIVER_DETAIL
+SET
+BUYER_FORCAST_DELIVER_DETAIL_ID = #{buyerForcastDeliverDetailId}
+, BUYER_BATCH_ORDER_ID = #{buyerBatchOrderId}
+, BUYER_BATCH_ORDER_DETAIL_ID = #{buyerBatchOrderDetailId}
+, FORCAST_TYPE = #{forcastType}
+, SELL_SIDE_TYPE = #{sellSideType}
+, SELL_SIDE_ID = #{sellSideId}
+, GOODS_ID = #{goodsId}
+, PRODUCT_ID = #{productId}
+, MANUFACTURER_ID = #{manufacturerId}
+, MAKER_ID = #{makerId}
+, SELLER_ID = #{sellerId}
+, SKU = #{sku}
+, BATCH_ID = #{batchId}
+, SALE_LABEL_ID = #{saleLabelId}
+, PLAN_SEND_QUANTITY = #{planSendQuantity}
+, REAL_SEND_QUANTITY = #{realSendQuantity}
+, RECEIVE_QUANTITY = #{receiveQuantity}
+, REJECT_QUANTITY = #{rejectQuantity}
+, DELAY_QUANTITY = #{delayQuantity}
+, CANCEL_QUANTITY = #{cancelQuantity}
+, REDISTRIBUTION_DATE = #{redistributionDate}
+, RETURN_QUANTITY = #{returnQuantity}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BUYER_FORCAST_DELIVER_DETAIL_ID = #{buyerForcastDeliverDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_FORCAST_DELIVER_DETAIL
+SET
+BUYER_FORCAST_DELIVER_DETAIL_ID = #{entity.buyerForcastDeliverDetailId}
+, BUYER_BATCH_ORDER_ID = #{entity.buyerBatchOrderId}
+, BUYER_BATCH_ORDER_DETAIL_ID = #{entity.buyerBatchOrderDetailId}
+, FORCAST_TYPE = #{entity.forcastType}
+, SELL_SIDE_TYPE = #{entity.sellSideType}
+, SELL_SIDE_ID = #{entity.sellSideId}
+, GOODS_ID = #{entity.goodsId}
+, PRODUCT_ID = #{entity.productId}
+, MANUFACTURER_ID = #{entity.manufacturerId}
+, MAKER_ID = #{entity.makerId}
+, SELLER_ID = #{entity.sellerId}
+, SKU = #{entity.sku}
+, BATCH_ID = #{entity.batchId}
+, SALE_LABEL_ID = #{entity.saleLabelId}
+, PLAN_SEND_QUANTITY = #{entity.planSendQuantity}
+, REAL_SEND_QUANTITY = #{entity.realSendQuantity}
+, RECEIVE_QUANTITY = #{entity.receiveQuantity}
+, REJECT_QUANTITY = #{entity.rejectQuantity}
+, DELAY_QUANTITY = #{entity.delayQuantity}
+, CANCEL_QUANTITY = #{entity.cancelQuantity}
+, REDISTRIBUTION_DATE = #{entity.redistributionDate}
+, RETURN_QUANTITY = #{entity.returnQuantity}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BUYER_FORCAST_DELIVER_DETAIL_ID = #{entity.buyerForcastDeliverDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BuyerForcastDeliverDetailEntity" resultType="com.bms.order.bean.entity.BuyerForcastDeliverDetailEntity">
+SELECT
+BUYER_FORCAST_DELIVER_DETAIL_ID AS buyerForcastDeliverDetailId
+, BUYER_BATCH_ORDER_ID AS buyerBatchOrderId
+, BUYER_BATCH_ORDER_DETAIL_ID AS buyerBatchOrderDetailId
+, FORCAST_TYPE AS forcastType
+, SELL_SIDE_TYPE AS sellSideType
+, SELL_SIDE_ID AS sellSideId
+, GOODS_ID AS goodsId
+, PRODUCT_ID AS productId
+, MANUFACTURER_ID AS manufacturerId
+, MAKER_ID AS makerId
+, SELLER_ID AS sellerId
+, SKU AS sku
+, BATCH_ID AS batchId
+, SALE_LABEL_ID AS saleLabelId
+, PLAN_SEND_QUANTITY AS planSendQuantity
+, REAL_SEND_QUANTITY AS realSendQuantity
+, RECEIVE_QUANTITY AS receiveQuantity
+, REJECT_QUANTITY AS rejectQuantity
+, DELAY_QUANTITY AS delayQuantity
+, CANCEL_QUANTITY AS cancelQuantity
+, REDISTRIBUTION_DATE AS redistributionDate
+, RETURN_QUANTITY AS returnQuantity
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_FORCAST_DELIVER_DETAIL
+<where>
+<if test="buyerForcastDeliverDetailId!=null">
+AND BUYER_FORCAST_DELIVER_DETAIL_ID = #{buyerForcastDeliverDetailId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BuyerForcastDeliverDetailEntity">
+SELECT
+BUYER_FORCAST_DELIVER_DETAIL_ID AS buyerForcastDeliverDetailId
+, BUYER_BATCH_ORDER_ID AS buyerBatchOrderId
+, BUYER_BATCH_ORDER_DETAIL_ID AS buyerBatchOrderDetailId
+, FORCAST_TYPE AS forcastType
+, SELL_SIDE_TYPE AS sellSideType
+, SELL_SIDE_ID AS sellSideId
+, GOODS_ID AS goodsId
+, PRODUCT_ID AS productId
+, MANUFACTURER_ID AS manufacturerId
+, MAKER_ID AS makerId
+, SELLER_ID AS sellerId
+, SKU AS sku
+, BATCH_ID AS batchId
+, SALE_LABEL_ID AS saleLabelId
+, PLAN_SEND_QUANTITY AS planSendQuantity
+, REAL_SEND_QUANTITY AS realSendQuantity
+, RECEIVE_QUANTITY AS receiveQuantity
+, REJECT_QUANTITY AS rejectQuantity
+, DELAY_QUANTITY AS delayQuantity
+, CANCEL_QUANTITY AS cancelQuantity
+, REDISTRIBUTION_DATE AS redistributionDate
+, RETURN_QUANTITY AS returnQuantity
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_FORCAST_DELIVER_DETAIL
+<where>
+<if test="ids!=null">
+AND BUYER_FORCAST_DELIVER_DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="buyerBatchOrderDetails!=null">
+AND BUYER_BATCH_ORDER_DETAIL_ID IN (<foreach item="item" collection="buyerBatchOrderDetails" separator=",">#{item.entity.buyerBatchOrderDetailId}</foreach>)
+</if>
+<if test="buyerBatchOrders!=null">
+AND BUYER_BATCH_ORDER_ID IN (<foreach item="item" collection="buyerBatchOrders" separator=",">#{item.entity.buyerBatchOrderId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.BuyerForcastDeliverDetailHistoryEntity">
+INSERT INTO
+ORDR_BUYER_FORCAST_DELIVER_DETAIL_HISTORY
+(
+HISTORY_ID
+, BUYER_FORCAST_DELIVER_DETAIL_ID
+, BUYER_BATCH_ORDER_ID
+, BUYER_BATCH_ORDER_DETAIL_ID
+, FORCAST_TYPE
+, SELL_SIDE_TYPE
+, SELL_SIDE_ID
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, MAKER_ID
+, SELLER_ID
+, SKU
+, BATCH_ID
+, SALE_LABEL_ID
+, PLAN_SEND_QUANTITY
+, REAL_SEND_QUANTITY
+, RECEIVE_QUANTITY
+, REJECT_QUANTITY
+, DELAY_QUANTITY
+, CANCEL_QUANTITY
+, REDISTRIBUTION_DATE
+, RETURN_QUANTITY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{buyerForcastDeliverDetailId}
+, #{buyerBatchOrderId}
+, #{buyerBatchOrderDetailId}
+, #{forcastType}
+, #{sellSideType}
+, #{sellSideId}
+, #{goodsId}
+, #{productId}
+, #{manufacturerId}
+, #{makerId}
+, #{sellerId}
+, #{sku}
+, #{batchId}
+, #{saleLabelId}
+, #{planSendQuantity}
+, #{realSendQuantity}
+, #{receiveQuantity}
+, #{rejectQuantity}
+, #{delayQuantity}
+, #{cancelQuantity}
+, #{redistributionDate}
+, #{returnQuantity}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_FORCAST_DELIVER_DETAIL_HISTORY
+(
+HISTORY_ID
+, BUYER_FORCAST_DELIVER_DETAIL_ID
+, BUYER_BATCH_ORDER_ID
+, BUYER_BATCH_ORDER_DETAIL_ID
+, FORCAST_TYPE
+, SELL_SIDE_TYPE
+, SELL_SIDE_ID
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, MAKER_ID
+, SELLER_ID
+, SKU
+, BATCH_ID
+, SALE_LABEL_ID
+, PLAN_SEND_QUANTITY
+, REAL_SEND_QUANTITY
+, RECEIVE_QUANTITY
+, REJECT_QUANTITY
+, DELAY_QUANTITY
+, CANCEL_QUANTITY
+, REDISTRIBUTION_DATE
+, RETURN_QUANTITY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.buyerForcastDeliverDetailId}
+, #{entity.buyerBatchOrderId}
+, #{entity.buyerBatchOrderDetailId}
+, #{entity.forcastType}
+, #{entity.sellSideType}
+, #{entity.sellSideId}
+, #{entity.goodsId}
+, #{entity.productId}
+, #{entity.manufacturerId}
+, #{entity.makerId}
+, #{entity.sellerId}
+, #{entity.sku}
+, #{entity.batchId}
+, #{entity.saleLabelId}
+, #{entity.planSendQuantity}
+, #{entity.realSendQuantity}
+, #{entity.receiveQuantity}
+, #{entity.rejectQuantity}
+, #{entity.delayQuantity}
+, #{entity.cancelQuantity}
+, #{entity.redistributionDate}
+, #{entity.returnQuantity}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

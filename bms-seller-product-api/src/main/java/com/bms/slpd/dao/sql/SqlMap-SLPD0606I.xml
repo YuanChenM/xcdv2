@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0606IDao">
+	<update id="updateFedStandards"  parameterType="com.bms.slpd.bean.UpdateEntity">
+			update SLPD_FED_STD
+			<set>
+				<if test="target.fedGoodValFlg == true">
+				FED_GOOD_VAL = #{entity.fedGoodVal},
+				</if>
+				<if test="target.fedNormalValFlg == true">
+				FED_NORMAL_VAL = #{entity.fedNormalVal},
+				</if>
+				<if test="target.fedOkValFlg == true">
+				FED_OK_VAL = #{entity.fedOkVal},
+				</if>
+				<if test="target.remarkFlg == true">
+				REMARK = #{entity.remark},
+				</if>
+				<if test="target.delFlgFlg ==true">
+				DEL_FLG = #{entity.delFlg},
+				</if>
+				UPD_ID = #{entity.updId},
+				UPD_TIME = #{entity.updTime},
+				VERSION=VERSION+1
+			</set>
+			where
+			FED_STD_ID = #{entity.fedStdId}
+			AND VERSION = #{entity.version}
+	</update>
+
+</mapper>

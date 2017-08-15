@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.fms.dao.FmsAgentReturnOrderDao">
+    <select id="findAgentReturnOrder" parameterType="com.bms.order.fms.bean.FmsOrderParam"
+            resultType="com.bms.order.fms.bean.FmsAgentReturnOrderBean">
+        SELECT
+            agentOrder.BACK_NO AS orgSystemId,
+            orderReturn.RETURN_CODE AS omsOrderNumber,
+            orderReturn.RETURN_ID AS omsOrderId,
+            agentOrder.BS_ORDER_CODE AS orgOrderNumber,
+            orderReturn.ORDER_ID AS orgOrderId,
+            orderReturn.APPLY_TIME AS orderPlaceDate,
+            agentOrder.BS_ID AS customerOrgNumber,
+            agentOrderAttached.BS_CODE AS customerNumber,
+            agentOrderAttached.BS_NAME AS soldTo,
+            orderReturn.BS_RETURN_SOURCE AS orderOrgsource
+        FROM
+          ORDR_BS_RETURN orderReturn
+        INNER JOIN ORDR_BS_ORDER agentOrder
+        ON agentOrder.BS_ORDER_ID = orderReturn.ORDER_ID
+        INNER JOIN ORDR_BS_ORDER_ATTACHED agentOrderAttached
+        ON agentOrderAttached.BS_ORDER_ID = agentOrder.BS_ORDER_ID
+        WHERE agentOrder.DEL_FLG = FALSE
+        <if test="pushOrderId != null and pushOrderId != ''">
+            AND orderReturn.RETURN_ID = #{pushOrderId}
+        </if>
+        <if test="pushOrderCode != null and pushOrderCode != ''">
+            AND orderReturn.RETURN_CODE = #{pushOrderCode}
+        </if>
+        <if test="backNo != null and backNo != ''">
+            AND agentOrder.BACK_NO = #{backNo}
+        </if>
+        ORDER BY orderReturn.RETURN_ID
+    </select>
+    <select id="findAgentReturnOrderDetail" parameterType="com.bms.order.fms.bean.FmsAgentReturnOrderBean"
+            resultType="com.bms.order.fms.bean.FmsAgentReturnOrderDetail">
+        SELECT
+            agentReturnDetail.DETAIL_ID AS lineNum,
+            agentReturnDetail.GOODS_ID AS productId,
+            agentReturnDetail.RETURN_QTY AS orderedQuantity,
+            agentReturnDetail.SALES_UNIT AS orderQuantityUom,
+            agentReturnDetail.REASON_ID AS returnReason
+        FROM
+            (SELECT @rownum := 0) AS SEQ,
+            ORDR_BS_RETURN_DETAIL agentReturnDetail
+        WHERE
+            agentReturnDetail.RETURN_ID = #{omsOrderId}
+        ORDER BY agentReturnDetail.DETAIL_ID
+    </select>
+</mapper>

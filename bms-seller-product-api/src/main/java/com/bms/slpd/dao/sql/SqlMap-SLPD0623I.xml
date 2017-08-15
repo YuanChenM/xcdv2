@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0623IDao">
+
+	<!-- 修改储存运输标准指标 -->
+	<update id="batchModify" parameterType="com.bms.slpd.bean.UpdateEntity">
+		UPDATE SLPD_PKG_STD
+		SET
+		<if test="target.pkgInSuttleFlg == true">
+			PKG_IN_SUTTLE = #{entity.pkgInSuttle},
+		</if>
+		<if test="target.pkgInErrorFlg == true">
+			PKG_IN_ERROR = #{entity.pkgInError},
+		</if>
+		<if test="target.pkgInNumberFlg == true">
+			PKG_IN_NUMBER = #{entity.pkgInNumber},
+		</if>
+		<if test="target.pkgInSizeFlg == true">
+			PKG_IN_SIZE = #{entity.pkgInSize},
+		</if>
+		<if test="target.pkgInTextureFlg == true">
+			PKG_IN_TEXTURE = #{entity.pkgInTexture},
+		</if>
+		<if test="target.pkgOutErrorFlg == true">
+			PKG_OUT_ERROR = #{entity.pkgOutError},
+		</if>
+		<if test="target.pkgOutNumberFlg == true">
+			PKG_OUT_NUMBER = #{entity.pkgOutNumber},
+		</if>
+		<if test="target.pkgOutSizeFlg == true">
+			PKG_OUT_SIZE = #{entity.pkgOutSize},
+		</if>
+		<if test="target.pkgOutSizeFlg == true">
+			PKG_OUT_SIZE = #{entity.pkgOutSize},
+		</if>
+		<if test="target.pkgOutTextureFlg == true">
+			PKG_OUT_TEXTURE = #{entity.pkgOutTexture},
+		</if>
+		<if test="target.remarkFlg == true">
+			REMARK = #{entity.remark},
+		</if>
+		<if test="target.delFlgFlg == true">
+			DEL_FLG = #{entity.delFlg},
+		</if>
+		UPD_ID = #{entity.updId},
+		UPD_TIME = #{entity.updTime},
+		VERSION = VERSION + 1
+		WHERE
+		PKG_STD_ID = #{entity.pkgStdId}
+		AND VERSION = #{entity.version}
+	</update>
+
+</mapper>

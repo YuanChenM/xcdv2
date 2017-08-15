@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0236IDao">
+    
+    <!--修改生产商实验室 -->
+    <update id="updateProducerLaboratories" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_PRODUCER_LABORATORY
+        <set>
+            <if test="target.sellerRoleIdFlg != null and target.sellerRoleIdFlg">
+                SELLER_ROLE_ID = #{entity.sellerRoleId},
+            </if>
+            <if test="target.acreageFlg != null and target.acreageFlg">
+                ACREAGE = #{entity.acreage},
+            </if>
+            <if test="target.effectFlg != null and target.effectFlg">
+                EFFECT = #{entity.effect},
+            </if>
+            <if test="target.inverstnentFlg != null and target.inverstnentFlg">
+                INVERSTNENT = #{entity.inverstnent},
+            </if>
+            <if test="target.memberFlg != null and target.memberFlg">
+                MEMBER = #{entity.member},
+            </if>
+            <if test="target.labPicUrlFlg != null and target.labPicUrlFlg">
+                LAB_PIC_URL = #{entity.labPicUrl},
+            </if>
+            <if test="target.orgFrameImgUrlFlg != null and target.orgFrameImgUrlFlg">
+                ORG_FRAME_IMG_URL = #{entity.orgFrameImgUrl},
+            </if>
+            <if test="target.qualityCtrlImgUrlFlg != null and target.qualityCtrlImgUrlFlg">
+                QUALITY_CTRL_IMG_URL = #{entity.qualityCtrlImgUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+            LABORATORY_ID = #{entity.laboratoryId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+</mapper>

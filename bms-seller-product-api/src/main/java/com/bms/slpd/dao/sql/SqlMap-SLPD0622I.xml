@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0622IDao">
+
+	<!-- 新增包装标准指标 -->
+	<insert id="batchInsert" parameterType="List">
+		INSERT INTO SLPD_PKG_STD (
+		PKG_STD_ID,
+		ITEM_ID,
+		PKG_IN_SUTTLE,
+		PKG_IN_ERROR,
+		PKG_IN_NUMBER,
+		PKG_IN_SIZE,
+		PKG_IN_TEXTURE,
+		PKG_OUT_ERROR,
+		PKG_OUT_NUMBER,
+		PKG_OUT_SIZE,
+		PKG_OUT_TEXTURE,
+		REMARK,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		UPD_ID,
+		UPD_TIME,
+		VERSION
+		)
+		VALUES
+		<foreach collection="list" item="pkgStd" index="index" separator=",">
+			(
+			#{pkgStd.pkgStdId},
+			#{pkgStd.itemId},
+			#{pkgStd.pkgInSuttle},
+			#{pkgStd.pkgInError},
+			#{pkgStd.pkgInNumber},
+			#{pkgStd.pkgInSize},
+			#{pkgStd.pkgInTexture},
+			#{pkgStd.pkgOutError},
+			#{pkgStd.pkgOutNumber},
+			#{pkgStd.pkgOutSize},
+			#{pkgStd.pkgOutTexture},
+			#{pkgStd.remark},
+			0,
+			#{pkgStd.crtId},
+			#{pkgStd.crtTime},
+			#{pkgStd.updId},
+			#{pkgStd.updTime},
+			1
+			)
+		</foreach>
+	</insert>
+
+</mapper>

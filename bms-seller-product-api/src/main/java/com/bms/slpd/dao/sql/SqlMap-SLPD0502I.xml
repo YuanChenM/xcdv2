@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0502IDao">
+
+    <!-- 新增品牌单品 -->
+	<insert id="batchInsert" parameterType="List">
+		INSERT INTO SLPD_BRAND_ITEM (
+		BRAND_ITEM_ID,
+		BRAND_ITEM_SKU,
+		ITEM_ID,
+		BRAND_ID,
+		AUDIT_STU,
+		DEL_FLG,
+		CRT_ID,
+		CRT_TIME,
+		UPD_ID,
+		UPD_TIME,
+		VERSION
+		)
+		VALUES
+		<foreach collection="list" item="brandItem" index="index" separator=",">
+			(
+			#{brandItem.brandItemId},
+			#{brandItem.brandItemSku},
+			#{brandItem.itemId},
+			#{brandItem.brandId},
+			0,
+			0,
+			#{brandItem.crtId},
+			#{brandItem.crtTime},
+			#{brandItem.updId},
+			#{brandItem.updTime},
+			1
+			)
+		</foreach>
+	</insert>
+
+    <!-- 根据itemId获取itemSku -->
+    <select id="findItemSkuByItemId" parameterType="Long" resultType="String">
+        SELECT
+          ITEM_SKU
+        FROM
+          SLPD_ITEM
+        WHERE
+          ITEM_ID = #{itemId}
+          AND DEL_FLG = 0
+    </select>
+
+    <!-- 根据brandId获取brandCode -->
+    <select id="findBrandCodeyBrandId" parameterType="Long" resultType="String">
+        SELECT
+        BRAND_CODE
+        FROM
+        SLPD_BRAND
+        WHERE
+        BRAND_ID = #{brandId}
+        AND DEL_FLG = 0
+    </select>
+
+
+    <select id="findBrandItemCount" parameterType="com.bms.slpd.bean.param.wrapper.SlpdBrandItemParam" resultType="int">
+      SELECT count(1) AS count
+      FROM SLPD_BRAND_ITEM
+      WHERE DEL_FLG = 0
+      AND
+        <foreach collection="list" item="brandItem"  index="index" open="(" separator="or" close=")">
+            (
+            ITEM_ID = #{brandItem.itemId}
+            AND
+            BRAND_ID = #{brandItem.brandId}
+            )
+        </foreach>
+    </select>
+</mapper>

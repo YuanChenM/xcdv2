@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.ORDR0107IDao">
+
+    <select id="findAllSalesVolumes" parameterType="com.bms.order.bean.param.ORDR0107IFilterParam"
+            resultType="com.bms.order.bean.result.ORDR0107IRestResult">
+        SELECT GOODS_ID AS commodityId,sum(GOODS_QUANTITY) AS salesVolumn FROM ordr_buyer_batch_order_detail
+        WHERE DEL_FLG = 0
+        <if test="commodityList != null and commodityList.size>0">
+            AND GOODS_ID IN
+            <foreach collection="commodityList" item="item" open="(" separator="," close=")">
+                #{item.commodityId}
+            </foreach>
+        </if>
+        GROUP BY GOODS_ID
+    </select>
+    <select id="findSalesVolumes" parameterType="com.bms.order.bean.param.ORDR0107IFilterParam"
+            resultType="com.bms.order.bean.result.ORDR0107IRestResult">
+        SELECT
+        t.GOODS_ID AS commodityId,
+        (
+        SUM(t.GOODS_QUANTITY) - SUM(t.CANCEL_QUANTITY) - SUM(rejectQty) - SUM(reutrnQty)
+        ) AS salesVolumn
+        FROM
+        (
+        SELECT
+        t1.BUYER_BATCH_ORDER_DETAIL_ID,
+        t1.GOODS_ID,
+        t1.GOODS_QUANTITY,
+        t1.CANCEL_QUANTITY,
+        SUM(
+        CASE
+        WHEN t2.REJECT_QUANTITY > 0 THEN
+        t2.REJECT_QUANTITY
+        ELSE
+        0
+        END
+        ) AS rejectQty,
+        SUM(
+        CASE
+        WHEN t2.RETURN_QUANTITY > 0 THEN
+        t2.RETURN_QUANTITY
+        ELSE
+        0
+        END
+        ) AS reutrnQty
+        FROM
+        ordr_buyer_batch_order_detail t1
+        LEFT JOIN ordr_buyer_forcast_deliver_detail t2 ON t2.BUYER_BATCH_ORDER_DETAIL_ID = t1.BUYER_BATCH_ORDER_DETAIL_ID AND t2.DEL_FLG = 0
+        WHERE t1.DEL_FLG = 0
+        <if test="commodityList != null and commodityList.size>0">
+            AND t1.GOODS_ID IN
+            <foreach collection="commodityList" item="item" open="(" separator="," close=")">
+                #{item.commodityId}
+            </foreach>
+        </if>
+        GROUP BY
+        t1.BUYER_BATCH_ORDER_DETAIL_ID
+        ) AS t
+        GROUP BY
+        t.GOODS_ID
+    </select>
+</mapper>

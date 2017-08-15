@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BuyerReturnDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BuyerReturnEntity">
+INSERT INTO
+ORDR_BUYER_RETURN
+(
+RETURN_ID
+, RETURN_CODE
+, ORDER_ID
+, BUYER_ID
+, BUYER_CODE
+, BUYER_NAME
+, BUYER_RETURN_SOURCE
+, BUYER_RETURN_TYPE
+, RETURN_AMOUNT
+, RETURN_REASON_ID
+, BUYER_APPLY_USER_TYPE
+, APPLY_UID
+, APPLY_UNAME
+, APPLY_TIME
+, APPLY_REMARK
+, BUYER_CONFIRM_USER_TYPE
+, CONFIRM_UID
+, CONFIRM_UNAME
+, CONFIRM_TIME
+, CONFIRM_TYPE
+, CONFIRM_REMARK
+, INBOUND_UID
+, INBOUND_UNAME
+, INBOUND_TIME
+, BUYER_RETURN_STATUS
+, IMAGE1
+, IMAGE2
+, IMAGE3
+, IMAGE4
+, IMAGE5
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{returnId}
+, #{returnCode}
+, #{orderId}
+, #{buyerId}
+, #{buyerCode}
+, #{buyerName}
+, #{buyerReturnSource}
+, #{buyerReturnType}
+, #{returnAmount}
+, #{returnReasonId}
+, #{buyerApplyUserType}
+, #{applyUid}
+, #{applyUname}
+, #{applyTime}
+, #{applyRemark}
+, #{buyerConfirmUserType}
+, #{confirmUid}
+, #{confirmUname}
+, #{confirmTime}
+, #{confirmType}
+, #{confirmRemark}
+, #{inboundUid}
+, #{inboundUname}
+, #{inboundTime}
+, #{buyerReturnStatus}
+, #{image1}
+, #{image2}
+, #{image3}
+, #{image4}
+, #{image5}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_RETURN
+(
+RETURN_ID
+, RETURN_CODE
+, ORDER_ID
+, BUYER_ID
+, BUYER_CODE
+, BUYER_NAME
+, BUYER_RETURN_SOURCE
+, BUYER_RETURN_TYPE
+, RETURN_AMOUNT
+, RETURN_REASON_ID
+, BUYER_APPLY_USER_TYPE
+, APPLY_UID
+, APPLY_UNAME
+, APPLY_TIME
+, APPLY_REMARK
+, BUYER_CONFIRM_USER_TYPE
+, CONFIRM_UID
+, CONFIRM_UNAME
+, CONFIRM_TIME
+, CONFIRM_TYPE
+, CONFIRM_REMARK
+, INBOUND_UID
+, INBOUND_UNAME
+, INBOUND_TIME
+, BUYER_RETURN_STATUS
+, IMAGE1
+, IMAGE2
+, IMAGE3
+, IMAGE4
+, IMAGE5
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.returnId}
+, #{entity.returnCode}
+, #{entity.orderId}
+, #{entity.buyerId}
+, #{entity.buyerCode}
+, #{entity.buyerName}
+, #{entity.buyerReturnSource}
+, #{entity.buyerReturnType}
+, #{entity.returnAmount}
+, #{entity.returnReasonId}
+, #{entity.buyerApplyUserType}
+, #{entity.applyUid}
+, #{entity.applyUname}
+, #{entity.applyTime}
+, #{entity.applyRemark}
+, #{entity.buyerConfirmUserType}
+, #{entity.confirmUid}
+, #{entity.confirmUname}
+, #{entity.confirmTime}
+, #{entity.confirmType}
+, #{entity.confirmRemark}
+, #{entity.inboundUid}
+, #{entity.inboundUname}
+, #{entity.inboundTime}
+, #{entity.buyerReturnStatus}
+, #{entity.image1}
+, #{entity.image2}
+, #{entity.image3}
+, #{entity.image4}
+, #{entity.image5}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BuyerReturnEntity">
+UPDATE ORDR_BUYER_RETURN
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+RETURN_ID = #{returnId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_RETURN
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+RETURN_ID = #{entity.returnId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BuyerReturnEntity">
+UPDATE ORDR_BUYER_RETURN
+SET
+RETURN_ID = #{returnId}
+, RETURN_CODE = #{returnCode}
+, ORDER_ID = #{orderId}
+, BUYER_ID = #{buyerId}
+, BUYER_CODE = #{buyerCode}
+, BUYER_NAME = #{buyerName}
+, BUYER_RETURN_SOURCE = #{buyerReturnSource}
+, BUYER_RETURN_TYPE = #{buyerReturnType}
+, RETURN_AMOUNT = #{returnAmount}
+, RETURN_REASON_ID = #{returnReasonId}
+, BUYER_APPLY_USER_TYPE = #{buyerApplyUserType}
+, APPLY_UID = #{applyUid}
+, APPLY_UNAME = #{applyUname}
+, APPLY_TIME = #{applyTime}
+, APPLY_REMARK = #{applyRemark}
+, BUYER_CONFIRM_USER_TYPE = #{buyerConfirmUserType}
+, CONFIRM_UID = #{confirmUid}
+, CONFIRM_UNAME = #{confirmUname}
+, CONFIRM_TIME = #{confirmTime}
+, CONFIRM_TYPE = #{confirmType}
+, CONFIRM_REMARK = #{confirmRemark}
+, INBOUND_UID = #{inboundUid}
+, INBOUND_UNAME = #{inboundUname}
+, INBOUND_TIME = #{inboundTime}
+, BUYER_RETURN_STATUS = #{buyerReturnStatus}
+, IMAGE1 = #{image1}
+, IMAGE2 = #{image2}
+, IMAGE3 = #{image3}
+, IMAGE4 = #{image4}
+, IMAGE5 = #{image5}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+RETURN_ID = #{returnId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_RETURN
+SET
+RETURN_ID = #{entity.returnId}
+, RETURN_CODE = #{entity.returnCode}
+, ORDER_ID = #{entity.orderId}
+, BUYER_ID = #{entity.buyerId}
+, BUYER_CODE = #{entity.buyerCode}
+, BUYER_NAME = #{entity.buyerName}
+, BUYER_RETURN_SOURCE = #{entity.buyerReturnSource}
+, BUYER_RETURN_TYPE = #{entity.buyerReturnType}
+, RETURN_AMOUNT = #{entity.returnAmount}
+, RETURN_REASON_ID = #{entity.returnReasonId}
+, BUYER_APPLY_USER_TYPE = #{entity.buyerApplyUserType}
+, APPLY_UID = #{entity.applyUid}
+, APPLY_UNAME = #{entity.applyUname}
+, APPLY_TIME = #{entity.applyTime}
+, APPLY_REMARK = #{entity.applyRemark}
+, BUYER_CONFIRM_USER_TYPE = #{entity.buyerConfirmUserType}
+, CONFIRM_UID = #{entity.confirmUid}
+, CONFIRM_UNAME = #{entity.confirmUname}
+, CONFIRM_TIME = #{entity.confirmTime}
+, CONFIRM_TYPE = #{entity.confirmType}
+, CONFIRM_REMARK = #{entity.confirmRemark}
+, INBOUND_UID = #{entity.inboundUid}
+, INBOUND_UNAME = #{entity.inboundUname}
+, INBOUND_TIME = #{entity.inboundTime}
+, BUYER_RETURN_STATUS = #{entity.buyerReturnStatus}
+, IMAGE1 = #{entity.image1}
+, IMAGE2 = #{entity.image2}
+, IMAGE3 = #{entity.image3}
+, IMAGE4 = #{entity.image4}
+, IMAGE5 = #{entity.image5}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+RETURN_ID = #{entity.returnId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BuyerReturnEntity" resultType="com.bms.order.bean.entity.BuyerReturnEntity">
+SELECT
+RETURN_ID AS returnId
+, RETURN_CODE AS returnCode
+, ORDER_ID AS orderId
+, BUYER_ID AS buyerId
+, BUYER_CODE AS buyerCode
+, BUYER_NAME AS buyerName
+, BUYER_RETURN_SOURCE AS buyerReturnSource
+, BUYER_RETURN_TYPE AS buyerReturnType
+, RETURN_AMOUNT AS returnAmount
+, RETURN_REASON_ID AS returnReasonId
+, BUYER_APPLY_USER_TYPE AS buyerApplyUserType
+, APPLY_UID AS applyUid
+, APPLY_UNAME AS applyUname
+, APPLY_TIME AS applyTime
+, APPLY_REMARK AS applyRemark
+, BUYER_CONFIRM_USER_TYPE AS buyerConfirmUserType
+, CONFIRM_UID AS confirmUid
+, CONFIRM_UNAME AS confirmUname
+, CONFIRM_TIME AS confirmTime
+, CONFIRM_TYPE AS confirmType
+, CONFIRM_REMARK AS confirmRemark
+, INBOUND_UID AS inboundUid
+, INBOUND_UNAME AS inboundUname
+, INBOUND_TIME AS inboundTime
+, BUYER_RETURN_STATUS AS buyerReturnStatus
+, IMAGE1 AS image1
+, IMAGE2 AS image2
+, IMAGE3 AS image3
+, IMAGE4 AS image4
+, IMAGE5 AS image5
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_RETURN
+<where>
+<if test="returnId!=null">
+AND RETURN_ID = #{returnId}
+</if>
+<if test="returnCode!=null">
+AND RETURN_CODE = #{returnCode}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BuyerReturnEntity">
+SELECT
+RETURN_ID AS returnId
+, RETURN_CODE AS returnCode
+, ORDER_ID AS orderId
+, BUYER_ID AS buyerId
+, BUYER_CODE AS buyerCode
+, BUYER_NAME AS buyerName
+, BUYER_RETURN_SOURCE AS buyerReturnSource
+, BUYER_RETURN_TYPE AS buyerReturnType
+, RETURN_AMOUNT AS returnAmount
+, RETURN_REASON_ID AS returnReasonId
+, BUYER_APPLY_USER_TYPE AS buyerApplyUserType
+, APPLY_UID AS applyUid
+, APPLY_UNAME AS applyUname
+, APPLY_TIME AS applyTime
+, APPLY_REMARK AS applyRemark
+, BUYER_CONFIRM_USER_TYPE AS buyerConfirmUserType
+, CONFIRM_UID AS confirmUid
+, CONFIRM_UNAME AS confirmUname
+, CONFIRM_TIME AS confirmTime
+, CONFIRM_TYPE AS confirmType
+, CONFIRM_REMARK AS confirmRemark
+, INBOUND_UID AS inboundUid
+, INBOUND_UNAME AS inboundUname
+, INBOUND_TIME AS inboundTime
+, BUYER_RETURN_STATUS AS buyerReturnStatus
+, IMAGE1 AS image1
+, IMAGE2 AS image2
+, IMAGE3 AS image3
+, IMAGE4 AS image4
+, IMAGE5 AS image5
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_RETURN
+<where>
+<if test="ids!=null">
+AND RETURN_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="codes!=null">
+AND RETURN_CODE IN (<foreach collection="codes" item="code" separator=",">#{code}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.BuyerReturnHistoryEntity">
+INSERT INTO
+ORDR_BUYER_RETURN_HISTORY
+(
+HISTORY_ID
+, RETURN_ID
+, RETURN_CODE
+, ORDER_ID
+, BUYER_ID
+, BUYER_CODE
+, BUYER_NAME
+, BUYER_RETURN_SOURCE
+, BUYER_RETURN_TYPE
+, RETURN_AMOUNT
+, RETURN_REASON_ID
+, BUYER_APPLY_USER_TYPE
+, APPLY_UID
+, APPLY_UNAME
+, APPLY_TIME
+, APPLY_REMARK
+, BUYER_CONFIRM_USER_TYPE
+, CONFIRM_UID
+, CONFIRM_UNAME
+, CONFIRM_TIME
+, CONFIRM_TYPE
+, CONFIRM_REMARK
+, INBOUND_UID
+, INBOUND_UNAME
+, INBOUND_TIME
+, BUYER_RETURN_STATUS
+, IMAGE1
+, IMAGE2
+, IMAGE3
+, IMAGE4
+, IMAGE5
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{returnId}
+, #{returnCode}
+, #{orderId}
+, #{buyerId}
+, #{buyerCode}
+, #{buyerName}
+, #{buyerReturnSource}
+, #{buyerReturnType}
+, #{returnAmount}
+, #{returnReasonId}
+, #{buyerApplyUserType}
+, #{applyUid}
+, #{applyUname}
+, #{applyTime}
+, #{applyRemark}
+, #{buyerConfirmUserType}
+, #{confirmUid}
+, #{confirmUname}
+, #{confirmTime}
+, #{confirmType}
+, #{confirmRemark}
+, #{inboundUid}
+, #{inboundUname}
+, #{inboundTime}
+, #{buyerReturnStatus}
+, #{image1}
+, #{image2}
+, #{image3}
+, #{image4}
+, #{image5}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_RETURN_HISTORY
+(
+HISTORY_ID
+, RETURN_ID
+, RETURN_CODE
+, ORDER_ID
+, BUYER_ID
+, BUYER_CODE
+, BUYER_NAME
+, BUYER_RETURN_SOURCE
+, BUYER_RETURN_TYPE
+, RETURN_AMOUNT
+, RETURN_REASON_ID
+, BUYER_APPLY_USER_TYPE
+, APPLY_UID
+, APPLY_UNAME
+, APPLY_TIME
+, APPLY_REMARK
+, BUYER_CONFIRM_USER_TYPE
+, CONFIRM_UID
+, CONFIRM_UNAME
+, CONFIRM_TIME
+, CONFIRM_TYPE
+, CONFIRM_REMARK
+, INBOUND_UID
+, INBOUND_UNAME
+, INBOUND_TIME
+, BUYER_RETURN_STATUS
+, IMAGE1
+, IMAGE2
+, IMAGE3
+, IMAGE4
+, IMAGE5
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.returnId}
+, #{entity.returnCode}
+, #{entity.orderId}
+, #{entity.buyerId}
+, #{entity.buyerCode}
+, #{entity.buyerName}
+, #{entity.buyerReturnSource}
+, #{entity.buyerReturnType}
+, #{entity.returnAmount}
+, #{entity.returnReasonId}
+, #{entity.buyerApplyUserType}
+, #{entity.applyUid}
+, #{entity.applyUname}
+, #{entity.applyTime}
+, #{entity.applyRemark}
+, #{entity.buyerConfirmUserType}
+, #{entity.confirmUid}
+, #{entity.confirmUname}
+, #{entity.confirmTime}
+, #{entity.confirmType}
+, #{entity.confirmRemark}
+, #{entity.inboundUid}
+, #{entity.inboundUname}
+, #{entity.inboundTime}
+, #{entity.buyerReturnStatus}
+, #{entity.image1}
+, #{entity.image2}
+, #{entity.image3}
+, #{entity.image4}
+, #{entity.image5}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+    <select id="findAlreadyReturn" parameterType="com.bms.order.bean.entity.BuyerReturnDetailEntity" resultType="java.math.BigDecimal">
+        SELECT
+        SUM(IFNULL(OBRD.RETURN_QTY, 0))
+        FROM
+        ORDR_BUYER_RETURN_DETAIL OBRD
+        INNER JOIN  ORDR_BUYER_RETURN OBR
+        ON OBR.RETURN_ID = OBRD.RETURN_ID
+        AND OBR.DEL_FLG = 0
+        AND OBR.BUYER_RETURN_STATUS = '004'
+        WHERE OBRD.DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{distributionNotificationDetailId}
+        AND OBRD.DEL_FLG = 0
+    </select>
+</mapper>

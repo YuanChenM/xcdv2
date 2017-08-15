@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0801IDao">
+
+    <!-- 新增(卖家)单品品牌(规格)生产商 -->
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO SLPD_SELLER_COMMODITY (
+        SELLER_COMMODITY_ID,
+        SELLER_COMMODITY_CODE,
+        SELLER_COMMODITY_SKU,
+        SELLER_ID,
+        SELLER_CODE,
+        ENTITY_SELLER_ID,
+        SELLER_NAME,
+        PRODUCER_PRODUCT_ID,
+        PRODUCT_ID,
+        SALE_TYPE,
+        ARTICLE_NO,
+        COMMODITY_ID,
+        SALE_TITLE,
+        AUDIT_STU,
+        AUDIT_REMARK,
+        AUDIT_HISTORY,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="sellerCommodity" index="index" separator=",">
+            (
+            #{sellerCommodity.sellerCommodityId},
+            #{sellerCommodity.sellerCommodityCode},
+            #{sellerCommodity.sellerCommoditySku},
+            #{sellerCommodity.sellerId},
+            #{sellerCommodity.sellerCode},
+            #{sellerCommodity.entitySellerId},
+            #{sellerCommodity.sellerName},
+            #{sellerCommodity.producerProductId},
+            #{sellerCommodity.productId},
+            #{sellerCommodity.saleType},
+            #{sellerCommodity.articleNo},
+            #{sellerCommodity.commodityId},
+            #{sellerCommodity.saleTitle},
+            #{sellerCommodity.auditStu},
+            #{sellerCommodity.auditRemark},
+            #{sellerCommodity.auditHistory},
+            0,
+            #{sellerCommodity.crtId},
+            #{sellerCommodity.crtTime},
+            #{sellerCommodity.updId},
+            #{sellerCommodity.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!-- 查询卖家产品生产商是否唯一 -->
+    <select id="findSellerProductProducers" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdSellerCommodity">
+        SELECT
+        SELLER_COMMODITY_ID AS sellerCommodityId,
+        SELLER_ID AS sellerId,
+        PRODUCER_PRODUCT_ID AS producerProductId,
+        SALE_TYPE AS saleType
+        FROM SLPD_SELLER_COMMODITY
+        WHERE
+        DEL_FLG = 0
+        AND
+        <foreach collection="list" item="sellerProducer" open="(" separator="or" close=")">
+            (
+            SELLER_ID = #{sellerProducer.sellerId}
+            AND
+            PRODUCER_PRODUCT_ID = #{sellerProducer.producerProductId}
+            AND
+            SALE_TYPE = #{sellerProducer.saleType}
+            )
+        </foreach>
+    </select>
+</mapper>

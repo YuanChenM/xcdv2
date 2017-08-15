@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BuyerBatchOrderDetailDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BuyerBatchOrderDetailEntity">
+INSERT INTO
+ORDR_BUYER_BATCH_ORDER_DETAIL
+(
+BUYER_BATCH_ORDER_DETAIL_ID
+, BUYER_ORDER_ID
+, BUYER_BATCH_ORDER_ID
+, GOODS_UNIT
+, GOODS_QUANTITY
+, CANCEL_QUANTITY
+, ORDER_CREATE_UNIT_PRICE
+, ORDER_CREATE_KG_PRICE
+, REAL_UNIT_PRICE
+, REAL_KG_PRICE
+, PRICE_CREATE_TIME
+, PRICE_WAY
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, BATCH_ID
+, SALE_LABEL_ID
+, SPLIT_FLG
+, MANUAL_SPLIT_FLG
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{buyerBatchOrderDetailId}
+, #{buyerOrderId}
+, #{buyerBatchOrderId}
+, #{goodsUnit}
+, #{goodsQuantity}
+, #{cancelQuantity}
+, #{orderCreateUnitPrice}
+, #{orderCreateKgPrice}
+, #{realUnitPrice}
+, #{realKgPrice}
+, #{priceCreateTime}
+, #{priceWay}
+, #{goodsId}
+, #{productId}
+, #{manufacturerId}
+, #{sellerId}
+, #{batchId}
+, #{saleLabelId}
+, #{splitFlg}
+, #{manualSplitFlg}
+, #{transactionSequence}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_BATCH_ORDER_DETAIL
+(
+BUYER_BATCH_ORDER_DETAIL_ID
+, BUYER_ORDER_ID
+, BUYER_BATCH_ORDER_ID
+, GOODS_UNIT
+, GOODS_QUANTITY
+, CANCEL_QUANTITY
+, ORDER_CREATE_UNIT_PRICE
+, ORDER_CREATE_KG_PRICE
+, REAL_UNIT_PRICE
+, REAL_KG_PRICE
+, PRICE_CREATE_TIME
+, PRICE_WAY
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, BATCH_ID
+, SALE_LABEL_ID
+, SPLIT_FLG
+, MANUAL_SPLIT_FLG
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.buyerBatchOrderDetailId}
+, #{entity.buyerOrderId}
+, #{entity.buyerBatchOrderId}
+, #{entity.goodsUnit}
+, #{entity.goodsQuantity}
+, #{entity.cancelQuantity}
+, #{entity.orderCreateUnitPrice}
+, #{entity.orderCreateKgPrice}
+, #{entity.realUnitPrice}
+, #{entity.realKgPrice}
+, #{entity.priceCreateTime}
+, #{entity.priceWay}
+, #{entity.goodsId}
+, #{entity.productId}
+, #{entity.manufacturerId}
+, #{entity.sellerId}
+, #{entity.batchId}
+, #{entity.saleLabelId}
+, #{entity.splitFlg}
+, #{entity.manualSplitFlg}
+, #{entity.transactionSequence}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BuyerBatchOrderDetailEntity">
+UPDATE ORDR_BUYER_BATCH_ORDER_DETAIL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BUYER_BATCH_ORDER_DETAIL_ID = #{buyerBatchOrderDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_BATCH_ORDER_DETAIL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BUYER_BATCH_ORDER_DETAIL_ID = #{entity.buyerBatchOrderDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BuyerBatchOrderDetailEntity">
+UPDATE ORDR_BUYER_BATCH_ORDER_DETAIL
+SET
+BUYER_BATCH_ORDER_DETAIL_ID = #{buyerBatchOrderDetailId}
+, BUYER_ORDER_ID = #{buyerOrderId}
+, BUYER_BATCH_ORDER_ID = #{buyerBatchOrderId}
+, GOODS_UNIT = #{goodsUnit}
+, GOODS_QUANTITY = #{goodsQuantity}
+, CANCEL_QUANTITY = #{cancelQuantity}
+, ORDER_CREATE_UNIT_PRICE = #{orderCreateUnitPrice}
+, ORDER_CREATE_KG_PRICE = #{orderCreateKgPrice}
+, REAL_UNIT_PRICE = #{realUnitPrice}
+, REAL_KG_PRICE = #{realKgPrice}
+, PRICE_CREATE_TIME = #{priceCreateTime}
+, PRICE_WAY = #{priceWay}
+, GOODS_ID = #{goodsId}
+, PRODUCT_ID = #{productId}
+, MANUFACTURER_ID = #{manufacturerId}
+, SELLER_ID = #{sellerId}
+, BATCH_ID = #{batchId}
+, SALE_LABEL_ID = #{saleLabelId}
+, SPLIT_FLG = #{splitFlg}
+, MANUAL_SPLIT_FLG = #{manualSplitFlg}
+, TRANSACTION_SEQUENCE = #{transactionSequence}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BUYER_BATCH_ORDER_DETAIL_ID = #{buyerBatchOrderDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_BATCH_ORDER_DETAIL
+SET
+BUYER_BATCH_ORDER_DETAIL_ID = #{entity.buyerBatchOrderDetailId}
+, BUYER_ORDER_ID = #{entity.buyerOrderId}
+, BUYER_BATCH_ORDER_ID = #{entity.buyerBatchOrderId}
+, GOODS_UNIT = #{entity.goodsUnit}
+, GOODS_QUANTITY = #{entity.goodsQuantity}
+, CANCEL_QUANTITY = #{entity.cancelQuantity}
+, ORDER_CREATE_UNIT_PRICE = #{entity.orderCreateUnitPrice}
+, ORDER_CREATE_KG_PRICE = #{entity.orderCreateKgPrice}
+, REAL_UNIT_PRICE = #{entity.realUnitPrice}
+, REAL_KG_PRICE = #{entity.realKgPrice}
+, PRICE_CREATE_TIME = #{entity.priceCreateTime}
+, PRICE_WAY = #{entity.priceWay}
+, GOODS_ID = #{entity.goodsId}
+, PRODUCT_ID = #{entity.productId}
+, MANUFACTURER_ID = #{entity.manufacturerId}
+, SELLER_ID = #{entity.sellerId}
+, BATCH_ID = #{entity.batchId}
+, SALE_LABEL_ID = #{entity.saleLabelId}
+, SPLIT_FLG = #{entity.splitFlg}
+, MANUAL_SPLIT_FLG = #{entity.manualSplitFlg}
+, TRANSACTION_SEQUENCE = #{entity.transactionSequence}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BUYER_BATCH_ORDER_DETAIL_ID = #{entity.buyerBatchOrderDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BuyerBatchOrderDetailEntity" resultType="com.bms.order.bean.entity.BuyerBatchOrderDetailEntity">
+SELECT
+BUYER_BATCH_ORDER_DETAIL_ID AS buyerBatchOrderDetailId
+, BUYER_ORDER_ID AS buyerOrderId
+, BUYER_BATCH_ORDER_ID AS buyerBatchOrderId
+, GOODS_UNIT AS goodsUnit
+, GOODS_QUANTITY AS goodsQuantity
+, CANCEL_QUANTITY AS cancelQuantity
+, ORDER_CREATE_UNIT_PRICE AS orderCreateUnitPrice
+, ORDER_CREATE_KG_PRICE AS orderCreateKgPrice
+, REAL_UNIT_PRICE AS realUnitPrice
+, REAL_KG_PRICE AS realKgPrice
+, PRICE_CREATE_TIME AS priceCreateTime
+, PRICE_WAY AS priceWay
+, GOODS_ID AS goodsId
+, PRODUCT_ID AS productId
+, MANUFACTURER_ID AS manufacturerId
+, SELLER_ID AS sellerId
+, BATCH_ID AS batchId
+, SALE_LABEL_ID AS saleLabelId
+, SPLIT_FLG AS splitFlg
+, MANUAL_SPLIT_FLG AS manualSplitFlg
+, TRANSACTION_SEQUENCE AS transactionSequence
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_BATCH_ORDER_DETAIL
+<where>
+<if test="buyerBatchOrderDetailId!=null">
+AND BUYER_BATCH_ORDER_DETAIL_ID = #{buyerBatchOrderDetailId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BuyerBatchOrderDetailEntity">
+SELECT
+BUYER_BATCH_ORDER_DETAIL_ID AS buyerBatchOrderDetailId
+, BUYER_ORDER_ID AS buyerOrderId
+, BUYER_BATCH_ORDER_ID AS buyerBatchOrderId
+, GOODS_UNIT AS goodsUnit
+, GOODS_QUANTITY AS goodsQuantity
+, CANCEL_QUANTITY AS cancelQuantity
+, ORDER_CREATE_UNIT_PRICE AS orderCreateUnitPrice
+, ORDER_CREATE_KG_PRICE AS orderCreateKgPrice
+, REAL_UNIT_PRICE AS realUnitPrice
+, REAL_KG_PRICE AS realKgPrice
+, PRICE_CREATE_TIME AS priceCreateTime
+, PRICE_WAY AS priceWay
+, GOODS_ID AS goodsId
+, PRODUCT_ID AS productId
+, MANUFACTURER_ID AS manufacturerId
+, SELLER_ID AS sellerId
+, BATCH_ID AS batchId
+, SALE_LABEL_ID AS saleLabelId
+, SPLIT_FLG AS splitFlg
+, MANUAL_SPLIT_FLG AS manualSplitFlg
+, TRANSACTION_SEQUENCE AS transactionSequence
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_BATCH_ORDER_DETAIL
+<where>
+<if test="ids!=null">
+AND BUYER_BATCH_ORDER_DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="buyerOrders!=null">
+AND BUYER_ORDER_ID IN (<foreach item="item" collection="buyerOrders" separator=",">#{item.entity.buyerOrderId}</foreach>)
+</if>
+<if test="buyerBatchOrders!=null">
+AND BUYER_BATCH_ORDER_ID IN (<foreach item="item" collection="buyerBatchOrders" separator=",">#{item.entity.buyerBatchOrderId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.BuyerBatchOrderDetailHistoryEntity">
+INSERT INTO
+ORDR_BUYER_BATCH_ORDER_DETAIL_HISTORY
+(
+HISTORY_ID
+, BUYER_BATCH_ORDER_DETAIL_ID
+, BUYER_ORDER_ID
+, BUYER_BATCH_ORDER_ID
+, GOODS_UNIT
+, GOODS_QUANTITY
+, CANCEL_QUANTITY
+, ORDER_CREATE_UNIT_PRICE
+, ORDER_CREATE_KG_PRICE
+, REAL_UNIT_PRICE
+, REAL_KG_PRICE
+, PRICE_CREATE_TIME
+, PRICE_WAY
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, BATCH_ID
+, SALE_LABEL_ID
+, SPLIT_FLG
+, MANUAL_SPLIT_FLG
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{buyerBatchOrderDetailId}
+, #{buyerOrderId}
+, #{buyerBatchOrderId}
+, #{goodsUnit}
+, #{goodsQuantity}
+, #{cancelQuantity}
+, #{orderCreateUnitPrice}
+, #{orderCreateKgPrice}
+, #{realUnitPrice}
+, #{realKgPrice}
+, #{priceCreateTime}
+, #{priceWay}
+, #{goodsId}
+, #{productId}
+, #{manufacturerId}
+, #{sellerId}
+, #{batchId}
+, #{saleLabelId}
+, #{splitFlg}
+, #{manualSplitFlg}
+, #{transactionSequence}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_BATCH_ORDER_DETAIL_HISTORY
+(
+HISTORY_ID
+, BUYER_BATCH_ORDER_DETAIL_ID
+, BUYER_ORDER_ID
+, BUYER_BATCH_ORDER_ID
+, GOODS_UNIT
+, GOODS_QUANTITY
+, CANCEL_QUANTITY
+, ORDER_CREATE_UNIT_PRICE
+, ORDER_CREATE_KG_PRICE
+, REAL_UNIT_PRICE
+, REAL_KG_PRICE
+, PRICE_CREATE_TIME
+, PRICE_WAY
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, BATCH_ID
+, SALE_LABEL_ID
+, SPLIT_FLG
+, MANUAL_SPLIT_FLG
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.buyerBatchOrderDetailId}
+, #{entity.buyerOrderId}
+, #{entity.buyerBatchOrderId}
+, #{entity.goodsUnit}
+, #{entity.goodsQuantity}
+, #{entity.cancelQuantity}
+, #{entity.orderCreateUnitPrice}
+, #{entity.orderCreateKgPrice}
+, #{entity.realUnitPrice}
+, #{entity.realKgPrice}
+, #{entity.priceCreateTime}
+, #{entity.priceWay}
+, #{entity.goodsId}
+, #{entity.productId}
+, #{entity.manufacturerId}
+, #{entity.sellerId}
+, #{entity.batchId}
+, #{entity.saleLabelId}
+, #{entity.splitFlg}
+, #{entity.manualSplitFlg}
+, #{entity.transactionSequence}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

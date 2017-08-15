@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.PaymentDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.PaymentEntity">
+INSERT INTO
+ORDR_PAYMENT
+(
+PAYMENT_ID
+, ORDER_ID
+, BATCH_ORDER_ID
+, PAYMENT_WAY
+, PAYMENT_SUBJECT
+, PAYMENT_AMOUNT
+, PAYMENT_DATETIME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{paymentId}
+, #{orderId}
+, #{batchOrderId}
+, #{paymentWay}
+, #{paymentSubject}
+, #{paymentAmount}
+, #{paymentDatetime}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_PAYMENT
+(
+PAYMENT_ID
+, ORDER_ID
+, BATCH_ORDER_ID
+, PAYMENT_WAY
+, PAYMENT_SUBJECT
+, PAYMENT_AMOUNT
+, PAYMENT_DATETIME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.paymentId}
+, #{entity.orderId}
+, #{entity.batchOrderId}
+, #{entity.paymentWay}
+, #{entity.paymentSubject}
+, #{entity.paymentAmount}
+, #{entity.paymentDatetime}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.PaymentEntity">
+UPDATE ORDR_PAYMENT
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+PAYMENT_ID = #{paymentId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_PAYMENT
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+PAYMENT_ID = #{entity.paymentId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.PaymentEntity">
+UPDATE ORDR_PAYMENT
+SET
+PAYMENT_ID = #{paymentId}
+, ORDER_ID = #{orderId}
+, BATCH_ORDER_ID = #{batchOrderId}
+, PAYMENT_WAY = #{paymentWay}
+, PAYMENT_SUBJECT = #{paymentSubject}
+, PAYMENT_AMOUNT = #{paymentAmount}
+, PAYMENT_DATETIME = #{paymentDatetime}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+PAYMENT_ID = #{paymentId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_PAYMENT
+SET
+PAYMENT_ID = #{entity.paymentId}
+, ORDER_ID = #{entity.orderId}
+, BATCH_ORDER_ID = #{entity.batchOrderId}
+, PAYMENT_WAY = #{entity.paymentWay}
+, PAYMENT_SUBJECT = #{entity.paymentSubject}
+, PAYMENT_AMOUNT = #{entity.paymentAmount}
+, PAYMENT_DATETIME = #{entity.paymentDatetime}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+PAYMENT_ID = #{entity.paymentId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.PaymentEntity" resultType="com.bms.order.bean.entity.PaymentEntity">
+SELECT
+PAYMENT_ID AS paymentId
+, ORDER_ID AS orderId
+, BATCH_ORDER_ID AS batchOrderId
+, PAYMENT_WAY AS paymentWay
+, PAYMENT_SUBJECT AS paymentSubject
+, PAYMENT_AMOUNT AS paymentAmount
+, PAYMENT_DATETIME AS paymentDatetime
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_PAYMENT
+<where>
+<if test="paymentId!=null">
+AND PAYMENT_ID = #{paymentId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.PaymentEntity">
+SELECT
+PAYMENT_ID AS paymentId
+, ORDER_ID AS orderId
+, BATCH_ORDER_ID AS batchOrderId
+, PAYMENT_WAY AS paymentWay
+, PAYMENT_SUBJECT AS paymentSubject
+, PAYMENT_AMOUNT AS paymentAmount
+, PAYMENT_DATETIME AS paymentDatetime
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_PAYMENT
+<where>
+<if test="ids!=null">
+AND PAYMENT_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+</mapper>

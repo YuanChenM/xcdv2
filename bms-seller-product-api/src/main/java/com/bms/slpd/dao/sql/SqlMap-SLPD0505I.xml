@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0505IDao">
+
+    <update id="updateItemProperties" parameterType="com.bms.slpd.bean.UpdateEntity">
+        update SLPD_ITEM_PROPERTY
+        <set>
+            <if test="target.sourceTypeFlg == true">
+                SOURCE_TYPE = #{entity.sourceType},
+            </if>
+            <if test="target.grossWeightFlg == true">
+                GROSS_WEIGHT = #{entity.grossWeight},
+            </if>
+            <if test="target.packageSpecificationFlg == true">
+                PACKAGE_SPECIFICATION = #{entity.packageSpecification},
+            </if>
+            <if test="target.packageQuantityFlg == true">
+                PACKAGE_QUANTITY = #{entity.packageQuantity},
+            </if>
+            <if test="target.cartonDimensionFlg == true">
+                CARTON_DIMENSION = #{entity.cartonDimension},
+            </if>
+            <if test="target.cartonLengthFlg == true">
+                CARTON_LENGTH = #{entity.cartonLength},
+            </if>
+            <if test="target.cartonWidthFlg == true">
+                CARTON_WIDTH = #{entity.cartonWidth},
+            </if>
+            <if test="target.cartonHeightFlg == true">
+                CARTON_HEIGHT = #{entity.cartonHeight},
+            </if>
+            <if test="target.palletStackingLimitFlg == true">
+                PALLET_STACKING_LIMIT = #{entity.palletStackingLimit},
+            </if>
+            <if test="target.delFlgFlg == true">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime},
+            VERSION=VERSION+1
+        </set>
+        where
+        DEL_FLG = 0
+        AND
+        ITEM_PROPERTY_ID = #{entity.itemPropertyId}
+        AND
+        VERSION = #{entity.version}
+    </update>
+
+    <!-- 查询单品规格是否已经生成产品 -->
+    <select id="findExistProducts" parameterType="java.util.List"
+            resultType="int">
+        SELECT
+        count(PRODUCT_ID)
+        FROM
+        SLPD_PRODUCT
+        <where>
+            DEL_FLG = 0
+            AND ITEM_PROPERTY_ID IN (
+            <foreach collection="list" item="itemPropertyId" separator=",">
+                #{itemPropertyId}
+            </foreach>
+            )
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0115IDao">
+    
+    <!--修改卖家制造商供应资质 -->
+    <update id="updateManufacturerSupplyQualification" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_MANUFACTURER_SUPPLY_QUALIFICATION
+        <set>
+            <if test="target.entitySellerIdFlg != null and target.entitySellerIdFlg">
+                ENTITY_SELLER_ID = #{entity.entitySellerId},
+            </if>
+            <if test="target.entrustedProducerNameFlg != null and target.entrustedProducerNameFlg">
+                ENTRUSTED_PRODUCER_NAME = #{entity.entrustedProducerName},
+            </if>
+            <if test="target.oemProducerNameFlg != null and target.oemProducerNameFlg">
+                OEM_PRODUCER_NAME = #{entity.oemProducerName},
+            </if>
+            <if test="target.oemValidPeriodFlg != null and target.oemValidPeriodFlg">
+                OEM_VALID_PERIOD = #{entity.oemValidPeriod},
+            </if>
+            <if test="target.oemProtocolUrlFlg != null and target.oemProtocolUrlFlg">
+                OEM_PROTOCOL_URL = #{entity.oemProtocolUrl},
+            </if>
+            <if test="target.foodBizLicNoFlg != null and target.foodBizLicNoFlg">
+                FOOD_BIZ_LIC_NO = #{entity.foodBizLicNo},
+            </if>
+            <if test="target.fblValidPeriodFlg != null and target.fblValidPeriodFlg">
+                FBL_VALID_PERIOD = #{entity.fblValidPeriod},
+            </if>
+            <if test="target.foodBizLicUrlFlg != null and target.foodBizLicUrlFlg">
+                FOOD_BIZ_LIC_URL = #{entity.foodBizLicUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+        MSQ_ID = #{entity.msqId} AND DEL_FLG = 0
+    </update>
+
+</mapper>

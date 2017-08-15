@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0237IDao">
+
+    <!--新增生产商检测设备 -->
+    <insert id="saveProducerTestEquipments" parameterType="java.util.List">
+        INSERT INTO SLIM_PRODUCER_TEST_EQUIPMENT (
+        TEST_EQP_ID,
+        SELLER_ROLE_ID,
+        TEST_EQP_NAME,
+        TEST_EQP_USE,
+        TEST_EQP_PIC_URL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.testEqpId},
+            #{item.sellerRoleId},
+            #{item.testEqpName},
+            #{item.testEqpUse},
+            #{item.testEqpPicUrl},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.updId},
+            #{item.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

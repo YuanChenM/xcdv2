@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0208IDao">
+
+    <!-- 查询生产商生产资质-定点屠宰许可证 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0208IParam"
+            resultType="com.bms.slim.bean.result.field.SLIM0208DesignatSlaughterPermitResult">
+        SELECT
+            DSP_ID AS dspId,
+            SELLER_ROLE_ID AS sellerRoleId,
+            APPROVAL_NO AS approvalNo,
+            DSGT_SLGT_PRMT_CODE AS dsgtSlgtPrmtCode,
+            DSGT_SLGT_PRMT_URL AS dsgtSlgtPrmtUrl,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+            SLIM_DESIGNAT_SLAUGHTER_PERMIT
+        <where>
+            <if test="delFlg != null">
+                DEL_FLG = #{delFlg}
+            </if>
+            <if test="dspIds != null and dspIds.size() > 0">
+                AND DSP_ID IN
+                <foreach collection="dspIds" item="dspId" open="(" separator="," close=")">
+                    #{dspId}
+                </foreach>
+            </if>
+            <if test="sellerRoleIds != null and sellerRoleIds.size() > 0">
+                AND SELLER_ROLE_ID IN
+                <foreach collection="sellerRoleIds" item="sellerRoleId" open="(" separator="," close=")">
+                    #{sellerRoleId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

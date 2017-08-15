@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.ReturnReasonDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.ReturnReasonEntity">
+INSERT INTO
+ORDR_RETURN_REASON
+(
+REASON_ID
+, REASON_NAME
+, APPLY_TYPE
+, APPLY_OBJECT
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{reasonId}
+, #{reasonName}
+, #{applyType}
+, #{applyObject}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_RETURN_REASON
+(
+REASON_ID
+, REASON_NAME
+, APPLY_TYPE
+, APPLY_OBJECT
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.reasonId}
+, #{entity.reasonName}
+, #{entity.applyType}
+, #{entity.applyObject}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.ReturnReasonEntity">
+UPDATE ORDR_RETURN_REASON
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+REASON_ID = #{reasonId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_RETURN_REASON
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+REASON_ID = #{entity.reasonId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.ReturnReasonEntity">
+UPDATE ORDR_RETURN_REASON
+SET
+REASON_ID = #{reasonId}
+, REASON_NAME = #{reasonName}
+, APPLY_TYPE = #{applyType}
+, APPLY_OBJECT = #{applyObject}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+REASON_ID = #{reasonId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_RETURN_REASON
+SET
+REASON_ID = #{entity.reasonId}
+, REASON_NAME = #{entity.reasonName}
+, APPLY_TYPE = #{entity.applyType}
+, APPLY_OBJECT = #{entity.applyObject}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+REASON_ID = #{entity.reasonId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.ReturnReasonEntity" resultType="com.bms.order.bean.entity.ReturnReasonEntity">
+SELECT
+REASON_ID AS reasonId
+, REASON_NAME AS reasonName
+, APPLY_TYPE AS applyType
+, APPLY_OBJECT AS applyObject
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_RETURN_REASON
+<where>
+<if test="reasonId!=null">
+AND REASON_ID = #{reasonId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.ReturnReasonEntity">
+SELECT
+REASON_ID AS reasonId
+, REASON_NAME AS reasonName
+, APPLY_TYPE AS applyType
+, APPLY_OBJECT AS applyObject
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_RETURN_REASON
+<where>
+<if test="ids!=null">
+AND REASON_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0107IDao">
+
+    <!--新增卖家经营团队 -->
+    <insert id="saveSellerManagementTeams" parameterType="java.util.List">
+        INSERT INTO SLIM_SELLER_MANAGEMENT_TEAM(
+        SMT_ID,
+        ENTITY_SELLER_ID,
+        POSITION_TYPE,
+        NAME,
+        AGE,
+        EDUCATIONAL_LEVEL,
+        CONTACT_WAY,
+        AVATAR_URL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.smtId},
+            #{item.entitySellerId},
+            #{item.positionType},
+            #{item.name},
+            #{item.age},
+            #{item.educationalLevel},
+            #{item.contactWay},
+            #{item.avatarUrl},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.updId},
+            #{item.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

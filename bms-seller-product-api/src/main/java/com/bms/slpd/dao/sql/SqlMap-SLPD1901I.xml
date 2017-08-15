@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD1901IDao">
+
+    <!-- 单品表字段 -->
+    <sql id="productColumns">
+        A.AUDIT_STU AS auditStu,
+        A.ITEM_ID AS itemId,
+        A.ITEM_CODE AS itemCode,
+        A.ITEM_SKU AS itemSku,
+        A.ITEM_NAME AS itemName,
+        A.SPECIFICATION AS specification,
+        A.PROCESSING_METHOD AS processingMethod,
+        A.TASTE AS taste,
+        A.BREED_ID AS breedId,
+        A.BREED_CODE AS breedCode,
+        A.BREED_SKU AS breedSku,
+        A.BREED_SALES_NAME AS breedSalesName,
+        A.BREED_SCIENTIFIC_NAME AS breedScientificName,
+        A.BREED_LOCAL_NAME AS breedLocalName,
+        A.MACHINING_ID AS machiningId,
+        A.MACHINING_CODE AS machiningCode,
+        A.MACHINING_NAME AS machiningName,
+        A.CLASSES_ID AS classesId,
+        A.CLASSES_CODE AS classesCode,
+        A.CLASSES_NAME AS classesName,
+        A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version,
+		A.NET_WEIGHT_CODE AS netWeightCode,
+		A.NET_WEIGHT AS netWeight
+	</sql>
+
+    <!-- 查询单品,查询条件-->
+    <sql id="whereConditions">
+        1 = 1
+        <if test="delFlg != null">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+        <if test="itemIds != null and itemIds.size() > 0">
+            AND A.ITEM_ID IN
+            <foreach collection="itemIds" item="itemId" open="(" separator="," close=")">
+                #{itemId}
+            </foreach>
+        </if>
+        <if test="netWeightCodes != null and netWeightCodes.size() > 0">
+            AND A.NET_WEIGHT_CODE IN
+            <foreach collection="netWeightCodes" item="netWeightCode" open="(" separator="," close=")">
+                #{netWeightCode}
+            </foreach>
+        </if>
+        <if test="netWeight != null and netWeight != ''">
+            AND E.NET_WEIGHT LIKE #{netWeight}
+        </if>
+        GROUP BY itemId,netWeight
+    </sql>
+
+    <select id="findPageList" parameterType="com.bms.slpd.bean.param.SLPD1901IParam" resultType="com.bms.slpd.bean.result.wrapper.SLPD1901INetWeightResult">
+        SELECT
+            <include refid="productColumns"/>
+        FROM
+        SLPD_PRODUCT AS A
+        WHERE
+            <include refid="whereConditions"/>
+    </select>
+    <!-- End -->
+
+</mapper>

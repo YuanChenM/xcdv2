@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0702IDao">
+
+    <!--新增单品品牌(规格)生产商-->
+    <insert id="saveProducerProducts" parameterType="java.util.List">
+        INSERT INTO SLPD_PRODUCER_PRODUCT (
+        PRODUCER_PRODUCT_ID,
+        PRODUCER_PRODUCT_CODE,
+        PRODUCER_PRODUCT_SKU,
+        PRODUCT_ID,
+        ENTITY_SELLER_ID,
+        AUDIT_STU,
+        AUDIT_REMARK,
+        AUDIT_HISTORY,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="producerProduct" separator=",">
+        (
+        #{producerProduct.producerProductId},
+        #{producerProduct.producerProductCode},
+        #{producerProduct.producerProductSku},
+        #{producerProduct.productId},
+        #{producerProduct.entitySellerId},
+        0,
+        #{producerProduct.auditRemark},
+        #{producerProduct.auditHistory},
+        0,
+        #{producerProduct.crtId},
+        #{producerProduct.crtTime},
+        #{producerProduct.updId},
+        #{producerProduct.updTime},
+        1
+        )
+        </foreach>
+    </insert>
+
+    <!-- 新增排他 -->
+    <!-- 查询单品名称是否唯一 -->
+    <select id="findProducerProduct" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdProducerProduct">
+        SELECT
+        PRODUCER_PRODUCT_ID AS producerProductId,
+        PRODUCT_ID AS productId,
+        PRODUCER_ID AS producerId
+        FROM SLPD_PRODUCER_PRODUCT
+        WHERE
+        DEL_FLG = 0
+        AND
+        <foreach collection="list" item="producerProduct" open="(" separator="or" close=")">
+            PRODUCT_ID = #{producerProduct.productId}
+            AND
+            PRODUCER_ID = #{producerProduct.producerId}
+        </foreach>
+    </select>
+
+</mapper>

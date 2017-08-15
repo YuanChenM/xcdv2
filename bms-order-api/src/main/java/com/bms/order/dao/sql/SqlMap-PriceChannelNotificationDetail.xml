@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.PriceChannelNotificationDetailDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.PriceChannelNotificationDetailEntity">
+INSERT INTO
+ORDR_PRICE_CHANNEL_NOTIFICATION_DETAIL
+(
+PRICE_CHANNEL_NOTIFICATION_DETAIL_ID
+, PRICE_CHANNEL_NOTIFICATION_ID
+, GOODS_ID
+, GOODS_QUANTITY
+, WAY_TYPE_ID
+, WAY_TYPE_NAME
+, WAY_CONFIG_ID
+, WAY_DESC
+, PRICE_CHANNEL_START_QUANTITY
+, PRICE_CHANNEL_END_QUANTITY
+, PRICE_CHANNEL_KG_PRICE
+, PRICE_CHANNEL_UNIT_PRICE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{priceChannelNotificationDetailId}
+, #{priceChannelNotificationId}
+, #{goodsId}
+, #{goodsQuantity}
+, #{wayTypeId}
+, #{wayTypeName}
+, #{wayConfigId}
+, #{wayDesc}
+, #{priceChannelStartQuantity}
+, #{priceChannelEndQuantity}
+, #{priceChannelKgPrice}
+, #{priceChannelUnitPrice}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_PRICE_CHANNEL_NOTIFICATION_DETAIL
+(
+PRICE_CHANNEL_NOTIFICATION_DETAIL_ID
+, PRICE_CHANNEL_NOTIFICATION_ID
+, GOODS_ID
+, GOODS_QUANTITY
+, WAY_TYPE_ID
+, WAY_TYPE_NAME
+, WAY_CONFIG_ID
+, WAY_DESC
+, PRICE_CHANNEL_START_QUANTITY
+, PRICE_CHANNEL_END_QUANTITY
+, PRICE_CHANNEL_KG_PRICE
+, PRICE_CHANNEL_UNIT_PRICE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.priceChannelNotificationDetailId}
+, #{entity.priceChannelNotificationId}
+, #{entity.goodsId}
+, #{entity.goodsQuantity}
+, #{entity.wayTypeId}
+, #{entity.wayTypeName}
+, #{entity.wayConfigId}
+, #{entity.wayDesc}
+, #{entity.priceChannelStartQuantity}
+, #{entity.priceChannelEndQuantity}
+, #{entity.priceChannelKgPrice}
+, #{entity.priceChannelUnitPrice}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.PriceChannelNotificationDetailEntity">
+UPDATE ORDR_PRICE_CHANNEL_NOTIFICATION_DETAIL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+PRICE_CHANNEL_NOTIFICATION_DETAIL_ID = #{priceChannelNotificationDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_PRICE_CHANNEL_NOTIFICATION_DETAIL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+PRICE_CHANNEL_NOTIFICATION_DETAIL_ID = #{entity.priceChannelNotificationDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.PriceChannelNotificationDetailEntity">
+UPDATE ORDR_PRICE_CHANNEL_NOTIFICATION_DETAIL
+SET
+PRICE_CHANNEL_NOTIFICATION_DETAIL_ID = #{priceChannelNotificationDetailId}
+, PRICE_CHANNEL_NOTIFICATION_ID = #{priceChannelNotificationId}
+, GOODS_ID = #{goodsId}
+, GOODS_QUANTITY = #{goodsQuantity}
+, WAY_TYPE_ID = #{wayTypeId}
+, WAY_TYPE_NAME = #{wayTypeName}
+, WAY_CONFIG_ID = #{wayConfigId}
+, WAY_DESC = #{wayDesc}
+, PRICE_CHANNEL_START_QUANTITY = #{priceChannelStartQuantity}
+, PRICE_CHANNEL_END_QUANTITY = #{priceChannelEndQuantity}
+, PRICE_CHANNEL_KG_PRICE = #{priceChannelKgPrice}
+, PRICE_CHANNEL_UNIT_PRICE = #{priceChannelUnitPrice}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+PRICE_CHANNEL_NOTIFICATION_DETAIL_ID = #{priceChannelNotificationDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_PRICE_CHANNEL_NOTIFICATION_DETAIL
+SET
+PRICE_CHANNEL_NOTIFICATION_DETAIL_ID = #{entity.priceChannelNotificationDetailId}
+, PRICE_CHANNEL_NOTIFICATION_ID = #{entity.priceChannelNotificationId}
+, GOODS_ID = #{entity.goodsId}
+, GOODS_QUANTITY = #{entity.goodsQuantity}
+, WAY_TYPE_ID = #{entity.wayTypeId}
+, WAY_TYPE_NAME = #{entity.wayTypeName}
+, WAY_CONFIG_ID = #{entity.wayConfigId}
+, WAY_DESC = #{entity.wayDesc}
+, PRICE_CHANNEL_START_QUANTITY = #{entity.priceChannelStartQuantity}
+, PRICE_CHANNEL_END_QUANTITY = #{entity.priceChannelEndQuantity}
+, PRICE_CHANNEL_KG_PRICE = #{entity.priceChannelKgPrice}
+, PRICE_CHANNEL_UNIT_PRICE = #{entity.priceChannelUnitPrice}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+PRICE_CHANNEL_NOTIFICATION_DETAIL_ID = #{entity.priceChannelNotificationDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.PriceChannelNotificationDetailEntity" resultType="com.bms.order.bean.entity.PriceChannelNotificationDetailEntity">
+SELECT
+PRICE_CHANNEL_NOTIFICATION_DETAIL_ID AS priceChannelNotificationDetailId
+, PRICE_CHANNEL_NOTIFICATION_ID AS priceChannelNotificationId
+, GOODS_ID AS goodsId
+, GOODS_QUANTITY AS goodsQuantity
+, WAY_TYPE_ID AS wayTypeId
+, WAY_TYPE_NAME AS wayTypeName
+, WAY_CONFIG_ID AS wayConfigId
+, WAY_DESC AS wayDesc
+, PRICE_CHANNEL_START_QUANTITY AS priceChannelStartQuantity
+, PRICE_CHANNEL_END_QUANTITY AS priceChannelEndQuantity
+, PRICE_CHANNEL_KG_PRICE AS priceChannelKgPrice
+, PRICE_CHANNEL_UNIT_PRICE AS priceChannelUnitPrice
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_PRICE_CHANNEL_NOTIFICATION_DETAIL
+<where>
+<if test="priceChannelNotificationDetailId!=null">
+AND PRICE_CHANNEL_NOTIFICATION_DETAIL_ID = #{priceChannelNotificationDetailId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.PriceChannelNotificationDetailEntity">
+SELECT
+PRICE_CHANNEL_NOTIFICATION_DETAIL_ID AS priceChannelNotificationDetailId
+, PRICE_CHANNEL_NOTIFICATION_ID AS priceChannelNotificationId
+, GOODS_ID AS goodsId
+, GOODS_QUANTITY AS goodsQuantity
+, WAY_TYPE_ID AS wayTypeId
+, WAY_TYPE_NAME AS wayTypeName
+, WAY_CONFIG_ID AS wayConfigId
+, WAY_DESC AS wayDesc
+, PRICE_CHANNEL_START_QUANTITY AS priceChannelStartQuantity
+, PRICE_CHANNEL_END_QUANTITY AS priceChannelEndQuantity
+, PRICE_CHANNEL_KG_PRICE AS priceChannelKgPrice
+, PRICE_CHANNEL_UNIT_PRICE AS priceChannelUnitPrice
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_PRICE_CHANNEL_NOTIFICATION_DETAIL
+<where>
+<if test="ids!=null">
+AND PRICE_CHANNEL_NOTIFICATION_DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="priceChannelNotifications!=null">
+AND PRICE_CHANNEL_NOTIFICATION_ID IN (<foreach item="item" collection="priceChannelNotifications" separator=",">#{item.entity.priceChannelNotificationId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+</mapper>

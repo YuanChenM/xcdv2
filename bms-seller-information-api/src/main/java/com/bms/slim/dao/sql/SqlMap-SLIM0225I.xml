@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0225IDao">
+
+    <!--新增生产商工厂 -->
+    <insert id="saveProducerFactories" parameterType="java.util.List">
+        INSERT INTO SLIM_PRODUCER_FACTORY (
+        FACTORY_ID,
+        SELLER_ROLE_ID,
+        TOTAL_ASSET,
+        REGISTERED_CAPITAL,
+        COVERED_AREA,
+        WORKSHOP_AREA,
+        MAJOR_EQUIPMENT,
+        DESIGN_CAPACITY,
+        EXPORT_SALE_PERCENT,
+        SELF_SALE_PERCENT,
+        AGENT_SALE_PERCENT,
+        FACTORY_PIC_URL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.factoryId},
+            #{item.sellerRoleId},
+            #{item.totalAsset},
+            #{item.registeredCapital},
+            #{item.coveredArea},
+            #{item.workshopArea},
+            #{item.majorEquipment},
+            #{item.designCapacity},
+            #{item.exportSalePercent},
+            #{item.selfSalePercent},
+            #{item.agentSalePercent},
+            #{item.factoryPicUrl},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.updId},
+            #{item.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.ReceiveNotificationDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.ReceiveNotificationEntity">
+INSERT INTO
+ORDR_RECEIVE_NOTIFICATION
+(
+RECEIVE_NOTIFICATION_ID
+, SEND_NOTIFICATION_CODE
+, SEND_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, PAYMENT_MONEY
+, SIGNATORY
+, RECEIVE_TIME
+, RECEIVE_REMARK
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{receiveNotificationId}
+, #{sendNotificationCode}
+, #{sendNotificationId}
+, #{distributionNotificationId}
+, #{distributionNotificationCode}
+, #{paymentMoney}
+, #{signatory}
+, #{receiveTime}
+, #{receiveRemark}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_RECEIVE_NOTIFICATION
+(
+RECEIVE_NOTIFICATION_ID
+, SEND_NOTIFICATION_CODE
+, SEND_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, PAYMENT_MONEY
+, SIGNATORY
+, RECEIVE_TIME
+, RECEIVE_REMARK
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.receiveNotificationId}
+, #{entity.sendNotificationCode}
+, #{entity.sendNotificationId}
+, #{entity.distributionNotificationId}
+, #{entity.distributionNotificationCode}
+, #{entity.paymentMoney}
+, #{entity.signatory}
+, #{entity.receiveTime}
+, #{entity.receiveRemark}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.ReceiveNotificationEntity">
+UPDATE ORDR_RECEIVE_NOTIFICATION
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+RECEIVE_NOTIFICATION_ID = #{receiveNotificationId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_RECEIVE_NOTIFICATION
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+RECEIVE_NOTIFICATION_ID = #{entity.receiveNotificationId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.ReceiveNotificationEntity">
+UPDATE ORDR_RECEIVE_NOTIFICATION
+SET
+RECEIVE_NOTIFICATION_ID = #{receiveNotificationId}
+, SEND_NOTIFICATION_CODE = #{sendNotificationCode}
+, SEND_NOTIFICATION_ID = #{sendNotificationId}
+, DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+, DISTRIBUTION_NOTIFICATION_CODE = #{distributionNotificationCode}
+, PAYMENT_MONEY = #{paymentMoney}
+, SIGNATORY = #{signatory}
+, RECEIVE_TIME = #{receiveTime}
+, RECEIVE_REMARK = #{receiveRemark}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+RECEIVE_NOTIFICATION_ID = #{receiveNotificationId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_RECEIVE_NOTIFICATION
+SET
+RECEIVE_NOTIFICATION_ID = #{entity.receiveNotificationId}
+, SEND_NOTIFICATION_CODE = #{entity.sendNotificationCode}
+, SEND_NOTIFICATION_ID = #{entity.sendNotificationId}
+, DISTRIBUTION_NOTIFICATION_ID = #{entity.distributionNotificationId}
+, DISTRIBUTION_NOTIFICATION_CODE = #{entity.distributionNotificationCode}
+, PAYMENT_MONEY = #{entity.paymentMoney}
+, SIGNATORY = #{entity.signatory}
+, RECEIVE_TIME = #{entity.receiveTime}
+, RECEIVE_REMARK = #{entity.receiveRemark}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+RECEIVE_NOTIFICATION_ID = #{entity.receiveNotificationId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.ReceiveNotificationEntity" resultType="com.bms.order.bean.entity.ReceiveNotificationEntity">
+SELECT
+RECEIVE_NOTIFICATION_ID AS receiveNotificationId
+, SEND_NOTIFICATION_CODE AS sendNotificationCode
+, SEND_NOTIFICATION_ID AS sendNotificationId
+, DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, DISTRIBUTION_NOTIFICATION_CODE AS distributionNotificationCode
+, PAYMENT_MONEY AS paymentMoney
+, SIGNATORY AS signatory
+, RECEIVE_TIME AS receiveTime
+, RECEIVE_REMARK AS receiveRemark
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_RECEIVE_NOTIFICATION
+<where>
+<if test="receiveNotificationId!=null">
+AND RECEIVE_NOTIFICATION_ID = #{receiveNotificationId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.ReceiveNotificationEntity">
+SELECT
+RECEIVE_NOTIFICATION_ID AS receiveNotificationId
+, SEND_NOTIFICATION_CODE AS sendNotificationCode
+, SEND_NOTIFICATION_ID AS sendNotificationId
+, DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, DISTRIBUTION_NOTIFICATION_CODE AS distributionNotificationCode
+, PAYMENT_MONEY AS paymentMoney
+, SIGNATORY AS signatory
+, RECEIVE_TIME AS receiveTime
+, RECEIVE_REMARK AS receiveRemark
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_RECEIVE_NOTIFICATION
+<where>
+<if test="ids!=null">
+AND RECEIVE_NOTIFICATION_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="distributionNotifications!=null">
+AND DISTRIBUTION_NOTIFICATION_ID IN (<foreach item="item" collection="distributionNotifications" separator=",">#{item.entity.distributionNotificationId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.ReceiveNotificationHistoryEntity">
+INSERT INTO
+ORDR_RECEIVE_NOTIFICATION_HISTORY
+(
+HISTORY_ID
+, RECEIVE_NOTIFICATION_ID
+, SEND_NOTIFICATION_CODE
+, SEND_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, PAYMENT_MONEY
+, SIGNATORY
+, RECEIVE_TIME
+, RECEIVE_REMARK
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{receiveNotificationId}
+, #{sendNotificationCode}
+, #{sendNotificationId}
+, #{distributionNotificationId}
+, #{distributionNotificationCode}
+, #{paymentMoney}
+, #{signatory}
+, #{receiveTime}
+, #{receiveRemark}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_RECEIVE_NOTIFICATION_HISTORY
+(
+HISTORY_ID
+, RECEIVE_NOTIFICATION_ID
+, SEND_NOTIFICATION_CODE
+, SEND_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, PAYMENT_MONEY
+, SIGNATORY
+, RECEIVE_TIME
+, RECEIVE_REMARK
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.receiveNotificationId}
+, #{entity.sendNotificationCode}
+, #{entity.sendNotificationId}
+, #{entity.distributionNotificationId}
+, #{entity.distributionNotificationCode}
+, #{entity.paymentMoney}
+, #{entity.signatory}
+, #{entity.receiveTime}
+, #{entity.receiveRemark}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

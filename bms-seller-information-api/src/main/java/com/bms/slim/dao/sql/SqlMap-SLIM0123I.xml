@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0123IDao">
+
+    <!-- 查询卖家角色信息 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0123IParam"
+            resultType="com.bms.slim.bean.result.field.SLIM0123SellerResult">
+        SELECT
+        SELLER_ID AS sellerId,
+        SELLER_CODE AS sellerCode,
+        SALE_TYPE AS saleType,
+        ENTITY_SELLER_ID AS entitySellerId,
+        DEL_FLG AS delFlg
+        FROM
+        SLIM_SELLER
+        <if test="entitySellerIds != null and entitySellerIds.size() > 0">
+        WHERE ENTITY_SELLER_ID IN
+            <foreach collection="entitySellerIds" index="index" item="entitySellerId" open="(" separator="," close=")">
+                #{entitySellerId}
+            </foreach>
+        </if>
+    </select>
+
+</mapper>

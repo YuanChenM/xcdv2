@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD1201IDao">
+
+    <!-- 新增物流区商品 -->
+    <insert id="saveLgcsCommodities" parameterType="java.util.List">
+        INSERT INTO SLPD_LOGISTICS_AREA_PRODUCT
+        (
+        LAC_ID,
+        LGCS_AREA_ID,
+        LGCS_AREA_CODE,
+        LGCS_AREA_NAME,
+        PRODUCT_DEMAND_GRADE,
+        PRODUCT_ID,
+        SHELF_STU,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="lac" separator=",">
+            (
+            #{lac.lacId},
+            #{lac.lgcsAreaId},
+            #{lac.lgcsAreaCode},
+            #{lac.lgcsAreaName},
+            0,
+            #{lac.productId},
+            2,
+            0,
+            #{lac.crtId},
+            #{lac.crtTime},
+            #{lac.updId},
+            #{lac.updTime},
+            1
+            )
+        </foreach>
+
+    </insert>
+
+    <!-- 查询已存在的物流区商品 -->
+    <select id="findExistLgcsCommodities" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdLogisticsAreaProduct">
+      SELECT
+      LAC_ID AS lacId,
+      LGCS_AREA_ID AS lgcsAreaId,
+      LGCS_AREA_CODE AS lgcsAreaCode,
+      PRODUCT_ID AS productId
+      FROM
+      SLPD_LOGISTICS_AREA_PRODUCT
+      WHERE DEL_FLG = 0
+        AND
+      <foreach collection="list" item="lgcsAreaCommodity" open="(" separator="or" close=")">
+          (
+          LGCS_AREA_ID = #{lgcsAreaCommodity.lgcsAreaId}
+          AND
+          PRODUCT_ID = #{lgcsAreaCommodity.productId}
+          )
+      </foreach>
+  </select>
+
+</mapper>

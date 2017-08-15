@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BuyerBatchOrderAttachedDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BuyerBatchOrderAttachedEntity">
+INSERT INTO
+ORDR_BUYER_BATCH_ORDER_ATTACHED
+(
+BUYER_BATCH_ORDER_ID
+, RECEIVER_NAME
+, RECEIVER_PHONE
+, RECEIVER_QQ
+, RECEIVER_WECHAT
+, RECEIVER_MAIL
+, RECEIVER_PROVINCE
+, RECEIVER_CITY
+, RECEIVER_DISTRICT
+, RECEIVER_ADDRESS
+, RECEIVER_ASSIST_ADDRESS
+, DELIVERY_AREA
+, PASS_TRAFFIC_MODEL
+, DISTRIBUTION_TYPE
+, RECEIVE_PERIOD
+, RECEIVE_EARLIEST
+, RECEIVE_LATEST
+, RECEIVE_WAIT_HOUR
+, ADVANCED_NOTIFICATION_HOUR
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG
+, STEVEDORE_REQUIREMENT
+, PACKAGE_REQUIREMENT
+, NEAREST_PARKING_DISTANCE
+, REMARK
+, ADDRESS_KEY
+, DELIVERY_AREA_CODE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{buyerBatchOrderId}
+, #{receiverName}
+, #{receiverPhone}
+, #{receiverQq}
+, #{receiverWechat}
+, #{receiverMail}
+, #{receiverProvince}
+, #{receiverCity}
+, #{receiverDistrict}
+, #{receiverAddress}
+, #{receiverAssistAddress}
+, #{deliveryArea}
+, #{passTrafficModel}
+, #{distributionType}
+, #{receivePeriod}
+, #{receiveEarliest}
+, #{receiveLatest}
+, #{receiveWaitHour}
+, #{advancedNotificationHour}
+, #{animalQuarantineCertificationFlg}
+, #{stevedoreRequirement}
+, #{packageRequirement}
+, #{nearestParkingDistance}
+, #{remark}
+, #{addressKey}
+, #{deliveryAreaCode}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_BATCH_ORDER_ATTACHED
+(
+BUYER_BATCH_ORDER_ID
+, RECEIVER_NAME
+, RECEIVER_PHONE
+, RECEIVER_QQ
+, RECEIVER_WECHAT
+, RECEIVER_MAIL
+, RECEIVER_PROVINCE
+, RECEIVER_CITY
+, RECEIVER_DISTRICT
+, RECEIVER_ADDRESS
+, RECEIVER_ASSIST_ADDRESS
+, DELIVERY_AREA
+, PASS_TRAFFIC_MODEL
+, DISTRIBUTION_TYPE
+, RECEIVE_PERIOD
+, RECEIVE_EARLIEST
+, RECEIVE_LATEST
+, RECEIVE_WAIT_HOUR
+, ADVANCED_NOTIFICATION_HOUR
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG
+, STEVEDORE_REQUIREMENT
+, PACKAGE_REQUIREMENT
+, NEAREST_PARKING_DISTANCE
+, REMARK
+, ADDRESS_KEY
+, DELIVERY_AREA_CODE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.buyerBatchOrderId}
+, #{entity.receiverName}
+, #{entity.receiverPhone}
+, #{entity.receiverQq}
+, #{entity.receiverWechat}
+, #{entity.receiverMail}
+, #{entity.receiverProvince}
+, #{entity.receiverCity}
+, #{entity.receiverDistrict}
+, #{entity.receiverAddress}
+, #{entity.receiverAssistAddress}
+, #{entity.deliveryArea}
+, #{entity.passTrafficModel}
+, #{entity.distributionType}
+, #{entity.receivePeriod}
+, #{entity.receiveEarliest}
+, #{entity.receiveLatest}
+, #{entity.receiveWaitHour}
+, #{entity.advancedNotificationHour}
+, #{entity.animalQuarantineCertificationFlg}
+, #{entity.stevedoreRequirement}
+, #{entity.packageRequirement}
+, #{entity.nearestParkingDistance}
+, #{entity.remark}
+, #{entity.addressKey}
+, #{entity.deliveryAreaCode}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BuyerBatchOrderAttachedEntity">
+UPDATE ORDR_BUYER_BATCH_ORDER_ATTACHED
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BUYER_BATCH_ORDER_ID = #{buyerBatchOrderId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_BATCH_ORDER_ATTACHED
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BUYER_BATCH_ORDER_ID = #{entity.buyerBatchOrderId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BuyerBatchOrderAttachedEntity">
+UPDATE ORDR_BUYER_BATCH_ORDER_ATTACHED
+SET
+BUYER_BATCH_ORDER_ID = #{buyerBatchOrderId}
+, RECEIVER_NAME = #{receiverName}
+, RECEIVER_PHONE = #{receiverPhone}
+, RECEIVER_QQ = #{receiverQq}
+, RECEIVER_WECHAT = #{receiverWechat}
+, RECEIVER_MAIL = #{receiverMail}
+, RECEIVER_PROVINCE = #{receiverProvince}
+, RECEIVER_CITY = #{receiverCity}
+, RECEIVER_DISTRICT = #{receiverDistrict}
+, RECEIVER_ADDRESS = #{receiverAddress}
+, RECEIVER_ASSIST_ADDRESS = #{receiverAssistAddress}
+, DELIVERY_AREA = #{deliveryArea}
+, PASS_TRAFFIC_MODEL = #{passTrafficModel}
+, DISTRIBUTION_TYPE = #{distributionType}
+, RECEIVE_PERIOD = #{receivePeriod}
+, RECEIVE_EARLIEST = #{receiveEarliest}
+, RECEIVE_LATEST = #{receiveLatest}
+, RECEIVE_WAIT_HOUR = #{receiveWaitHour}
+, ADVANCED_NOTIFICATION_HOUR = #{advancedNotificationHour}
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG = #{animalQuarantineCertificationFlg}
+, STEVEDORE_REQUIREMENT = #{stevedoreRequirement}
+, PACKAGE_REQUIREMENT = #{packageRequirement}
+, NEAREST_PARKING_DISTANCE = #{nearestParkingDistance}
+, REMARK = #{remark}
+, ADDRESS_KEY = #{addressKey}
+, DELIVERY_AREA_CODE = #{deliveryAreaCode}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BUYER_BATCH_ORDER_ID = #{buyerBatchOrderId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_BATCH_ORDER_ATTACHED
+SET
+BUYER_BATCH_ORDER_ID = #{entity.buyerBatchOrderId}
+, RECEIVER_NAME = #{entity.receiverName}
+, RECEIVER_PHONE = #{entity.receiverPhone}
+, RECEIVER_QQ = #{entity.receiverQq}
+, RECEIVER_WECHAT = #{entity.receiverWechat}
+, RECEIVER_MAIL = #{entity.receiverMail}
+, RECEIVER_PROVINCE = #{entity.receiverProvince}
+, RECEIVER_CITY = #{entity.receiverCity}
+, RECEIVER_DISTRICT = #{entity.receiverDistrict}
+, RECEIVER_ADDRESS = #{entity.receiverAddress}
+, RECEIVER_ASSIST_ADDRESS = #{entity.receiverAssistAddress}
+, DELIVERY_AREA = #{entity.deliveryArea}
+, PASS_TRAFFIC_MODEL = #{entity.passTrafficModel}
+, DISTRIBUTION_TYPE = #{entity.distributionType}
+, RECEIVE_PERIOD = #{entity.receivePeriod}
+, RECEIVE_EARLIEST = #{entity.receiveEarliest}
+, RECEIVE_LATEST = #{entity.receiveLatest}
+, RECEIVE_WAIT_HOUR = #{entity.receiveWaitHour}
+, ADVANCED_NOTIFICATION_HOUR = #{entity.advancedNotificationHour}
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG = #{entity.animalQuarantineCertificationFlg}
+, STEVEDORE_REQUIREMENT = #{entity.stevedoreRequirement}
+, PACKAGE_REQUIREMENT = #{entity.packageRequirement}
+, NEAREST_PARKING_DISTANCE = #{entity.nearestParkingDistance}
+, REMARK = #{entity.remark}
+, ADDRESS_KEY = #{entity.addressKey}
+, DELIVERY_AREA_CODE = #{entity.deliveryAreaCode}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BUYER_BATCH_ORDER_ID = #{entity.buyerBatchOrderId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BuyerBatchOrderAttachedEntity" resultType="com.bms.order.bean.entity.BuyerBatchOrderAttachedEntity">
+SELECT
+BUYER_BATCH_ORDER_ID AS buyerBatchOrderId
+, RECEIVER_NAME AS receiverName
+, RECEIVER_PHONE AS receiverPhone
+, RECEIVER_QQ AS receiverQq
+, RECEIVER_WECHAT AS receiverWechat
+, RECEIVER_MAIL AS receiverMail
+, RECEIVER_PROVINCE AS receiverProvince
+, RECEIVER_CITY AS receiverCity
+, RECEIVER_DISTRICT AS receiverDistrict
+, RECEIVER_ADDRESS AS receiverAddress
+, RECEIVER_ASSIST_ADDRESS AS receiverAssistAddress
+, DELIVERY_AREA AS deliveryArea
+, PASS_TRAFFIC_MODEL AS passTrafficModel
+, DISTRIBUTION_TYPE AS distributionType
+, RECEIVE_PERIOD AS receivePeriod
+, RECEIVE_EARLIEST AS receiveEarliest
+, RECEIVE_LATEST AS receiveLatest
+, RECEIVE_WAIT_HOUR AS receiveWaitHour
+, ADVANCED_NOTIFICATION_HOUR AS advancedNotificationHour
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG AS animalQuarantineCertificationFlg
+, STEVEDORE_REQUIREMENT AS stevedoreRequirement
+, PACKAGE_REQUIREMENT AS packageRequirement
+, NEAREST_PARKING_DISTANCE AS nearestParkingDistance
+, REMARK AS remark
+, ADDRESS_KEY AS addressKey
+, DELIVERY_AREA_CODE AS deliveryAreaCode
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_BATCH_ORDER_ATTACHED
+<where>
+<if test="buyerBatchOrderId!=null">
+AND BUYER_BATCH_ORDER_ID = #{buyerBatchOrderId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BuyerBatchOrderAttachedEntity">
+SELECT
+BUYER_BATCH_ORDER_ID AS buyerBatchOrderId
+, RECEIVER_NAME AS receiverName
+, RECEIVER_PHONE AS receiverPhone
+, RECEIVER_QQ AS receiverQq
+, RECEIVER_WECHAT AS receiverWechat
+, RECEIVER_MAIL AS receiverMail
+, RECEIVER_PROVINCE AS receiverProvince
+, RECEIVER_CITY AS receiverCity
+, RECEIVER_DISTRICT AS receiverDistrict
+, RECEIVER_ADDRESS AS receiverAddress
+, RECEIVER_ASSIST_ADDRESS AS receiverAssistAddress
+, DELIVERY_AREA AS deliveryArea
+, PASS_TRAFFIC_MODEL AS passTrafficModel
+, DISTRIBUTION_TYPE AS distributionType
+, RECEIVE_PERIOD AS receivePeriod
+, RECEIVE_EARLIEST AS receiveEarliest
+, RECEIVE_LATEST AS receiveLatest
+, RECEIVE_WAIT_HOUR AS receiveWaitHour
+, ADVANCED_NOTIFICATION_HOUR AS advancedNotificationHour
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG AS animalQuarantineCertificationFlg
+, STEVEDORE_REQUIREMENT AS stevedoreRequirement
+, PACKAGE_REQUIREMENT AS packageRequirement
+, NEAREST_PARKING_DISTANCE AS nearestParkingDistance
+, REMARK AS remark
+, ADDRESS_KEY AS addressKey
+, DELIVERY_AREA_CODE AS deliveryAreaCode
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_BATCH_ORDER_ATTACHED
+<where>
+<if test="ids!=null">
+AND BUYER_BATCH_ORDER_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.BuyerBatchOrderAttachedHistoryEntity">
+INSERT INTO
+ORDR_BUYER_BATCH_ORDER_ATTACHED_HISTORY
+(
+HISTORY_ID
+, BUYER_BATCH_ORDER_ID
+, RECEIVER_NAME
+, RECEIVER_PHONE
+, RECEIVER_QQ
+, RECEIVER_WECHAT
+, RECEIVER_MAIL
+, RECEIVER_PROVINCE
+, RECEIVER_CITY
+, RECEIVER_DISTRICT
+, RECEIVER_ADDRESS
+, RECEIVER_ASSIST_ADDRESS
+, DELIVERY_AREA
+, PASS_TRAFFIC_MODEL
+, DISTRIBUTION_TYPE
+, RECEIVE_PERIOD
+, RECEIVE_EARLIEST
+, RECEIVE_LATEST
+, RECEIVE_WAIT_HOUR
+, ADVANCED_NOTIFICATION_HOUR
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG
+, STEVEDORE_REQUIREMENT
+, PACKAGE_REQUIREMENT
+, NEAREST_PARKING_DISTANCE
+, REMARK
+, ADDRESS_KEY
+, DELIVERY_AREA_CODE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{buyerBatchOrderId}
+, #{receiverName}
+, #{receiverPhone}
+, #{receiverQq}
+, #{receiverWechat}
+, #{receiverMail}
+, #{receiverProvince}
+, #{receiverCity}
+, #{receiverDistrict}
+, #{receiverAddress}
+, #{receiverAssistAddress}
+, #{deliveryArea}
+, #{passTrafficModel}
+, #{distributionType}
+, #{receivePeriod}
+, #{receiveEarliest}
+, #{receiveLatest}
+, #{receiveWaitHour}
+, #{advancedNotificationHour}
+, #{animalQuarantineCertificationFlg}
+, #{stevedoreRequirement}
+, #{packageRequirement}
+, #{nearestParkingDistance}
+, #{remark}
+, #{addressKey}
+, #{deliveryAreaCode}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_BATCH_ORDER_ATTACHED_HISTORY
+(
+HISTORY_ID
+, BUYER_BATCH_ORDER_ID
+, RECEIVER_NAME
+, RECEIVER_PHONE
+, RECEIVER_QQ
+, RECEIVER_WECHAT
+, RECEIVER_MAIL
+, RECEIVER_PROVINCE
+, RECEIVER_CITY
+, RECEIVER_DISTRICT
+, RECEIVER_ADDRESS
+, RECEIVER_ASSIST_ADDRESS
+, DELIVERY_AREA
+, PASS_TRAFFIC_MODEL
+, DISTRIBUTION_TYPE
+, RECEIVE_PERIOD
+, RECEIVE_EARLIEST
+, RECEIVE_LATEST
+, RECEIVE_WAIT_HOUR
+, ADVANCED_NOTIFICATION_HOUR
+, ANIMAL_QUARANTINE_CERTIFICATION_FLG
+, STEVEDORE_REQUIREMENT
+, PACKAGE_REQUIREMENT
+, NEAREST_PARKING_DISTANCE
+, REMARK
+, ADDRESS_KEY
+, DELIVERY_AREA_CODE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.buyerBatchOrderId}
+, #{entity.receiverName}
+, #{entity.receiverPhone}
+, #{entity.receiverQq}
+, #{entity.receiverWechat}
+, #{entity.receiverMail}
+, #{entity.receiverProvince}
+, #{entity.receiverCity}
+, #{entity.receiverDistrict}
+, #{entity.receiverAddress}
+, #{entity.receiverAssistAddress}
+, #{entity.deliveryArea}
+, #{entity.passTrafficModel}
+, #{entity.distributionType}
+, #{entity.receivePeriod}
+, #{entity.receiveEarliest}
+, #{entity.receiveLatest}
+, #{entity.receiveWaitHour}
+, #{entity.advancedNotificationHour}
+, #{entity.animalQuarantineCertificationFlg}
+, #{entity.stevedoreRequirement}
+, #{entity.packageRequirement}
+, #{entity.nearestParkingDistance}
+, #{entity.remark}
+, #{entity.addressKey}
+, #{entity.deliveryAreaCode}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

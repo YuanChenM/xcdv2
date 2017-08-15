@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.OrdrShortsellDao">
+    <!-- 查询字段 -->
+    <sql id="selectColumns">
+		ORDER_ID AS orderId,
+		ORDER_CODE AS orderCode,
+		BACK_NO AS backNo,
+		ORDER_TYPE AS orderType,
+		ORDER_SOURCE_TYPE AS orderSourceType,
+		LOGISTICS_ID AS logisticsId,
+		LOGISTICS_CODE AS logisticsCode,
+		LOGISTICS_NAME AS logisticsName,
+		SELLER_ID AS sellerId,
+		SELLER_CODE AS sellerCode,
+		SELLER_NAME AS sellerName,
+		SELLER_TYPE AS sellerType,
+		BUYER_ID AS buyerId,
+		BUYER_CODE AS buyerCode,
+		BUYER_NAME AS buyerName,
+		BUYER_TYPE AS buyerType,
+		TOTAL_AMOUNT AS totalAmount,
+		RECEIVE_AMOUNT AS receiveAmount,
+		PAYMENT_STU AS paymentStu,
+		TAX_RATE AS taxRate,
+		CURRENCY AS currency,
+		SELLER_FEE_MONEY AS sellerFeeMoney,
+		SELLER_DEPOSIT_MONEY AS sellerDepositMoney,
+		SELLER_DEL_MONEY AS sellerDelMoney,
+		BUYER_FEE_MONEY AS buyerFeeMoney,
+		BUYER_DEPOSIT_MONEY AS buyerDepositMoney,
+		BUYER_DEL_MONEY AS buyerDelMoney,
+		PLACE_CODE AS placeCode,
+		PLACE_NAME AS placeName,
+		PLACE_TIME AS placeTime,
+		TRADE_TIME AS tradeTime,
+		ORDER_STU AS orderStu
+	</sql>
+
+    <insert id="save" parameterType="com.bms.order.bean.entity.OrdrShortsell">
+		INSERT INTO ordr_shortsell (
+			ORDER_ID,
+			ORDER_CODE,
+			BACK_NO,
+			ORDER_TYPE,
+			ORDER_SOURCE_TYPE,
+			LOGISTICS_ID,
+			LOGISTICS_CODE,
+			LOGISTICS_NAME,
+			SELLER_ID,
+			SELLER_CODE,
+			SELLER_NAME,
+			SELLER_TYPE,
+			BUYER_ID,
+			BUYER_CODE,
+			BUYER_NAME,
+			BUYER_TYPE,
+			TOTAL_AMOUNT,
+			RECEIVE_AMOUNT,
+			PAYMENT_STU,
+			TAX_RATE,
+			CURRENCY,
+			SELLER_FEE_MONEY,
+			SELLER_DEPOSIT_MONEY,
+			SELLER_DEL_MONEY,
+			BUYER_FEE_MONEY,
+			BUYER_DEPOSIT_MONEY,
+			BUYER_DEL_MONEY,
+			PLACE_CODE,
+			PLACE_NAME,
+			PLACE_TIME,
+			TRADE_TIME,
+			ORDER_STU,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES (
+			#{orderId},
+			#{orderCode},
+			#{backNo},
+			#{orderType},
+			#{orderSourceType},
+			#{logisticsId},
+			#{logisticsCode},
+			#{logisticsName},
+			#{sellerId},
+			#{sellerCode},
+			#{sellerName},
+			#{sellerType},
+			#{buyerId},
+			#{buyerCode},
+			#{buyerName},
+			#{buyerType},
+			#{totalAmount},
+			#{receiveAmount},
+			#{paymentStu},
+			#{taxRate},
+			#{currency},
+			#{sellerFeeMoney},
+			#{sellerDepositMoney},
+			#{sellerDelMoney},
+			#{buyerFeeMoney},
+			#{buyerDepositMoney},
+			#{buyerDelMoney},
+			#{placeCode},
+			#{placeName},
+			#{placeTime},
+			#{tradeTime},
+			#{orderStu},
+			0,
+			#{crtId},
+			#{crtTime},
+			#{updId},
+			#{updTime},
+			1
+		)
+	</insert>
+
+    <select id="findMaxMarketCode" resultType="String">
+		SELECT
+		CONCAT('GH',date_format(now(),'%Y%m%d'),IFNULL(LPAD(MAX(CAST(RIGHT(ORDER_CODE,8) AS SIGNED))+1,8,0),'00000001')) AS marketCode
+		FROM
+		ORDR_SHORTSELL
+	</select>
+
+</mapper>

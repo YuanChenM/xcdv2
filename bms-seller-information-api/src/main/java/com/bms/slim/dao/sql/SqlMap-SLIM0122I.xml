@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0122IDao">
+
+    <!-- 批量新增卖家 -->
+    <insert id="saveSellers" parameterType="list">
+        INSERT INTO SLIM_SELLER (
+			SELLER_ID,
+			SELLER_CODE,
+			SALE_TYPE,
+			ENTITY_SELLER_ID,
+			DEL_FLG,
+			CRT_ID,
+			CRT_TIME,
+			UPD_ID,
+			UPD_TIME,
+			VERSION
+		)
+		VALUES
+        <foreach collection="list" item="seller" index="index" separator=",">
+            (
+                #{seller.sellerId},
+                #{seller.sellerCode},
+                #{seller.saleType},
+                #{seller.entitySellerId},
+                #{seller.delFlg},
+                #{seller.crtId},
+                #{seller.crtTime},
+                #{seller.crtId},
+                #{seller.crtTime},
+                1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

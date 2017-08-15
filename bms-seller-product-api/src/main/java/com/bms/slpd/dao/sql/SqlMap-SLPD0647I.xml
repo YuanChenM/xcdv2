@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0647IDao">
+    <update id="updateDifPkgStandards" parameterType="com.bms.slpd.bean.UpdateEntity">
+        update SLPD_DIF_PKG_STD
+        <set>
+            <if test="target.pkgDifInSuttleFlg == true">
+                PKG_DIF_IN_SUTTLE = #{entity.pkgDifInSuttle},
+            </if>
+            <if test="target.pkgDifInErrorFlg == true">
+                PKG_DIF_IN_ERROR = #{entity.pkgDifInError},
+            </if>
+            <if test="target.pkgDifInNumberFlg == true">
+                PKG_DIF_IN_NUMBER = #{entity.pkgDifInNumber},
+            </if>
+            <if test="target.pkgDifInSizeFlg == true">
+                PKG_DIF_IN_SIZE = #{entity.pkgDifInSize},
+            </if>
+            <if test="target.pkgDifInTextureFlg == true">
+                PKG_DIF_IN_TEXTURE = #{entity.pkgDifInTexture},
+            </if>
+            <if test="target.pkgDifOutErrorFlg == true">
+                PKG_DIF_OUT_ERROR = #{entity.pkgDifOutError},
+            </if>
+            <if test="target.pkgDifOutNumberFlg == true">
+                PKG_DIF_OUT_NUMBER = #{entity.pkgDifOutNumber},
+            </if>
+            <if test="target.pkgDifOutSizeFlg == true">
+                PKG_DIF_OUT_SIZE = #{entity.pkgDifOutSize},
+            </if>
+            <if test="target.pkgDifOutTextureFlg == true">
+                PKG_DIF_OUT_TEXTURE = #{entity.pkgDifOutTexture},
+            </if>
+            <if test="target.remarkFlg == true">
+                REMARK = #{entity.remark},
+            </if>
+            <if test="target.delFlgFlg == true">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+                UPD_ID = #{entity.updId},
+                UPD_TIME = #{entity.updTime},
+                VERSION=VERSION+1
+        </set>
+        where
+        PKG_DIF_STD_ID = #{entity.pkgDifStdId}
+        AND VERSION = #{entity.version}
+    </update>
+</mapper>

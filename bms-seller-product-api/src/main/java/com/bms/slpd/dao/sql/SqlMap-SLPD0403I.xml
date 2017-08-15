@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0403IDao">
+	<!--  -->
+	<select id="findPageList" parameterType="com.bms.slpd.bean.param.SLPD0403IParam" resultType="com.bms.slpd.bean.result.wrapper.SlpdBrandResult">
+		SELECT
+		A.BRAND_ID AS brandId,
+		A.BRAND_CODE AS brandCode,
+		A.BRAND_NAME AS brandName,
+		A.BRAND_TYPE AS brandType,
+		A.TRADEMARK_REG_NO AS trademarkRegNo,
+		A.START_VALID_DATE AS startValidDate,
+		A.END_VALID_DATE AS endValidDate,
+		A.BRAND_CERT_URL AS brandCertUrl,
+		A.PRODUCT_PACKAGE_URL AS productPackageUrl,
+		A.HONOR_CERT_NO AS honorCertNo,
+		A.HONOR_CERT_DATE AS honorCertDate,
+		A.HONOR_CERT_UNIT AS honorCertUnit,
+		A.HONOR_CERT_URL AS honorCertUrl,
+		A.AUDIT_STU AS auditStu,
+		A.AUDIT_REMARK AS auditRemark,
+		A.AUDIT_HISTORY AS auditHistory,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+		FROM
+			SLPD_BRAND A
+		LEFT JOIN SLPD_BRAND_OWNER_RELATION B ON A.BRAND_ID=B.BRAND_ID
+		AND B.DEL_FLG=0
+		LEFT JOIN SLPD_BRAND_OWNER C ON C.BRAND_OWNER_ID=B.BRAND_OWNER_ID
+		WHERE 1=1
+		<if test="brandIds != null and brandIds.size()>0">
+			AND A.BRAND_ID in(
+			<foreach collection="brandIds" item="brandId" index="index" open="" close="" separator=",">
+				#{brandId}
+			</foreach>
+			)
+		</if>
+		<if test = "brandOwnerIds != null and brandOwnerIds.size()>0">
+			AND B.BRAND_OWNER_ID in
+			<foreach collection="brandOwnerIds" item="brandOwnerId" index="index" open="(" separator="," close=")">
+				#{brandOwnerId}
+			</foreach>
+		</if>
+		<if test = "brandCode!= null and brandCode != ''">
+			AND A.BRAND_CODE LIKE  #{brandCode}
+		</if>
+		<if test = "brandName != null and brandName != ''">
+			AND A.BRAND_NAME LIKE #{brandName}
+		</if>
+		<if test = "brandType != null and brandType != ''">
+			AND A.BRAND_TYPE = #{brandType}
+		</if>
+		<if test = "ownerName != null and ownerName != ''">
+			AND C.OWNER_NAME LIKE #{ownerName}
+		</if>
+		<if test = "trademarkRegNo != null and trademarkRegNo != ''">
+			AND A.TRADEMARK_REG_NO LIKE #{trademarkRegNo}
+		</if>
+		<if test = "startValidDate != null and startValidDate != ''">
+			AND A.START_VALID_DATE &gt;= #{startValidDate}
+		</if>
+		<if test = "endValidDate != null and endValidDate != ''">
+			AND A.END_VALID_DATE &lt;= #{endValidDate}
+		</if>
+		<if test = "delFlg != null">
+		AND A.DEL_FLG=#{delFlg}
+		</if>
+		<if test = "delFlg == null">
+			AND A.DEL_FLG= 0
+		</if>
+		<if test = "auditStu != null">
+			AND A.AUDIT_STU=#{auditStu}
+		</if>
+		GROUP BY brandId
+		ORDER BY brandId DESC
+	</select>
+
+	<select id="count"  parameterType="com.bms.slpd.bean.param.SLPD0403IParam" resultType="int">
+		SELECT count(1) FROM
+		(
+		SELECT
+		A.BRAND_ID AS brandId,
+		A.BRAND_CODE AS brandCode,
+		A.BRAND_NAME AS brandName,
+		A.BRAND_TYPE AS brandType,
+		A.TRADEMARK_REG_NO AS trademarkRegNo,
+		A.START_VALID_DATE AS startValidDate,
+		A.END_VALID_DATE AS endValidDate,
+		A.BRAND_CERT_URL AS brandCertUrl,
+		A.AUDIT_STU AS auditStu,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+		FROM
+		SLPD_BRAND A
+		LEFT JOIN SLPD_BRAND_OWNER_RELATION B ON A.BRAND_ID=B.BRAND_ID
+		AND B.DEL_FLG=0
+		LEFT JOIN SLPD_BRAND_OWNER C ON C.BRAND_OWNER_ID=B.BRAND_OWNER_ID
+		WHERE 1=1
+		<if test="brandIds != null and brandIds.size()>0">
+			AND A.BRAND_ID in(
+			<foreach collection="brandIds" item="brandId" index="index" open="" close="" separator=",">
+				#{brandId}
+			</foreach>
+			)
+		</if>
+		<if test = "brandOwnerIds != null and brandOwnerIds.size()>0">
+			AND B.BRAND_OWNER_ID in
+			<foreach collection="brandOwnerIds" item="brandOwnerId" index="index" open="(" separator="," close=")">
+				#{brandOwnerId}
+			</foreach>
+		</if>
+		<if test = "brandCode!= null and brandCode != ''">
+			AND A.BRAND_CODE LIKE #{brandCode}
+		</if>
+		<if test = "brandName != null and brandName != ''">
+			AND A.BRAND_NAME LIKE #{brandName}
+		</if>
+		<if test = "brandType != null and brandType != ''">
+			AND A.BRAND_TYPE = #{brandType}
+		</if>
+		<if test = "ownerName != null and ownerName != ''">
+			AND C.OWNER_NAME LIKE #{ownerName}
+		</if>
+		<if test = "trademarkRegNo != null and trademarkRegNo != ''">
+			AND A.TRADEMARK_REG_NO = #{trademarkRegNo}
+		</if>
+		<if test = "startValidDate != null and startValidDate != ''">
+			AND A.START_VALID_DATE &gt;= #{startValidDate}
+		</if>
+		<if test = "endValidDate != null and endValidDate != ''">
+			AND A.END_VALID_DATE &lt;= #{endValidDate}
+		</if>
+		<if test = "delFlg != null">
+			AND A.DEL_FLG=#{delFlg}
+		</if>
+		<if test = "auditStu != null">
+			AND A.AUDIT_STU=#{auditStu}
+		</if>
+		GROUP BY A.BRAND_ID
+		) D
+	</select>
+
+
+	<select id="findListByName" parameterType="java.util.List" resultType="com.bms.slpd.bean.result.wrapper.SlpdBrandResult">
+		SELECT
+		A.BRAND_ID AS brandId,
+		A.BRAND_CODE AS brandCode,
+		A.BRAND_NAME AS brandName,
+		A.BRAND_TYPE AS brandType,
+		A.TRADEMARK_REG_NO AS trademarkRegNo,
+		A.START_VALID_DATE AS startValidDate,
+		A.END_VALID_DATE AS endValidDate,
+		A.BRAND_CERT_URL AS brandCertUrl,
+		A.PRODUCT_PACKAGE_URL AS productPackageUrl,
+		A.HONOR_CERT_NO AS honorCertNo,
+		A.HONOR_CERT_DATE AS honorCertDate,
+		A.HONOR_CERT_UNIT AS honorCertUnit,
+		A.HONOR_CERT_URL AS honorCertUrl,
+		A.AUDIT_STU AS auditStu,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+		FROM SLPD_BRAND A
+		WHERE
+		A.DEL_FLG=0
+		AND
+		A.BRAND_NAME IN
+		<foreach collection="list" item="item" open="(" separator="," close=")">
+			#{item.brandName}
+		</foreach>
+	</select>
+
+
+	<select id="findBrandByCode" resultType="com.bms.slpd.bean.result.wrapper.SlpdBrandResult">
+		SELECT
+		max(cast(BRAND_CODE AS SIGNED)) AS brandCode
+		FROM SLPD_BRAND
+		WHERE
+		DEL_FLG=0
+	</select>
+
+</mapper>

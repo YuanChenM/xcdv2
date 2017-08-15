@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.DistributionNotificationDetailDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.DistributionNotificationDetailEntity">
+INSERT INTO
+ORDR_DISTRIBUTION_NOTIFICATION_DETAIL
+(
+DISTRIBUTION_NOTIFICATION_DETAIL_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, BUYER_FORCAST_DELIVER_DETAIL_ID
+, GOODS_ID
+, SKU
+, BATCH_CODE
+, GOODS_UNIT
+, SELLER_CODE
+, DISTRIBUTION_QUANTITY
+, CANCEL_QUANTITY
+, SELL_SIDE_CODE
+, LOGISTICS_ZONE_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{distributionNotificationDetailId}
+, #{distributionNotificationId}
+, #{buyerForcastDeliverDetailId}
+, #{goodsId}
+, #{sku}
+, #{batchCode}
+, #{goodsUnit}
+, #{sellerCode}
+, #{distributionQuantity}
+, #{cancelQuantity}
+, #{sellSideCode}
+, #{logisticsZoneName}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_DISTRIBUTION_NOTIFICATION_DETAIL
+(
+DISTRIBUTION_NOTIFICATION_DETAIL_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, BUYER_FORCAST_DELIVER_DETAIL_ID
+, GOODS_ID
+, SKU
+, BATCH_CODE
+, GOODS_UNIT
+, SELLER_CODE
+, DISTRIBUTION_QUANTITY
+, CANCEL_QUANTITY
+, SELL_SIDE_CODE
+, LOGISTICS_ZONE_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.distributionNotificationDetailId}
+, #{entity.distributionNotificationId}
+, #{entity.buyerForcastDeliverDetailId}
+, #{entity.goodsId}
+, #{entity.sku}
+, #{entity.batchCode}
+, #{entity.goodsUnit}
+, #{entity.sellerCode}
+, #{entity.distributionQuantity}
+, #{entity.cancelQuantity}
+, #{entity.sellSideCode}
+, #{entity.logisticsZoneName}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.DistributionNotificationDetailEntity">
+UPDATE ORDR_DISTRIBUTION_NOTIFICATION_DETAIL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{distributionNotificationDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_DISTRIBUTION_NOTIFICATION_DETAIL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{entity.distributionNotificationDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.DistributionNotificationDetailEntity">
+UPDATE ORDR_DISTRIBUTION_NOTIFICATION_DETAIL
+SET
+DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{distributionNotificationDetailId}
+, DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+, BUYER_FORCAST_DELIVER_DETAIL_ID = #{buyerForcastDeliverDetailId}
+, GOODS_ID = #{goodsId}
+, SKU = #{sku}
+, BATCH_CODE = #{batchCode}
+, GOODS_UNIT = #{goodsUnit}
+, SELLER_CODE = #{sellerCode}
+, DISTRIBUTION_QUANTITY = #{distributionQuantity}
+, CANCEL_QUANTITY = #{cancelQuantity}
+, SELL_SIDE_CODE = #{sellSideCode}
+, LOGISTICS_ZONE_NAME = #{logisticsZoneName}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{distributionNotificationDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_DISTRIBUTION_NOTIFICATION_DETAIL
+SET
+DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{entity.distributionNotificationDetailId}
+, DISTRIBUTION_NOTIFICATION_ID = #{entity.distributionNotificationId}
+, BUYER_FORCAST_DELIVER_DETAIL_ID = #{entity.buyerForcastDeliverDetailId}
+, GOODS_ID = #{entity.goodsId}
+, SKU = #{entity.sku}
+, BATCH_CODE = #{entity.batchCode}
+, GOODS_UNIT = #{entity.goodsUnit}
+, SELLER_CODE = #{entity.sellerCode}
+, DISTRIBUTION_QUANTITY = #{entity.distributionQuantity}
+, CANCEL_QUANTITY = #{entity.cancelQuantity}
+, SELL_SIDE_CODE = #{entity.sellSideCode}
+, LOGISTICS_ZONE_NAME = #{entity.logisticsZoneName}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{entity.distributionNotificationDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.DistributionNotificationDetailEntity" resultType="com.bms.order.bean.entity.DistributionNotificationDetailEntity">
+SELECT
+DISTRIBUTION_NOTIFICATION_DETAIL_ID AS distributionNotificationDetailId
+, DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, BUYER_FORCAST_DELIVER_DETAIL_ID AS buyerForcastDeliverDetailId
+, GOODS_ID AS goodsId
+, SKU AS sku
+, BATCH_CODE AS batchCode
+, GOODS_UNIT AS goodsUnit
+, SELLER_CODE AS sellerCode
+, DISTRIBUTION_QUANTITY AS distributionQuantity
+, CANCEL_QUANTITY AS cancelQuantity
+, SELL_SIDE_CODE AS sellSideCode
+, LOGISTICS_ZONE_NAME AS logisticsZoneName
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_DISTRIBUTION_NOTIFICATION_DETAIL
+<where>
+<if test="distributionNotificationDetailId!=null">
+AND DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{distributionNotificationDetailId}
+</if>
+<if test="buyerForcastDeliverDetailId!=null">
+AND BUYER_FORCAST_DELIVER_DETAIL_ID = #{buyerForcastDeliverDetailId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.DistributionNotificationDetailEntity">
+SELECT
+DISTRIBUTION_NOTIFICATION_DETAIL_ID AS distributionNotificationDetailId
+, DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, BUYER_FORCAST_DELIVER_DETAIL_ID AS buyerForcastDeliverDetailId
+, GOODS_ID AS goodsId
+, SKU AS sku
+, BATCH_CODE AS batchCode
+, GOODS_UNIT AS goodsUnit
+, SELLER_CODE AS sellerCode
+, DISTRIBUTION_QUANTITY AS distributionQuantity
+, CANCEL_QUANTITY AS cancelQuantity
+, SELL_SIDE_CODE AS sellSideCode
+, LOGISTICS_ZONE_NAME AS logisticsZoneName
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_DISTRIBUTION_NOTIFICATION_DETAIL
+<where>
+<if test="ids!=null">
+AND DISTRIBUTION_NOTIFICATION_DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="distributionNotifications!=null">
+AND DISTRIBUTION_NOTIFICATION_ID IN (<foreach item="item" collection="distributionNotifications" separator=",">#{item.entity.distributionNotificationId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.DistributionNotificationDetailHistoryEntity">
+INSERT INTO
+ORDR_DISTRIBUTION_NOTIFICATION_DETAIL_HISTORY
+(
+HISTORY_ID
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, BUYER_FORCAST_DELIVER_DETAIL_ID
+, GOODS_ID
+, SKU
+, BATCH_CODE
+, GOODS_UNIT
+, SELLER_CODE
+, DISTRIBUTION_QUANTITY
+, CANCEL_QUANTITY
+, SELL_SIDE_CODE
+, LOGISTICS_ZONE_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{distributionNotificationDetailId}
+, #{distributionNotificationId}
+, #{buyerForcastDeliverDetailId}
+, #{goodsId}
+, #{sku}
+, #{batchCode}
+, #{goodsUnit}
+, #{sellerCode}
+, #{distributionQuantity}
+, #{cancelQuantity}
+, #{sellSideCode}
+, #{logisticsZoneName}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_DISTRIBUTION_NOTIFICATION_DETAIL_HISTORY
+(
+HISTORY_ID
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, BUYER_FORCAST_DELIVER_DETAIL_ID
+, GOODS_ID
+, SKU
+, BATCH_CODE
+, GOODS_UNIT
+, SELLER_CODE
+, DISTRIBUTION_QUANTITY
+, CANCEL_QUANTITY
+, SELL_SIDE_CODE
+, LOGISTICS_ZONE_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.distributionNotificationDetailId}
+, #{entity.distributionNotificationId}
+, #{entity.buyerForcastDeliverDetailId}
+, #{entity.goodsId}
+, #{entity.sku}
+, #{entity.batchCode}
+, #{entity.goodsUnit}
+, #{entity.sellerCode}
+, #{entity.distributionQuantity}
+, #{entity.cancelQuantity}
+, #{entity.sellSideCode}
+, #{entity.logisticsZoneName}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0104IDao">
+    <!-- 查询产品二级分类 -->
+    <select id="findMachinings" parameterType="com.bms.slpd.bean.param.SLPD0104IParam"
+            resultType="com.bms.slpd.bean.result.wrapper.SlpdMachiningResult">
+        SELECT
+        machining.MACHINING_ID AS machiningId,
+        machining.MACHINING_CODE AS machiningCode,
+        machining.MACHINING_NAME AS machiningName,
+        machining.AUDIT_STU AS machiningAuditStu,
+        machining.CLASSES_ID AS classesId,
+        classes.CLASSES_CODE AS classesCode,
+        classes.CLASSES_NAME AS classesName,
+        classes.AUDIT_STU AS classesAuditStu,
+        machining.DEL_FLG AS delFlg,
+        machining.CRT_ID AS crtId,
+        machining.CRT_TIME AS crtTime,
+        machining.UPD_ID AS updId,
+        machining.UPD_TIME AS updTime,
+        machining.VERSION AS version
+        FROM
+        SLPD_MACHINING machining
+        LEFT JOIN SLPD_CLASSES AS classes ON classes.CLASSES_ID = machining.CLASSES_ID
+        WHERE
+        1=1
+        <if test="delFlg != null">
+            AND machining.DEL_FLG = #{delFlg}
+        </if>
+        <if test="machiningAuditStu != null">
+            AND machining.AUDIT_STU = #{machiningAuditStu}
+        </if>
+        <if test="classesAuditStu != null">
+            AND classes.AUDIT_STU = #{classesAuditStu}
+        </if>
+        <if test="classesIds != null and classesIds.size() > 0">
+            AND machining.CLASSES_ID IN
+            <foreach collection="classesIds" item="classesId" open="(" separator="," close=")">
+                #{classesId}
+            </foreach>
+        </if>
+        <if test="classesCodes != null and classesCodes.size() > 0">
+            AND classes.CLASSES_CODE IN
+            <foreach collection="classesCodes" item="classesCode" open="(" separator="," close=")">
+                #{classesCode}
+            </foreach>
+        </if>
+        <if test="machiningIds != null and machiningIds.size() > 0">
+            AND machining.MACHINING_ID IN
+            <foreach collection="machiningIds" item="machiningId" open="(" separator="," close=")">
+                #{machiningId}
+            </foreach>
+        </if>
+        <if test="machiningCodes != null and machiningCodes.size() > 0">
+            AND machining.MACHINING_CODE IN
+            <foreach collection="machiningCodes" item="machiningCode" open="(" separator="," close=")">
+                #{machiningCode}
+            </foreach>
+        </if>
+        <if test="classesName != null and classesName != ''">
+            AND classes.CLASSES_NAME LIKE #{classesName}
+        </if>
+        <if test="machiningName != null and machiningName != ''">
+            AND machining.MACHINING_NAME LIKE #{machiningName}
+        </if>
+        ORDER BY CONVERT(machining.MACHINING_CODE,SIGNED)
+    </select>
+</mapper>

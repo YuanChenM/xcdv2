@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BuyerReturnDetailDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BuyerReturnDetailEntity">
+INSERT INTO
+ORDR_BUYER_RETURN_DETAIL
+(
+DETAIL_ID
+, RETURN_ID
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID
+, RECEIVE_NOTIFICATION_ID
+, RECEIVE_NOTIFICATION_DETAIL_ID
+, GOODS_ID
+, SALES_UNIT
+, RETURN_QTY
+, REASON_ID
+, INBOUND_BATCH
+, DISTRIBUTION_NOTIFICATION_ID
+, INBOUND_QTY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{detailId}
+, #{returnId}
+, #{distributionNotificationDetailId}
+, #{receiveNotificationId}
+, #{receiveNotificationDetailId}
+, #{goodsId}
+, #{salesUnit}
+, #{returnQty}
+, #{reasonId}
+, #{inboundBatch}
+, #{distributionNotificationId}
+, #{inboundQty}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_RETURN_DETAIL
+(
+DETAIL_ID
+, RETURN_ID
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID
+, RECEIVE_NOTIFICATION_ID
+, RECEIVE_NOTIFICATION_DETAIL_ID
+, GOODS_ID
+, SALES_UNIT
+, RETURN_QTY
+, REASON_ID
+, INBOUND_BATCH
+, DISTRIBUTION_NOTIFICATION_ID
+, INBOUND_QTY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.detailId}
+, #{entity.returnId}
+, #{entity.distributionNotificationDetailId}
+, #{entity.receiveNotificationId}
+, #{entity.receiveNotificationDetailId}
+, #{entity.goodsId}
+, #{entity.salesUnit}
+, #{entity.returnQty}
+, #{entity.reasonId}
+, #{entity.inboundBatch}
+, #{entity.distributionNotificationId}
+, #{entity.inboundQty}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BuyerReturnDetailEntity">
+UPDATE ORDR_BUYER_RETURN_DETAIL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+DETAIL_ID = #{detailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_RETURN_DETAIL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+DETAIL_ID = #{entity.detailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BuyerReturnDetailEntity">
+UPDATE ORDR_BUYER_RETURN_DETAIL
+SET
+DETAIL_ID = #{detailId}
+, RETURN_ID = #{returnId}
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{distributionNotificationDetailId}
+, RECEIVE_NOTIFICATION_ID = #{receiveNotificationId}
+, RECEIVE_NOTIFICATION_DETAIL_ID = #{receiveNotificationDetailId}
+, GOODS_ID = #{goodsId}
+, SALES_UNIT = #{salesUnit}
+, RETURN_QTY = #{returnQty}
+, REASON_ID = #{reasonId}
+, INBOUND_BATCH = #{inboundBatch}
+, DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+, INBOUND_QTY = #{inboundQty}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+DETAIL_ID = #{detailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_RETURN_DETAIL
+SET
+DETAIL_ID = #{entity.detailId}
+, RETURN_ID = #{entity.returnId}
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID = #{entity.distributionNotificationDetailId}
+, RECEIVE_NOTIFICATION_ID = #{entity.receiveNotificationId}
+, RECEIVE_NOTIFICATION_DETAIL_ID = #{entity.receiveNotificationDetailId}
+, GOODS_ID = #{entity.goodsId}
+, SALES_UNIT = #{entity.salesUnit}
+, RETURN_QTY = #{entity.returnQty}
+, REASON_ID = #{entity.reasonId}
+, INBOUND_BATCH = #{entity.inboundBatch}
+, DISTRIBUTION_NOTIFICATION_ID = #{entity.distributionNotificationId}
+, INBOUND_QTY = #{entity.inboundQty}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+DETAIL_ID = #{entity.detailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BuyerReturnDetailEntity" resultType="com.bms.order.bean.entity.BuyerReturnDetailEntity">
+SELECT
+DETAIL_ID AS detailId
+, RETURN_ID AS returnId
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID AS distributionNotificationDetailId
+, RECEIVE_NOTIFICATION_ID AS receiveNotificationId
+, RECEIVE_NOTIFICATION_DETAIL_ID AS receiveNotificationDetailId
+, GOODS_ID AS goodsId
+, SALES_UNIT AS salesUnit
+, RETURN_QTY AS returnQty
+, REASON_ID AS reasonId
+, INBOUND_BATCH AS inboundBatch
+, DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, INBOUND_QTY AS inboundQty
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_RETURN_DETAIL
+<where>
+<if test="detailId!=null">
+AND DETAIL_ID = #{detailId}
+</if>
+<if test="reasonId!=null">
+AND REASON_ID = #{reasonId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BuyerReturnDetailEntity">
+SELECT
+DETAIL_ID AS detailId
+, RETURN_ID AS returnId
+, DISTRIBUTION_NOTIFICATION_DETAIL_ID AS distributionNotificationDetailId
+, RECEIVE_NOTIFICATION_ID AS receiveNotificationId
+, RECEIVE_NOTIFICATION_DETAIL_ID AS receiveNotificationDetailId
+, GOODS_ID AS goodsId
+, SALES_UNIT AS salesUnit
+, RETURN_QTY AS returnQty
+, REASON_ID AS reasonId
+, INBOUND_BATCH AS inboundBatch
+, DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, INBOUND_QTY AS inboundQty
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_RETURN_DETAIL
+<where>
+<if test="ids!=null">
+AND DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="receiveNotificationDetails!=null">
+AND RECEIVE_NOTIFICATION_DETAIL_ID IN (<foreach item="item" collection="receiveNotificationDetails" separator=",">#{item.entity.receiveNotificationDetailId}</foreach>)
+</if>
+<if test="buyerReturns!=null">
+AND RETURN_ID IN (<foreach item="item" collection="buyerReturns" separator=",">#{item.entity.returnId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0233IDao">
+    
+    <!--修改生产商库容 -->
+    <update id="updateProducerStorageCapacities" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_PRODUCER_STORAGE_CAPACITY
+        <set>
+            <if test="target.sellerRoleIdFlg != null and target.sellerRoleIdFlg">
+                SELLER_ROLE_ID = #{entity.sellerRoleId},
+            </if>
+            <if test="target.materialCapacityFlg != null and target.materialCapacityFlg">
+                MATERIAL_CAPACITY = #{entity.materialCapacity},
+            </if>
+            <if test="target.productCapacityFlg != null and target.productCapacityFlg">
+                PRODUCT_CAPACITY = #{entity.productCapacity},
+            </if>
+            <if test="target.warehousePicUrlFlg != null and target.warehousePicUrlFlg">
+                WAREHOUSE_PIC_URL = #{entity.warehousePicUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+            STORAGE_CAPACITY_ID = #{entity.storageCapacityId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+</mapper>

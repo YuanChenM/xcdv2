@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0214IDao">
+
+    <!-- 查询生产商生产资质-进沪(京、津)登记信息 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0214IParam"
+            resultType="com.bms.slim.bean.result.field.SLIM0214ShBjTjRegistrationResult">
+        SELECT
+            SBT_REG_ID AS sbtRegId,
+            SELLER_ROLE_ID AS sellerRoleId,
+            WORKUNIT_NAME AS workunitName,
+            PRODUCT_CATEGORY_NAME AS productCategoryName,
+            REG_DATE AS regDate,
+            SBT_REG_URL AS sbtRegUrl,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+        SLIM_SH_BJ_TJ_REGISTRATION
+        <where>
+            <if test="delFlg != null">
+                DEL_FLG = #{delFlg}
+            </if>
+            <if test="sbtRegIds != null and sbtRegIds.size() > 0">
+                AND SBT_REG_ID IN
+                <foreach collection="sbtRegIds" item="sbtRegId" open="(" separator="," close=")">
+                    #{sbtRegId}
+                </foreach>
+            </if>
+            <if test="sellerRoleIds != null and sellerRoleIds.size() > 0">
+                AND SELLER_ROLE_ID IN
+                <foreach collection="sellerRoleIds" item="sellerRoleId" open="(" separator="," close=")">
+                    #{sellerRoleId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

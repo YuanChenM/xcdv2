@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0121IDao">
+    
+    <!--修改卖家电商经营团队 -->
+    <update id="udpateSellerBusinessTeams" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_SELLER_BUSINESS_TEAM
+        <set>
+            <if test="target.entitySellerIdFlg != null and target.entitySellerIdFlg">
+                ENTITY_SELLER_ID = #{entity.entitySellerId},
+            </if>
+            <if test="target.positionTypeFlg != null and target.positionTypeFlg">
+                POSITION_TYPE = #{entity.positionType},
+            </if>
+            <if test="target.nameFlg != null and target.nameFlg">
+                NAME = #{entity.name},
+            </if>
+            <if test="target.ageFlg != null and target.ageFlg">
+                AGE = #{entity.age},
+            </if>
+            <if test="target.educationalLevelFlg != null and target.educationalLevelFlg">
+                EDUCATIONAL_LEVEL = #{entity.educationalLevel},
+            </if>
+            <if test="target.contactWayFlg != null and target.contactWayFlg">
+                CONTACT_WAY = #{entity.contactWay},
+            </if>
+            <if test="target.avatarUrlFlg != null and target.avatarUrlFlg">
+                AVATAR_URL = #{entity.avatarUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+            SBT_ID = #{entity.sbtId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+</mapper>

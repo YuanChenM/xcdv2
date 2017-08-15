@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0805IDao">
+
+    <!-- 查询字段 -->
+    <sql id="sellerCommodityColumns">
+        A.SELLER_COMMODITY_ID AS sellerCommodityId,
+        A.SELLER_COMMODITY_CODE AS sellerCommodityCode,
+        A.SELLER_COMMODITY_SKU AS sellerCommoditySku,
+        A.SELLER_ID AS sellerId,
+        A.SELLER_CODE AS sellerCode,
+        A.ENTITY_SELLER_ID AS entitySellerId,
+        A.SELLER_NAME AS sellerName,
+        A.PRODUCER_PRODUCT_ID AS producerProductId,
+        A.PRODUCT_ID AS productId,
+        A.ARTICLE_NO AS articleNo,
+        A.SALE_TYPE AS saleType,
+        A.COMMODITY_ID AS commodityId,
+        A.SALE_TITLE AS saleTitle,
+        A.AUDIT_STU AS auditStu,
+        A.AUDIT_REMARK AS auditRemark,
+        A.AUDIT_HISTORY AS auditHistory,
+        A.DEL_FLG AS delFlg,
+        A.CRT_ID AS crtId,
+        A.CRT_TIME AS crtTime,
+        A.UPD_ID AS updId,
+        A.UPD_TIME AS updTime,
+        A.VERSION AS version
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="whereConditions">
+        1 = 1
+        AND A.DEL_FLG = 0
+        AND A.AUDIT_STU = 2
+        AND A.COMMODITY_ID IS NOT NULL
+        <!--<if test="sellerCommodityIds != null and sellerCommodityIds.size() > 0">
+            AND A.SELLER_COMMODITY_ID IN
+            <foreach collection="sellerCommodityIds" item="sellerCommodityId" open="(" separator="," close=")">
+                #{sellerCommodityId}
+            </foreach>
+        </if>
+        <if test="sellerCommodityCodes != null and sellerCommodityCodes.size() > 0">
+            AND A.SELLER_COMMODITY_CODE IN
+            <foreach collection="sellerCommodityCodes" item="sellerCommodityCode" open="(" separator="," close=")">
+                #{sellerCommodityCode}
+            </foreach>
+        </if>-->
+        <if test="sellerCommoditySkus != null and sellerCommoditySkus.size() > 0">
+            AND A.SELLER_COMMODITY_SKU IN
+            <foreach collection="sellerCommoditySkus" item="sellerCommoditySku" open="(" separator="," close=")">
+                #{sellerCommoditySku}
+            </foreach>
+        </if>
+        <!--<if test="auditStus != null and auditStus.size() > 0">
+            AND A.AUDIT_STU IN
+            <foreach collection="auditStus" item="auditStu" open="(" separator="," close=")">
+                #{auditStu}
+            </foreach>
+        </if>-->
+        <!--<if test="delFlg != null">
+            AND A.DEL_FLG = #{delFlg}
+        </if>-->
+        <if test="articleNos != null and articleNos.size() > 0">
+            AND A.ARTICLE_NO IN
+            <foreach collection="articleNos" item="articleNo" open="(" separator="," close=")">
+                #{articleNo}
+            </foreach>
+        </if>
+        <if test="commodityIds != null and commodityIds.size() > 0">
+            AND A.COMMODITY_ID IN
+            <foreach collection="commodityIds" item="commodityId" open="(" separator="," close=")">
+                #{commodityId}
+            </foreach>
+        </if>
+        <if test="saleType != null and saleType != ''">
+            AND A.SALE_TYPE = #{saleType}
+        </if>
+        <if test="sellerIds != null and sellerIds.size() > 0">
+            AND A.SELLER_ID IN
+            <foreach collection="sellerIds" item="sellerId" open="(" separator="," close=")">
+                #{sellerId}
+            </foreach>
+        </if>
+        <if test="sellerCodes != null and sellerCodes.size() > 0">
+            AND A.SELLER_CODE IN
+            <foreach collection="sellerCodes" item="sellerCode" open="(" separator="," close=")">
+                #{sellerCode}
+            </foreach>
+        </if>
+        <if test="entitySellerIds != null and entitySellerIds.size() > 0">
+            AND A.ENTITY_SELLER_ID IN
+            <foreach collection="entitySellerIds" item="entitySellerId" open="(" separator="," close=")">
+                #{entitySellerId}
+            </foreach>
+        </if>
+        <if test="sellerName != null and sellerName != ''">
+            AND A.SELLER_NAME LIKE #{sellerName}
+        </if>
+        <!--<if test="producerProductIds != null and producerProductIds.size() > 0">
+            AND B.PRODUCER_PRODUCT_ID IN
+            <foreach collection="producerProductIds" item="producerProductId" open="(" separator="," close=")">
+                #{producerProductId}
+            </foreach>
+        </if>-->
+        <if test="producerProductSkus != null and producerProductSkus.size() > 0">
+            AND B.PRODUCER_PRODUCT_SKU IN
+            <foreach collection="producerProductSkus" item="producerProductSku" open="(" separator="," close=")">
+                #{producerProductSku}
+            </foreach>
+        </if>
+        <!--<if test="producerProductAuditStus != null and producerProductAuditStus.size() > 0">
+            AND B.AUDIT_STU IN
+            <foreach collection="producerProductAuditStus" item="producerProductAuditStu" open="(" separator="," close=")">
+                #{producerProductAuditStu}
+            </foreach>
+        </if>-->
+        <if test="producerIds != null and producerIds.size() > 0">
+            AND B.PRODUCER_ID IN
+            <foreach collection="producerIds" item="producerId" open="(" separator="," close=")">
+                #{producerId}
+            </foreach>
+        </if>
+        <if test="producerCodes != null and producerCodes.size() > 0">
+            AND B.PRODUCER_CODE IN
+            <foreach collection="producerCodes" item="producerCode" open="(" separator="," close=")">
+                #{producerCode}
+            </foreach>
+        </if>
+        <if test="producerName != null and producerName != ''">
+            AND B.PRODUCER_NAME LIKE #{producerName}
+        </if>
+        <if test="productIds != null and productIds.size() > 0">
+            AND C.PRODUCT_ID IN
+            <foreach collection="productIds" item="productId" open="(" separator="," close=")">
+                #{productId}
+            </foreach>
+        </if>
+        <if test="qualityGradeTypes != null and qualityGradeTypes.size() > 0">
+            AND C.QUALITY_GRADE_TYPE IN
+            <foreach collection="qualityGradeTypes" item="qualityGradeType" open="(" separator="," close=")">
+                #{qualityGradeType}
+            </foreach>
+        </if>
+        <!--<if test="productAuditStus != null and productAuditStus.size() > 0">
+            AND C.AUDIT_STU IN
+            <foreach collection="productAuditStus" item="productAuditStu" open="(" separator="," close=")">
+                #{productAuditStu}
+            </foreach>
+        </if>-->
+        <!--<if test="brandItemPropertyIds != null and brandItemPropertyIds.size() > 0">
+            AND C.BRAND_ITEM_PROPERTY_ID IN
+            <foreach collection="brandItemPropertyIds" item="brandItemPropertyId" open="(" separator="," close=")">
+                #{brandItemPropertyIds}
+            </foreach>
+        </if>
+        <if test="brandItemIds != null and brandItemIds.size() > 0">
+            AND C.BRAND_ITEM_ID IN
+            <foreach collection="brandItemIds" item="brandItemId" open="(" separator="," close=")">
+                #{brandItemId}
+            </foreach>
+        </if>-->
+        <if test="brandItemSkus != null and brandItemSkus.size() > 0">
+            AND C.BRAND_ITEM_SKU IN
+            <foreach collection="brandItemSkus" item="brandItemSku" open="(" separator="," close=")">
+                #{brandItemSku}
+            </foreach>
+        </if>
+        <!--<if test="brandIds != null and brandIds.size() > 0">
+            AND C.BRAND_ID IN
+            <foreach collection="brandIds" item="brandId" open="(" separator="," close=")">
+                #{brandId}
+            </foreach>
+        </if>-->
+        <if test="brandCodes != null and brandCodes.size() > 0">
+            AND C.BRAND_CODE IN
+            <foreach collection="brandCodes" item="brandCode" open="(" separator="," close=")">
+                #{brandCode}
+            </foreach>
+        </if>
+        <if test="brandName != null and brandName != ''">
+            AND C.BRAND_NAME LIKE #{brandName}
+        </if>
+        <if test="brandTypes != null and brandTypes.size() > 0">
+            AND C.BRAND_TYPE IN
+            <foreach collection="brandTypes" item="brandType" open="(" separator="," close=")">
+                #{brandType}
+            </foreach>
+        </if>
+        <!--<if test="itemIds != null and itemIds.size() > 0">
+            AND C.ITEM_ID IN
+            <foreach collection="itemIds" item="itemId" open="(" separator="," close=")">
+                #{itemId}
+            </foreach>
+        </if>-->
+        <if test="itemCodes != null and itemCodes.size() > 0">
+            AND C.ITEM_CODE IN
+            <foreach collection="itemCodes" item="itemCode" open="(" separator="," close=")">
+                #{itemCode}
+            </foreach>
+        </if>
+        <if test="itemSkus != null and itemSkus.size() > 0">
+            AND C.ITEM_SKU IN
+            <foreach collection="itemSkus" item="itemSku" open="(" separator="," close=")">
+                #{itemSku}
+            </foreach>
+        </if>
+        <if test="itemName != null and itemName != ''">
+            AND C.ITEM_NAME LIKE #{itemName}
+        </if>
+        <!--<if test="breedIds != null and breedIds.size() > 0">
+            AND C.BREED_ID IN
+            <foreach collection="breedIds" item="breedId" open="(" separator="," close=")">
+                #{breedId}
+            </foreach>
+        </if>-->
+        <if test="breedCodes != null and breedCodes.size() > 0">
+            AND C.BREED_CODE IN
+            <foreach collection="breedCodes" item="breedCode" open="(" separator="," close=")">
+                #{breedCode}
+            </foreach>
+        </if>
+        <if test="breedSkus != null and breedSkus.size() > 0">
+            AND C.BREED_SKU IN
+            <foreach collection="breedSkus" item="breedSku" open="(" separator="," close=")">
+                #{breedSku}
+            </foreach>
+        </if>
+        <if test="breedSalesName != null and breedSalesName !=''">
+            AND C.BREED_SALES_NAME LIKE #{breedSalesName}
+        </if>
+        <!--<if test="machiningIds != null and machiningIds.size() > 0">
+            AND C.MACHINING_ID IN
+            <foreach collection="machiningIds" item="machiningId" open="(" separator="," close=")">
+                #{machiningId}
+            </foreach>
+        </if>-->
+        <if test="machiningCodes != null and machiningCodes.size() > 0">
+            AND C.MACHINING_CODE IN
+            <foreach collection="machiningCodes" item="machiningCode" open="(" separator="," close=")">
+                #{machiningCode}
+            </foreach>
+        </if>
+        <if test="machiningName != null and machiningName !=''">
+            AND C.MACHINING_NAME LIKE #{machiningName}
+        </if>
+        <!--<if test="classesIds != null and classesIds.size() > 0">
+            AND C.CLASSES_ID IN
+            <foreach collection="classesIds" item="classesId" open="(" separator="," close=")">
+                #{classesId}
+            </foreach>
+        </if>-->
+        <if test="classesCodes != null and classesCodes.size() > 0">
+            AND C.CLASSES_CODE IN
+            <foreach collection="classesCodes" item="classesCode" open="(" separator="," close=")">
+                #{classesCode}
+            </foreach>
+        </if>
+        <if test="classesName != null and classesName !=''">
+            AND C.CLASSES_NAME LIKE #{classesName}
+        </if>
+    </sql>
+
+    <!-- 批量查询卖家单品品牌(规格)生产商，Start -->
+    <select id="findCommoditiesById" parameterType="com.bms.slpd.bean.param.SLPD0802IParam" resultType="com.bms.slpd.bean.entity.SlpdSellerCommodity">
+        SELECT
+            <include refid="sellerCommodityColumns"/>
+        FROM
+            SLPD_SELLER_COMMODITY AS A
+        LEFT JOIN SLPD_PRODUCER_PRODUCT AS B ON B.PRODUCER_PRODUCT_ID = A.PRODUCER_PRODUCT_ID AND B.DEL_FLG = 0
+        LEFT JOIN SLPD_PRODUCT AS C ON C.PRODUCT_ID = A.PRODUCT_ID AND C.DEL_FLG = 0
+        WHERE
+            <include refid="whereConditions" />
+    </select>
+
+    <select id="findPageList" parameterType="com.bms.slpd.bean.param.SLPD0802IParam" resultType="com.bms.slpd.bean.entity.SlpdSellerCommodity">
+        SELECT
+          A.COMMODITY_ID AS commodityId
+        FROM
+        SLPD_SELLER_COMMODITY AS A
+        LEFT JOIN SLPD_PRODUCER_PRODUCT AS B ON B.PRODUCER_PRODUCT_ID = A.PRODUCER_PRODUCT_ID AND B.DEL_FLG = 0
+        LEFT JOIN SLPD_PRODUCT AS C ON C.PRODUCT_ID = A.PRODUCT_ID AND C.DEL_FLG = 0
+        WHERE
+        <include refid="whereConditions" />
+        GROUP BY A.COMMODITY_ID
+    </select>
+    <!-- End -->
+</mapper>

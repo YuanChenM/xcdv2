@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD1815IDao">
+
+    <!-- 单品规格表字段 -->
+    <sql id="itemPropertyColumns">
+        A.ITEM_PROPERTY_ID AS itemPropertyId,
+        A.ITEM_PROPERTY_CODE AS itemPropertyCode,
+        A.ITEM_ID AS itemId,
+        A.SOURCE_TYPE AS sourceType,
+		A.GROSS_WEIGHT AS grossWeight,
+		A.PACKAGE_SPECIFICATION AS packageSpecification,
+		A.PACKAGE_QUANTITY AS packageQuantity,
+		A.CARTON_DIMENSION AS cartonDimension,
+		A.CARTON_LENGTH AS cartonLength,
+		A.CARTON_WIDTH AS cartonWidth,
+		A.CARTON_HEIGHT AS cartonHeight,
+		A.PALLET_STACKING_LIMIT AS palletStackingLimit,
+		A.AUDIT_STU AS auditStu,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="whereConditions">
+        1 = 1
+        <if test="delFlg != null">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+        <if test="itemPropertyIds != null and itemPropertyIds.size() > 0">
+            AND A.ITEM_PROPERTY_ID IN
+            <foreach collection="itemPropertyIds" item="itemPropertyId" open="(" separator="," close=")">
+                #{itemPropertyId}
+            </foreach>
+        </if>
+        <if test="itemPropertyCodes != null and itemPropertyCodes.size() > 0">
+            AND A.ITEM_PROPERTY_CODE IN
+            <foreach collection="itemPropertyCodes" item="itemPropertyCode" open="(" separator="," close=")">
+                #{itemPropertyCode}
+            </foreach>
+        </if>
+        <if test="auditStus != null and auditStus.size() > 0">
+            AND A.AUDIT_STU IN
+            <foreach collection="auditStus" item="auditStu" open="(" separator="," close=")">
+                #{auditStu}
+            </foreach>
+        </if>
+        <if test="productIds != null and productIds.size() > 0">
+            AND A.ITEM_PROPERTY_ID IN
+            (SELECT ITEM_PROPERTY_ID FROM SLPD_PRODUCT WHERE PRODUCT_ID IN
+            <foreach collection="productIds" item="productId" open="(" separator="," close=")">
+                #{productId}
+            </foreach>)
+        </if>
+        <if test="itemIds != null and itemIds.size() > 0">
+            AND A.ITEM_ID IN
+            <foreach collection="itemIds" item="itemId" open="(" separator="," close=")">
+                #{itemId}
+            </foreach>
+        </if>
+        <if test="itemCodes != null and itemCodes.size() > 0">
+            AND B.ITEM_CODE IN
+            <foreach collection="itemCodes" item="itemCode" open="(" separator="," close=")">
+                #{itemCode}
+            </foreach>
+        </if>
+        <if test="itemSkus != null and itemSkus.size() > 0">
+            AND B.ITEM_SKU IN
+            <foreach collection="itemSkus" item="itemSku" open="(" separator="," close=")">
+                #{itemSku}
+            </foreach>
+        </if>
+        <if test="itemName != null and itemName != ''">
+            AND B.ITEM_NAME LIKE #{itemName}
+        </if>
+        <if test="breedIds != null and breedIds.size() > 0">
+            AND B.BREED_ID IN
+            <foreach collection="breedIds" item="breedId" open="(" separator="," close=")">
+                #{breedId}
+            </foreach>
+        </if>
+        <if test="machiningIds != null and machiningIds.size() > 0">
+            AND B.MACHINING_ID IN
+            <foreach collection="machiningIds" item="machiningId" open="(" separator="," close=")">
+                #{machiningId}
+            </foreach>
+        </if>
+        <if test="classesIds != null and classesIds.size() > 0">
+            AND B.CLASSES_ID IN
+            <foreach collection="classesIds" item="classesId" open="(" separator="," close=")">
+                #{classesId}
+            </foreach>
+        </if>
+    </sql>
+
+    <select id="findPageList" parameterType="com.bms.slpd.bean.param.SLPD1815IParam" resultType="com.bms.slpd.bean.result.field.SLPD1815IItemPropertyResult">
+        SELECT
+            <include refid="itemPropertyColumns"/>
+        FROM
+            SLPD_ITEM_PROPERTY AS A
+        LEFT JOIN SLPD_ITEM AS B ON A.ITEM_ID = B.ITEM_ID AND B.DEL_FLG = 0
+        WHERE
+            <include refid="whereConditions"/>
+        ORDER BY A.ITEM_PROPERTY_ID DESC
+    </select>
+    <!-- End -->
+
+</mapper>

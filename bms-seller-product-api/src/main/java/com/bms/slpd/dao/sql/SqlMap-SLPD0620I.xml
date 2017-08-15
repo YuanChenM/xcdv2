@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0620IDao">
+
+	<!-- 修改储存运输标准指标 -->
+	<update id="batchModify" parameterType="com.bms.slpd.bean.UpdateEntity">
+		UPDATE SLPD_TSP_STD
+		SET
+		<if test="target.tspOkValFlg == true">
+			TSP_OK_VAL = #{entity.tspOkVal},
+		</if>
+		<if test="target.tspNgValFlg == true">
+			TSP_NG_VAL = #{entity.tspNgVal},
+		</if>
+		<if test="target.remarkFlg == true">
+			REMARK = #{entity.remark},
+		</if>
+		<if test="target.delFlgFlg == true">
+			DEL_FLG = #{entity.delFlg},
+		</if>
+		UPD_ID = #{entity.updId},
+		UPD_TIME = #{entity.updTime},
+		VERSION = VERSION + 1
+		WHERE
+		TSP_STD_ID = #{entity.tspStdId}
+		AND VERSION = #{entity.version}
+	</update>
+
+</mapper>

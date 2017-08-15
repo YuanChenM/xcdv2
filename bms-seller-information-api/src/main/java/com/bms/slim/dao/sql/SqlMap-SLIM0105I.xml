@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0105IDao">
+
+    <!-- 查询单个卖家经营资质 -->
+    <select id="findSBQ" parameterType="com.bms.slim.bean.param.SLIM0105IParam" resultType="com.bms.slim.bean.entity.SlimSellerBusinessQualification">
+        SELECT
+            SBQ_ID AS sbqId,
+            ENTITY_SELLER_ID AS entitySellerId,
+            THREE_IN_ONE_FLG AS threeInOneFlg,
+            THREE_IN_ONE_NO AS threeInOneNo,
+            THREE_IN_ONE_URL AS threeInOneUrl,
+            ORGANIZATION_CODE AS organizationCode,
+            ORG_CODE_CERT_URL AS orgCodeCertUrl,
+            TAX_REG_CERT_NO AS taxRegCertNo,
+            TAX_REG_CERT_URL AS taxRegCertUrl,
+            VAT_TAXPAYER_QUAL_URL AS vatTaxpayerQualUrl,
+            BUSINESS_LICENSE_NO AS businessLicenseNo,
+            BUSINESS_LICENSE_URL AS businessLicenseUrl,
+            COMPANY_NAME AS companyName,
+            COMPANY_NATURE AS companyNature,
+            COMPANY_ADDRESS AS companyAddress,
+            LEGAL_PERSON AS legalPerson,
+            REGISTERED_CAPITAL AS registeredCapital,
+            PAID_IN_CAPITAL AS paidInCapital,
+            FOUNDING_DATE AS foundingDate,
+            OPERATION_PERIOD AS operationPeriod,
+            BUSINESS_SCOPE AS businessScope,
+            DEPOSIT_BANK AS depositBank,
+            BANK_ACCOUNT AS bankAccount,
+            BANK_LEGAL_PERSON AS bankLegalPerson,
+            ACC_PERMIT_CERT_URL AS accPermitCertUrl,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+            SLIM_SELLER_BUSINESS_QUALIFICATION
+        WHERE
+            DEL_FLg = 0
+        AND
+            ENTITY_SELLER_ID = #{entitySellerId}
+    </select>
+</mapper>

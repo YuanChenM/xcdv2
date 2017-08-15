@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BuyerSellerDetailDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BuyerSellerDetailEntity">
+INSERT INTO
+ORDR_BUYER_SELLER_DETAIL
+(
+SELLER_DETAIL_ID
+, BUYER_BATCH_ORDER_DETAIL_ID
+, SELLER_ID
+, SELLER_CODE
+, SELL_SIDE_TYPE
+, SELL_SIDE_ID
+, ALLOCATE_GOODS_ID
+, COMO_IV_TYPE
+, SELL_QTY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{sellerDetailId}
+, #{buyerBatchOrderDetailId}
+, #{sellerId}
+, #{sellerCode}
+, #{sellSideType}
+, #{sellSideId}
+, #{allocateGoodsId}
+, #{comoIvType}
+, #{sellQty}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_SELLER_DETAIL
+(
+SELLER_DETAIL_ID
+, BUYER_BATCH_ORDER_DETAIL_ID
+, SELLER_ID
+, SELLER_CODE
+, SELL_SIDE_TYPE
+, SELL_SIDE_ID
+, ALLOCATE_GOODS_ID
+, COMO_IV_TYPE
+, SELL_QTY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.sellerDetailId}
+, #{entity.buyerBatchOrderDetailId}
+, #{entity.sellerId}
+, #{entity.sellerCode}
+, #{entity.sellSideType}
+, #{entity.sellSideId}
+, #{entity.allocateGoodsId}
+, #{entity.comoIvType}
+, #{entity.sellQty}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BuyerSellerDetailEntity">
+UPDATE ORDR_BUYER_SELLER_DETAIL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+SELLER_DETAIL_ID = #{sellerDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_SELLER_DETAIL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+SELLER_DETAIL_ID = #{entity.sellerDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BuyerSellerDetailEntity">
+UPDATE ORDR_BUYER_SELLER_DETAIL
+SET
+SELLER_DETAIL_ID = #{sellerDetailId}
+, BUYER_BATCH_ORDER_DETAIL_ID = #{buyerBatchOrderDetailId}
+, SELLER_ID = #{sellerId}
+, SELLER_CODE = #{sellerCode}
+, SELL_SIDE_TYPE = #{sellSideType}
+, SELL_SIDE_ID = #{sellSideId}
+, ALLOCATE_GOODS_ID = #{allocateGoodsId}
+, COMO_IV_TYPE = #{comoIvType}
+, SELL_QTY = #{sellQty}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+SELLER_DETAIL_ID = #{sellerDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_SELLER_DETAIL
+SET
+SELLER_DETAIL_ID = #{entity.sellerDetailId}
+, BUYER_BATCH_ORDER_DETAIL_ID = #{entity.buyerBatchOrderDetailId}
+, SELLER_ID = #{entity.sellerId}
+, SELLER_CODE = #{entity.sellerCode}
+, SELL_SIDE_TYPE = #{entity.sellSideType}
+, SELL_SIDE_ID = #{entity.sellSideId}
+, ALLOCATE_GOODS_ID = #{entity.allocateGoodsId}
+, COMO_IV_TYPE = #{entity.comoIvType}
+, SELL_QTY = #{entity.sellQty}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+SELLER_DETAIL_ID = #{entity.sellerDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BuyerSellerDetailEntity" resultType="com.bms.order.bean.entity.BuyerSellerDetailEntity">
+SELECT
+SELLER_DETAIL_ID AS sellerDetailId
+, BUYER_BATCH_ORDER_DETAIL_ID AS buyerBatchOrderDetailId
+, SELLER_ID AS sellerId
+, SELLER_CODE AS sellerCode
+, SELL_SIDE_TYPE AS sellSideType
+, SELL_SIDE_ID AS sellSideId
+, ALLOCATE_GOODS_ID AS allocateGoodsId
+, COMO_IV_TYPE AS comoIvType
+, SELL_QTY AS sellQty
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_SELLER_DETAIL
+<where>
+<if test="sellerDetailId!=null">
+AND SELLER_DETAIL_ID = #{sellerDetailId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BuyerSellerDetailEntity">
+SELECT
+SELLER_DETAIL_ID AS sellerDetailId
+, BUYER_BATCH_ORDER_DETAIL_ID AS buyerBatchOrderDetailId
+, SELLER_ID AS sellerId
+, SELLER_CODE AS sellerCode
+, SELL_SIDE_TYPE AS sellSideType
+, SELL_SIDE_ID AS sellSideId
+, ALLOCATE_GOODS_ID AS allocateGoodsId
+, COMO_IV_TYPE AS comoIvType
+, SELL_QTY AS sellQty
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_SELLER_DETAIL
+<where>
+<if test="ids!=null">
+AND SELLER_DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+</mapper>

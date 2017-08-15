@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0106IDao">
+
+    <!-- 修改卖家经营资质 -->
+    <update id="updateSBQ" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_SELLER_BUSINESS_QUALIFICATION
+        SET
+        <if test="null != target.threeInOneFlgFlg and target.threeInOneFlgFlg">
+            THREE_IN_ONE_FLG = #{entity.threeInOneFlg},
+        </if>
+        <if test="null != target.threeInOneNoFlg and target.threeInOneNoFlg">
+            THREE_IN_ONE_NO = #{entity.threeInOneNo},
+        </if>
+        <if test="null != target.threeInOneUrlFlg and target.threeInOneUrlFlg">
+            THREE_IN_ONE_URL = #{entity.threeInOneUrl},
+        </if>
+        <if test="null != target.organizationCodeFlg and target.organizationCodeFlg">
+            ORGANIZATION_CODE = #{entity.organizationCode},
+        </if>
+        <if test="null != target.orgCodeCertUrlFlg and target.orgCodeCertUrlFlg">
+            ORG_CODE_CERT_URL = #{entity.orgCodeCertUrl},
+        </if>
+        <if test="null != target.taxRegCertNoFlg and target.taxRegCertNoFlg">
+            TAX_REG_CERT_NO = #{entity.taxRegCertNo},
+        </if>
+        <if test="null != target.taxRegCertUrlFlg and target.taxRegCertUrlFlg">
+            TAX_REG_CERT_URL = #{entity.taxRegCertUrl},
+        </if>
+        <if test="null != target.vatTaxpayerQualUrlFlg and target.vatTaxpayerQualUrlFlg">
+            VAT_TAXPAYER_QUAL_URL = #{entity.vatTaxpayerQualUrl},
+        </if>
+        <if test="null != target.businessLicenseNoFlg and target.businessLicenseNoFlg">
+            BUSINESS_LICENSE_NO = #{entity.businessLicenseNo},
+        </if>
+        <if test="null != target.businessLicenseUrlFlg and target.businessLicenseUrlFlg">
+            BUSINESS_LICENSE_URL = #{entity.businessLicenseUrl},
+        </if>
+        <if test="null != target.companyNameFlg and target.companyNameFlg">
+            COMPANY_NAME = #{entity.companyName},
+        </if>
+        <if test="null != target.companyNatureFlg and target.companyNatureFlg">
+            COMPANY_NATURE = #{entity.companyNature},
+        </if>
+        <if test="null != target.companyAddressFlg and target.companyAddressFlg">
+            COMPANY_ADDRESS = #{entity.companyAddress},
+        </if>
+        <if test="null != target.legalPersonFlg and target.legalPersonFlg">
+            LEGAL_PERSON = #{entity.legalPerson},
+        </if>
+        <if test="null != target.registeredCapitalFlg and target.registeredCapitalFlg">
+            REGISTERED_CAPITAL = #{entity.registeredCapital},
+        </if>
+        <if test="null != target.paidInCapitalFlg and target.paidInCapitalFlg">
+            PAID_IN_CAPITAL = #{entity.paidInCapital},
+        </if>
+        <if test="null != target.foundingDateFlg and target.foundingDateFlg">
+            FOUNDING_DATE = #{entity.foundingDate},
+        </if>
+        <if test="null != target.operationPeriodFlg and target.operationPeriodFlg">
+            OPERATION_PERIOD = #{entity.operationPeriod},
+        </if>
+        <if test="null != target.businessScopeFlg and target.businessScopeFlg">
+            BUSINESS_SCOPE = #{entity.businessScope},
+        </if>
+        <if test="null != target.depositBankFlg and target.depositBankFlg">
+            DEPOSIT_BANK = #{entity.depositBank},
+        </if>
+        <if test="null != target.bankAccountFlg and target.bankAccountFlg">
+            BANK_ACCOUNT = #{entity.bankAccount},
+        </if>
+        <if test="null != target.bankLegalPersonFlg and target.bankLegalPersonFlg">
+            BANK_LEGAL_PERSON = #{entity.bankLegalPerson},
+        </if>
+        <if test="null != target.accPermitCertUrlFlg and target.accPermitCertUrlFlg">
+            ACC_PERMIT_CERT_URL = #{entity.accPermitCertUrl},
+        </if>
+        <if test="null != target.delFlgFlg and target.delFlgFlg">
+            DEL_FLG = #{entity.delFlg},
+        </if>
+			UPD_ID = #{entity.updId},
+			UPD_TIME = #{entity.updTime},
+			VERSION = VERSION + 1
+		WHERE
+            DEL_FLG = 0
+        AND
+            ENTITY_SELLER_ID = #{entity.entitySellerId}
+        AND VERSION = #{entity.version}
+        AND SBQ_ID = #{entity.sbqId}
+    </update>
+</mapper>

@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BuyerOrderAttachedDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BuyerOrderAttachedEntity">
+INSERT INTO
+ORDR_BUYER_ORDER_ATTACHED
+(
+BUYER_ORDER_ID
+, ORDER_PLACER_CODE
+, ORDER_PLACER_NAME
+, LOGISTICS_ZONE_CODE
+, LOGISTICS_ZONE_NAME
+, CITY_ID
+, CITY_CODE
+, CITY_NAME
+, COUNTRY_ID
+, COUNTRY_CODE
+, COUNTRY_NAME
+, REGIONAL_DISTRIBUTION_STATION
+, REGIONAL_DISTRIBUTION_STATION_CODE
+, REGIONAL_DISTRIBUTION_STATION_NAME
+, BUYER_CODE
+, BUYER_NAME
+, BUYER_PHONE
+, BUYER_WECHAT
+, BUYER_QQ
+, BUYER_MAIL
+, REGIONAL_BS_ID
+, REGIONAL_BS_CODE
+, REGIONAL_BS_NAME
+, NON_REGIONAL_BS_ID
+, NON_REGIONAL_BS_CODE
+, NON_REGIONAL_BS_NAME
+, REGIONAL_DISTRIBUTION_BS_ID
+, REGIONAL_DISTRIBUTION_BS_CODE
+, REGIONAL_DISTRIBUTION_BS_NAME
+, NET_USER_BS_ID
+, NET_USER_BS_CODE
+, NET_USER_BS_NAME
+, SA_ID
+, SA_CODE
+, SA_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{buyerOrderId}
+, #{orderPlacerCode}
+, #{orderPlacerName}
+, #{logisticsZoneCode}
+, #{logisticsZoneName}
+, #{cityId}
+, #{cityCode}
+, #{cityName}
+, #{countryId}
+, #{countryCode}
+, #{countryName}
+, #{regionalDistributionStation}
+, #{regionalDistributionStationCode}
+, #{regionalDistributionStationName}
+, #{buyerCode}
+, #{buyerName}
+, #{buyerPhone}
+, #{buyerWechat}
+, #{buyerQq}
+, #{buyerMail}
+, #{regionalBsId}
+, #{regionalBsCode}
+, #{regionalBsName}
+, #{nonRegionalBsId}
+, #{nonRegionalBsCode}
+, #{nonRegionalBsName}
+, #{regionalDistributionBsId}
+, #{regionalDistributionBsCode}
+, #{regionalDistributionBsName}
+, #{netUserBsId}
+, #{netUserBsCode}
+, #{netUserBsName}
+, #{saId}
+, #{saCode}
+, #{saName}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_ORDER_ATTACHED
+(
+BUYER_ORDER_ID
+, ORDER_PLACER_CODE
+, ORDER_PLACER_NAME
+, LOGISTICS_ZONE_CODE
+, LOGISTICS_ZONE_NAME
+, CITY_ID
+, CITY_CODE
+, CITY_NAME
+, COUNTRY_ID
+, COUNTRY_CODE
+, COUNTRY_NAME
+, REGIONAL_DISTRIBUTION_STATION
+, REGIONAL_DISTRIBUTION_STATION_CODE
+, REGIONAL_DISTRIBUTION_STATION_NAME
+, BUYER_CODE
+, BUYER_NAME
+, BUYER_PHONE
+, BUYER_WECHAT
+, BUYER_QQ
+, BUYER_MAIL
+, REGIONAL_BS_ID
+, REGIONAL_BS_CODE
+, REGIONAL_BS_NAME
+, NON_REGIONAL_BS_ID
+, NON_REGIONAL_BS_CODE
+, NON_REGIONAL_BS_NAME
+, REGIONAL_DISTRIBUTION_BS_ID
+, REGIONAL_DISTRIBUTION_BS_CODE
+, REGIONAL_DISTRIBUTION_BS_NAME
+, NET_USER_BS_ID
+, NET_USER_BS_CODE
+, NET_USER_BS_NAME
+, SA_ID
+, SA_CODE
+, SA_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.buyerOrderId}
+, #{entity.orderPlacerCode}
+, #{entity.orderPlacerName}
+, #{entity.logisticsZoneCode}
+, #{entity.logisticsZoneName}
+, #{entity.cityId}
+, #{entity.cityCode}
+, #{entity.cityName}
+, #{entity.countryId}
+, #{entity.countryCode}
+, #{entity.countryName}
+, #{entity.regionalDistributionStation}
+, #{entity.regionalDistributionStationCode}
+, #{entity.regionalDistributionStationName}
+, #{entity.buyerCode}
+, #{entity.buyerName}
+, #{entity.buyerPhone}
+, #{entity.buyerWechat}
+, #{entity.buyerQq}
+, #{entity.buyerMail}
+, #{entity.regionalBsId}
+, #{entity.regionalBsCode}
+, #{entity.regionalBsName}
+, #{entity.nonRegionalBsId}
+, #{entity.nonRegionalBsCode}
+, #{entity.nonRegionalBsName}
+, #{entity.regionalDistributionBsId}
+, #{entity.regionalDistributionBsCode}
+, #{entity.regionalDistributionBsName}
+, #{entity.netUserBsId}
+, #{entity.netUserBsCode}
+, #{entity.netUserBsName}
+, #{entity.saId}
+, #{entity.saCode}
+, #{entity.saName}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BuyerOrderAttachedEntity">
+UPDATE ORDR_BUYER_ORDER_ATTACHED
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BUYER_ORDER_ID = #{buyerOrderId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_ORDER_ATTACHED
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BUYER_ORDER_ID = #{entity.buyerOrderId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BuyerOrderAttachedEntity">
+UPDATE ORDR_BUYER_ORDER_ATTACHED
+SET
+BUYER_ORDER_ID = #{buyerOrderId}
+, ORDER_PLACER_CODE = #{orderPlacerCode}
+, ORDER_PLACER_NAME = #{orderPlacerName}
+, LOGISTICS_ZONE_CODE = #{logisticsZoneCode}
+, LOGISTICS_ZONE_NAME = #{logisticsZoneName}
+, CITY_ID = #{cityId}
+, CITY_CODE = #{cityCode}
+, CITY_NAME = #{cityName}
+, COUNTRY_ID = #{countryId}
+, COUNTRY_CODE = #{countryCode}
+, COUNTRY_NAME = #{countryName}
+, REGIONAL_DISTRIBUTION_STATION = #{regionalDistributionStation}
+, REGIONAL_DISTRIBUTION_STATION_CODE = #{regionalDistributionStationCode}
+, REGIONAL_DISTRIBUTION_STATION_NAME = #{regionalDistributionStationName}
+, BUYER_CODE = #{buyerCode}
+, BUYER_NAME = #{buyerName}
+, BUYER_PHONE = #{buyerPhone}
+, BUYER_WECHAT = #{buyerWechat}
+, BUYER_QQ = #{buyerQq}
+, BUYER_MAIL = #{buyerMail}
+, REGIONAL_BS_ID = #{regionalBsId}
+, REGIONAL_BS_CODE = #{regionalBsCode}
+, REGIONAL_BS_NAME = #{regionalBsName}
+, NON_REGIONAL_BS_ID = #{nonRegionalBsId}
+, NON_REGIONAL_BS_CODE = #{nonRegionalBsCode}
+, NON_REGIONAL_BS_NAME = #{nonRegionalBsName}
+, REGIONAL_DISTRIBUTION_BS_ID = #{regionalDistributionBsId}
+, REGIONAL_DISTRIBUTION_BS_CODE = #{regionalDistributionBsCode}
+, REGIONAL_DISTRIBUTION_BS_NAME = #{regionalDistributionBsName}
+, NET_USER_BS_ID = #{netUserBsId}
+, NET_USER_BS_CODE = #{netUserBsCode}
+, NET_USER_BS_NAME = #{netUserBsName}
+, SA_ID = #{saId}
+, SA_CODE = #{saCode}
+, SA_NAME = #{saName}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BUYER_ORDER_ID = #{buyerOrderId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BUYER_ORDER_ATTACHED
+SET
+BUYER_ORDER_ID = #{entity.buyerOrderId}
+, ORDER_PLACER_CODE = #{entity.orderPlacerCode}
+, ORDER_PLACER_NAME = #{entity.orderPlacerName}
+, LOGISTICS_ZONE_CODE = #{entity.logisticsZoneCode}
+, LOGISTICS_ZONE_NAME = #{entity.logisticsZoneName}
+, CITY_ID = #{entity.cityId}
+, CITY_CODE = #{entity.cityCode}
+, CITY_NAME = #{entity.cityName}
+, COUNTRY_ID = #{entity.countryId}
+, COUNTRY_CODE = #{entity.countryCode}
+, COUNTRY_NAME = #{entity.countryName}
+, REGIONAL_DISTRIBUTION_STATION = #{entity.regionalDistributionStation}
+, REGIONAL_DISTRIBUTION_STATION_CODE = #{entity.regionalDistributionStationCode}
+, REGIONAL_DISTRIBUTION_STATION_NAME = #{entity.regionalDistributionStationName}
+, BUYER_CODE = #{entity.buyerCode}
+, BUYER_NAME = #{entity.buyerName}
+, BUYER_PHONE = #{entity.buyerPhone}
+, BUYER_WECHAT = #{entity.buyerWechat}
+, BUYER_QQ = #{entity.buyerQq}
+, BUYER_MAIL = #{entity.buyerMail}
+, REGIONAL_BS_ID = #{entity.regionalBsId}
+, REGIONAL_BS_CODE = #{entity.regionalBsCode}
+, REGIONAL_BS_NAME = #{entity.regionalBsName}
+, NON_REGIONAL_BS_ID = #{entity.nonRegionalBsId}
+, NON_REGIONAL_BS_CODE = #{entity.nonRegionalBsCode}
+, NON_REGIONAL_BS_NAME = #{entity.nonRegionalBsName}
+, REGIONAL_DISTRIBUTION_BS_ID = #{entity.regionalDistributionBsId}
+, REGIONAL_DISTRIBUTION_BS_CODE = #{entity.regionalDistributionBsCode}
+, REGIONAL_DISTRIBUTION_BS_NAME = #{entity.regionalDistributionBsName}
+, NET_USER_BS_ID = #{entity.netUserBsId}
+, NET_USER_BS_CODE = #{entity.netUserBsCode}
+, NET_USER_BS_NAME = #{entity.netUserBsName}
+, SA_ID = #{entity.saId}
+, SA_CODE = #{entity.saCode}
+, SA_NAME = #{entity.saName}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BUYER_ORDER_ID = #{entity.buyerOrderId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BuyerOrderAttachedEntity" resultType="com.bms.order.bean.entity.BuyerOrderAttachedEntity">
+SELECT
+BUYER_ORDER_ID AS buyerOrderId
+, ORDER_PLACER_CODE AS orderPlacerCode
+, ORDER_PLACER_NAME AS orderPlacerName
+, LOGISTICS_ZONE_CODE AS logisticsZoneCode
+, LOGISTICS_ZONE_NAME AS logisticsZoneName
+, CITY_ID AS cityId
+, CITY_CODE AS cityCode
+, CITY_NAME AS cityName
+, COUNTRY_ID AS countryId
+, COUNTRY_CODE AS countryCode
+, COUNTRY_NAME AS countryName
+, REGIONAL_DISTRIBUTION_STATION AS regionalDistributionStation
+, REGIONAL_DISTRIBUTION_STATION_CODE AS regionalDistributionStationCode
+, REGIONAL_DISTRIBUTION_STATION_NAME AS regionalDistributionStationName
+, BUYER_CODE AS buyerCode
+, BUYER_NAME AS buyerName
+, BUYER_PHONE AS buyerPhone
+, BUYER_WECHAT AS buyerWechat
+, BUYER_QQ AS buyerQq
+, BUYER_MAIL AS buyerMail
+, REGIONAL_BS_ID AS regionalBsId
+, REGIONAL_BS_CODE AS regionalBsCode
+, REGIONAL_BS_NAME AS regionalBsName
+, NON_REGIONAL_BS_ID AS nonRegionalBsId
+, NON_REGIONAL_BS_CODE AS nonRegionalBsCode
+, NON_REGIONAL_BS_NAME AS nonRegionalBsName
+, REGIONAL_DISTRIBUTION_BS_ID AS regionalDistributionBsId
+, REGIONAL_DISTRIBUTION_BS_CODE AS regionalDistributionBsCode
+, REGIONAL_DISTRIBUTION_BS_NAME AS regionalDistributionBsName
+, NET_USER_BS_ID AS netUserBsId
+, NET_USER_BS_CODE AS netUserBsCode
+, NET_USER_BS_NAME AS netUserBsName
+, SA_ID AS saId
+, SA_CODE AS saCode
+, SA_NAME AS saName
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_ORDER_ATTACHED
+<where>
+<if test="buyerOrderId!=null">
+AND BUYER_ORDER_ID = #{buyerOrderId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BuyerOrderAttachedEntity">
+SELECT
+BUYER_ORDER_ID AS buyerOrderId
+, ORDER_PLACER_CODE AS orderPlacerCode
+, ORDER_PLACER_NAME AS orderPlacerName
+, LOGISTICS_ZONE_CODE AS logisticsZoneCode
+, LOGISTICS_ZONE_NAME AS logisticsZoneName
+, CITY_ID AS cityId
+, CITY_CODE AS cityCode
+, CITY_NAME AS cityName
+, COUNTRY_ID AS countryId
+, COUNTRY_CODE AS countryCode
+, COUNTRY_NAME AS countryName
+, REGIONAL_DISTRIBUTION_STATION AS regionalDistributionStation
+, REGIONAL_DISTRIBUTION_STATION_CODE AS regionalDistributionStationCode
+, REGIONAL_DISTRIBUTION_STATION_NAME AS regionalDistributionStationName
+, BUYER_CODE AS buyerCode
+, BUYER_NAME AS buyerName
+, BUYER_PHONE AS buyerPhone
+, BUYER_WECHAT AS buyerWechat
+, BUYER_QQ AS buyerQq
+, BUYER_MAIL AS buyerMail
+, REGIONAL_BS_ID AS regionalBsId
+, REGIONAL_BS_CODE AS regionalBsCode
+, REGIONAL_BS_NAME AS regionalBsName
+, NON_REGIONAL_BS_ID AS nonRegionalBsId
+, NON_REGIONAL_BS_CODE AS nonRegionalBsCode
+, NON_REGIONAL_BS_NAME AS nonRegionalBsName
+, REGIONAL_DISTRIBUTION_BS_ID AS regionalDistributionBsId
+, REGIONAL_DISTRIBUTION_BS_CODE AS regionalDistributionBsCode
+, REGIONAL_DISTRIBUTION_BS_NAME AS regionalDistributionBsName
+, NET_USER_BS_ID AS netUserBsId
+, NET_USER_BS_CODE AS netUserBsCode
+, NET_USER_BS_NAME AS netUserBsName
+, SA_ID AS saId
+, SA_CODE AS saCode
+, SA_NAME AS saName
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BUYER_ORDER_ATTACHED
+<where>
+<if test="ids!=null">
+AND BUYER_ORDER_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.BuyerOrderAttachedHistoryEntity">
+INSERT INTO
+ORDR_BUYER_ORDER_ATTACHED_HISTORY
+(
+HISTORY_ID
+, BUYER_ORDER_ID
+, ORDER_PLACER_CODE
+, ORDER_PLACER_NAME
+, LOGISTICS_ZONE_CODE
+, LOGISTICS_ZONE_NAME
+, CITY_ID
+, CITY_CODE
+, CITY_NAME
+, COUNTRY_ID
+, COUNTRY_CODE
+, COUNTRY_NAME
+, REGIONAL_DISTRIBUTION_STATION
+, REGIONAL_DISTRIBUTION_STATION_CODE
+, REGIONAL_DISTRIBUTION_STATION_NAME
+, BUYER_CODE
+, BUYER_NAME
+, BUYER_PHONE
+, BUYER_WECHAT
+, BUYER_QQ
+, BUYER_MAIL
+, REGIONAL_BS_ID
+, REGIONAL_BS_CODE
+, REGIONAL_BS_NAME
+, NON_REGIONAL_BS_ID
+, NON_REGIONAL_BS_CODE
+, NON_REGIONAL_BS_NAME
+, REGIONAL_DISTRIBUTION_BS_ID
+, REGIONAL_DISTRIBUTION_BS_CODE
+, REGIONAL_DISTRIBUTION_BS_NAME
+, NET_USER_BS_ID
+, NET_USER_BS_CODE
+, NET_USER_BS_NAME
+, SA_ID
+, SA_CODE
+, SA_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{buyerOrderId}
+, #{orderPlacerCode}
+, #{orderPlacerName}
+, #{logisticsZoneCode}
+, #{logisticsZoneName}
+, #{cityId}
+, #{cityCode}
+, #{cityName}
+, #{countryId}
+, #{countryCode}
+, #{countryName}
+, #{regionalDistributionStation}
+, #{regionalDistributionStationCode}
+, #{regionalDistributionStationName}
+, #{buyerCode}
+, #{buyerName}
+, #{buyerPhone}
+, #{buyerWechat}
+, #{buyerQq}
+, #{buyerMail}
+, #{regionalBsId}
+, #{regionalBsCode}
+, #{regionalBsName}
+, #{nonRegionalBsId}
+, #{nonRegionalBsCode}
+, #{nonRegionalBsName}
+, #{regionalDistributionBsId}
+, #{regionalDistributionBsCode}
+, #{regionalDistributionBsName}
+, #{netUserBsId}
+, #{netUserBsCode}
+, #{netUserBsName}
+, #{saId}
+, #{saCode}
+, #{saName}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_BUYER_ORDER_ATTACHED_HISTORY
+(
+HISTORY_ID
+, BUYER_ORDER_ID
+, ORDER_PLACER_CODE
+, ORDER_PLACER_NAME
+, LOGISTICS_ZONE_CODE
+, LOGISTICS_ZONE_NAME
+, CITY_ID
+, CITY_CODE
+, CITY_NAME
+, COUNTRY_ID
+, COUNTRY_CODE
+, COUNTRY_NAME
+, REGIONAL_DISTRIBUTION_STATION
+, REGIONAL_DISTRIBUTION_STATION_CODE
+, REGIONAL_DISTRIBUTION_STATION_NAME
+, BUYER_CODE
+, BUYER_NAME
+, BUYER_PHONE
+, BUYER_WECHAT
+, BUYER_QQ
+, BUYER_MAIL
+, REGIONAL_BS_ID
+, REGIONAL_BS_CODE
+, REGIONAL_BS_NAME
+, NON_REGIONAL_BS_ID
+, NON_REGIONAL_BS_CODE
+, NON_REGIONAL_BS_NAME
+, REGIONAL_DISTRIBUTION_BS_ID
+, REGIONAL_DISTRIBUTION_BS_CODE
+, REGIONAL_DISTRIBUTION_BS_NAME
+, NET_USER_BS_ID
+, NET_USER_BS_CODE
+, NET_USER_BS_NAME
+, SA_ID
+, SA_CODE
+, SA_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.buyerOrderId}
+, #{entity.orderPlacerCode}
+, #{entity.orderPlacerName}
+, #{entity.logisticsZoneCode}
+, #{entity.logisticsZoneName}
+, #{entity.cityId}
+, #{entity.cityCode}
+, #{entity.cityName}
+, #{entity.countryId}
+, #{entity.countryCode}
+, #{entity.countryName}
+, #{entity.regionalDistributionStation}
+, #{entity.regionalDistributionStationCode}
+, #{entity.regionalDistributionStationName}
+, #{entity.buyerCode}
+, #{entity.buyerName}
+, #{entity.buyerPhone}
+, #{entity.buyerWechat}
+, #{entity.buyerQq}
+, #{entity.buyerMail}
+, #{entity.regionalBsId}
+, #{entity.regionalBsCode}
+, #{entity.regionalBsName}
+, #{entity.nonRegionalBsId}
+, #{entity.nonRegionalBsCode}
+, #{entity.nonRegionalBsName}
+, #{entity.regionalDistributionBsId}
+, #{entity.regionalDistributionBsCode}
+, #{entity.regionalDistributionBsName}
+, #{entity.netUserBsId}
+, #{entity.netUserBsCode}
+, #{entity.netUserBsName}
+, #{entity.saId}
+, #{entity.saCode}
+, #{entity.saName}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

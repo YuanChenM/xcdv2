@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0116IDao">
+
+    <!-- 批量新增卖家合同信息 -->
+    <insert id="saveSCPs" parameterType="java.util.List">
+        INSERT INTO SLIM_SELLER_CONTRACT_PERMISSION (
+        SCP_ID,
+        ENTITY_SELLER_ID,
+        SELLER_FULL_NAME,
+        COUNTRY_CODE,
+        COUNTRY_NAME,
+        PROVINCE_CODE,
+        PROVINCE_NAME,
+        CITY_CODE,
+        CITY_NAME,
+        BUSINESS_ADDRESS,
+        PAYEE_NAME,
+        PAYEE_BANK,
+        BANK_ACCOUNT,
+        EXPRESS_ADDRESS,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="scp" index="index" separator=",">
+            (
+            #{scp.scpId},
+            #{scp.entitySellerId},
+            #{scp.sellerFullName},
+            #{scp.countryCode},
+            #{scp.countryName},
+            #{scp.provinceCode},
+            #{scp.provinceName},
+            #{scp.cityCode},
+            #{scp.cityName},
+            #{scp.businessAddress},
+            #{scp.payeeName},
+            #{scp.payeeBank},
+            #{scp.bankAccount},
+            #{scp.expressAddress},
+            0,
+            #{scp.crtId},
+            #{scp.crtTime},
+            #{scp.crtId},
+            #{scp.crtTime},
+            1
+            )
+        </foreach>
+    </insert>
+</mapper>

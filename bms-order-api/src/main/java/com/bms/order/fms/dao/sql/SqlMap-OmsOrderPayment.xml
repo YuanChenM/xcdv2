@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.fms.dao.OmsOrderPaymentDao">
+    <select id="findOrderPayment" parameterType="com.bms.order.fms.bean.OmsOrderPayment"
+            resultType="com.bms.order.fms.bean.OmsOrderPayment">
+        SELECT
+            ordrPay.ORDER_ID AS orderId,
+            ordrPay.PAYMENT_WAY AS paymentWay,
+            ordrPay.PAYMENT_AMOUNT AS paymentAmount,
+            ordrPay.PAYMENT_DATETIME AS paymentDatetime
+        FROM
+            ORDR_PAYMENT ordrPay
+        WHERE
+            ordrPay.PAYMENT_ID = (
+                SELECT
+                    min(PAYMENT_ID)
+                FROM
+                    ORDR_PAYMENT
+                WHERE
+                    ORDER_ID = #{orderId})
+    </select>
+    <select id="findOrderTotalPayment" parameterType="com.bms.order.fms.bean.OmsOrderPayment"
+            resultType="com.bms.order.fms.bean.OmsOrderPayment">
+        SELECT
+        ordrPay.ORDER_ID AS orderId,
+        SUM(ordrPay.PAYMENT_AMOUNT) AS paymentAmount
+        FROM
+        ORDR_PAYMENT ordrPay
+        WHERE
+        ordrPay.ORDER_ID = #{orderId}
+    </select>
+</mapper>

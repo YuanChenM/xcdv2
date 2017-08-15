@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0102IDao">
+
+    <!-- 实体卖家表字段 -->
+    <sql id="entitySellerColumns">
+        A.ENTITY_SELLER_ID AS entitySellerId,
+        A.ENTITY_SELLER_CODE AS entitySellerCode,
+        A.ENTITY_SELLER_DISPLAY_CODE AS entitySellerDisplayCode,
+        A.FULL_NAME AS fullName,
+		A.SHORT_NAME AS shortName,
+        A.ACCOUNT AS account,
+        A.PASSWORD AS password,
+        A.COUNTRY_CODE AS countryCode,
+        A.COUNTRY_NAME AS countryName,
+        A.PROVINCE_CODE AS provinceCode,
+        A.PROVINCE_NAME AS provinceName,
+        A.CITY_CODE AS cityCode,
+        A.CITY_NAME AS cityName,
+        A.TEL AS tel,
+        A.FAX AS fax,
+        A.MEDIA_PLATFORM AS mediaPlatform,
+        A.ADDRESS AS address,
+		A.BRAND_REQUIRED_FLG AS brandRequiredFlg,
+		A.BRAND_REG_FLG AS brandRegFlg,
+		A.PRODUCER_REQUIRED_FLG AS producerRequiredFlg,
+		A.PRODUCER_REG_FLG AS producerRegFlg,
+		A.BIZ_QUAL_REQUIRED_FLG AS bizQualRequiredFlg,
+		A.BIZ_QUAL_REG_FLG AS bizQualRegFlg,
+		A.SUP_QUAL_REQUIRED_FLG AS supQualRequiredFlg,
+		A.SUP_QUAL_REG_FLG AS supQualRegFlg,
+		A.BIZ_TEAM_REQUIRED_FLG AS bizTeamRequiredFlg,
+		A.BIZ_TEAM_REG_FLG AS bizTeamRegFlg,
+		A.MGT_TEAM_REQUIRED_FLG AS mgtTeamRequiredFlg,
+		A.MGT_TEAM_REG_FLG AS mgtTeamRegFlg,
+		A.CONTRACT_REQUIRED_FLG AS contractRequiredFlg,
+		A.CONTRACT_REG_FLG AS contractRegFlg,
+		A.AUDIT_STU AS auditStu,
+		A.AUDIT_REMARK AS auditRemark,
+		A.AUDIT_HISTORY AS auditHistory,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="whereConditions">
+        1 = 1
+        <if test="delFlg != null">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+        <if test="entitySellerIds != null and entitySellerIds.size() > 0">
+            AND A.ENTITY_SELLER_ID IN
+            <foreach collection="entitySellerIds" index="index" item="entitySellerId" open="(" separator="," close=")">
+                #{entitySellerId}
+            </foreach>
+        </if>
+        <if test="fullName != null and fullName != ''">
+            AND A.FULL_NAME LIKE #{fullName}
+        </if>
+        <if test="shortName != null and shortName != ''">
+            AND A.SHORT_NAME LIKE #{shortName}
+        </if>
+        <if test="countryCode != null and countryCode != ''">
+            AND A.COUNTRY_CODE = #{countryCode}
+        </if>
+        <if test="countryName != null and countryName != ''">
+            AND A.COUNTRY_NAME LIKE #{countryName}
+        </if>
+        <if test="provinceCode != null and provinceCode != ''">
+            AND A.PROVINCE_CODE = #{provinceCode}
+        </if>
+        <if test="provinceName != null and provinceName != ''">
+            AND A.PROVINCE_NAME LIKE #{provinceName}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND A.CITY_CODE = #{cityCode}
+        </if>
+        <if test="cityName != null and cityName != ''">
+            AND A.CITY_NAME LIKE #{cityName}
+        </if>
+    </sql>
+
+    <!-- 批量查询实体卖家 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0102IParam" resultType="com.bms.slim.bean.result.field.SLIM0102IEntitySellerResult">
+        SELECT
+            <include refid="entitySellerColumns"/>
+        FROM
+            SLIM_ENTITY_SELLER AS A
+        WHERE
+            <include refid="whereConditions"/>
+        GROUP BY A.ENTITY_SELLER_ID
+        ORDER BY A.ENTITY_SELLER_ID DESC
+    </select>
+
+    <!-- 根据实体卖家ID，批量查询联系人 -->
+    <select id="findContactsByEntitySellerIds" parameterType="list" resultType="com.bms.slim.bean.entity.SlimContact">
+        SELECT
+            CONTACT_ID AS contactId,
+            CONTACT_NAME AS contactName,
+            WORKUNIT_ID AS workunitId,
+            MOBILE AS mobile,
+            WECHAT AS wechat,
+            QQ AS qq,
+            EMAIL AS email
+        FROM
+            SLIM_CONTACT
+        WHERE
+            DEL_FLG = 0
+        AND WORKUNIT_TYPE = 1
+        AND WORKUNIT_ID IN
+        <foreach collection="list" index="index" item="workunitId" open="(" separator="," close=")">
+            #{workunitId}
+        </foreach>
+    </select>
+
+</mapper>

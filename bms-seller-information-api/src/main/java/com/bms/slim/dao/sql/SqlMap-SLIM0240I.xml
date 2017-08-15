@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0240IDao">
+    
+    <!-- 查询平台生产商信息 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0240IParam"
+            resultType="com.bms.slim.bean.result.wrapper.SlimProducerResult">
+        SELECT
+            SP.PRODUCER_ID AS producerId,
+            SP.PRODUCER_CODE AS producerCode,
+            SP.SHORT_NAME AS shortName,
+            SP.FULL_NAME AS fullName,
+            SP.COUNTRY_CODE AS countryCode,
+            SP.COUNTRY_NAME AS countryName,
+            SP.PROVINCE_CODE AS provinceCode,
+            SP.PROVINCE_NAME AS provinceName,
+            SP.CITY_CODE AS cityCode,
+            SP.CITY_NAME AS cityName,
+            SP.ADDRESS AS address,
+            SP.TEL AS tel,
+            SP.FAX AS fax,
+            SP.MEDIA_PLATFORM AS mediaPlatForm,
+            SP.AUDIT_STU AS auditStu,
+            SP.AUDIT_REMARK AS auditRemark,
+            SP.AUDIT_HISTORY AS auditHistory,
+            C.CONTACT_ID AS contactId,
+            C.CONTACT_NAME AS contactName,
+            C.WECHAT AS wechat,
+            C.EMAIL AS email,
+            C.QQ AS qq,
+            C.MOBILE AS mobile,
+            SP.DEL_FLG AS delFlg,
+            SP.CRT_ID AS crtId,
+            SP.CRT_TIME AS crtTime,
+            SP.UPD_ID AS updId,
+            SP.UPD_TIME AS updTime,
+            SP.VERSION AS version
+        FROM
+            SLIM_PRODUCER SP
+            LEFT JOIN SLIM_CONTACT C
+            ON SP.PRODUCER_ID = C.WORKUNIT_ID  AND C.WORKUNIT_TYPE = 2
+        <where>
+            <if test="delFlg != null">
+                SP.DEL_FLG = #{delFlg}
+            </if>
+            <if test="producerIds != null and producerIds.size() > 0">
+                AND SP.PRODUCER_ID IN
+                <foreach collection="producerIds" item="producerId" open="(" separator="," close=")">
+                    #{producerId}
+                </foreach>
+            </if>
+            <if test="producerCode != null and producerCode != ''">
+                AND SP.PRODUCER_CODE LIKE #{producerCode}
+            </if>
+            <if test="fullName != null and fullName != ''">
+                AND SP.FULL_NAME LIKE #{fullName}
+            </if>
+        </where>
+    </select>
+
+</mapper>

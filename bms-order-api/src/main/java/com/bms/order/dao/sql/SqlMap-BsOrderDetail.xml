@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BsOrderDetailDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BsOrderDetailEntity">
+INSERT INTO
+ORDR_BS_ORDER_DETAIL
+(
+BS_ORDER_DETAIL_ID
+, BS_ORDER_ID
+, GOODS_UNIT
+, GOODS_QUANTITY
+, CANCEL_QUANTITY
+, REAL_UNIT_PRICE
+, REAL_KG_PRICE
+, PRICE_CREATE_TIME
+, PRICE_WAY
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, BATCH_ID
+, SALE_LABEL_ID
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{bsOrderDetailId}
+, #{bsOrderId}
+, #{goodsUnit}
+, #{goodsQuantity}
+, #{cancelQuantity}
+, #{realUnitPrice}
+, #{realKgPrice}
+, #{priceCreateTime}
+, #{priceWay}
+, #{goodsId}
+, #{productId}
+, #{manufacturerId}
+, #{sellerId}
+, #{batchId}
+, #{saleLabelId}
+, #{transactionSequence}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_ORDER_DETAIL
+(
+BS_ORDER_DETAIL_ID
+, BS_ORDER_ID
+, GOODS_UNIT
+, GOODS_QUANTITY
+, CANCEL_QUANTITY
+, REAL_UNIT_PRICE
+, REAL_KG_PRICE
+, PRICE_CREATE_TIME
+, PRICE_WAY
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, BATCH_ID
+, SALE_LABEL_ID
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.bsOrderDetailId}
+, #{entity.bsOrderId}
+, #{entity.goodsUnit}
+, #{entity.goodsQuantity}
+, #{entity.cancelQuantity}
+, #{entity.realUnitPrice}
+, #{entity.realKgPrice}
+, #{entity.priceCreateTime}
+, #{entity.priceWay}
+, #{entity.goodsId}
+, #{entity.productId}
+, #{entity.manufacturerId}
+, #{entity.sellerId}
+, #{entity.batchId}
+, #{entity.saleLabelId}
+, #{entity.transactionSequence}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BsOrderDetailEntity">
+UPDATE ORDR_BS_ORDER_DETAIL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BS_ORDER_DETAIL_ID = #{bsOrderDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_ORDER_DETAIL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BS_ORDER_DETAIL_ID = #{entity.bsOrderDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BsOrderDetailEntity">
+UPDATE ORDR_BS_ORDER_DETAIL
+SET
+BS_ORDER_DETAIL_ID = #{bsOrderDetailId}
+, BS_ORDER_ID = #{bsOrderId}
+, GOODS_UNIT = #{goodsUnit}
+, GOODS_QUANTITY = #{goodsQuantity}
+, CANCEL_QUANTITY = #{cancelQuantity}
+, REAL_UNIT_PRICE = #{realUnitPrice}
+, REAL_KG_PRICE = #{realKgPrice}
+, PRICE_CREATE_TIME = #{priceCreateTime}
+, PRICE_WAY = #{priceWay}
+, GOODS_ID = #{goodsId}
+, PRODUCT_ID = #{productId}
+, MANUFACTURER_ID = #{manufacturerId}
+, SELLER_ID = #{sellerId}
+, BATCH_ID = #{batchId}
+, SALE_LABEL_ID = #{saleLabelId}
+, TRANSACTION_SEQUENCE = #{transactionSequence}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BS_ORDER_DETAIL_ID = #{bsOrderDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_ORDER_DETAIL
+SET
+BS_ORDER_DETAIL_ID = #{entity.bsOrderDetailId}
+, BS_ORDER_ID = #{entity.bsOrderId}
+, GOODS_UNIT = #{entity.goodsUnit}
+, GOODS_QUANTITY = #{entity.goodsQuantity}
+, CANCEL_QUANTITY = #{entity.cancelQuantity}
+, REAL_UNIT_PRICE = #{entity.realUnitPrice}
+, REAL_KG_PRICE = #{entity.realKgPrice}
+, PRICE_CREATE_TIME = #{entity.priceCreateTime}
+, PRICE_WAY = #{entity.priceWay}
+, GOODS_ID = #{entity.goodsId}
+, PRODUCT_ID = #{entity.productId}
+, MANUFACTURER_ID = #{entity.manufacturerId}
+, SELLER_ID = #{entity.sellerId}
+, BATCH_ID = #{entity.batchId}
+, SALE_LABEL_ID = #{entity.saleLabelId}
+, TRANSACTION_SEQUENCE = #{entity.transactionSequence}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BS_ORDER_DETAIL_ID = #{entity.bsOrderDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BsOrderDetailEntity" resultType="com.bms.order.bean.entity.BsOrderDetailEntity">
+SELECT
+BS_ORDER_DETAIL_ID AS bsOrderDetailId
+, BS_ORDER_ID AS bsOrderId
+, GOODS_UNIT AS goodsUnit
+, GOODS_QUANTITY AS goodsQuantity
+, CANCEL_QUANTITY AS cancelQuantity
+, REAL_UNIT_PRICE AS realUnitPrice
+, REAL_KG_PRICE AS realKgPrice
+, PRICE_CREATE_TIME AS priceCreateTime
+, PRICE_WAY AS priceWay
+, GOODS_ID AS goodsId
+, PRODUCT_ID AS productId
+, MANUFACTURER_ID AS manufacturerId
+, SELLER_ID AS sellerId
+, BATCH_ID AS batchId
+, SALE_LABEL_ID AS saleLabelId
+, TRANSACTION_SEQUENCE AS transactionSequence
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_ORDER_DETAIL
+<where>
+<if test="bsOrderDetailId!=null">
+AND BS_ORDER_DETAIL_ID = #{bsOrderDetailId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BsOrderDetailEntity">
+SELECT
+BS_ORDER_DETAIL_ID AS bsOrderDetailId
+, BS_ORDER_ID AS bsOrderId
+, GOODS_UNIT AS goodsUnit
+, GOODS_QUANTITY AS goodsQuantity
+, CANCEL_QUANTITY AS cancelQuantity
+, REAL_UNIT_PRICE AS realUnitPrice
+, REAL_KG_PRICE AS realKgPrice
+, PRICE_CREATE_TIME AS priceCreateTime
+, PRICE_WAY AS priceWay
+, GOODS_ID AS goodsId
+, PRODUCT_ID AS productId
+, MANUFACTURER_ID AS manufacturerId
+, SELLER_ID AS sellerId
+, BATCH_ID AS batchId
+, SALE_LABEL_ID AS saleLabelId
+, TRANSACTION_SEQUENCE AS transactionSequence
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_ORDER_DETAIL
+<where>
+<if test="ids!=null">
+AND BS_ORDER_DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="bsOrders!=null">
+AND BS_ORDER_ID IN (<foreach item="item" collection="bsOrders" separator=",">#{item.entity.bsOrderId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.BsOrderDetailHistoryEntity">
+INSERT INTO
+ORDR_BS_ORDER_DETAIL_HISTORY
+(
+HISTORY_ID
+, BS_ORDER_DETAIL_ID
+, BS_ORDER_ID
+, GOODS_UNIT
+, GOODS_QUANTITY
+, CANCEL_QUANTITY
+, REAL_UNIT_PRICE
+, REAL_KG_PRICE
+, PRICE_CREATE_TIME
+, PRICE_WAY
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, BATCH_ID
+, SALE_LABEL_ID
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{bsOrderDetailId}
+, #{bsOrderId}
+, #{goodsUnit}
+, #{goodsQuantity}
+, #{cancelQuantity}
+, #{realUnitPrice}
+, #{realKgPrice}
+, #{priceCreateTime}
+, #{priceWay}
+, #{goodsId}
+, #{productId}
+, #{manufacturerId}
+, #{sellerId}
+, #{batchId}
+, #{saleLabelId}
+, #{transactionSequence}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_ORDER_DETAIL_HISTORY
+(
+HISTORY_ID
+, BS_ORDER_DETAIL_ID
+, BS_ORDER_ID
+, GOODS_UNIT
+, GOODS_QUANTITY
+, CANCEL_QUANTITY
+, REAL_UNIT_PRICE
+, REAL_KG_PRICE
+, PRICE_CREATE_TIME
+, PRICE_WAY
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, BATCH_ID
+, SALE_LABEL_ID
+, TRANSACTION_SEQUENCE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.bsOrderDetailId}
+, #{entity.bsOrderId}
+, #{entity.goodsUnit}
+, #{entity.goodsQuantity}
+, #{entity.cancelQuantity}
+, #{entity.realUnitPrice}
+, #{entity.realKgPrice}
+, #{entity.priceCreateTime}
+, #{entity.priceWay}
+, #{entity.goodsId}
+, #{entity.productId}
+, #{entity.manufacturerId}
+, #{entity.sellerId}
+, #{entity.batchId}
+, #{entity.saleLabelId}
+, #{entity.transactionSequence}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

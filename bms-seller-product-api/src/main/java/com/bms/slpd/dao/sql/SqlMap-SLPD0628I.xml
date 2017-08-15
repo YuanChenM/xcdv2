@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0628IDao">
+
+    <!-- 新增饲养标准指标差异 -->
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO SLPD_DIF_FED_STD (
+        FED_DIF_STD_ID,
+        FED_STD_TYPE,
+        BREED_ID,
+        PRODUCT_ID,
+        FED_GOOD_DIF_VAL,
+        FED_NORMAL_DIF_VAL,
+        FED_OK_DIF_VAL,
+        REMARK,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="difFedStd" index="index" separator=",">
+            (
+            #{difFedStd.fedDifStdId},
+            #{difFedStd.fedStdType},
+            #{difFedStd.breedId},
+            #{difFedStd.productId},
+            #{difFedStd.fedGoodDifVal},
+            #{difFedStd.fedNormalDifVal},
+            #{difFedStd.fedOkDifVal},
+            #{difFedStd.remark},
+            0,
+            #{difFedStd.crtId},
+            #{difFedStd.crtTime},
+            #{difFedStd.updId},
+            #{difFedStd.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

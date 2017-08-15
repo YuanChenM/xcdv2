@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BsStockpileSaleDetailDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BsStockpileSaleDetailEntity">
+INSERT INTO
+ORDR_BS_STOCKPILE_SALE_DETAIL
+(
+STOCKPILE_SALE_DETAIL_ID
+, BS_STOCKPILE_SPLIT_DETAIL_ID
+, BUYER_FORCAST_DELIVER_DETAIL_ID
+, SALE_QUANTITY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{stockpileSaleDetailId}
+, #{bsStockpileSplitDetailId}
+, #{buyerForcastDeliverDetailId}
+, #{saleQuantity}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_STOCKPILE_SALE_DETAIL
+(
+STOCKPILE_SALE_DETAIL_ID
+, BS_STOCKPILE_SPLIT_DETAIL_ID
+, BUYER_FORCAST_DELIVER_DETAIL_ID
+, SALE_QUANTITY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.stockpileSaleDetailId}
+, #{entity.bsStockpileSplitDetailId}
+, #{entity.buyerForcastDeliverDetailId}
+, #{entity.saleQuantity}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BsStockpileSaleDetailEntity">
+UPDATE ORDR_BS_STOCKPILE_SALE_DETAIL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+STOCKPILE_SALE_DETAIL_ID = #{stockpileSaleDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_STOCKPILE_SALE_DETAIL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+STOCKPILE_SALE_DETAIL_ID = #{entity.stockpileSaleDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BsStockpileSaleDetailEntity">
+UPDATE ORDR_BS_STOCKPILE_SALE_DETAIL
+SET
+STOCKPILE_SALE_DETAIL_ID = #{stockpileSaleDetailId}
+, BS_STOCKPILE_SPLIT_DETAIL_ID = #{bsStockpileSplitDetailId}
+, BUYER_FORCAST_DELIVER_DETAIL_ID = #{buyerForcastDeliverDetailId}
+, SALE_QUANTITY = #{saleQuantity}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+STOCKPILE_SALE_DETAIL_ID = #{stockpileSaleDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_STOCKPILE_SALE_DETAIL
+SET
+STOCKPILE_SALE_DETAIL_ID = #{entity.stockpileSaleDetailId}
+, BS_STOCKPILE_SPLIT_DETAIL_ID = #{entity.bsStockpileSplitDetailId}
+, BUYER_FORCAST_DELIVER_DETAIL_ID = #{entity.buyerForcastDeliverDetailId}
+, SALE_QUANTITY = #{entity.saleQuantity}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+STOCKPILE_SALE_DETAIL_ID = #{entity.stockpileSaleDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BsStockpileSaleDetailEntity" resultType="com.bms.order.bean.entity.BsStockpileSaleDetailEntity">
+SELECT
+STOCKPILE_SALE_DETAIL_ID AS stockpileSaleDetailId
+, BS_STOCKPILE_SPLIT_DETAIL_ID AS bsStockpileSplitDetailId
+, BUYER_FORCAST_DELIVER_DETAIL_ID AS buyerForcastDeliverDetailId
+, SALE_QUANTITY AS saleQuantity
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_STOCKPILE_SALE_DETAIL
+<where>
+<if test="stockpileSaleDetailId!=null">
+AND STOCKPILE_SALE_DETAIL_ID = #{stockpileSaleDetailId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BsStockpileSaleDetailEntity">
+SELECT
+STOCKPILE_SALE_DETAIL_ID AS stockpileSaleDetailId
+, BS_STOCKPILE_SPLIT_DETAIL_ID AS bsStockpileSplitDetailId
+, BUYER_FORCAST_DELIVER_DETAIL_ID AS buyerForcastDeliverDetailId
+, SALE_QUANTITY AS saleQuantity
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_STOCKPILE_SALE_DETAIL
+<where>
+<if test="ids!=null">
+AND STOCKPILE_SALE_DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="buyerForcastDeliverDetails!=null">
+AND BUYER_FORCAST_DELIVER_DETAIL_ID IN (<foreach item="item" collection="buyerForcastDeliverDetails" separator=",">#{item.entity.buyerForcastDeliverDetailId}</foreach>)
+</if>
+<if test="bsStockpileSplitDetails!=null">
+AND BS_STOCKPILE_SPLIT_DETAIL_ID IN (<foreach item="item" collection="bsStockpileSplitDetails" separator=",">#{item.entity.bsStockpileSplitDetailId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.BsStockpileSaleDetailHistoryEntity">
+INSERT INTO
+ORDR_BS_STOCKPILE_SALE_DETAIL_HISTORY
+(
+HISTORY_ID
+, STOCKPILE_SALE_DETAIL_ID
+, BS_STOCKPILE_SPLIT_DETAIL_ID
+, BUYER_FORCAST_DELIVER_DETAIL_ID
+, SALE_QUANTITY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{stockpileSaleDetailId}
+, #{bsStockpileSplitDetailId}
+, #{buyerForcastDeliverDetailId}
+, #{saleQuantity}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_STOCKPILE_SALE_DETAIL_HISTORY
+(
+HISTORY_ID
+, STOCKPILE_SALE_DETAIL_ID
+, BS_STOCKPILE_SPLIT_DETAIL_ID
+, BUYER_FORCAST_DELIVER_DETAIL_ID
+, SALE_QUANTITY
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.stockpileSaleDetailId}
+, #{entity.bsStockpileSplitDetailId}
+, #{entity.buyerForcastDeliverDetailId}
+, #{entity.saleQuantity}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

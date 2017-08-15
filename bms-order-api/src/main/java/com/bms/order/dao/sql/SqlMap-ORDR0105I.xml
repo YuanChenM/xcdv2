@@ -1,0 +1,914 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.ORDR0105IDao">
+	<resultMap id="L1Result" type="com.bms.order.bean.result.ORDR0105IL1RestResult">
+		<id         property="buyerOrderId"                    column="L1_buyerOrderId" />
+		<result     property="backNo"                           column="L1_backNo" />
+		<result     property="buyerOrderCode"                  column="L1_buyerOrderCode" />
+		<result     property="orderType"                       column="L1_orderType" />
+		<result     property="salePlatformType"                column="L1_salePlatformType" />
+		<result     property="orderSourceType"                 column="L1_orderSourceType" />
+		<result     property="batchFlg"                        column="L1_batchFlg" />
+		<result     property="orderSplitType"                  column="L1_orderSplitType" />
+		<result     property="orderPlacerId"                   column="L1_orderPlacerId" />
+		<result     property="orderPlacerType"                 column="L1_orderPlacerType" />
+		<result     property="orderPlaceDatetime"              column="L1_orderPlaceDatetime" />
+		<result     property="orderCreateDatetime"             column="L1_orderCreateDatetime" />
+		<result     property="orderPlaceType"                  column="L1_orderPlaceType" />
+		<result     property="logisticsZoneId"                 column="L1_logisticsZoneId" />
+		<result     property="buyerType"                       column="L1_buyerType" />
+		<result     property="buyerTypeName"                   column="L1_buyerTypeName" />
+		<result     property="buyerId"                         column="L1_buyerId" />
+		<result     property="bsType"                          column="L1_bsType" />
+		<result     property="bsId"                            column="L1_bsId" />
+		<result     property="invoiceFlg"                      column="L1_invoiceFlg" />
+		<result     property="netBuyerFlg"                     column="L1_netBuyerFlg" />
+		<result     property="useNetFlg"                       column="L1_useNetFlg" />
+		<result     property="paymentType"                     column="L1_paymentType" />
+		<result     property="paymentStu"                      column="L1_paymentStu" />
+		<result     property="orderAmount"                     column="L1_orderAmount" />
+		<result     property="freight"                         column="L1_freight" />
+		<result     property="preferentialAmount"              column="L1_preferentialAmount" />
+		<result     property="receiveAmount"                   column="L1_receiveAmount" />
+		<result     property="earnestPercent"                  column="L1_earnestPercent" />
+		<result     property="earnestAmount"                   column="L1_earnestAmount" />
+		<result     property="advancePaymentPercent"           column="L1_advancePaymentPercent" />
+		<result     property="advancePaymentAmount"            column="L1_advancePaymentAmount" />
+		<result     property="buyerOrderStu"                   column="L1_buyerOrderStu" />
+		<result     property="version"                         column="L1_version" />
+		<result     property="orderPlacerCode"                 column="L1A_orderPlacerCode" />
+		<result     property="orderPlacerName"                 column="L1A_orderPlacerName" />
+		<result     property="logisticsZoneCode"               column="L1A_logisticsZoneCode" />
+		<result     property="logisticsZoneName"               column="L1A_logisticsZoneName" />
+		<result     property="cityId"                          column="L1A_cityId" />
+		<result     property="cityName"                        column="L1A_cityName" />
+		<result     property="countryId"                       column="L1A_countryId" />
+		<result     property="countryName"                     column="L1A_countryName" />
+		<result     property="regionalDistributionStation"     column="L1A_regionalDistributionStation" />
+		<result     property="regionalDistributionStationCode" column="L1A_regionalDistributionStationCode" />
+		<result     property="regionalDistributionStationName" column="L1A_regionalDistributionStationName" />
+		<result     property="buyerCode"                       column="L1A_buyerCode" />
+		<result     property="buyerName"                       column="L1A_buyerName" />
+		<result     property="buyerPhone"                      column="L1A_buyerPhone" />
+		<result     property="buyerWechat"                     column="L1A_buyerWechat" />
+		<result     property="buyerQq"                         column="L1A_buyerQq" />
+		<result     property="buyerMail"                       column="L1A_buyerMail" />
+		<result     property="regionalBsId"                    column="L1A_regionalBsId" />
+		<result     property="regionalBsCode"                  column="L1A_regionalBsCode" />
+		<result     property="regionalBsName"                  column="L1A_regionalBsName" />
+		<result     property="nonRegionalBsId"                 column="L1A_nonRegionalBsId" />
+		<result     property="nonRegionalBsCode"               column="L1A_nonRegionalBsCode" />
+		<result     property="nonRegionalBsName"               column="L1A_nonRegionalBsName" />
+		<result     property="regionalDistributionBsId"        column="L1A_regionalDistributionBsId" />
+		<result     property="regionalDistributionBsCode"      column="L1A_regionalDistributionBsCode" />
+		<result     property="regionalDistributionBsName"      column="L1A_regionalDistributionBsName" />
+		<result     property="netUserBsId"                     column="L1A_netUserBsId" />
+		<result     property="netUserBsCode"                   column="L1A_netUserBsCode" />
+		<result     property="netUserBsName"                   column="L1A_netUserBsName" />
+		<result     property="saId"                            column="L1A_saId" />
+		<result     property="saCode"                          column="L1A_saCode" />
+		<result     property="saName"                          column="L1A_saName" />
+		<result     property="cancelType"                      column="L1C_cancelType" />
+		<result     property="cancelPersonType"                column="L1C_cancelPersonType" />
+		<result     property="cancelPersonId"                  column="L1C_cancelPersonId" />
+		<result     property="cancelPersonCode"                column="L1C_cancelPersonCode" />
+		<result     property="cancelPersonName"                column="L1C_cancelPersonName" />
+		<result     property="cancelDatetime"                  column="L1C_cancelDatetime" />
+		<result     property="cancelReason"                    column="L1C_cancelReason" />
+		<result     property="sortSeq"                         column="L1_sortSeq" />
+		<collection property="batchOrders"                     resultMap="L2Result" />
+	</resultMap>
+	<resultMap id="L2Result" type="com.bms.order.bean.result.ORDR0105IL2RestResult">
+		<id         property="buyerBatchOrderId"                column="L2_buyerBatchOrderId" />
+		<result     property="buyerBatchOrderCode"              column="L2_buyerBatchOrderCode" />
+		<result     property="buyerOrderId"                     column="L2_buyerOrderId" />
+		<result     property="requiredDistributionDate"         column="L2_requiredDistributionDate" />
+		<result     property="expectedSendDatetime"             column="L2_expectedSendDatetime" />
+		<result     property="expectedArrivalDatetime"          column="L2_expectedArrivalDatetime" />
+		<result     property="orderAmount"                      column="L2_orderAmount" />
+		<result     property="freight"                          column="L2_freight" />
+		<result     property="preferentialAmount"               column="L2_preferentialAmount" />
+		<result     property="receiveAmount"                    column="L2_receiveAmount" />
+		<result     property="earnestPercent"                   column="L2_earnestPercent" />
+		<result     property="earnestAmount"                    column="L2_earnestAmount" />
+		<result     property="advancePaymentPercent"            column="L2_advancePaymentPercent" />
+		<result     property="advancePaymentAmount"             column="L2_advancePaymentAmount" />
+		<result     property="buyerBatchOrderStu"               column="L2_buyerBatchOrderStu" />
+		<result     property="version"                          column="L2_version" />
+		<result     property="receiverName"                     column="L2A_receiverName" />
+		<result     property="receiverPhone"                    column="L2A_receiverPhone" />
+		<result     property="receiverQq"                       column="L2A_receiverQq" />
+		<result     property="receiverWechat"                   column="L2A_receiverWechat" />
+		<result     property="receiverMail"                     column="L2A_receiverMail" />
+		<result     property="receiverProvince"                 column="L2A_receiverProvince" />
+		<result     property="receiverCity"                     column="L2A_receiverCity" />
+		<result     property="receiverDistrict"                 column="L2A_receiverDistrict" />
+		<result     property="receiverAddress"                  column="L2A_receiverAddress" />
+		<result     property="receiverAssistAddress"            column="L2A_receiverAssistAddress" />
+		<result     property="deliveryArea"                     column="L2A_deliveryArea" />
+		<result     property="passTrafficModel"                 column="L2A_passTrafficModel" />
+		<result     property="distributionType"                 column="L2A_distributionType" />
+		<result     property="receivePeriod"                    column="L2A_receivePeriod" />
+		<result     property="receiveEarliest"                  column="L2A_receiveEarliest" />
+		<result     property="receiveLatest"                    column="L2A_receiveLatest" />
+		<result     property="receiveWaitHour"                  column="L2A_receiveWaitHour" />
+		<result     property="advancedNotificationHour"         column="L2A_advancedNotificationHour" />
+		<result     property="animalQuarantineCertificationFlg" column="L2A_animalQuarantineCertificationFlg" />
+		<result     property="stevedoreRequirement"             column="L2A_stevedoreRequirement" />
+		<result     property="packageRequirement"               column="L2A_packageRequirement" />
+		<result     property="nearestParkingDistance"           column="L2A_nearestParkingDistance" />
+		<result     property="cancelType"                      column="L2C_cancelType" />
+		<result     property="cancelPersonType"                column="L2C_cancelPersonType" />
+		<result     property="cancelPersonId"                  column="L2C_cancelPersonId" />
+		<result     property="cancelPersonCode"                column="L2C_cancelPersonCode" />
+		<result     property="cancelPersonName"                column="L2C_cancelPersonName" />
+		<result     property="cancelDatetime"                  column="L2C_cancelDatetime" />
+		<result     property="cancelReason"                    column="L2C_cancelReason" />
+		<result     property="remark"                           column="L2A_remark" />
+		<result     property="sortSeq"                          column="L2_sortSeq" />
+		<collection property="batchOrderDetails"                resultMap="L3Result" />
+	</resultMap>
+	<resultMap id="L3Result" type="com.bms.order.bean.result.ORDR0105IL3RestResult">
+		<id         property="buyerBatchOrderDetailId"        column="L3_buyerBatchOrderDetailId" />
+		<result     property="buyerOrderId"                   column="L3_buyerOrderId" />
+		<result     property="buyerBatchOrderId"              column="L3_buyerBatchOrderId" />
+		<result     property="goodsUnit"                      column="L3_goodsUnit" />
+		<result     property="goodsQuantity"                  column="L3_goodsQuantity" />
+		<result     property="cancelQuantity"                 column="L3_cancelQuantity" />
+		<result     property="orderCreateUnitPrice"          column="L3_orderCreateUnitPrice" />
+		<result     property="orderCreateKgPrice"            column="L3_orderCreateKgPrice" />
+		<result     property="realUnitPrice"                  column="L3_realUnitPrice" />
+		<result     property="realKgPrice"                    column="L3_realKgPrice" />
+		<result     property="priceCreateTime"                column="L3_priceCreateTime" />
+		<result     property="priceWay"                       column="L3_priceWay" />
+		<result     property="goodsId"                        column="L3_goodsId" />
+		<result     property="productId"                      column="L3_productId" />
+		<result     property="manufacturerId"                 column="L3_manufacturerId" />
+		<result     property="sellerId"                       column="L3_sellerId" />
+		<result     property="batchId"                        column="L3_batchId" />
+		<result     property="saleLabelId"                    column="L3_saleLabelId" />
+		<result     property="splitFlg"                       column="L3_splitFlg" />
+		<result     property="manualSplitFlg"                 column="L3_manualSplitFlg" />
+		<result     property="version"                        column="L3_version" />
+		<result     property="itemCode"                       column="L3A_itemCode" />
+		<result     property="itemName"                       column="L3A_itemName" />
+		<result     property="brandCode"                      column="L3A_brandCode" />
+		<result     property="brandName"                      column="L3A_brandName" />
+		<result     property="itemBrandCode"                  column="L3A_itemBrandCode" />
+		<result     property="manufacturerCode"               column="L3A_manufacturerCode" />
+		<result     property="manufacturerName"               column="L3A_manufacturerName" />
+		<result     property="sellerCode"                     column="L3A_sellerCode" />
+		<result     property="sellerName"                     column="L3A_sellerName" />
+		<result     property="batchCode"                      column="L3A_batchCode" />
+		<result     property="goodsCode"                      column="L3A_goodsCode" />
+		<result     property="goodsName"                      column="L3A_goodsName" />
+		<result     property="saleLabelCode"                  column="L3A_saleLabelCode" />
+		<result     property="saleLabelName"                  column="L3A_saleLabelName" />
+		<result     property="smallPackageFeature"            column="L3A_smallPackageFeature" />
+		<result     property="quantityPerPackage"             column="L3A_quantityPerPackage" />
+		<result     property="netWeight"                      column="L3A_netWeight" />
+		<result     property="grossWeight"                    column="L3A_grossWeight" />
+		<result     property="cartonSize"                     column="L3A_cartonSize" />
+		<result     property="productLevel"                   column="L3A_productLevel" />
+		<result     property="palletStandardStackQuantity"    column="L3A_palletStandardStackQuantity" />
+		<result     property="sortSeq"                        column="L3_sortSeq" />
+		<collection property="ordrBuyerForcastDeliverDetails" resultMap="L4Result" />
+	</resultMap>
+	<resultMap id="L4Result" type="com.bms.order.bean.result.ORDR0105IL4RestResult">
+		<id         property="buyerForcastDeliverDetailId" column="L4_buyerForcastDeliverDetailId" />
+		<result     property="buyerBatchOrderId"           column="L4_buyerBatchOrderId" />
+		<result     property="buyerBatchOrderDetailId"     column="L4_buyerBatchOrderDetailId" />
+		<result     property="forcastType"                 column="L4_forcastType" />
+		<result     property="sellSideType"                column="L4_sellSideType" />
+		<result     property="sellSideId"                  column="L4_sellSideId" />
+		<result     property="goodsId"                     column="L4_goodsId" />
+		<result     property="productId"                   column="L4_productId" />
+		<result     property="manufacturerId"              column="L4_manufacturerId" />
+		<result     property="sellerId"                    column="L4_sellerId" />
+		<result     property="sku"                         column="L4_sku" />
+		<result     property="batchId"                     column="L4_batchId" />
+		<result     property="saleLabelId"                 column="L4_saleLabelId" />
+		<result     property="planSendQuantity"            column="L4_planSendQuantity" />
+		<result     property="realSendQuantity"            column="L4_realSendQuantity" />
+		<result     property="receiveQuantity"             column="L4_receiveQuantity" />
+		<result     property="rejectQuantity"              column="L4_rejectQuantity" />
+		<result     property="delayQuantity"               column="L4_delayQuantity" />
+		<result     property="redistributionDate"          column="L4_redistributionDate" />
+		<result     property="returnQuantity"              column="L4_returnQuantity" />
+		<result     property="version"                     column="L4_version" />
+		<result     property="sellSideCode"                column="L4A_sellSideCode" />
+		<result     property="sellSideName"                column="L4A_sellSideName" />
+		<result     property="itemCode"                    column="L4A_itemCode" />
+		<result     property="itemName"                    column="L4A_itemName" />
+		<result     property="brandCode"                   column="L4A_brandCode" />
+		<result     property="brandName"                   column="L4A_brandName" />
+		<result     property="itemBrandCode"               column="L4A_itemBrandCode" />
+		<result     property="manufacturerCode"            column="L4A_manufacturerCode" />
+		<result     property="manufacturerName"            column="L4A_manufacturerName" />
+		<result     property="sellerCode"                  column="L4A_sellerCode" />
+		<result     property="sellerName"                  column="L4A_sellerName" />
+		<result     property="batchCode"                   column="L4A_batchCode" />
+		<result     property="goodsCode"                   column="L4A_goodsCode" />
+		<result     property="goodsName"                   column="L4A_goodsName" />
+		<result     property="saleLabelCode"               column="L4A_saleLabelCode" />
+		<result     property="saleLabelName"               column="L4A_saleLabelName" />
+		<result     property="smallPackageFeature"         column="L4A_smallPackageFeature" />
+		<result     property="quantityPerPackage"          column="L4A_quantityPerPackage" />
+		<result     property="netWeight"                   column="L4A_netWeight" />
+		<result     property="grossWeight"                 column="L4A_grossWeight" />
+		<result     property="cartonSize"                  column="L4A_cartonSize" />
+		<result     property="productLevel"                column="L4A_productLevel" />
+		<result     property="sortSeq"                     column="L4_sortSeq" />
+		<result     property="palletStandardStackQuantity" column="L4A_palletStandardStackQuantity" />
+	</resultMap>
+
+	<sql id="L1Select">
+		L1.BUYER_ORDER_ID AS L1_buyerOrderId
+		, L1.BACK_NO AS L1_backNo
+		, L1.BUYER_ORDER_CODE AS L1_buyerOrderCode
+		, L1.ORDER_TYPE AS L1_orderType
+		, L1.SALE_PLATFORM_TYPE AS L1_salePlatformType
+		, L1.ORDER_SOURCE_TYPE AS L1_orderSourceType
+		, L1.BATCH_FLG AS L1_batchFlg
+		, L1.ORDER_SPLIT_TYPE AS L1_orderSplitType
+		, L1.ORDER_PLACER_ID AS L1_orderPlacerId
+		, L1.ORDER_PLACER_TYPE AS L1_orderPlacerType
+		, L1.ORDER_PLACE_DATETIME AS L1_orderPlaceDatetime
+		, L1.ORDER_PLACE_TYPE AS L1_orderPlaceType
+		, L1.LOGISTICS_ZONE_ID AS L1_logisticsZoneId
+		, L1.BUYER_TYPE AS L1_buyerType
+		, L1.BUYER_TYPE_NAME AS L1_buyerTypeName
+		, L1.BUYER_ID AS L1_buyerId
+		, L1.BS_TYPE AS L1_bsType
+		, L1.BS_ID AS L1_bsId
+		, L1.INVOICE_FLG AS L1_invoiceFlg
+		, L1.NET_BUYER_FLG AS L1_netBuyerFlg
+		, L1.USE_NET_FLG AS L1_useNetFlg
+		, L1.PAYMENT_TYPE AS L1_paymentType
+		, L1.PAYMENT_STU AS L1_paymentStu
+		, L1.ORDER_AMOUNT AS L1_orderAmount
+		, L1.FREIGHT AS L1_freight
+		, L1.PREFERENTIAL_AMOUNT AS L1_preferentialAmount
+		, L1.RECEIVE_AMOUNT AS L1_receiveAmount
+		, L1.EARNEST_PERCENT AS L1_earnestPercent
+		, L1.EARNEST_AMOUNT AS L1_earnestAmount
+		, L1.ADVANCE_PAYMENT_PERCENT AS L1_advancePaymentPercent
+		, L1.ADVANCE_PAYMENT_AMOUNT AS L1_advancePaymentAmount
+		, L1.BUYER_ORDER_STU AS L1_buyerOrderStu
+		, L1.CRT_TIME AS L1_orderCreateDatetime
+		, L1.VERSION AS L1_version
+	</sql>
+	<sql id="L1ASelect">
+		, L1A.ORDER_PLACER_CODE AS L1A_orderPlacerCode
+		, L1A.ORDER_PLACER_NAME AS L1A_orderPlacerName
+		, L1A.LOGISTICS_ZONE_CODE AS L1A_logisticsZoneCode
+		, L1A.LOGISTICS_ZONE_NAME AS L1A_logisticsZoneName
+		, L1A.CITY_ID AS L1A_cityId
+		, L1A.CITY_NAME AS L1A_cityName
+		, L1A.COUNTRY_ID AS L1A_countryId
+		, L1A.COUNTRY_NAME AS L1A_countryName
+		, L1A.REGIONAL_DISTRIBUTION_STATION AS L1A_regionalDistributionStation
+		, L1A.REGIONAL_DISTRIBUTION_STATION_CODE AS L1A_regionalDistributionStationCode
+		, L1A.REGIONAL_DISTRIBUTION_STATION_NAME AS L1A_regionalDistributionStationName
+		, L1A.BUYER_CODE AS L1A_buyerCode
+		, L1A.BUYER_NAME AS L1A_buyerName
+		, L1A.BUYER_PHONE AS L1A_buyerPhone
+		, L1A.BUYER_WECHAT AS L1A_buyerWechat
+		, L1A.BUYER_QQ AS L1A_buyerQq
+		, L1A.BUYER_MAIL AS L1A_buyerMail
+		, L1A.REGIONAL_BS_ID AS L1A_regionalBsId
+		, L1A.REGIONAL_BS_CODE AS L1A_regionalBsCode
+		, L1A.REGIONAL_BS_NAME AS L1A_regionalBsName
+		, L1A.NON_REGIONAL_BS_ID AS L1A_nonRegionalBsId
+		, L1A.NON_REGIONAL_BS_CODE AS L1A_nonRegionalBsCode
+		, L1A.NON_REGIONAL_BS_NAME AS L1A_nonRegionalBsName
+		, L1A.REGIONAL_DISTRIBUTION_BS_ID AS L1A_regionalDistributionBsId
+		, L1A.REGIONAL_DISTRIBUTION_BS_CODE AS L1A_regionalDistributionBsCode
+		, L1A.REGIONAL_DISTRIBUTION_BS_NAME AS L1A_regionalDistributionBsName
+		, L1A.NET_USER_BS_ID AS L1A_netUserBsId
+		, L1A.NET_USER_BS_CODE AS L1A_netUserBsCode
+		, L1A.NET_USER_BS_NAME AS L1A_netUserBsName
+		, L1A.SA_ID AS L1A_saId
+		, L1A.SA_CODE AS L1A_saCode
+		, L1A.SA_NAME AS L1A_saName
+	</sql>
+	<sql id="L1CSelect">
+		, L1C.CANCEL_MODEL_TYPE AS L1C_cancelModelType
+		, L1C.CANCEL_MODEL_ID AS L1C_cancelModelId
+		, L1C.CANCEL_TYPE AS L1C_cancelType
+		, L1C.CANCEL_PERSON_TYPE AS L1C_cancelPersonType
+		, L1C.CANCEL_PERSON_ID AS L1C_cancelPersonId
+		, L1C.CANCEL_PERSON_CODE AS L1C_cancelPersonCode
+		, L1C.CANCEL_PERSON_NAME AS L1C_cancelPersonName
+		, L1C.CANCEL_DATETIME AS L1C_cancelDatetime
+		,L1C.CANCEL_REASON AS L1C_cancelReason
+	</sql>
+	<sql id="L2Select">
+		, L2.BUYER_BATCH_ORDER_ID AS L2_buyerBatchOrderId
+		, L2.BUYER_BATCH_ORDER_CODE AS L2_buyerBatchOrderCode
+		, L2.BUYER_ORDER_ID AS L2_buyerOrderId
+		, L2.REQUIRED_DISTRIBUTION_DATE AS L2_requiredDistributionDate
+		, L2.EXPECTED_SEND_DATETIME AS L2_expectedSendDatetime
+		, L2.EXPECTED_ARRIVAL_DATETIME AS L2_expectedArrivalDatetime
+		, L2.ORDER_AMOUNT AS L2_orderAmount
+		, L2.FREIGHT AS L2_freight
+		, L2.PREFERENTIAL_AMOUNT AS L2_preferentialAmount
+		, L2.RECEIVE_AMOUNT AS L2_receiveAmount
+		, L2.EARNEST_PERCENT AS L2_earnestPercent
+		, L2.EARNEST_AMOUNT AS L2_earnestAmount
+		, L2.ADVANCE_PAYMENT_PERCENT AS L2_advancePaymentPercent
+		, L2.ADVANCE_PAYMENT_AMOUNT AS L2_advancePaymentAmount
+		, L2.BUYER_BATCH_ORDER_STU AS L2_buyerBatchOrderStu
+		, L2.VERSION AS L2_version
+	</sql>
+	<sql id="L2ASelect">
+		, L2A.RECEIVER_NAME AS L2A_receiverName
+		, L2A.RECEIVER_PHONE AS L2A_receiverPhone
+		, L2A.RECEIVER_QQ AS L2A_receiverQq
+		, L2A.RECEIVER_WECHAT AS L2A_receiverWechat
+		, L2A.RECEIVER_MAIL AS L2A_receiverMail
+		, L2A.RECEIVER_PROVINCE AS L2A_receiverProvince
+		, L2A.RECEIVER_CITY AS L2A_receiverCity
+		, L2A.RECEIVER_DISTRICT AS L2A_receiverDistrict
+		, L2A.RECEIVER_ADDRESS AS L2A_receiverAddress
+		, L2A.RECEIVER_ASSIST_ADDRESS AS L2A_receiverAssistAddress
+		, L2A.DELIVERY_AREA AS L2A_deliveryArea
+		, L2A.PASS_TRAFFIC_MODEL AS L2A_passTrafficModel
+		, L2A.DISTRIBUTION_TYPE AS L2A_distributionType
+		, L2A.RECEIVE_PERIOD AS L2A_receivePeriod
+		, L2A.RECEIVE_EARLIEST AS L2A_receiveEarliest
+		, L2A.RECEIVE_LATEST AS L2A_receiveLatest
+		, L2A.RECEIVE_WAIT_HOUR AS L2A_receiveWaitHour
+		, L2A.ADVANCED_NOTIFICATION_HOUR AS L2A_advancedNotificationHour
+		, L2A.ANIMAL_QUARANTINE_CERTIFICATION_FLG AS L2A_animalQuarantineCertificationFlg
+		, L2A.STEVEDORE_REQUIREMENT AS L2A_stevedoreRequirement
+		, L2A.PACKAGE_REQUIREMENT AS L2A_packageRequirement
+		, L2A.NEAREST_PARKING_DISTANCE AS L2A_nearestParkingDistance
+		, L2A.REMARK AS L2A_remark
+	</sql>
+	<sql id="L2CSelect">
+		, L2C.CANCEL_MODEL_TYPE AS L2C_cancelModelType
+		, L2C.CANCEL_MODEL_ID AS L2C_cancelModelId
+		, L2C.CANCEL_TYPE AS L2C_cancelType
+		, L2C.CANCEL_PERSON_TYPE AS L2C_cancelPersonType
+		, L2C.CANCEL_PERSON_ID AS L2C_cancelPersonId
+		, L2C.CANCEL_PERSON_CODE AS L2C_cancelPersonCode
+		, L2C.CANCEL_PERSON_NAME AS L2C_cancelPersonName
+		, L2C.CANCEL_DATETIME AS L2C_cancelDatetime
+		, L2C.CANCEL_REASON AS L2C_cancelReason
+	</sql>
+	<sql id="L3Select">
+		, L3.BUYER_BATCH_ORDER_DETAIL_ID AS L3_buyerBatchOrderDetailId
+		, L3.BUYER_ORDER_ID AS L3_buyerOrderId
+		, L3.BUYER_BATCH_ORDER_ID AS L3_buyerBatchOrderId
+		, L3.GOODS_UNIT AS L3_goodsUnit
+		, L3.GOODS_QUANTITY AS L3_goodsQuantity
+		, L3.CANCEL_QUANTITY AS L3_cancelQuantity
+		,L3.ORDER_CREATE_UNIT_PRICE AS L3_orderCreateUnitPrice
+	    ,L3.ORDER_CREATE_KG_PRICE AS L3_orderCreateKgPrice
+		, L3.REAL_UNIT_PRICE AS L3_realUnitPrice
+		, L3.REAL_KG_PRICE AS L3_realKgPrice
+		, L3.PRICE_CREATE_TIME AS L3_priceCreateTime
+		, L3.PRICE_WAY AS L3_priceWay
+		, L3.GOODS_ID AS L3_goodsId
+		, L3.PRODUCT_ID AS L3_productId
+		, L3.MANUFACTURER_ID AS L3_manufacturerId
+		, L3.SELLER_ID AS L3_sellerId
+		, L3.BATCH_ID AS L3_batchId
+		, L3.SALE_LABEL_ID AS L3_saleLabelId
+		, L3.SPLIT_FLG AS L3_splitFlg
+		, L3.MANUAL_SPLIT_FLG AS L3_manualSplitFlg
+		, L3.VERSION AS L3_version
+	</sql>
+	<sql id="L3ASelect">
+		, L3A.ITEM_CODE AS L3A_itemCode
+		, L3A.ITEM_NAME AS L3A_itemName
+		, L3A.BRAND_CODE AS L3A_brandCode
+		, L3A.BRAND_NAME AS L3A_brandName
+		, L3A.ITEM_BRAND_CODE AS L3A_itemBrandCode
+		, L3A.MANUFACTURER_CODE AS L3A_manufacturerCode
+		, L3A.MANUFACTURER_NAME AS L3A_manufacturerName
+		, L3A.SELLER_CODE AS L3A_sellerCode
+		, L3A.SELLER_NAME AS L3A_sellerName
+		, L3A.BATCH_CODE AS L3A_batchCode
+		, L3A.GOODS_CODE AS L3A_goodsCode
+		, L3A.GOODS_NAME AS L3A_goodsName
+		, L3A.SALE_LABEL_CODE AS L3A_saleLabelCode
+		, L3A.SALE_LABEL_NAME AS L3A_saleLabelName
+		, L3A.SMALL_PACKAGE_FEATURE AS L3A_smallPackageFeature
+		, L3A.QUANTITY_PER_PACKAGE AS L3A_quantityPerPackage
+		, L3A.NET_WEIGHT AS L3A_netWeight
+		, L3A.GROSS_WEIGHT AS L3A_grossWeight
+		, L3A.CARTON_SIZE AS L3A_cartonSize
+		, L3A.PRODUCT_LEVEL AS L3A_productLevel
+		, L3A.PALLET_STANDARD_STACK_QUANTITY AS L3A_palletStandardStackQuantity
+	</sql>
+	<sql id="L4Select">
+		, L4.BUYER_FORCAST_DELIVER_DETAIL_ID AS L4_buyerForcastDeliverDetailId
+		, L4.BUYER_BATCH_ORDER_ID AS L4_buyerBatchOrderId
+		, L4.BUYER_BATCH_ORDER_DETAIL_ID AS L4_buyerBatchOrderDetailId
+		, L4.FORCAST_TYPE AS L4_forcastType
+		, L4.SELL_SIDE_TYPE AS L4_sellSideType
+		, L4.SELL_SIDE_ID AS L4_sellSideId
+		, L4.GOODS_ID AS L4_goodsId
+		, L4.PRODUCT_ID AS L4_productId
+		, L4.MANUFACTURER_ID AS L4_manufacturerId
+		, L4.SELLER_ID AS L4_sellerId
+		, L4.SKU AS L4_sku
+		, L4.BATCH_ID AS L4_batchId
+		, L4.SALE_LABEL_ID AS L4_saleLabelId
+		, L4.PLAN_SEND_QUANTITY AS L4_planSendQuantity
+		, L4.REAL_SEND_QUANTITY AS L4_realSendQuantity
+		, L4.RECEIVE_QUANTITY AS L4_receiveQuantity
+		, L4.REJECT_QUANTITY AS L4_rejectQuantity
+		, L4.DELAY_QUANTITY AS L4_delayQuantity
+		, L4.REDISTRIBUTION_DATE AS L4_redistributionDate
+		, L4.RETURN_QUANTITY AS L4_returnQuantity
+		, L4.VERSION AS L4_version
+	</sql>
+	<sql id="L4ASelect">
+	 	, L4A.SELL_SIDE_CODE AS L4A_sellSideCode
+		, L4A.SELL_SIDE_NAME AS L4A_sellSideName
+		, L4A.ITEM_CODE AS L4A_itemCode
+		, L4A.ITEM_NAME AS L4A_itemName
+		, L4A.BRAND_CODE AS L4A_brandCode
+		, L4A.BRAND_NAME AS L4A_brandName
+		, L4A.ITEM_BRAND_CODE AS L4A_itemBrandCode
+		, L4A.MANUFACTURER_CODE AS L4A_manufacturerCode
+		, L4A.MANUFACTURER_NAME AS L4A_manufacturerName
+		, L4A.SELLER_CODE AS L4A_sellerCode
+		, L4A.SELLER_NAME AS L4A_sellerName
+		, L4A.BATCH_CODE AS L4A_batchCode
+		, L4A.GOODS_CODE AS L4A_goodsCode
+		, L4A.GOODS_NAME AS L4A_goodsName
+		, L4A.SALE_LABEL_CODE AS L4A_saleLabelCode
+		, L4A.SALE_LABEL_NAME AS L4A_saleLabelName
+		, L4A.SMALL_PACKAGE_FEATURE AS L4A_smallPackageFeature
+		, L4A.QUANTITY_PER_PACKAGE AS L4A_quantityPerPackage
+		, L4A.NET_WEIGHT AS L4A_netWeight
+		, L4A.GROSS_WEIGHT AS L4A_grossWeight
+		, L4A.CARTON_SIZE AS L4A_cartonSize
+		, L4A.PRODUCT_LEVEL AS L4A_productLevel
+		, L4A.PALLET_STANDARD_STACK_QUANTITY AS L4A_palletStandardStackQuantity
+	</sql>
+
+	<select id="findPageList" parameterType="com.bms.order.common.rest.SearchRestParam" resultMap="L1Result">
+		SELECT
+			<if test="pagingLevel>=1">
+				<include refid="L1Select" />
+				<include refid="L1ASelect" />
+				<include refid="L1CSelect" />
+			</if>
+			<if test="pagingLevel>=2">
+				<include refid="L2Select" />
+				<include refid="L2ASelect" />
+				<include refid="L2CSelect" />
+			</if>
+			<if test="pagingLevel>=3">
+				<include refid="L3Select" />
+				<include refid="L3ASelect" />
+			</if>
+			<if test="pagingLevel>=4">
+				<include refid="L4Select" />
+				<include refid="L4ASelect" />
+			</if>
+			<if test="pagingLevel==1">
+				, (@sortSeq := @sortSeq + 1) AS L1_sortSeq
+			</if>
+			<if test="pagingLevel==2">
+				, (@sortSeq := @sortSeq + 1) AS L2_sortSeq
+			</if>
+			<if test="pagingLevel==3">
+				, (@sortSeq := @sortSeq + 1) AS L3_sortSeq
+			</if>
+			<if test="pagingLevel==4">
+				, (@sortSeq := @sortSeq + 1) AS L4_sortSeq
+			</if>
+		FROM
+			<include refid="From" />
+		<where>
+			<include refid="Where" />
+		</where>
+		<!-- GROUP BY -->
+		<include refid="GroupBy" />
+	</select>
+	
+	<sql id="From">
+		(select @sortSeq := 0) AS SEQ,
+		<if test="searchLevel>=1">
+	                    ORDR_BUYER_ORDER                            AS L1
+			INNER JOIN  ORDR_BUYER_ORDER_ATTACHED                   AS L1A  ON L1A.BUYER_ORDER_ID                  = L1.BUYER_ORDER_ID                    AND L1A.DEL_FLG = 0
+			LEFT  JOIN  ORDR_CANCEL                                 AS L1C  ON L1C.CANCEL_MODEL_ID                 = L1.BUYER_ORDER_ID                    AND L1C.DEL_FLG = 0 AND L1C.CANCEL_MODEL_TYPE = '001'
+		</if>
+		<if test="searchLevel>=2">
+			INNER JOIN  ORDR_BUYER_BATCH_ORDER                      AS L2   ON L2.BUYER_ORDER_ID                   = L1.BUYER_ORDER_ID                    AND L2.DEL_FLG = 0
+			INNER JOIN  ORDR_BUYER_BATCH_ORDER_ATTACHED             AS L2A  ON L2A.BUYER_BATCH_ORDER_ID            = L2.BUYER_BATCH_ORDER_ID              AND L2A.DEL_FLG = 0
+			LEFT  JOIN  ORDR_CANCEL                                 AS L2C  ON L2C.CANCEL_MODEL_ID                 = L2.BUYER_BATCH_ORDER_ID             AND L2C.DEL_FLG = 0 AND L2C.CANCEL_MODEL_TYPE = '003'
+		</if>
+		<if test="searchLevel>=3">
+			INNER JOIN  ORDR_BUYER_BATCH_ORDER_DETAIL               AS L3   ON L3.BUYER_BATCH_ORDER_ID             = L2.BUYER_BATCH_ORDER_ID              AND L3.DEL_FLG = 0
+			INNER JOIN  ORDR_BUYER_BATCH_ORDER_DETAIL_ATTACHED      AS L3A  ON L3A.BUYER_BATCH_ORDER_DETAIL_ID     = L3.BUYER_BATCH_ORDER_DETAIL_ID       AND L3A.DEL_FLG = 0
+		</if>
+		<if test="searchLevel==4"><!-- 分页层级为4，查询第四层时，不存在的信息不能被查出来 -->
+			INNER JOIN   ORDR_BUYER_FORCAST_DELIVER_DETAIL          AS L4   ON L4.BUYER_BATCH_ORDER_DETAIL_ID      = L3.BUYER_BATCH_ORDER_DETAIL_ID       AND L4.DEL_FLG = 0
+			INNER JOIN   ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED AS L4A  ON L4A.BUYER_FORCAST_DELIVER_DETAIL_ID = L4.BUYER_FORCAST_DELIVER_DETAIL_ID   AND L4A.DEL_FLG = 0
+		</if>
+		<if test="searchLevel>4"><!-- 不分页，查询第四层时，第四层可以为空 -->
+			LEFT JOIN   ORDR_BUYER_FORCAST_DELIVER_DETAIL           AS L4   ON L4.BUYER_BATCH_ORDER_DETAIL_ID      = L3.BUYER_BATCH_ORDER_DETAIL_ID       AND L4.DEL_FLG = 0
+			LEFT JOIN   ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED  AS L4A  ON L4A.BUYER_FORCAST_DELIVER_DETAIL_ID = L4.BUYER_FORCAST_DELIVER_DETAIL_ID   AND L4A.DEL_FLG = 0
+		</if>
+	</sql>
+
+	<sql id="CountFrom">
+		<if test="searchLevel>=1">
+			ORDR_BUYER_ORDER                            AS L1
+			INNER JOIN  ORDR_BUYER_ORDER_ATTACHED                   AS L1A  ON L1A.BUYER_ORDER_ID                  = L1.BUYER_ORDER_ID                    AND L1A.DEL_FLG = 0
+			LEFT  JOIN  ORDR_CANCEL                                 AS L1C  ON L1C.CANCEL_MODEL_ID                 = L1.BUYER_ORDER_ID                    AND L1C.DEL_FLG = 0 AND L1C.CANCEL_MODEL_TYPE = '001'
+		</if>
+		<if test="searchLevel>=2">
+			INNER JOIN  ORDR_BUYER_BATCH_ORDER                      AS L2   ON L2.BUYER_ORDER_ID                   = L1.BUYER_ORDER_ID                    AND L2.DEL_FLG = 0
+			INNER JOIN  ORDR_BUYER_BATCH_ORDER_ATTACHED             AS L2A  ON L2A.BUYER_BATCH_ORDER_ID            = L2.BUYER_BATCH_ORDER_ID              AND L2A.DEL_FLG = 0
+			LEFT  JOIN  ORDR_CANCEL                                 AS L2C  ON L2C.CANCEL_MODEL_ID                 = L2.BUYER_BATCH_ORDER_ID             AND L2C.DEL_FLG = 0 AND L1C.CANCEL_MODEL_TYPE = '003'
+		</if>
+		<if test="searchLevel>=3">
+			INNER JOIN  ORDR_BUYER_BATCH_ORDER_DETAIL               AS L3   ON L3.BUYER_BATCH_ORDER_ID             = L2.BUYER_BATCH_ORDER_ID              AND L3.DEL_FLG = 0
+			INNER JOIN  ORDR_BUYER_BATCH_ORDER_DETAIL_ATTACHED      AS L3A  ON L3A.BUYER_BATCH_ORDER_DETAIL_ID     = L3.BUYER_BATCH_ORDER_DETAIL_ID       AND L3A.DEL_FLG = 0
+		</if>
+		<if test="searchLevel==4"><!-- 分页层级为4，查询第四层时，不存在的信息不能被查出来 -->
+			INNER JOIN   ORDR_BUYER_FORCAST_DELIVER_DETAIL          AS L4   ON L4.BUYER_BATCH_ORDER_DETAIL_ID      = L3.BUYER_BATCH_ORDER_DETAIL_ID       AND L4.DEL_FLG = 0
+			INNER JOIN   ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED AS L4A  ON L4A.BUYER_FORCAST_DELIVER_DETAIL_ID = L4.BUYER_FORCAST_DELIVER_DETAIL_ID   AND L4A.DEL_FLG = 0
+		</if>
+		<if test="searchLevel>4"><!-- 不分页，查询第四层时，第四层可以为空 -->
+			LEFT JOIN   ORDR_BUYER_FORCAST_DELIVER_DETAIL           AS L4   ON L4.BUYER_BATCH_ORDER_DETAIL_ID      = L3.BUYER_BATCH_ORDER_DETAIL_ID       AND L4.DEL_FLG = 0
+			LEFT JOIN   ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED  AS L4A  ON L4A.BUYER_FORCAST_DELIVER_DETAIL_ID = L4.BUYER_FORCAST_DELIVER_DETAIL_ID   AND L4A.DEL_FLG = 0
+		</if>
+	</sql>
+
+	<sql id="Where">
+	    AND L1.DEL_FLG = 0
+		<if test="filter.updTimeFrom != null">
+			AND L1.UPD_TIME <![CDATA[ >= ]]> #{filter.updTimeFrom}
+		</if>
+		<if test="filter.updTimeTo != null">
+			AND L1.UPD_TIME <![CDATA[ <= ]]> #{filter.updTimeTo}
+		</if>
+		<if test="filter.buyerOrderId != null">
+			AND L1.BUYER_ORDER_ID IN
+			<foreach collection="filter.buyerOrderId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.buyerOrderCode != null">
+			AND L1.BUYER_ORDER_CODE LIKE #{filter.buyerOrderCode}
+		</if>
+		<if test="filter.backNo != null">
+			AND L1.BACK_NO LIKE #{filter.backNo}
+		</if>
+		<if test="filter.orderType != null">
+			AND L1.ORDER_TYPE IN
+			<foreach collection="filter.orderType" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.batchFlg != null">
+			AND L1.BATCH_FLG = #{filter.batchFlg}
+		</if>
+		<if test="filter.orderSourceType != null">
+			AND L1.ORDER_SOURCE_TYPE IN
+			<foreach collection="filter.orderSourceType" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.salePlatformType != null">
+			AND L1.SALE_PLATFORM_TYPE IN
+			<foreach collection="filter.salePlatformType" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.buyerOrderStu != null">
+			AND L1.BUYER_ORDER_STU IN
+			<foreach collection="filter.buyerOrderStu" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.orderPlaceType != null">
+			AND L1.ORDER_PLACE_TYPE IN
+			<foreach collection="filter.orderPlaceType" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.orderPlacerType != null">
+			AND L1.ORDER_PLACER_TYPE IN
+			<foreach collection="filter.orderPlacerType" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.orderPlacerId != null">
+			AND L1.ORDER_PLACER_ID IN
+			<foreach collection="filter.orderPlacerId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.orderPlacerCode != null">
+			AND L1A.ORDER_PLACER_CODE LIKE #{filter.orderPlacerCode}
+		</if>
+		<if test="filter.orderPlacerName != null">
+			AND L1A.ORDER_PLACER_NAME LIKE #{filter.orderPlacerName}
+		</if>
+		<if test="filter.orderPlaceDateTimeFrom != null">
+			AND L1.ORDER_PLACE_DATETIME <![CDATA[ >= ]]> #{filter.orderPlaceDateTimeFrom}
+		</if>
+		<if test="filter.orderPlaceDateTimeTo != null">
+			AND L1.ORDER_PLACE_DATETIME <![CDATA[ <= ]]> #{filter.orderPlaceDateTimeTo}
+		</if>
+		<if test="filter.paymentType != null">
+			AND L1.PAYMENT_TYPE IN
+			<foreach collection="filter.paymentType" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.invoiceFlg != null">
+			AND L1.INVOICE_FLG = #{filter.invoiceFlg}
+		</if>
+		<if test="filter.useNetFlg != null">
+			AND L1.USE_NET_FLG = #{filter.useNetFlg}
+		</if>
+		<if test="filter.logisticsZoneId != null">
+			AND L1.LOGISTICS_ZONE_ID IN
+			<foreach collection="filter.logisticsZoneId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.logisticsZoneCode != null">
+			AND L1A.LOGISTICS_ZONE_CODE LIKE #{filter.logisticsZoneCode}
+		</if>
+		<if test="filter.logisticsZoneName != null">
+			AND L1A.LOGISTICS_ZONE_NAME LIKE #{filter.logisticsZoneName}
+		</if>
+		<if test="filter.batchOrderId != null">
+			AND L2.BUYER_BATCH_ORDER_ID IN
+			<foreach collection="filter.batchOrderId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.batchOrderCode != null">
+			AND L2.BUYER_BATCH_ORDER_CODE LIKE #{filter.batchOrderCode}
+		</if>
+		<if test="filter.requiredDistributionDateFrom != null">
+			AND L2.REQUIRED_DISTRIBUTION_DATE <![CDATA[ >= ]]> #{filter.requiredDistributionDateFrom}
+		</if>
+		<if test="filter.requiredDistributionDateTo != null">
+			AND L2.REQUIRED_DISTRIBUTION_DATE <![CDATA[ <= ]]> #{filter.requiredDistributionDateTo}
+		</if>
+		<if test="filter.buyerBatchOrderStu != null">
+			AND L2.BUYER_BATCH_ORDER_STU IN
+			<foreach collection="filter.buyerBatchOrderStu" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.buyerBatchOrderDetailId != null">
+			AND L3.BUYER_BATCH_ORDER_DETAIL_ID IN
+			<foreach collection="filter.buyerBatchOrderDetailId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.buyerId != null">
+			AND L1.BUYER_ID IN
+			<foreach collection="filter.buyerId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.buyerType != null">
+			AND L1.BUYER_TYPE IN
+			<foreach collection="filter.buyerType" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.buyerTypeName != null">
+			AND L1.BUYER_NAME LIKE #{filter.buyerTypeName}
+		</if>
+		<if test="filter.buyerCode != null">
+			AND L1A.BUYER_CODE LIKE #{filter.buyerCode}
+		</if>
+		<if test="filter.buyerName != null">
+			AND L1A.BUYER_NAME LIKE #{filter.buyerName}
+		</if>
+		<if test="filter.netBuyerFlg != null">
+			AND L1.NET_BUYER_FLG = #{filter.netBuyerFlg}
+		</if>
+		<if test="filter.bsType != null">
+			AND L1.BS_TYPE IN
+			<foreach collection="filter.bsType" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.bsId != null">
+			AND L1.BS_ID IN
+			<foreach collection="filter.bsId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.bsName != null">
+			AND (L1A.REGIONAL_BS_NAME LIKE #{filter.bsName} 
+			OR L1A.NON_REGIONAL_BS_NAME LIKE #{filter.bsName}
+			OR L1A.REGIONAL_DISTRIBUTION_BS_NAME LIKE #{filter.bsName}
+			OR L1A.NET_USER_BS_NAME LIKE #{filter.bsName})
+		</if>
+<!--		<if test="filter.bsCode != null">
+			AND (L1A.REGIONAL_BS_CODE LIKE #{filter.bsCode} 
+			OR L1A.NON_REGIONAL_BS_CODE LIKE #{filter.bsCode}
+			OR L1A.REGIONAL_DISTRIBUTION_BS_CODE LIKE #{filter.bsCode}
+			OR L1A.NET_USER_BS_CODE LIKE #{filter.bsCode})
+		</if>-->
+		<if test="filter.saId != null">
+			AND L1A.SA_ID IN
+			<foreach collection="filter.saId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.saName != null">
+			AND L1A.SA_NAME LIKE #{filter.saName}
+		</if>
+		<if test="filter.saCode != null">
+			AND L1A.SA_CODE LIKE #{filter.saCode}
+		</if>
+		<if test="filter.goodsId != null">
+			AND L3.GOODS_ID IN
+			<foreach collection="filter.goodsId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.goodsName != null">
+			AND L3A.GOODS_NAME LIKE #{filter.goodsName}
+		</if>
+		<if test="filter.goodsCode != null">
+			AND L3A.GOODS_CODE LIKE #{filter.goodsCode}
+		</if>
+		<if test="filter.saleLabelId != null">
+			AND L3.SALE_LABEL_ID IN
+			<foreach collection="filter.saleLabelId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.saleLabelName != null">
+			AND L3A.SALE_LABEL_NAME LIKE #{filter.saleLabelName}
+		</if>
+		<if test="filter.saleLabelCode != null">
+			AND L3A.SALE_LABEL_CODE LIKE #{filter.saleLabelCode}
+		</if>
+		<if test="filter.forcastType != null">
+			AND L4.FORCAST_TYPE = #{filter.forcastType}
+		</if>
+		<if test="filter.sellSideType != null">
+			AND L4.SELL_SIDE_TYPE IN
+			<foreach collection="filter.sellSideType" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.sellSideId != null">
+			AND L4.SELL_SIDE_ID IN
+			<foreach collection="filter.sellSideId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.sellSideCode != null">
+			AND L4A.SELL_SIDE_CODE LIKE #{filter.sellSideCode}
+		</if>
+		<if test="filter.sellSideName != null">
+			AND L4A.SELL_SIDE_NAME LIKE #{filter.sellSideName}
+		</if>
+		<if test="filter.manufacturerId != null">
+			AND L4.MANUFACTURER_ID IN
+			<foreach collection="filter.manufacturerId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.manufacturerCode != null">
+			AND L4A.MANUFACTURER_CODE LIKE #{filter.manufacturerCode}
+		</if>
+		<if test="filter.manufacturerName != null">
+			AND L4A.MANUFACTURER_NAME LIKE #{filter.manufacturerName}
+		</if>
+		<if test="filter.sellerId != null">
+			AND L4.SELLER_ID IN
+			<foreach collection="filter.sellerId" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.sellerCode != null">
+			AND L4A.SELLER_CODE LIKE #{filter.sellerCode}
+		</if>
+		<if test="filter.sellerName != null">
+			AND L4A.SELLER_NAME LIKE #{filter.sellerName}
+		</if>
+		<if test="filter.regionalDistributionStation != null">
+			AND L1A.REGIONAL_DISTRIBUTION_STATION IN
+			<foreach collection="filter.regionalDistributionStation" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="filter.regionalDistributionStationCode != null">
+			AND L1A.REGIONAL_DISTRIBUTION_STATION_CODE LIKE #{filter.regionalDistributionStationCode}
+		</if>
+		<if test="filter.regionalDistributionStationName != null">
+			AND L1A.REGIONAL_DISTRIBUTION_STATION_NAME LIKE #{filter.regionalDistributionStationName}
+		</if>
+	</sql>
+	
+	<sql id="GroupBy">
+		<if test="pagingLevel==1 and searchLevel>1">
+			GROUP BY L1.BUYER_ORDER_ID
+		</if>
+		<if test="pagingLevel==2 and searchLevel>2">
+			GROUP BY L2.BUYER_BATCH_ORDER_ID
+		</if>
+		<if test="pagingLevel==3 and searchLevel>3">
+			GROUP BY L3.BUYER_BATCH_ORDER_DETAIL_ID
+		</if>
+	</sql>
+
+	<select id="getCount" parameterType="com.bms.order.common.rest.SearchRestParam" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM (
+		SELECT
+			1
+		FROM
+			<include refid="CountFrom" />
+			<where>
+				<include refid="Where" />
+			</where>
+			<!-- GROUP BY -->
+			<include refid="GroupBy" />
+			<!--<if test="null != sort">
+				ORDER BY
+				<foreach collection="sort" item="item" separator=",">
+					${item.sortField}
+					<if test="item.descFlag == true">
+						DESC
+					</if>
+					<if test="item.descFlag == false">
+						ASC
+					</if>
+				</foreach>
+			</if>-->
+		) AS tmp_count
+	</select>
+
+	<select id="findOrdersInfo" parameterType="com.bms.order.common.rest.SearchRestParam" resultMap="L1Result">
+		SELECT
+		<if test="pagingLevel>=1">
+			<include refid="L1Select" />
+			<include refid="L1ASelect" />
+			<include refid="L1CSelect" />
+		</if>
+		<if test="pagingLevel>=2">
+			<include refid="L2Select" />
+			<include refid="L2ASelect" />
+			<include refid="L2CSelect" />
+		</if>
+		<if test="pagingLevel>=3">
+			<include refid="L3Select" />
+			<include refid="L3ASelect" />
+		</if>
+		<if test="pagingLevel>=4">
+			<include refid="L4Select" />
+			<include refid="L4ASelect" />
+		</if>
+		<if test="pagingLevel==1">
+			, (@sortSeq := @sortSeq + 1) AS L1_sortSeq
+		</if>
+		<if test="pagingLevel==2">
+			, (@sortSeq := @sortSeq + 1) AS L2_sortSeq
+		</if>
+		<if test="pagingLevel==3">
+			, (@sortSeq := @sortSeq + 1) AS L3_sortSeq
+		</if>
+		<if test="pagingLevel==4">
+			, (@sortSeq := @sortSeq + 1) AS L4_sortSeq
+		</if>
+		FROM
+		<include refid="From" />
+		<where>
+			<include refid="Where" />
+		</where>
+		<!-- GROUP BY -->
+		<include refid="GroupBy" />
+		<!-- SORT -->
+		<if test="null != sort">
+			ORDER BY
+			<foreach collection="sort" item="item" separator=",">
+				${item.sortField}
+				<if test="item.descFlag == true">
+					DESC
+				</if>
+				<if test="item.descFlag == false">
+					ASC
+				</if>
+			</foreach>
+		</if>
+		<if test="null != pagination">
+			LIMIT #{pagination.startPos},#{pagination.pageSize}
+		</if>
+	</select>
+</mapper>

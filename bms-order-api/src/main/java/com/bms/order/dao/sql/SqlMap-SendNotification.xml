@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.SendNotificationDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.SendNotificationEntity">
+INSERT INTO
+ORDR_SEND_NOTIFICATION
+(
+SEND_NOTIFICATION_ID
+, SEND_NOTIFICATION_CODE
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, DISTRIBUTION_PERSON_NAME
+, DISTRIBUTION_PERSON_PHONE
+, DISTRIBUTION_TYPE
+, DISTRIBUTION_VEHICLE
+, REAL_DEPART_DATETIME
+, EXPECTED_ARRIVAL_DATETIME
+, REMARKS
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{sendNotificationId}
+, #{sendNotificationCode}
+, #{distributionNotificationId}
+, #{distributionNotificationCode}
+, #{distributionPersonName}
+, #{distributionPersonPhone}
+, #{distributionType}
+, #{distributionVehicle}
+, #{realDepartDatetime}
+, #{expectedArrivalDatetime}
+, #{remarks}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_SEND_NOTIFICATION
+(
+SEND_NOTIFICATION_ID
+, SEND_NOTIFICATION_CODE
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, DISTRIBUTION_PERSON_NAME
+, DISTRIBUTION_PERSON_PHONE
+, DISTRIBUTION_TYPE
+, DISTRIBUTION_VEHICLE
+, REAL_DEPART_DATETIME
+, EXPECTED_ARRIVAL_DATETIME
+, REMARKS
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.sendNotificationId}
+, #{entity.sendNotificationCode}
+, #{entity.distributionNotificationId}
+, #{entity.distributionNotificationCode}
+, #{entity.distributionPersonName}
+, #{entity.distributionPersonPhone}
+, #{entity.distributionType}
+, #{entity.distributionVehicle}
+, #{entity.realDepartDatetime}
+, #{entity.expectedArrivalDatetime}
+, #{entity.remarks}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.SendNotificationEntity">
+UPDATE ORDR_SEND_NOTIFICATION
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+SEND_NOTIFICATION_ID = #{sendNotificationId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_SEND_NOTIFICATION
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+SEND_NOTIFICATION_ID = #{entity.sendNotificationId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.SendNotificationEntity">
+UPDATE ORDR_SEND_NOTIFICATION
+SET
+SEND_NOTIFICATION_ID = #{sendNotificationId}
+, SEND_NOTIFICATION_CODE = #{sendNotificationCode}
+, DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+, DISTRIBUTION_NOTIFICATION_CODE = #{distributionNotificationCode}
+, DISTRIBUTION_PERSON_NAME = #{distributionPersonName}
+, DISTRIBUTION_PERSON_PHONE = #{distributionPersonPhone}
+, DISTRIBUTION_TYPE = #{distributionType}
+, DISTRIBUTION_VEHICLE = #{distributionVehicle}
+, REAL_DEPART_DATETIME = #{realDepartDatetime}
+, EXPECTED_ARRIVAL_DATETIME = #{expectedArrivalDatetime}
+, REMARKS = #{remarks}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+SEND_NOTIFICATION_ID = #{sendNotificationId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_SEND_NOTIFICATION
+SET
+SEND_NOTIFICATION_ID = #{entity.sendNotificationId}
+, SEND_NOTIFICATION_CODE = #{entity.sendNotificationCode}
+, DISTRIBUTION_NOTIFICATION_ID = #{entity.distributionNotificationId}
+, DISTRIBUTION_NOTIFICATION_CODE = #{entity.distributionNotificationCode}
+, DISTRIBUTION_PERSON_NAME = #{entity.distributionPersonName}
+, DISTRIBUTION_PERSON_PHONE = #{entity.distributionPersonPhone}
+, DISTRIBUTION_TYPE = #{entity.distributionType}
+, DISTRIBUTION_VEHICLE = #{entity.distributionVehicle}
+, REAL_DEPART_DATETIME = #{entity.realDepartDatetime}
+, EXPECTED_ARRIVAL_DATETIME = #{entity.expectedArrivalDatetime}
+, REMARKS = #{entity.remarks}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+SEND_NOTIFICATION_ID = #{entity.sendNotificationId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.SendNotificationEntity" resultType="com.bms.order.bean.entity.SendNotificationEntity">
+SELECT
+SEND_NOTIFICATION_ID AS sendNotificationId
+, SEND_NOTIFICATION_CODE AS sendNotificationCode
+, DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, DISTRIBUTION_NOTIFICATION_CODE AS distributionNotificationCode
+, DISTRIBUTION_PERSON_NAME AS distributionPersonName
+, DISTRIBUTION_PERSON_PHONE AS distributionPersonPhone
+, DISTRIBUTION_TYPE AS distributionType
+, DISTRIBUTION_VEHICLE AS distributionVehicle
+, REAL_DEPART_DATETIME AS realDepartDatetime
+, EXPECTED_ARRIVAL_DATETIME AS expectedArrivalDatetime
+, REMARKS AS remarks
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_SEND_NOTIFICATION
+<where>
+<if test="sendNotificationId!=null">
+AND SEND_NOTIFICATION_ID = #{sendNotificationId}
+</if>
+<if test="sendNotificationCode!=null">
+AND SEND_NOTIFICATION_CODE = #{sendNotificationCode}
+</if>
+<if test="distributionNotificationId!=null">
+AND DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.SendNotificationEntity">
+SELECT
+SEND_NOTIFICATION_ID AS sendNotificationId
+, SEND_NOTIFICATION_CODE AS sendNotificationCode
+, DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, DISTRIBUTION_NOTIFICATION_CODE AS distributionNotificationCode
+, DISTRIBUTION_PERSON_NAME AS distributionPersonName
+, DISTRIBUTION_PERSON_PHONE AS distributionPersonPhone
+, DISTRIBUTION_TYPE AS distributionType
+, DISTRIBUTION_VEHICLE AS distributionVehicle
+, REAL_DEPART_DATETIME AS realDepartDatetime
+, EXPECTED_ARRIVAL_DATETIME AS expectedArrivalDatetime
+, REMARKS AS remarks
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_SEND_NOTIFICATION
+<where>
+<if test="ids!=null">
+AND SEND_NOTIFICATION_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="codes!=null">
+AND SEND_NOTIFICATION_CODE IN (<foreach collection="codes" item="code" separator=",">#{code}</foreach>)
+</if>
+<if test="distributionNotifications!=null">
+AND DISTRIBUTION_NOTIFICATION_ID IN (<foreach item="item" collection="distributionNotifications" separator=",">#{item.entity.distributionNotificationId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.SendNotificationHistoryEntity">
+INSERT INTO
+ORDR_SEND_NOTIFICATION_HISTORY
+(
+HISTORY_ID
+, SEND_NOTIFICATION_ID
+, SEND_NOTIFICATION_CODE
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, DISTRIBUTION_PERSON_NAME
+, DISTRIBUTION_PERSON_PHONE
+, DISTRIBUTION_TYPE
+, DISTRIBUTION_VEHICLE
+, REAL_DEPART_DATETIME
+, EXPECTED_ARRIVAL_DATETIME
+, REMARKS
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{sendNotificationId}
+, #{sendNotificationCode}
+, #{distributionNotificationId}
+, #{distributionNotificationCode}
+, #{distributionPersonName}
+, #{distributionPersonPhone}
+, #{distributionType}
+, #{distributionVehicle}
+, #{realDepartDatetime}
+, #{expectedArrivalDatetime}
+, #{remarks}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_SEND_NOTIFICATION_HISTORY
+(
+HISTORY_ID
+, SEND_NOTIFICATION_ID
+, SEND_NOTIFICATION_CODE
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, DISTRIBUTION_PERSON_NAME
+, DISTRIBUTION_PERSON_PHONE
+, DISTRIBUTION_TYPE
+, DISTRIBUTION_VEHICLE
+, REAL_DEPART_DATETIME
+, EXPECTED_ARRIVAL_DATETIME
+, REMARKS
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.sendNotificationId}
+, #{entity.sendNotificationCode}
+, #{entity.distributionNotificationId}
+, #{entity.distributionNotificationCode}
+, #{entity.distributionPersonName}
+, #{entity.distributionPersonPhone}
+, #{entity.distributionType}
+, #{entity.distributionVehicle}
+, #{entity.realDepartDatetime}
+, #{entity.expectedArrivalDatetime}
+, #{entity.remarks}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0704IDao">
+
+    <!-- 修改单品品牌(规格)生产商的审核状态 -->
+    <update id="modify" parameterType="com.bms.slpd.bean.entity.SlpdProducerProduct">
+        UPDATE SLPD_PRODUCER_PRODUCT
+        SET
+            AUDIT_STU = #{auditStu},
+            AUDIT_REMARK = #{auditRemark},
+            AUDIT_HISTORY = concat(ifnull(AUDIT_HISTORY, ''), #{auditHistory}),
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime},
+            VERSION = VERSION + 1
+        WHERE
+            VERSION = #{version}
+        AND PRODUCER_PRODUCT_ID = #{producerProductId}
+    </update>
+
+    <!-- 根据生产商产品ID，批量查询制造商产品 -->
+    <select id="findManufacturerProductsByIds" parameterType="list" resultType="com.bms.slpd.bean.entity.SlpdManufacturerProduct">
+        SELECT
+        MANUFACTURER_PRODUCT_ID AS manufacturerProductId,
+        PRODUCT_ID AS productId,
+        AUDIT_STU AS auditStu,
+        AUDIT_HISTORY AS auditHistory,
+        VERSION AS version
+        FROM
+        SLPD_MANUFACTURER_PRODUCT
+        WHERE
+        DEL_FLG = 0
+        AND PRODUCER_PRODUCT_ID IN
+        <foreach collection="list" index="index" item="producerProductId" open="(" separator="," close=")">
+            #{producerProductId}
+        </foreach>
+    </select>
+
+    <!-- 根据生产商产品ID，批量查询产品 -->
+    <select id="findProductsByIds" parameterType="list" resultType="com.bms.slpd.bean.entity.SlpdProduct">
+        SELECT
+        A.PRODUCT_ID AS productId,
+        A.AUDIT_STU AS auditStu,
+        A.AUDIT_HISTORY AS auditHistory,
+        A.VERSION AS version
+        FROM
+        SLPD_PRODUCT A
+        LEFT JOIN SLPD_PRODUCER_PRODUCT B ON A.PRODUCT_ID = B.PRODUCT_ID
+        WHERE
+        A.DEL_FLG = 0
+        AND B.PRODUCER_PRODUCT_ID IN
+        <foreach collection="list" index="index" item="producerProductId" open="(" separator="," close=")">
+            #{producerProductId}
+        </foreach>
+    </select>
+
+</mapper>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0203IDao">
+    <!-- 修改一级分类 -->
+    <update id="updateClasses" parameterType="com.bms.slpd.bean.UpdateEntity">
+        UPDATE SLPD_CLASSES
+        SET
+        <if test="target.classesNameFlg != null and target.classesNameFlg">
+            CLASSES_NAME = #{entity.classesName},
+        </if>
+        <if test="target.classesCodeFlg != null and target.classesCodeFlg">
+            CLASSES_CODE = #{entity.classesCode},
+        </if>
+        <if test="target.delFlgFlg != null and target.delFlgFlg">
+            DEL_FLG = #{entity.delFlg},
+        </if>
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        WHERE
+        DEL_FLG = 0
+        AND
+        CLASSES_ID = #{entity.classesId}
+        AND
+        VERSION = #{entity.version}
+    </update>
+
+    <!-- 修改二级分类 -->
+    <update id="updateMachinings" parameterType="com.bms.slpd.bean.UpdateEntity">
+        UPDATE SLPD_MACHINING
+        SET
+        <if test="target.machiningNameFlg != null and target.machiningNameFlg">
+            MACHINING_NAME = #{entity.machiningName},
+        </if>
+        <if test="target.machiningCodeFlg != null and target.machiningCodeFlg">
+            MACHINING_CODE = #{entity.machiningCode},
+        </if>
+        <if test="target.delFlgFlg != null and target.delFlgFlg">
+            DEL_FLG = #{entity.delFlg},
+        </if>
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION +1
+        WHERE
+        MACHINING_ID = #{entity.machiningId}
+        AND
+        DEL_FLG = 0
+        AND
+        VERSION = #{entity.version}
+    </update>
+
+    <!-- 修改品种 -->
+    <update id="updateBreeds" parameterType="com.bms.slpd.bean.UpdateEntity">
+        UPDATE SLPD_BREED
+        SET
+        <if test="target.breedSalesNameFlg != null and target.breedSalesNameFlg">
+            BREED_SALES_NAME = #{entity.breedSalesName},
+        </if>
+        <if test="target.breedCodeFlg != null and target.breedCodeFlg">
+            BREED_CODE = #{entity.breedCode},
+        </if>
+        <if test="target.breedScientificNameFlg != null and target.breedScientificNameFlg">
+            BREED_SCIENTIFIC_NAME = #{entity.breedScientificName},
+        </if>
+        <if test="target.breedLocalNameFlg != null and target.breedLocalNameFlg">
+            BREED_LOCAL_NAME = #{entity.breedLocalName},
+        </if>
+        <if test="target.delFlgFlg != null and target.delFlgFlg">
+            DEL_FLG = #{entity.delFlg},
+        </if>
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        WHERE
+        BREED_ID = #{entity.breedId}
+        AND
+        DEL_FLG = 0
+        AND
+        VERSION = #{entity.version}
+    </update>
+
+    <!-- 级联修改product的classes -->
+    <update id="updateProductForClasses" parameterType="com.bms.slpd.bean.UpdateEntity">
+        UPDATE SLPD_PRODUCT
+        SET
+        <if test="target.classesNameFlg != null and target.classesNameFlg">
+            CLASSES_NAME = #{entity.classesName},
+        </if>
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        WHERE
+        DEL_FLG = 0
+        AND  CLASSES_ID = #{entity.classesId}
+    </update>
+
+    <!-- 级联修改product的machining -->
+    <update id="updateProductForMachining" parameterType="com.bms.slpd.bean.UpdateEntity">
+        UPDATE SLPD_PRODUCT
+        SET
+        <if test="target.machiningNameFlg != null and target.machiningNameFlg">
+            MACHINING_NAME = #{entity.machiningName},
+        </if>
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        WHERE
+        DEL_FLG = 0
+        AND MACHINING_ID = #{entity.machiningId}
+    </update>
+
+    <!-- 级联修改product的breed -->
+    <update id="updateProductForBreed" parameterType="com.bms.slpd.bean.UpdateEntity">
+        UPDATE SLPD_PRODUCT
+        SET
+        <if test="target.breedSalesNameFlg != null and target.breedSalesNameFlg">
+            BREED_SALES_NAME = #{entity.breedSalesName},
+        </if>
+        <if test="target.breedScientificNameFlg != null and target.breedScientificNameFlg">
+            BREED_SCIENTIFIC_NAME = #{entity.breedScientificName},
+        </if>
+        <if test="target.breedLocalNameFlg != null and target.breedLocalNameFlg">
+            BREED_LOCAL_NAME = #{entity.breedLocalName},
+        </if>
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        WHERE
+        DEL_FLG = 0
+        AND BREED_ID = #{entity.breedId}
+    </update>
+
+    <!-- 新增品种与档案卡关系 -->
+    <insert id="saveBreedStdRelations" parameterType="java.util.List">
+        INSERT INTO SLPD_BREED_STD_RELATION (
+        BREED_STD_ID,
+        BREED_ID,
+        ORG_STD_FLG,
+        FED_STD_FLG,
+        MCT_STD_FLG,
+        TNC_STD_FLG,
+        GNQ_STD_FLG,
+        SFT_STD_FLG,
+        TSP_STD_FLG,
+        PKG_STD_FLG,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="stdRelation" separator=",">
+            (
+            #{stdRelation.breedStdId},
+            #{stdRelation.breedId},
+            #{stdRelation.orgStdFlg},
+            #{stdRelation.fedStdFlg},
+            #{stdRelation.mctStdFlg},
+            #{stdRelation.tncStdFlg},
+            #{stdRelation.gnqStdFlg},
+            #{stdRelation.sftStdFlg},
+            #{stdRelation.tspStdFlg},
+            #{stdRelation.pkgStdFlg},
+            0,
+            #{stdRelation.crtId},
+            #{stdRelation.crtTime},
+            #{stdRelation.updId},
+            #{stdRelation.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!-- 删除品种与档案卡关系 -->
+    <delete id="deleteBreedStdRelation" parameterType="java.util.List">
+        DELETE FROM SLPD_BREED_STD_RELATION WHERE BREED_ID IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

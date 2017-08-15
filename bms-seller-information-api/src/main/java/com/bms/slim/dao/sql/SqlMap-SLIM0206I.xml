@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0206IDao">
+    
+    <!--修改生产商生产资质-动物防疫条件合格证 -->
+    <update id="updateAnimalEpidemicPreventionConditionCertificate" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_ANIMAL_EPIDEMIC_PREVENTION_CONDITION_CERTIFICATE
+        <set>
+            <if test="target.sellerRoleIdFlg != null and target.sellerRoleIdFlg">
+                SELLER_ROLE_ID = #{entity.sellerRoleId},
+            </if>
+            <if test="target.certNoFlg != null and target.certNoFlg">
+                CERT_NO = #{entity.certNo},
+            </if>
+            <if test="target.validPeriodFlg != null and target.validPeriodFlg">
+                VALID_PERIOD = #{entity.validPeriod},
+            </if>
+            <if test="target.aniEpiPrevContCertUrlFlg != null and target.aniEpiPrevContCertUrlFlg">
+                ANI_EPI_PREV_CONT_CERT_URL = #{entity.aniEpiPrevContCertUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+        AEPCC_ID = #{entity.aepccId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+</mapper>

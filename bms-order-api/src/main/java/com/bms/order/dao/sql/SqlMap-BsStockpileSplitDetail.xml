@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BsStockpileSplitDetailDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BsStockpileSplitDetailEntity">
+INSERT INTO
+ORDR_BS_STOCKPILE_SPLIT_DETAIL
+(
+BS_STOCKPILE_SPLIT_DETAIL_ID
+, BS_ORDER_DETAIL_ID
+, SELL_SIDE_ID
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, SKU
+, BATCH_ID
+, SALE_LABEL_ID
+, GOODS_QUANTITY
+, RETURN_QUANTITY
+, MAKER_ID
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{bsStockpileSplitDetailId}
+, #{bsOrderDetailId}
+, #{sellSideId}
+, #{goodsId}
+, #{productId}
+, #{manufacturerId}
+, #{sellerId}
+, #{sku}
+, #{batchId}
+, #{saleLabelId}
+, #{goodsQuantity}
+, #{returnQuantity}
+, #{makerId}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_STOCKPILE_SPLIT_DETAIL
+(
+BS_STOCKPILE_SPLIT_DETAIL_ID
+, BS_ORDER_DETAIL_ID
+, SELL_SIDE_ID
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, SKU
+, BATCH_ID
+, SALE_LABEL_ID
+, GOODS_QUANTITY
+, RETURN_QUANTITY
+, MAKER_ID
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.bsStockpileSplitDetailId}
+, #{entity.bsOrderDetailId}
+, #{entity.sellSideId}
+, #{entity.goodsId}
+, #{entity.productId}
+, #{entity.manufacturerId}
+, #{entity.sellerId}
+, #{entity.sku}
+, #{entity.batchId}
+, #{entity.saleLabelId}
+, #{entity.goodsQuantity}
+, #{entity.returnQuantity}
+, #{entity.makerId}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BsStockpileSplitDetailEntity">
+UPDATE ORDR_BS_STOCKPILE_SPLIT_DETAIL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BS_STOCKPILE_SPLIT_DETAIL_ID = #{bsStockpileSplitDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_STOCKPILE_SPLIT_DETAIL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BS_STOCKPILE_SPLIT_DETAIL_ID = #{entity.bsStockpileSplitDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BsStockpileSplitDetailEntity">
+UPDATE ORDR_BS_STOCKPILE_SPLIT_DETAIL
+SET
+BS_STOCKPILE_SPLIT_DETAIL_ID = #{bsStockpileSplitDetailId}
+, BS_ORDER_DETAIL_ID = #{bsOrderDetailId}
+, SELL_SIDE_ID = #{sellSideId}
+, GOODS_ID = #{goodsId}
+, PRODUCT_ID = #{productId}
+, MANUFACTURER_ID = #{manufacturerId}
+, SELLER_ID = #{sellerId}
+, SKU = #{sku}
+, BATCH_ID = #{batchId}
+, SALE_LABEL_ID = #{saleLabelId}
+, GOODS_QUANTITY = #{goodsQuantity}
+, RETURN_QUANTITY = #{returnQuantity}
+, MAKER_ID = #{makerId}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BS_STOCKPILE_SPLIT_DETAIL_ID = #{bsStockpileSplitDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_STOCKPILE_SPLIT_DETAIL
+SET
+BS_STOCKPILE_SPLIT_DETAIL_ID = #{entity.bsStockpileSplitDetailId}
+, BS_ORDER_DETAIL_ID = #{entity.bsOrderDetailId}
+, SELL_SIDE_ID = #{entity.sellSideId}
+, GOODS_ID = #{entity.goodsId}
+, PRODUCT_ID = #{entity.productId}
+, MANUFACTURER_ID = #{entity.manufacturerId}
+, SELLER_ID = #{entity.sellerId}
+, SKU = #{entity.sku}
+, BATCH_ID = #{entity.batchId}
+, SALE_LABEL_ID = #{entity.saleLabelId}
+, GOODS_QUANTITY = #{entity.goodsQuantity}
+, RETURN_QUANTITY = #{entity.returnQuantity}
+, MAKER_ID = #{entity.makerId}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BS_STOCKPILE_SPLIT_DETAIL_ID = #{entity.bsStockpileSplitDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BsStockpileSplitDetailEntity" resultType="com.bms.order.bean.entity.BsStockpileSplitDetailEntity">
+SELECT
+BS_STOCKPILE_SPLIT_DETAIL_ID AS bsStockpileSplitDetailId
+, BS_ORDER_DETAIL_ID AS bsOrderDetailId
+, SELL_SIDE_ID AS sellSideId
+, GOODS_ID AS goodsId
+, PRODUCT_ID AS productId
+, MANUFACTURER_ID AS manufacturerId
+, SELLER_ID AS sellerId
+, SKU AS sku
+, BATCH_ID AS batchId
+, SALE_LABEL_ID AS saleLabelId
+, GOODS_QUANTITY AS goodsQuantity
+, RETURN_QUANTITY AS returnQuantity
+, MAKER_ID AS makerId
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_STOCKPILE_SPLIT_DETAIL
+<where>
+<if test="bsStockpileSplitDetailId!=null">
+AND BS_STOCKPILE_SPLIT_DETAIL_ID = #{bsStockpileSplitDetailId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BsStockpileSplitDetailEntity">
+SELECT
+BS_STOCKPILE_SPLIT_DETAIL_ID AS bsStockpileSplitDetailId
+, BS_ORDER_DETAIL_ID AS bsOrderDetailId
+, SELL_SIDE_ID AS sellSideId
+, GOODS_ID AS goodsId
+, PRODUCT_ID AS productId
+, MANUFACTURER_ID AS manufacturerId
+, SELLER_ID AS sellerId
+, SKU AS sku
+, BATCH_ID AS batchId
+, SALE_LABEL_ID AS saleLabelId
+, GOODS_QUANTITY AS goodsQuantity
+, RETURN_QUANTITY AS returnQuantity
+, MAKER_ID AS makerId
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_STOCKPILE_SPLIT_DETAIL
+<where>
+<if test="ids!=null">
+AND BS_STOCKPILE_SPLIT_DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="bsOrderDetails!=null">
+AND BS_ORDER_DETAIL_ID IN (<foreach item="item" collection="bsOrderDetails" separator=",">#{item.entity.bsOrderDetailId}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.BsStockpileSplitDetailHistoryEntity">
+INSERT INTO
+ORDR_BS_STOCKPILE_SPLIT_DETAIL_HISTORY
+(
+HISTORY_ID
+, BS_STOCKPILE_SPLIT_DETAIL_ID
+, BS_ORDER_DETAIL_ID
+, SELL_SIDE_ID
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, SKU
+, BATCH_ID
+, SALE_LABEL_ID
+, GOODS_QUANTITY
+, RETURN_QUANTITY
+, MAKER_ID
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{bsStockpileSplitDetailId}
+, #{bsOrderDetailId}
+, #{sellSideId}
+, #{goodsId}
+, #{productId}
+, #{manufacturerId}
+, #{sellerId}
+, #{sku}
+, #{batchId}
+, #{saleLabelId}
+, #{goodsQuantity}
+, #{returnQuantity}
+, #{makerId}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_STOCKPILE_SPLIT_DETAIL_HISTORY
+(
+HISTORY_ID
+, BS_STOCKPILE_SPLIT_DETAIL_ID
+, BS_ORDER_DETAIL_ID
+, SELL_SIDE_ID
+, GOODS_ID
+, PRODUCT_ID
+, MANUFACTURER_ID
+, SELLER_ID
+, SKU
+, BATCH_ID
+, SALE_LABEL_ID
+, GOODS_QUANTITY
+, RETURN_QUANTITY
+, MAKER_ID
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.bsStockpileSplitDetailId}
+, #{entity.bsOrderDetailId}
+, #{entity.sellSideId}
+, #{entity.goodsId}
+, #{entity.productId}
+, #{entity.manufacturerId}
+, #{entity.sellerId}
+, #{entity.sku}
+, #{entity.batchId}
+, #{entity.saleLabelId}
+, #{entity.goodsQuantity}
+, #{entity.returnQuantity}
+, #{entity.makerId}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

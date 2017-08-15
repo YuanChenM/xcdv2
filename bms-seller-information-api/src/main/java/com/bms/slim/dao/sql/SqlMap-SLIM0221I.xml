@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0221IDao">
+    
+    <!--修改生产商生产资质-管理体系认证证书 -->
+    <update id="updateIsoManagementSystemCertification" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_ISO_MANAGEMENT_SYSTEM_CERTIFICATION
+        <set>
+            <if test="target.sellerRoleIdFlg != null and target.sellerRoleIdFlg">
+                SELLER_ROLE_ID = #{entity.sellerRoleId},
+            </if>
+            <if test="target.certTypeFlg != null and target.certTypeFlg">
+                CERT_TYPE = #{entity.certType},
+            </if>
+            <if test="target.isoTypeFlg != null and target.isoTypeFlg">
+                ISO_TYPE = #{entity.isoType},
+            </if>
+            <if test="target.certNoFlg != null and target.certNoFlg">
+                CERT_NO = #{entity.certNo},
+            </if>
+            <if test="target.certificationStandardFlg != null and target.certificationStandardFlg">
+                CERTIFICATION_STANDARD = #{entity.certificationStandard},
+            </if>
+            <if test="target.certificationScopeFlg != null and target.certificationScopeFlg">
+                CERTIFICATION_SCOPE = #{entity.certificationScope},
+            </if>
+            <if test="target.issueDateValidPeriodFlg != null and target.issueDateValidPeriodFlg">
+                ISSUE_DATE_VALID_PERIOD = #{entity.issueDateValidPeriod},
+            </if>
+            <if test="target.certificationAuthorityFlg != null and target.certificationAuthorityFlg">
+                CERTIFICATION_AUTHORITY = #{entity.certificationAuthority},
+            </if>
+            <if test="target.certUrlFlg != null and target.certUrlFlg">
+                CERT_URL = #{entity.certUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+        ISO_MSC_ID = #{entity.isoMscId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+</mapper>

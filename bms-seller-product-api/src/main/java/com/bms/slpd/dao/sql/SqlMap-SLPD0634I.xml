@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0634IDao">
+    <!-- 新增加工质量标准差异-->
+    <insert id="saveTncDifStds" parameterType="java.util.List">
+        INSERT INTO SLPD_DIF_TNC_STD (
+        TNC_DIF_STD_ID,
+        TNC_STD_TYPE,
+        BREED_ID,
+        PRODUCT_ID,
+        TNC_STD_DIF_VAL_A,
+        TNC_STD_DIF_VAL_B,
+        TNC_STD_DIF_VAL_C,
+        REMARK,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.tncDifStdId},
+            #{item.tncStdType},
+            #{item.breedId},
+            #{item.productId},
+            #{item.tncStdDifValA},
+            #{item.tncStdDifValB},
+            #{item.tncStdDifValC},
+            #{item.remark},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.updId},
+            #{item.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+</mapper>

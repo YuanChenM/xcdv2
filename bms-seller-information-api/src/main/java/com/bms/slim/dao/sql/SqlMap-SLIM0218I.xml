@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0218IDao">
+    
+    <!--修改生产商生产资质-食品生产许可证 -->
+    <update id="updateFoodProductionLicense" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_FOOD_PRODUCTION_LICENSE
+        <set>
+            <if test="target.sellerRoleIdFlg != null and target.sellerRoleIdFlg">
+                SELLER_ROLE_ID = #{entity.sellerRoleId},
+            </if>
+            <if test="target.certNoFlg != null and target.certNoFlg">
+                CERT_NO = #{entity.certNo},
+            </if>
+            <if test="target.categoryRangeFlg != null and target.categoryRangeFlg">
+                CATEGORY_RANGE = #{entity.categoryRange},
+            </if>
+            <if test="target.validPeriodFlg != null and target.validPeriodFlg">
+                VALID_PERIOD = #{entity.validPeriod},
+            </if>
+            <if test="target.foodProdLicUrlFlg != null and target.foodProdLicUrlFlg">
+                FOOD_PROD_LIC_URL = #{entity.foodProdLicUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+        FPL_ID = #{entity.fplId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+</mapper>

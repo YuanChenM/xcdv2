@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0224IDao">
+    
+    <!--修改生产商荣誉证书 -->
+    <update id="updateProducerHonorCertificate" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_PRODUCER_HONOR_CERTIFICATE
+        <set>
+            <if test="target.sellerRoleIdFlg != null and target.sellerRoleIdFlg">
+                SELLER_ROLE_ID = #{entity.sellerRoleId},
+            </if>
+            <if test="target.issueAuthorityFlg != null and target.issueAuthorityFlg">
+                ISSUE_AUTHORITY = #{entity.issueAuthority},
+            </if>
+            <if test="target.issueDateFlg != null and target.issueDateFlg">
+                ISSUE_DATE = #{entity.issueDate},
+            </if>
+            <if test="target.honorCertUrlFlg != null and target.honorCertUrlFlg">
+                HONOR_CERT_URL = #{entity.honorCertUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+            HONOR_CERT_ID = #{entity.honorCertId} AND DEL_FLG = 0
+    </update>
+
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0117IDao">
+
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0117IParam" resultType="com.bms.slim.bean.result.field.SLIM0117ISellerContractPermissionResult">
+        SELECT
+        <include refid="selectColumns"/>
+        FROM
+          SLIM_SELLER_CONTRACT_PERMISSION
+        <include refid="whereConditions"/>
+    </select>
+    <sql id="selectColumns">
+        SCP_ID AS scpId,
+		ENTITY_SELLER_ID AS entitySellerId,
+		SELLER_FULL_NAME AS sellerFullName,
+		COUNTRY_CODE AS countryCode,
+		COUNTRY_NAME AS countryName,
+		PROVINCE_CODE AS provinceCode,
+		PROVINCE_NAME AS provinceName,
+		CITY_CODE AS cityCode,
+		CITY_NAME AS cityName,
+		BUSINESS_ADDRESS AS businessAddress,
+		PAYEE_NAME AS payeeName,
+		PAYEE_BANK AS payeeBank,
+		BANK_ACCOUNT AS bankAccount,
+		EXPRESS_ADDRESS AS expressAddress,
+		DEL_FLG AS delFlg,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS version
+    </sql>
+    <sql id="whereConditions">
+        <where>
+            <if test="null != delFlg">
+                AND DEL_FLG = #{delFlg}
+            </if>
+            <if test="null != scpIds and scpIds.size() > 0">
+                AND SCP_ID IN
+                <foreach collection="scpIds" item="scpId" open="(" separator="," close=")">
+                    #{scpId}
+                </foreach>
+            </if>
+            <if test="null != entitySellerIds and entitySellerIds.size() > 0">
+                AND ENTITY_SELLER_ID IN
+                <foreach collection="entitySellerIds" item="entitySellerId" open="(" separator="," close=")">
+                    #{entitySellerId}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+</mapper>

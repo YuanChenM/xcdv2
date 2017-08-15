@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0201IDao">
+    <!--新增卖家生产商信息 -->
+    <insert id="saveSellerProducers" parameterType="java.util.List">
+        INSERT INTO SLIM_PRODUCER(
+                PRODUCER_ID,
+                PRODUCER_CODE,
+                FULL_NAME,
+                SHORT_NAME,
+                COUNTRY_CODE,
+                COUNTRY_NAME,
+                PROVINCE_CODE,
+                PROVINCE_NAME,
+                CITY_CODE,
+                CITY_NAME,
+                ADDRESS,
+                TEL,
+                FAX,
+                MEDIA_PLATFORM,
+                AUDIT_STU,
+                AUDIT_REMARK,
+                AUDIT_HISTORY,
+                DEL_FLG,
+                CRT_ID,
+                CRT_TIME,
+                UPD_ID,
+                UPD_TIME,
+                VERSION
+                )
+                VALUES
+                    <foreach collection="list" item="item" separator=",">
+                        (
+                        #{item.producerId},
+                        #{item.producerCode},
+                        #{item.fullName},
+                        #{item.shortName},
+                        #{item.countryCode},
+                        #{item.countryName},
+                        #{item.provinceCode},
+                        #{item.provinceName},
+                        #{item.cityCode},
+                        #{item.cityName},
+                        #{item.address},
+                        #{item.tel},
+                        #{item.fax},
+                        #{item.mediaPlatform},
+                        #{item.auditStu},
+                        #{item.auditRemark},
+                        #{item.auditHistory},
+                        0,
+                        #{item.crtId},
+                        #{item.crtTime},
+                        #{item.updId},
+                        #{item.updTime},
+                        1
+                        )
+                    </foreach>
+    </insert>
+
+    <!--新增卖家生产商关联信息 -->
+    <insert id="saveSellerProducerRelations" parameterType="map">
+        INSERT INTO SLIM_SELLER_PRODUCER(
+        SELLER_PRODUCER_ID,
+        ENTITY_SELLER_ID,
+        PRODUCER_ID,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="li" index="index" item="relation" separator=",">
+            (
+            #{relation.sellerProducerId},
+            #{relation.entitySellerId},
+            #{relation.producerId},
+            0,
+            #{relation.crtId},
+            #{relation.crtTime},
+            #{relation.updId},
+            #{relation.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!--新增生产商联系人信息 -->
+    <insert id="saveProducerContact" parameterType="com.bms.slim.bean.entity.SlimContact">
+        INSERT INTO SLIM_CONTACT(
+        CONTACT_ID,
+        CONTACT_NAME,
+        WORKUNIT_ID,
+        WORKUNIT_TYPE,
+        MOBILE,
+        WECHAT,
+        QQ,
+        EMAIL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        (
+            #{contactId},
+            #{contactName},
+            #{workunitId},
+            2,
+            #{mobile},
+            #{wechat},
+            #{qq},
+            #{email},
+            0,
+            #{crtId},
+            #{crtTime},
+            #{updId},
+            #{updTime},
+            1
+            )
+    </insert>
+
+</mapper>

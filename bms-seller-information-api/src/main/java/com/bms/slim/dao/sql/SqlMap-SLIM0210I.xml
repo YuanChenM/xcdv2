@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0210IDao">
+
+    <!--新增生产商生产资质-清真食品生产经营许可证 -->
+    <insert id="saveHalalFoodProductionOperationLicenses" parameterType="map">
+        INSERT INTO SLIM_HALAL_FOOD_PRODUCTION_OPERATION_LICENSE(
+        HFPOL_ID,
+        SELLER_ROLE_ID,
+        CERT_NO,
+        COMM_INSP_CERT_NO,
+        ISSUE_DATE_BEGIN,
+        ISSUE_DATE_END,
+        ISSUE_AUTHORITY,
+        HALAL_FOOD_PROD_OPT_LIC_URL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="relation" separator=",">
+            (
+            #{relation.hfpolId},
+            #{relation.sellerRoleId},
+            #{relation.certNo},
+            #{relation.commInspCertNo},
+            #{relation.issueDateBegin},
+            #{relation.issueDateEnd},
+            #{relation.issueAuthority},
+            #{relation.halalFoodProdOptLicUrl},
+            0,
+            #{relation.crtId},
+            #{relation.crtTime},
+            #{relation.updId},
+            #{relation.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

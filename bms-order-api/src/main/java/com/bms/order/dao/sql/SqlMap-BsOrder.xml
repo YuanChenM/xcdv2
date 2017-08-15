@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BsOrderDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BsOrderEntity">
+INSERT INTO
+ORDR_BS_ORDER
+(
+BS_ORDER_ID
+, BS_ORDER_CODE
+, BACK_NO
+, ORDER_TYPE
+, SALE_PLATFORM_TYPE
+, ORDER_SOURCE_TYPE
+, ORDER_PLACER_ID
+, ORDER_PLACER_TYPE
+, ORDER_PLACE_DATETIME
+, LOGISTICS_ZONE_ID
+, BS_ID
+, PAYMENT_STU
+, INVOICE_FLG
+, USE_NET_FLG
+, ORDER_AMOUNT
+, PREFERENTIAL_AMOUNT
+, RECEIVE_AMOUNT
+, EARNEST_PERCENT
+, EARNEST_AMOUNT
+, ADVANCE_PAYMENT_PERCENT
+, ADVANCE_PAYMENT_AMOUNT
+, BS_ORDER_STU
+, COMPLETE_TIME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{bsOrderId}
+, #{bsOrderCode}
+, #{backNo}
+, #{orderType}
+, #{salePlatformType}
+, #{orderSourceType}
+, #{orderPlacerId}
+, #{orderPlacerType}
+, #{orderPlaceDatetime}
+, #{logisticsZoneId}
+, #{bsId}
+, #{paymentStu}
+, #{invoiceFlg}
+, #{useNetFlg}
+, #{orderAmount}
+, #{preferentialAmount}
+, #{receiveAmount}
+, #{earnestPercent}
+, #{earnestAmount}
+, #{advancePaymentPercent}
+, #{advancePaymentAmount}
+, #{bsOrderStu}
+, #{completeTime}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_ORDER
+(
+BS_ORDER_ID
+, BS_ORDER_CODE
+, BACK_NO
+, ORDER_TYPE
+, SALE_PLATFORM_TYPE
+, ORDER_SOURCE_TYPE
+, ORDER_PLACER_ID
+, ORDER_PLACER_TYPE
+, ORDER_PLACE_DATETIME
+, LOGISTICS_ZONE_ID
+, BS_ID
+, PAYMENT_STU
+, INVOICE_FLG
+, USE_NET_FLG
+, ORDER_AMOUNT
+, PREFERENTIAL_AMOUNT
+, RECEIVE_AMOUNT
+, EARNEST_PERCENT
+, EARNEST_AMOUNT
+, ADVANCE_PAYMENT_PERCENT
+, ADVANCE_PAYMENT_AMOUNT
+, BS_ORDER_STU
+, COMPLETE_TIME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.bsOrderId}
+, #{entity.bsOrderCode}
+, #{entity.backNo}
+, #{entity.orderType}
+, #{entity.salePlatformType}
+, #{entity.orderSourceType}
+, #{entity.orderPlacerId}
+, #{entity.orderPlacerType}
+, #{entity.orderPlaceDatetime}
+, #{entity.logisticsZoneId}
+, #{entity.bsId}
+, #{entity.paymentStu}
+, #{entity.invoiceFlg}
+, #{entity.useNetFlg}
+, #{entity.orderAmount}
+, #{entity.preferentialAmount}
+, #{entity.receiveAmount}
+, #{entity.earnestPercent}
+, #{entity.earnestAmount}
+, #{entity.advancePaymentPercent}
+, #{entity.advancePaymentAmount}
+, #{entity.bsOrderStu}
+, #{entity.completeTime}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BsOrderEntity">
+UPDATE ORDR_BS_ORDER
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BS_ORDER_ID = #{bsOrderId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_ORDER
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BS_ORDER_ID = #{entity.bsOrderId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BsOrderEntity">
+UPDATE ORDR_BS_ORDER
+SET
+BS_ORDER_ID = #{bsOrderId}
+, BS_ORDER_CODE = #{bsOrderCode}
+, BACK_NO = #{backNo}
+, ORDER_TYPE = #{orderType}
+, SALE_PLATFORM_TYPE = #{salePlatformType}
+, ORDER_SOURCE_TYPE = #{orderSourceType}
+, ORDER_PLACER_ID = #{orderPlacerId}
+, ORDER_PLACER_TYPE = #{orderPlacerType}
+, ORDER_PLACE_DATETIME = #{orderPlaceDatetime}
+, LOGISTICS_ZONE_ID = #{logisticsZoneId}
+, BS_ID = #{bsId}
+, PAYMENT_STU = #{paymentStu}
+, INVOICE_FLG = #{invoiceFlg}
+, USE_NET_FLG = #{useNetFlg}
+, ORDER_AMOUNT = #{orderAmount}
+, PREFERENTIAL_AMOUNT = #{preferentialAmount}
+, RECEIVE_AMOUNT = #{receiveAmount}
+, EARNEST_PERCENT = #{earnestPercent}
+, EARNEST_AMOUNT = #{earnestAmount}
+, ADVANCE_PAYMENT_PERCENT = #{advancePaymentPercent}
+, ADVANCE_PAYMENT_AMOUNT = #{advancePaymentAmount}
+, BS_ORDER_STU = #{bsOrderStu}
+, COMPLETE_TIME = #{completeTime}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+<where>
+   <if test="bsOrderId!=null">
+       AND BS_ORDER_ID = #{bsOrderId}
+   </if>
+   <if test="backNo!=null">
+      AND BACK_NO = #{backNo}
+    </if>
+            AND VERSION = #{version} - 1
+        </where>
+    </update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_ORDER
+SET
+BS_ORDER_ID = #{entity.bsOrderId}
+, BS_ORDER_CODE = #{entity.bsOrderCode}
+            , BACK_NO = #{entity.backNo}
+, ORDER_TYPE = #{entity.orderType}
+, SALE_PLATFORM_TYPE = #{entity.salePlatformType}
+, ORDER_SOURCE_TYPE = #{entity.orderSourceType}
+, ORDER_PLACER_ID = #{entity.orderPlacerId}
+, ORDER_PLACER_TYPE = #{entity.orderPlacerType}
+, ORDER_PLACE_DATETIME = #{entity.orderPlaceDatetime}
+, LOGISTICS_ZONE_ID = #{entity.logisticsZoneId}
+, BS_ID = #{entity.bsId}
+, PAYMENT_STU = #{entity.paymentStu}
+, INVOICE_FLG = #{entity.invoiceFlg}
+, USE_NET_FLG = #{entity.useNetFlg}
+, ORDER_AMOUNT = #{entity.orderAmount}
+, PREFERENTIAL_AMOUNT = #{entity.preferentialAmount}
+, RECEIVE_AMOUNT = #{entity.receiveAmount}
+, EARNEST_PERCENT = #{entity.earnestPercent}
+, EARNEST_AMOUNT = #{entity.earnestAmount}
+, ADVANCE_PAYMENT_PERCENT = #{entity.advancePaymentPercent}
+, ADVANCE_PAYMENT_AMOUNT = #{entity.advancePaymentAmount}
+, BS_ORDER_STU = #{entity.bsOrderStu}
+, COMPLETE_TIME = #{entity.completeTime}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BS_ORDER_ID = #{entity.bsOrderId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BsOrderEntity" resultType="com.bms.order.bean.entity.BsOrderEntity">
+SELECT
+BS_ORDER_ID AS bsOrderId
+, BS_ORDER_CODE AS bsOrderCode
+, BACK_NO AS backNo
+, ORDER_TYPE AS orderType
+, SALE_PLATFORM_TYPE AS salePlatformType
+, ORDER_SOURCE_TYPE AS orderSourceType
+, ORDER_PLACER_ID AS orderPlacerId
+, ORDER_PLACER_TYPE AS orderPlacerType
+, ORDER_PLACE_DATETIME AS orderPlaceDatetime
+, LOGISTICS_ZONE_ID AS logisticsZoneId
+, BS_ID AS bsId
+, PAYMENT_STU AS paymentStu
+, INVOICE_FLG AS invoiceFlg
+, USE_NET_FLG AS useNetFlg
+, ORDER_AMOUNT AS orderAmount
+, PREFERENTIAL_AMOUNT AS preferentialAmount
+, RECEIVE_AMOUNT AS receiveAmount
+, EARNEST_PERCENT AS earnestPercent
+, EARNEST_AMOUNT AS earnestAmount
+, ADVANCE_PAYMENT_PERCENT AS advancePaymentPercent
+, ADVANCE_PAYMENT_AMOUNT AS advancePaymentAmount
+, BS_ORDER_STU AS bsOrderStu
+, COMPLETE_TIME AS completeTime
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_ORDER
+<where>
+<if test="bsOrderId!=null">
+AND BS_ORDER_ID = #{bsOrderId}
+</if>
+            <if test="backNo!=null">
+                AND BACK_NO = #{backNo}
+            </if>
+            <if test="bsOrderCode!=null">
+AND BS_ORDER_CODE = #{bsOrderCode}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BsOrderEntity">
+SELECT
+BS_ORDER_ID AS bsOrderId
+, BS_ORDER_CODE AS bsOrderCode
+        , BACK_NO AS backNo
+, ORDER_TYPE AS orderType
+, SALE_PLATFORM_TYPE AS salePlatformType
+, ORDER_SOURCE_TYPE AS orderSourceType
+, ORDER_PLACER_ID AS orderPlacerId
+, ORDER_PLACER_TYPE AS orderPlacerType
+, ORDER_PLACE_DATETIME AS orderPlaceDatetime
+, LOGISTICS_ZONE_ID AS logisticsZoneId
+, BS_ID AS bsId
+, PAYMENT_STU AS paymentStu
+, INVOICE_FLG AS invoiceFlg
+, USE_NET_FLG AS useNetFlg
+, ORDER_AMOUNT AS orderAmount
+, PREFERENTIAL_AMOUNT AS preferentialAmount
+, RECEIVE_AMOUNT AS receiveAmount
+, EARNEST_PERCENT AS earnestPercent
+, EARNEST_AMOUNT AS earnestAmount
+, ADVANCE_PAYMENT_PERCENT AS advancePaymentPercent
+, ADVANCE_PAYMENT_AMOUNT AS advancePaymentAmount
+, BS_ORDER_STU AS bsOrderStu
+, COMPLETE_TIME AS completeTime
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_ORDER
+<where>
+<if test="ids!=null">
+AND BS_ORDER_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="codes!=null">
+AND BS_ORDER_CODE IN (<foreach collection="codes" item="code" separator=",">#{code}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.BsOrderHistoryEntity">
+INSERT INTO
+ORDR_BS_ORDER_HISTORY
+(
+HISTORY_ID
+, BS_ORDER_ID
+, BS_ORDER_CODE
+, BACK_NO
+, ORDER_TYPE
+, SALE_PLATFORM_TYPE
+, ORDER_SOURCE_TYPE
+, ORDER_PLACER_ID
+, ORDER_PLACER_TYPE
+, ORDER_PLACE_DATETIME
+, LOGISTICS_ZONE_ID
+, BS_ID
+, PAYMENT_STU
+, INVOICE_FLG
+, USE_NET_FLG
+, ORDER_AMOUNT
+, PREFERENTIAL_AMOUNT
+, RECEIVE_AMOUNT
+, EARNEST_PERCENT
+, EARNEST_AMOUNT
+, ADVANCE_PAYMENT_PERCENT
+, ADVANCE_PAYMENT_AMOUNT
+, BS_ORDER_STU
+, COMPLETE_TIME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{bsOrderId}
+, #{bsOrderCode}
+, #{backNo}
+, #{orderType}
+, #{salePlatformType}
+, #{orderSourceType}
+, #{orderPlacerId}
+, #{orderPlacerType}
+, #{orderPlaceDatetime}
+, #{logisticsZoneId}
+, #{bsId}
+, #{paymentStu}
+, #{invoiceFlg}
+, #{useNetFlg}
+, #{orderAmount}
+, #{preferentialAmount}
+, #{receiveAmount}
+, #{earnestPercent}
+, #{earnestAmount}
+, #{advancePaymentPercent}
+, #{advancePaymentAmount}
+, #{bsOrderStu}
+, #{completeTime}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_ORDER_HISTORY
+(
+HISTORY_ID
+, BS_ORDER_ID
+, BS_ORDER_CODE
+, BACK_NO
+, ORDER_TYPE
+, SALE_PLATFORM_TYPE
+, ORDER_SOURCE_TYPE
+, ORDER_PLACER_ID
+, ORDER_PLACER_TYPE
+, ORDER_PLACE_DATETIME
+, LOGISTICS_ZONE_ID
+, BS_ID
+, PAYMENT_STU
+, INVOICE_FLG
+, USE_NET_FLG
+, ORDER_AMOUNT
+, PREFERENTIAL_AMOUNT
+, RECEIVE_AMOUNT
+, EARNEST_PERCENT
+, EARNEST_AMOUNT
+, ADVANCE_PAYMENT_PERCENT
+, ADVANCE_PAYMENT_AMOUNT
+, BS_ORDER_STU
+, COMPLETE_TIME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.bsOrderId}
+, #{entity.bsOrderCode}
+, #{entity.backNo}
+, #{entity.orderType}
+, #{entity.salePlatformType}
+, #{entity.orderSourceType}
+, #{entity.orderPlacerId}
+, #{entity.orderPlacerType}
+, #{entity.orderPlaceDatetime}
+, #{entity.logisticsZoneId}
+, #{entity.bsId}
+, #{entity.paymentStu}
+, #{entity.invoiceFlg}
+, #{entity.useNetFlg}
+, #{entity.orderAmount}
+, #{entity.preferentialAmount}
+, #{entity.receiveAmount}
+, #{entity.earnestPercent}
+, #{entity.earnestAmount}
+, #{entity.advancePaymentPercent}
+, #{entity.advancePaymentAmount}
+, #{entity.bsOrderStu}
+, #{entity.completeTime}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

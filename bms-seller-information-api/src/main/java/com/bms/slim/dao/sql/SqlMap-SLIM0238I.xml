@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0238IDao">
+
+    <!-- 查询生产商检测设备 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0238IParam"
+            resultType="com.bms.slim.bean.result.field.SLIM0238ProducerTestEquipmentyResult">
+        SELECT
+            TEST_EQP_ID AS testEqpId,
+            SELLER_ROLE_ID AS sellerRoleId,
+            TEST_EQP_NAME AS testEqpName,
+            TEST_EQP_USE AS testEqpUse,
+            TEST_EQP_PIC_URL AS testEqpPicUrl,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+            SLIM_PRODUCER_TEST_EQUIPMENT
+        <where>
+            <if test="delFlg != null">
+                DEL_FLG = #{delFlg}
+            </if>
+            <if test="testEqpIds != null and testEqpIds.size() > 0">
+                AND TEST_EQP_ID IN
+                <foreach collection="testEqpIds" item="testEqpId" open="(" separator="," close=")">
+                    #{testEqpId}
+                </foreach>
+            </if>
+            <if test="sellerRoleIds != null and sellerRoleIds.size() > 0">
+                AND SELLER_ROLE_ID IN
+                <foreach collection="sellerRoleIds" item="sellerRoleId" open="(" separator="," close=")">
+                    #{sellerRoleId}
+                </foreach>
+            </if>
+            <if test="testEqpName != null and testEqpName != ''">
+                AND TEST_EQP_NAME LIKE #{testEqpName}
+            </if>
+            <if test="testEqpUse != null and testEqpUse != ''">
+                AND TEST_EQP_USE LIKE #{testEqpUse}
+            </if>
+        </where>
+    </select>
+
+</mapper>

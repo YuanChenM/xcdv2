@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD1203IDao">
+
+    <!-- 物流区商品上下架 -->
+    <update id="updateLgcsCommodities" parameterType="com.bms.slpd.bean.entity.SlpdLogisticsAreaProduct">
+        UPDATE
+          SLPD_LOGISTICS_AREA_PRODUCT
+        SET
+        <if test="null != shelfStu and shelfStu != ''">
+            SHELF_STU = #{shelfStu},
+        </if>
+          <if test="null != productDemandGrade and '' != productDemandGrade">
+              PRODUCT_DEMAND_GRADE = #{productDemandGrade},
+          </if>
+          UPD_ID = #{updId},
+          UPD_TIME = #{updTime},
+          VERSION = VERSION + 1
+        WHERE
+          1 = 1
+        AND
+          LAC_ID = #{lacId}
+        AND
+          VERSION = #{version}
+    </update>
+
+
+</mapper>

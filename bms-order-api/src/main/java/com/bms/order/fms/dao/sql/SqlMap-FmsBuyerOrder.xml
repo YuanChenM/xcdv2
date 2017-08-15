@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.fms.dao.FmsBuyerOrderDao">
+    <select id="findBuyerOrder" parameterType="com.bms.order.fms.bean.FmsOrderParam"
+            resultType="com.bms.order.fms.bean.FmsBuyerOrderBean">
+        SELECT
+          buyerOrder.BUYER_ORDER_ID AS omsOrderId
+        , buyerOrder.BUYER_ORDER_CODE AS omsOrderNumber
+        , buyerOrder.BACK_NO AS orgsystemId
+        , buyerOrder.ORDER_TYPE AS orderType
+        , buyerOrder.ORDER_PLACE_DATETIME AS orderPlaceDate
+        , buyerOrder.ORDER_AMOUNT AS buyAmount
+        , buyerOrder.ORDER_AMOUNT AS memberPerPayfor
+        , buyerOrder.ORDER_PLACE_TYPE AS orderPlaceType
+        , buyerOrder.PAYMENT_STU AS orderPaymentStu
+        , ordrAttached.BUYER_NAME AS soldTo
+        , buyerOrder.BUYER_ID AS customerOrgNumber
+        , ordrAttached.BUYER_CODE AS customerNumber
+        , buyerOrder.BS_ID AS agentId
+        , ordrAttached.REGIONAL_BS_CODE AS salesNumber
+        , buyerOrder.ORDER_SOURCE_TYPE AS orderOrgsource
+        FROM
+             ORDR_BUYER_ORDER buyerOrder
+             LEFT JOIN ORDR_BUYER_ORDER_ATTACHED ordrAttached ON ordrAttached.BUYER_ORDER_ID = buyerOrder.BUYER_ORDER_ID
+        WHERE buyerOrder.DEL_FLG = FALSE
+        <if test="pushOrderId != null and pushOrderId != ''">
+            AND buyerOrder.BUYER_ORDER_ID = #{pushOrderId}
+        </if>
+        <if test="pushOrderCode != null and pushOrderCode != ''">
+            AND buyerOrder.BUYER_ORDER_CODE = #{pushOrderCode}
+        </if>
+        <if test="backNo != null and backNo != ''">
+            AND buyerOrder.BACK_NO = #{backNo}
+        </if>
+        ORDER BY buyerOrder.BUYER_ORDER_ID
+    </select>
+    <select id="findBuyerOrderDetail" parameterType="com.bms.order.fms.bean.FmsOrderParam"
+            resultType="com.bms.order.fms.bean.OmsBuyerOrderDetail">
+        SELECT
+            sendDetail.SEND_NOTIFICATION_DETAIL_ID AS lineNum,
+            distributionDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID AS distributionDetailId,
+            orderDetail.BUYER_BATCH_ORDER_DETAIL_ID AS orderDetailId,
+            distributionDetail.BUYER_FORCAST_DELIVER_DETAIL_ID AS deliverDetailId,
+            sendDetail.SEND_NOTIFICATION_DETAIL_ID AS sendDetailId,
+            deliverDetail.SELL_SIDE_ID AS sellSideId,
+            deliverDetail.SELL_SIDE_TYPE AS sellSideType,
+            orderDetail.GOODS_ID AS productId,
+            sendDetail.REAL_SEND_QUANTITY AS orderedQuantity,
+            distributionDetail.GOODS_UNIT AS orderQuantityUom,
+            orderDetail.ORDER_CREATE_UNIT_PRICE AS unitSellingPriceDsp,
+            distributionDetail.SKU AS itemSku,
+            deliverDetailAttached.MAKER_CODE AS producerCode,
+            deliverDetailAttached.MAKER_NAME AS producerName,
+            deliverDetailAttached.MANUFACTURER_CODE AS manufacturerCode,
+            deliverDetailAttached.MANUFACTURER_NAME AS manufacturerName
+        FROM
+            ORDR_BUYER_BATCH_ORDER_DETAIL orderDetail
+        INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL deliverDetail
+        ON deliverDetail.BUYER_BATCH_ORDER_DETAIL_ID = orderDetail.BUYER_BATCH_ORDER_DETAIL_ID
+        INNER JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED deliverDetailAttached
+        ON deliverDetailAttached.BUYER_FORCAST_DELIVER_DETAIL_ID = deliverDetail.BUYER_FORCAST_DELIVER_DETAIL_ID
+        INNER JOIN ORDR_DISTRIBUTION_NOTIFICATION_DETAIL distributionDetail
+        ON distributionDetail.BUYER_FORCAST_DELIVER_DETAIL_ID = deliverDetail.BUYER_FORCAST_DELIVER_DETAIL_ID
+        INNER JOIN ORDR_SEND_NOTIFICATION_DETAIL sendDetail
+        ON sendDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID = distributionDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID
+        WHERE
+            orderDetail.BUYER_ORDER_ID = #{pushOrderId}
+        <if test="pushDistributionDetailIds != null">
+            AND distributionDetail.DISTRIBUTION_NOTIFICATION_DETAIL_ID IN
+            <foreach collection="pushDistributionDetailIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY orderDetail.PRODUCT_ID
+    </select>
+</mapper>

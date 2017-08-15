@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0229IDao">
+
+    <!-- 查询生产商车间 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0229IParam"
+            resultType="com.bms.slim.bean.result.field.SLIM0229ProducerWorkShopResult">
+        SELECT
+            WORKSHOP_ID AS workshopId,
+            SELLER_ROLE_ID AS sellerRoleId,
+            WORKSHOP_NAME AS workshopName,
+            PRODUCTION_PRODUCT AS productionProduct,
+            PROCCESS_FLOW_CHARACTER AS proccessFlowCharacter,
+            WORKSHOP_PIC_URL AS workshopPicUrl,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+            SLIM_PRODUCER_WORKSHOP
+        <where>
+            <if test="delFlg != null">
+                DEL_FLG = #{delFlg}
+            </if>
+            <if test="workshopIds != null and workshopIds.size() > 0">
+                AND WORKSHOP_ID IN
+                <foreach collection="workshopIds" item="workshopId" open="(" separator="," close=")">
+                    #{workshopId}
+                </foreach>
+            </if>
+            <if test="sellerRoleIds != null and sellerRoleIds.size() > 0">
+                AND SELLER_ROLE_ID IN
+                <foreach collection="sellerRoleIds" item="sellerRoleId" open="(" separator="," close=")">
+                    #{sellerRoleId}
+                </foreach>
+            </if>
+            <if test="workshopName != null and workshopName != ''">
+                AND WORKSHOP_NAME LIKE #{workshopName}
+            </if>
+            <if test="productionProduct != null and productionProduct != ''">
+                AND PRODUCTION_PRODUCT LIKE #{productionProduct}
+            </if>
+            <if test="proccessFlowCharacter != null and proccessFlowCharacter != ''">
+                AND PROCCESS_FLOW_CHARACTER LIKE #{productionProduct}
+            </if>
+        </where>
+    </select>
+
+</mapper>

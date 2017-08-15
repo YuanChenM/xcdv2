@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BsOrderDetailAttachedDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BsOrderDetailAttachedEntity">
+INSERT INTO
+ORDR_BS_ORDER_DETAIL_ATTACHED
+(
+BS_ORDER_DETAIL_ID
+, ITEM_CODE
+, ITEM_NAME
+, BRAND_CODE
+, BRAND_NAME
+, ITEM_BRAND_CODE
+, MANUFACTURER_CODE
+, MANUFACTURER_NAME
+, SELLER_CODE
+, SELLER_NAME
+, BATCH_CODE
+, SALE_LABEL_CODE
+, SALE_LABEL_NAME
+, SMALL_PACKAGE_FEATURE
+, QUANTITY_PER_PACKAGE
+, NET_WEIGHT
+, GROSS_WEIGHT
+, CARTON_SIZE
+, PRODUCT_LEVEL
+, PALLET_STANDARD_STACK_QUANTITY
+, GOODS_CODE
+, GOODS_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{bsOrderDetailId}
+, #{itemCode}
+, #{itemName}
+, #{brandCode}
+, #{brandName}
+, #{itemBrandCode}
+, #{manufacturerCode}
+, #{manufacturerName}
+, #{sellerCode}
+, #{sellerName}
+, #{batchCode}
+, #{saleLabelCode}
+, #{saleLabelName}
+, #{smallPackageFeature}
+, #{quantityPerPackage}
+, #{netWeight}
+, #{grossWeight}
+, #{cartonSize}
+, #{productLevel}
+, #{palletStandardStackQuantity}
+, #{goodsCode}
+, #{goodsName}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_ORDER_DETAIL_ATTACHED
+(
+BS_ORDER_DETAIL_ID
+, ITEM_CODE
+, ITEM_NAME
+, BRAND_CODE
+, BRAND_NAME
+, ITEM_BRAND_CODE
+, MANUFACTURER_CODE
+, MANUFACTURER_NAME
+, SELLER_CODE
+, SELLER_NAME
+, BATCH_CODE
+, SALE_LABEL_CODE
+, SALE_LABEL_NAME
+, SMALL_PACKAGE_FEATURE
+, QUANTITY_PER_PACKAGE
+, NET_WEIGHT
+, GROSS_WEIGHT
+, CARTON_SIZE
+, PRODUCT_LEVEL
+, PALLET_STANDARD_STACK_QUANTITY
+, GOODS_CODE
+, GOODS_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.bsOrderDetailId}
+, #{entity.itemCode}
+, #{entity.itemName}
+, #{entity.brandCode}
+, #{entity.brandName}
+, #{entity.itemBrandCode}
+, #{entity.manufacturerCode}
+, #{entity.manufacturerName}
+, #{entity.sellerCode}
+, #{entity.sellerName}
+, #{entity.batchCode}
+, #{entity.saleLabelCode}
+, #{entity.saleLabelName}
+, #{entity.smallPackageFeature}
+, #{entity.quantityPerPackage}
+, #{entity.netWeight}
+, #{entity.grossWeight}
+, #{entity.cartonSize}
+, #{entity.productLevel}
+, #{entity.palletStandardStackQuantity}
+, #{entity.goodsCode}
+, #{entity.goodsName}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BsOrderDetailAttachedEntity">
+UPDATE ORDR_BS_ORDER_DETAIL_ATTACHED
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BS_ORDER_DETAIL_ID = #{bsOrderDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_ORDER_DETAIL_ATTACHED
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BS_ORDER_DETAIL_ID = #{entity.bsOrderDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BsOrderDetailAttachedEntity">
+UPDATE ORDR_BS_ORDER_DETAIL_ATTACHED
+SET
+BS_ORDER_DETAIL_ID = #{bsOrderDetailId}
+, ITEM_CODE = #{itemCode}
+, ITEM_NAME = #{itemName}
+, BRAND_CODE = #{brandCode}
+, BRAND_NAME = #{brandName}
+, ITEM_BRAND_CODE = #{itemBrandCode}
+, MANUFACTURER_CODE = #{manufacturerCode}
+, MANUFACTURER_NAME = #{manufacturerName}
+, SELLER_CODE = #{sellerCode}
+, SELLER_NAME = #{sellerName}
+, BATCH_CODE = #{batchCode}
+, SALE_LABEL_CODE = #{saleLabelCode}
+, SALE_LABEL_NAME = #{saleLabelName}
+, SMALL_PACKAGE_FEATURE = #{smallPackageFeature}
+, QUANTITY_PER_PACKAGE = #{quantityPerPackage}
+, NET_WEIGHT = #{netWeight}
+, GROSS_WEIGHT = #{grossWeight}
+, CARTON_SIZE = #{cartonSize}
+, PRODUCT_LEVEL = #{productLevel}
+, PALLET_STANDARD_STACK_QUANTITY = #{palletStandardStackQuantity}
+, GOODS_CODE = #{goodsCode}
+, GOODS_NAME = #{goodsName}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+BS_ORDER_DETAIL_ID = #{bsOrderDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_ORDER_DETAIL_ATTACHED
+SET
+BS_ORDER_DETAIL_ID = #{entity.bsOrderDetailId}
+, ITEM_CODE = #{entity.itemCode}
+, ITEM_NAME = #{entity.itemName}
+, BRAND_CODE = #{entity.brandCode}
+, BRAND_NAME = #{entity.brandName}
+, ITEM_BRAND_CODE = #{entity.itemBrandCode}
+, MANUFACTURER_CODE = #{entity.manufacturerCode}
+, MANUFACTURER_NAME = #{entity.manufacturerName}
+, SELLER_CODE = #{entity.sellerCode}
+, SELLER_NAME = #{entity.sellerName}
+, BATCH_CODE = #{entity.batchCode}
+, SALE_LABEL_CODE = #{entity.saleLabelCode}
+, SALE_LABEL_NAME = #{entity.saleLabelName}
+, SMALL_PACKAGE_FEATURE = #{entity.smallPackageFeature}
+, QUANTITY_PER_PACKAGE = #{entity.quantityPerPackage}
+, NET_WEIGHT = #{entity.netWeight}
+, GROSS_WEIGHT = #{entity.grossWeight}
+, CARTON_SIZE = #{entity.cartonSize}
+, PRODUCT_LEVEL = #{entity.productLevel}
+, PALLET_STANDARD_STACK_QUANTITY = #{entity.palletStandardStackQuantity}
+, GOODS_CODE = #{entity.goodsCode}
+, GOODS_NAME = #{entity.goodsName}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+BS_ORDER_DETAIL_ID = #{entity.bsOrderDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BsOrderDetailAttachedEntity" resultType="com.bms.order.bean.entity.BsOrderDetailAttachedEntity">
+SELECT
+BS_ORDER_DETAIL_ID AS bsOrderDetailId
+, ITEM_CODE AS itemCode
+, ITEM_NAME AS itemName
+, BRAND_CODE AS brandCode
+, BRAND_NAME AS brandName
+, ITEM_BRAND_CODE AS itemBrandCode
+, MANUFACTURER_CODE AS manufacturerCode
+, MANUFACTURER_NAME AS manufacturerName
+, SELLER_CODE AS sellerCode
+, SELLER_NAME AS sellerName
+, BATCH_CODE AS batchCode
+, SALE_LABEL_CODE AS saleLabelCode
+, SALE_LABEL_NAME AS saleLabelName
+, SMALL_PACKAGE_FEATURE AS smallPackageFeature
+, QUANTITY_PER_PACKAGE AS quantityPerPackage
+, NET_WEIGHT AS netWeight
+, GROSS_WEIGHT AS grossWeight
+, CARTON_SIZE AS cartonSize
+, PRODUCT_LEVEL AS productLevel
+, PALLET_STANDARD_STACK_QUANTITY AS palletStandardStackQuantity
+, GOODS_CODE AS goodsCode
+, GOODS_NAME AS goodsName
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_ORDER_DETAIL_ATTACHED
+<where>
+<if test="bsOrderDetailId!=null">
+AND BS_ORDER_DETAIL_ID = #{bsOrderDetailId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BsOrderDetailAttachedEntity">
+SELECT
+BS_ORDER_DETAIL_ID AS bsOrderDetailId
+, ITEM_CODE AS itemCode
+, ITEM_NAME AS itemName
+, BRAND_CODE AS brandCode
+, BRAND_NAME AS brandName
+, ITEM_BRAND_CODE AS itemBrandCode
+, MANUFACTURER_CODE AS manufacturerCode
+, MANUFACTURER_NAME AS manufacturerName
+, SELLER_CODE AS sellerCode
+, SELLER_NAME AS sellerName
+, BATCH_CODE AS batchCode
+, SALE_LABEL_CODE AS saleLabelCode
+, SALE_LABEL_NAME AS saleLabelName
+, SMALL_PACKAGE_FEATURE AS smallPackageFeature
+, QUANTITY_PER_PACKAGE AS quantityPerPackage
+, NET_WEIGHT AS netWeight
+, GROSS_WEIGHT AS grossWeight
+, CARTON_SIZE AS cartonSize
+, PRODUCT_LEVEL AS productLevel
+, PALLET_STANDARD_STACK_QUANTITY AS palletStandardStackQuantity
+, GOODS_CODE AS goodsCode
+, GOODS_NAME AS goodsName
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_ORDER_DETAIL_ATTACHED
+<where>
+<if test="ids!=null">
+AND BS_ORDER_DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.BsOrderDetailAttachedHistoryEntity">
+INSERT INTO
+ORDR_BS_ORDER_DETAIL_ATTACHED_HISTORY
+(
+HISTORY_ID
+, BS_ORDER_DETAIL_ID
+, ITEM_CODE
+, ITEM_NAME
+, BRAND_CODE
+, BRAND_NAME
+, ITEM_BRAND_CODE
+, MANUFACTURER_CODE
+, MANUFACTURER_NAME
+, SELLER_CODE
+, SELLER_NAME
+, BATCH_CODE
+, SALE_LABEL_CODE
+, SALE_LABEL_NAME
+, SMALL_PACKAGE_FEATURE
+, QUANTITY_PER_PACKAGE
+, NET_WEIGHT
+, GROSS_WEIGHT
+, CARTON_SIZE
+, PRODUCT_LEVEL
+, PALLET_STANDARD_STACK_QUANTITY
+, GOODS_CODE
+, GOODS_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{bsOrderDetailId}
+, #{itemCode}
+, #{itemName}
+, #{brandCode}
+, #{brandName}
+, #{itemBrandCode}
+, #{manufacturerCode}
+, #{manufacturerName}
+, #{sellerCode}
+, #{sellerName}
+, #{batchCode}
+, #{saleLabelCode}
+, #{saleLabelName}
+, #{smallPackageFeature}
+, #{quantityPerPackage}
+, #{netWeight}
+, #{grossWeight}
+, #{cartonSize}
+, #{productLevel}
+, #{palletStandardStackQuantity}
+, #{goodsCode}
+, #{goodsName}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_ORDER_DETAIL_ATTACHED_HISTORY
+(
+HISTORY_ID
+, BS_ORDER_DETAIL_ID
+, ITEM_CODE
+, ITEM_NAME
+, BRAND_CODE
+, BRAND_NAME
+, ITEM_BRAND_CODE
+, MANUFACTURER_CODE
+, MANUFACTURER_NAME
+, SELLER_CODE
+, SELLER_NAME
+, BATCH_CODE
+, SALE_LABEL_CODE
+, SALE_LABEL_NAME
+, SMALL_PACKAGE_FEATURE
+, QUANTITY_PER_PACKAGE
+, NET_WEIGHT
+, GROSS_WEIGHT
+, CARTON_SIZE
+, PRODUCT_LEVEL
+, PALLET_STANDARD_STACK_QUANTITY
+, GOODS_CODE
+, GOODS_NAME
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.bsOrderDetailId}
+, #{entity.itemCode}
+, #{entity.itemName}
+, #{entity.brandCode}
+, #{entity.brandName}
+, #{entity.itemBrandCode}
+, #{entity.manufacturerCode}
+, #{entity.manufacturerName}
+, #{entity.sellerCode}
+, #{entity.sellerName}
+, #{entity.batchCode}
+, #{entity.saleLabelCode}
+, #{entity.saleLabelName}
+, #{entity.smallPackageFeature}
+, #{entity.quantityPerPackage}
+, #{entity.netWeight}
+, #{entity.grossWeight}
+, #{entity.cartonSize}
+, #{entity.productLevel}
+, #{entity.palletStandardStackQuantity}
+, #{entity.goodsCode}
+, #{entity.goodsName}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

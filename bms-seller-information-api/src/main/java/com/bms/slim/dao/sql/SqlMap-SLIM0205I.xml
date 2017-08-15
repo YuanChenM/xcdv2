@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0205IDao">
+
+    <!-- 查询生产商生产资质-动物防疫条件合格证 -->
+    <select id="findPageList" parameterType="com.bms.slim.bean.param.SLIM0205IParam"
+            resultType="com.bms.slim.bean.result.field.SLIM0205AnimalEpidemicPreventionConditionCertificateResult">
+        SELECT
+            AEPCC_ID AS aepccId,
+            SELLER_ROLE_ID AS sellerRoleId,
+            CERT_NO AS certNo,
+            VALID_PERIOD AS validPeriod,
+            ANI_EPI_PREV_CONT_CERT_URL AS aniEpiPrevContCertUrl,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+        SLIM_ANIMAL_EPIDEMIC_PREVENTION_CONDITION_CERTIFICATE
+        <where>
+            <if test="delFlg != null">
+                DEL_FLG = #{delFlg}
+            </if>
+            <if test="aepccIds != null and aepccIds.size() > 0">
+                AND AEPCC_ID IN
+                <foreach collection="aepccIds" item="aepccId" open="(" separator="," close=")">
+                    #{aepccId}
+                </foreach>
+            </if>
+            <if test="sellerRoleIds != null and sellerRoleIds.size() > 0">
+                AND SELLER_ROLE_ID IN
+                <foreach collection="sellerRoleIds" item="sellerRoleId" open="(" separator="," close=")">
+                    #{sellerRoleId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

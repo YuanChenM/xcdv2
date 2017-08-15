@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0101IDao">
+
+    <!-- 查询是否有重名的实体卖家 -->
+    <select id="countSameFullNames" parameterType="list" resultType="int">
+        SELECT
+        count(1)
+        FROM
+        SLIM_ENTITY_SELLER
+        WHERE
+        DEL_FLG = 0
+        AND FULL_NAME IN
+        <foreach collection="list" index="index" item="fullName" open="(" separator="," close=")">
+            #{fullName}
+        </foreach>
+    </select>
+
+    <!-- 批量新增实体卖家 -->
+    <insert id="saveEntitySellers" parameterType="list">
+        INSERT INTO SLIM_ENTITY_SELLER (
+        ENTITY_SELLER_ID,
+        ENTITY_SELLER_DISPLAY_CODE,
+        ENTITY_SELLER_CODE,
+        FULL_NAME,
+        SHORT_NAME,
+        ACCOUNT,
+        PASSWORD,
+        COUNTRY_CODE,
+        COUNTRY_NAME,
+        PROVINCE_CODE,
+        PROVINCE_NAME,
+        CITY_CODE,
+        CITY_NAME,
+        TEL,
+        FAX,
+        MEDIA_PLATFORM,
+        ADDRESS,
+        BRAND_REQUIRED_FLG,
+        BRAND_REG_FLG,
+        PRODUCER_REQUIRED_FLG,
+        PRODUCER_REG_FLG,
+        BIZ_QUAL_REQUIRED_FLG,
+        BIZ_QUAL_REG_FLG,
+        SUP_QUAL_REQUIRED_FLG,
+        SUP_QUAL_REG_FLG,
+        BIZ_TEAM_REQUIRED_FLG,
+        BIZ_TEAM_REG_FLG,
+        MGT_TEAM_REQUIRED_FLG,
+        MGT_TEAM_REG_FLG,
+        CONTRACT_REQUIRED_FLG,
+        CONTRACT_REG_FLG,
+        AUDIT_STU,
+        AUDIT_REMARK,
+        AUDIT_HISTORY,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="entitySeller" index="index" separator=",">
+            (
+            #{entitySeller.entitySellerId},
+            #{entitySeller.entitySellerDisplayCode},
+            #{entitySeller.entitySellerCode},
+            #{entitySeller.fullName},
+            #{entitySeller.shortName},
+            #{entitySeller.account},
+            #{entitySeller.password},
+            #{entitySeller.countryCode},
+            #{entitySeller.countryName},
+            #{entitySeller.provinceCode},
+            #{entitySeller.provinceName},
+            #{entitySeller.cityCode},
+            #{entitySeller.cityName},
+            #{entitySeller.tel},
+            #{entitySeller.fax},
+            #{entitySeller.mediaPlatform},
+            #{entitySeller.address},
+            #{entitySeller.brandRequiredFlg},
+            #{entitySeller.brandRegFlg},
+            #{entitySeller.producerRequiredFlg},
+            #{entitySeller.producerRegFlg},
+            #{entitySeller.bizQualRequiredFlg},
+            #{entitySeller.bizQualRegFlg},
+            #{entitySeller.supQualRequiredFlg},
+            #{entitySeller.supQualRegFlg},
+            #{entitySeller.bizTeamRequiredFlg},
+            #{entitySeller.bizTeamRegFlg},
+            #{entitySeller.mgtTeamRequiredFlg},
+            #{entitySeller.mgtTeamRegFlg},
+            #{entitySeller.contractRequiredFlg},
+            #{entitySeller.contractRegFlg},
+            #{entitySeller.auditStu},
+            #{entitySeller.auditRemark},
+            #{entitySeller.auditHistory},
+            0,
+            #{entitySeller.crtId},
+            #{entitySeller.crtTime},
+            #{entitySeller.crtId},
+            #{entitySeller.crtTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!-- 根据cityCode获取entitySellerDisplayCode最大值 -->
+    <select id="getMaxEntitySellerDisplayCode" parameterType="java.util.List"
+            resultType="com.bms.slim.bean.entity.SlimEntitySeller">
+        SELECT
+        max(cast(ENTITY_SELLER_DISPLAY_CODE AS SIGNED)) AS entitySellerDisPlayCode,
+        CITY_CODE AS cityCode
+        FROM
+        SLIM_ENTITY_SELLER
+        WHERE
+        DEL_FLG = 0
+        AND
+        CITY_CODE IN
+        <foreach collection="list" item="cityCode" open="(" separator="," close=")">
+            #{cityCode}
+        </foreach>
+        GROUP BY CITY_CODE
+    </select>
+
+    <!-- 根据entitySellerId获取entitySellerCode最大值 -->
+    <select id="getMaxEntitySellerCode" resultType="com.bms.slim.bean.entity.SlimEntitySeller">
+        SELECT
+        max(cast(ENTITY_SELLER_CODE AS SIGNED)) AS entitySellerCode,
+        ENTITY_SELLER_ID AS entitySellerId
+        FROM
+        SLIM_ENTITY_SELLER
+        WHERE
+        DEL_FLG = 0
+    </select>
+    <!-- 批量新增卖家联系人 -->
+    <insert id="saveContacts" parameterType="list">
+        INSERT INTO SLIM_CONTACT (
+        CONTACT_ID,
+        CONTACT_NAME,
+        WORKUNIT_ID,
+        WORKUNIT_TYPE,
+        MOBILE,
+        WECHAT,
+        QQ,
+        EMAIL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="contact" index="index" separator=",">
+            (
+            #{contact.contactId},
+            #{contact.contactName},
+            #{contact.workunitId},
+            #{contact.workunitType},
+            #{contact.mobile},
+            #{contact.wechat},
+            #{contact.qq},
+            #{contact.email},
+            0,
+            #{contact.crtId},
+            #{contact.crtTime},
+            #{contact.crtId},
+            #{contact.crtTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

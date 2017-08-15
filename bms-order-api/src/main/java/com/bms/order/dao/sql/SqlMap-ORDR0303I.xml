@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.ORDR0303IDao">
+    <resultMap id="L1Result" type="com.bms.order.bean.result.ORDR0303IL1RestResult">
+        <id property="distributionNotificationId" column="L1_distributionNotificationId"/>
+        <result property="distributionNotificationCode" column="L1_distributionNotificationCode"/>
+        <result property="buyerOrderId" column="L1_buyerOrderId"/>
+        <result property="buyerOrderCode" column="L1_buyerOrderCode"/>
+        <result property="orderType" column="L1_orderType"/>
+        <result property="buyerId" column="L1_buyerId"/>
+        <result property="buyerType" column="L1_buyerType"/>
+        <result property="buyerTypeName" column="L1_buyerTypeName"/>
+        <result property="buyerCode" column="L1_buyerCode"/>
+        <result property="buyerName" column="L1_buyerName"/>
+        <result property="paymentType" column="L1_paymentType"/>
+        <result property="receiverName" column="L1_receiverName"/>
+        <result property="receiverPhone" column="L1_receiverPhone"/>
+        <result property="receiverQq" column="L1_receiverQq"/>
+        <result property="receiverWechat" column="L1_receiverWechat"/>
+        <result property="receiverMail" column="L1_receiverMail"/>
+        <result property="receiverProvince" column="L1_receiverProvince"/>
+        <result property="receiverCity" column="L1_receiverCity"/>
+        <result property="receiverDistrict" column="L1_receiverDistrict"/>
+        <result property="receiverAddress" column="L1_receiverAddress"/>
+        <result property="receiverAssistAddress" column="L1_receiverAssistAddress"/>
+        <result property="deliveryArea" column="L1_deliveryArea"/>
+        <result property="passTrafficModel" column="L1_passTrafficModel"/>
+        <result property="distributionType" column="L1_distributionType"/>
+        <result property="receivePeriod" column="L1_receivePeriod"/>
+        <result property="receiveEarliest" column="L1_receiveEarliest"/>
+        <result property="receiveLatest" column="L1_receiveLatest"/>
+        <result property="receiveWaitHour" column="L1_receiveWaitHour"/>
+        <result property="advancedNotificationHour" column="L1_advancedNotificationHour"/>
+        <result property="animalQuarantineCertificationFlg" column="L1_animalQuarantineCertificationFlg"/>
+        <result property="stevedoreRequirement" column="L1_stevedoreRequirement"/>
+        <result property="packageRequirement" column="L1_packageRequirement"/>
+        <result property="nearestParkingDistance" column="L1_nearestParkingDistance"/>
+        <result property="remark" column="L1_remark"/>
+        <result property="expectedSendDatetime" column="L1_expectedSendDatetime"/>
+        <result property="expectedArrivalDatetime" column="L1_expectedArrivalDatetime"/>
+        <result property="distributionNotificationStu" column="L1_distributionNotificationStu"/>
+        <result property="sendFlg" column="L1_sendFlg"/>
+        <result property="version" column="L1_version"/>
+        <result property="sortSeq" column="L1_sortSeq"/>
+        <result property="logisticsZoneName" column="L1_logisticsZoneName"/>
+        <result property="whCode" column="L1_whCode"/>
+        <result property="whName" column="L1_whName"/>
+        <result property="crtTime" column="L1_crtTime"/>
+        <result property="requiredDistributionDate" column="L1_requiredDistributionDate"/>
+        <collection property="details" resultMap="L2Result"/>
+    </resultMap>
+    <resultMap id="L2Result" type="com.bms.order.bean.result.ORDR0303IL2RestResult">
+        <id property="distributionNotificationDetailId" column="L2_distributionNotificationDetailId"/>
+        <result property="distributionNotificationId" column="L2_distributionNotificationId"/>
+        <result property="buyerForcastDeliverDetailId" column="L2_buyerForcastDeliverDetailId"/>
+        <result property="goodsId" column="L2_goodsId"/>
+        <result property="sku" column="L2_sku"/>
+        <result property="batchCode" column="L2_batchCode"/>
+        <result property="goodsUnit" column="L2_goodsUnit"/>
+        <result property="sellerCode" column="L2_sellerCode"/>
+        <result property="distributionQuantity" column="L2_distributionQuantity"/>
+        <result property="sellSideCode" column="L2_sellSideCode"/>
+        <result property="logisticsZoneName" column="L2_logisticsZoneName"/>
+        <result property="version" column="L2_version"/>
+        <result property="sortSeq" column="L2_sortSeq"/>
+        <result property="planSendQuantity" column="L2_planSendQuantity"/>
+        <result property="realSendQuantity" column="L2_realSendQuantity"/>
+        <result property="receiveQuantity" column="L2_receiveQuantity"/>
+        <result property="rejectQuantity" column="L2_rejectQuantity"/>
+        <result property="delayQuantity" column="L2_delayQuantity"/>
+        <result property="returnQuantity" column="L2_returnQuantity"/>
+        <result property="sellSideName" column="L2_sellSideName"/>
+        <result property="itemName" column="L2_itemName"/>
+        <result property="brandName" column="L2_brandName"/>
+        <result property="manufacturerName" column="L2_manufacturerName"/>
+        <result property="sellerCode" column="L2_sellerCode"/>
+        <result property="sellerName" column="L2_sellerName"/>
+        <result property="batchCode" column="L2_batchCode"/>
+        <result property="saleLabelCode" column="L2_saleLabelCode"/>
+        <result property="saleLabelName" column="L2_saleLabelName"/>
+        <result property="smallPackageFeature" column="L2_smallPackageFeature"/>
+        <result property="quantityPerPackage" column="L2_quantityPerPackage"/>
+        <result property="netWeight" column="L2_netWeight"/>
+        <result property="grossWeight" column="L2_grossWeight"/>
+        <result property="cartonSize" column="L2_cartonSize"/>
+        <result property="productLevel" column="L2_productLevel"/>
+        <result property="sellSideType" column="L2_sellSideType"/>
+        <result property="palletStandardStackQuantity" column="L2_palletStandardStackQuantity"/>
+        <result property="priceWay" column="L2_priceWay"/>
+        <result property="unitPrice" column="L2_unitPrice"/>
+        <result property="kgPrice" column="L2_kgPrice"/>
+        <result property="cancelQuantity" column="L2_cancelQty"/>
+    </resultMap>
+
+    <sql id="L1Select">
+        L1.DISTRIBUTION_NOTIFICATION_ID AS L1_distributionNotificationId
+		, L1.DISTRIBUTION_NOTIFICATION_CODE AS L1_distributionNotificationCode
+		, L1.BUYER_ORDER_ID AS L1_buyerOrderId
+		, L1.BUYER_ORDER_CODE AS L1_buyerOrderCode
+		, L1.ORDER_TYPE AS L1_orderType
+		, L1.BUYER_ID AS L1_buyerId
+		, L1.BUYER_TYPE AS L1_buyerType
+		, L1.BUYER_TYPE_NAME AS L1_buyerTypeName
+		, L1.BUYER_CODE AS L1_buyerCode
+		, L1.BUYER_NAME AS L1_buyerName
+		, L1.PAYMENT_TYPE AS L1_paymentType
+		, L1.RECEIVER_NAME AS L1_receiverName
+		, L1.RECEIVER_PHONE AS L1_receiverPhone
+		, L1.RECEIVER_QQ AS L1_receiverQq
+		, L1.RECEIVER_WECHAT AS L1_receiverWechat
+		, L1.RECEIVER_MAIL AS L1_receiverMail
+		, L1.RECEIVER_PROVINCE AS L1_receiverProvince
+		, L1.RECEIVER_CITY AS L1_receiverCity
+		, L1.RECEIVER_DISTRICT AS L1_receiverDistrict
+		, L1.RECEIVER_ADDRESS AS L1_receiverAddress
+		, L1.RECEIVER_ASSIST_ADDRESS AS L1_receiverAssistAddress
+		, L1.DELIVERY_AREA AS L1_deliveryArea
+		, L1.PASS_TRAFFIC_MODEL AS L1_passTrafficModel
+		, L1.DISTRIBUTION_TYPE AS L1_distributionType
+		, L1.RECEIVE_PERIOD AS L1_receivePeriod
+		, L1.RECEIVE_EARLIEST AS L1_receiveEarliest
+		, L1.RECEIVE_LATEST AS L1_receiveLatest
+		, L1.RECEIVE_WAIT_HOUR AS L1_receiveWaitHour
+		, L1.ADVANCED_NOTIFICATION_HOUR AS L1_advancedNotificationHour
+		, L1.ANIMAL_QUARANTINE_CERTIFICATION_FLG AS L1_animalQuarantineCertificationFlg
+		, L1.STEVEDORE_REQUIREMENT AS L1_stevedoreRequirement
+		, L1.PACKAGE_REQUIREMENT AS L1_packageRequirement
+		, L1.NEAREST_PARKING_DISTANCE AS L1_nearestParkingDistance
+		, L1.REMARK AS L1_remark
+		, L1.EXPECTED_SEND_DATETIME AS L1_expectedSendDatetime
+		, L1.EXPECTED_ARRIVAL_DATETIME AS L1_expectedArrivalDatetime
+		, L1.DISTRIBUTION_NOTIFICATION_STU AS L1_distributionNotificationStu
+		, L1.VERSION AS L1_version
+		, L1.CRT_TIME AS L1_crtTime
+		, L1.REQUIRED_DISTRIBUTION_DATE AS L1_requiredDistributionDate
+		, buyerOrder.LOGISTICS_ZONE_NAME AS L1_logisticsZoneName
+		, L1.WH_CODE AS L1_whCode
+		, L1.WH_NAME AS L1_whName
+		, L1.SEND_FLG AS L1_sendFlg
+    </sql>
+    <sql id="L2Select">
+        , L2.DISTRIBUTION_NOTIFICATION_DETAIL_ID AS L2_distributionNotificationDetailId
+        , L2.DISTRIBUTION_NOTIFICATION_ID AS L2_distributionNotificationId
+        , L2.BUYER_FORCAST_DELIVER_DETAIL_ID AS L2_buyerForcastDeliverDetailId
+        , L2.GOODS_UNIT AS L2_goodsUnit
+        , L2.DISTRIBUTION_QUANTITY AS L2_distributionQuantity
+        , L2.LOGISTICS_ZONE_NAME AS L2_logisticsZoneName
+        , L2.VERSION AS L2_version
+        , forcast.SELL_SIDE_TYPE AS L2_sellSideType
+        , forcast.SELL_SIDE_ID AS L2_sellSideId
+        , forcast.GOODS_ID AS L2_goodsId
+        , forcast.PRODUCT_ID AS L2_productId
+        , forcast.SKU AS L2_sku
+        , forcast.PLAN_SEND_QUANTITY AS L2_planSendQuantity
+         , forcast.REAL_SEND_QUANTITY AS L2_realSendQuantity
+         , forcast.RECEIVE_QUANTITY AS L2_receiveQuantity
+         , forcast.REJECT_QUANTITY AS L2_rejectQuantity
+         , forcast.DELAY_QUANTITY AS L2_delayQuantity
+         , forcast.RETURN_QUANTITY AS L2_returnQuantity
+         , forcasta.SELL_SIDE_CODE AS L2_sellSideCode
+         , forcasta.SELL_SIDE_NAME AS L2_sellSideName
+         , forcasta.ITEM_NAME AS L2_itemName
+         , forcasta.BRAND_NAME AS L2_brandName
+         , forcasta.MANUFACTURER_NAME AS L2_manufacturerName
+         , forcasta.SELLER_CODE AS L2_sellerCode
+         , forcasta.SELLER_NAME AS L2_sellerName
+         , forcasta.BATCH_CODE AS L2_batchCode
+         , forcasta.SALE_LABEL_CODE AS L2_saleLabelCode
+         , forcasta.SALE_LABEL_NAME AS L2_saleLabelName
+         , forcasta.SMALL_PACKAGE_FEATURE AS L2_smallPackageFeature
+         , forcasta.QUANTITY_PER_PACKAGE AS L2_quantityPerPackage
+         , forcasta.NET_WEIGHT AS L2_netWeight
+         , forcasta.GROSS_WEIGHT AS L2_grossWeight
+         , forcasta.CARTON_SIZE AS L2_cartonSize
+         , forcasta.PRODUCT_LEVEL AS L2_productLevel
+         , forcasta.PALLET_STANDARD_STACK_QUANTITY AS L2_palletStandardStackQuantity
+         , batchOrderDetail.PRICE_WAY as L2_priceWay
+          ,batchOrderDetail.REAL_UNIT_PRICE as L2_unitPrice
+          ,batchOrderDetail.REAL_KG_PRICE  as L2_kgPrice
+          , CASE
+          when  cancel.DISTRIBUTION_CANCEL_NOTIFICATION_ID  is null  then 0.00
+          ELSE   L2.DISTRIBUTION_QUANTITY
+         END  L2_cancelQty
+    </sql>
+
+
+    <select id="findPageList" parameterType="com.bms.order.common.rest.SearchRestParam" resultMap="L1Result">
+        SELECT
+        <if test="pagingLevel>=1">
+            <include refid="L1Select"/>
+        </if>
+        <if test="pagingLevel>=2">
+            <include refid="L2Select"/>
+        </if>
+        <if test="pagingLevel==1">
+            , (@sortSeq := @sortSeq + 1) AS L1_sortSeq
+        </if>
+        <if test="pagingLevel==2">
+            , (@sortSeq := @sortSeq + 1) AS L2_sortSeq
+        </if>
+        FROM
+        <include refid="From"/>
+        <where>
+            <include refid="Where"/>
+        </where>
+        <!-- GROUP BY -->
+        <include refid="GroupBy"/>
+    </select>
+
+    <sql id="From">
+        (select @sortSeq := 0) AS SEQ,
+        <if test="searchLevel>=1">
+            ORDR_DISTRIBUTION_NOTIFICATION AS L1
+            INNER JOIN ORDR_BUYER_ORDER_ATTACHED AS buyerOrder ON L1.BUYER_ORDER_ID=buyerOrder.BUYER_ORDER_ID
+            INNER JOIN ORDR_BUYER_ORDER AS realBuyerOrder ON L1.BUYER_ORDER_ID=realBuyerOrder.BUYER_ORDER_ID
+        </if>
+        <if test="searchLevel>=2">
+            INNER JOIN ORDR_DISTRIBUTION_NOTIFICATION_DETAIL AS L2 ON L2.DISTRIBUTION_NOTIFICATION_ID =
+            L1.DISTRIBUTION_NOTIFICATION_ID AND L2.DEL_FLG = 0
+            LEFT JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL AS forcast on
+            forcast.BUYER_FORCAST_DELIVER_DETAIL_ID=L2.BUYER_FORCAST_DELIVER_DETAIL_ID
+            LEFT JOIN ORDR_BUYER_FORCAST_DELIVER_DETAIL_ATTACHED forcasta on
+            forcasta.BUYER_FORCAST_DELIVER_DETAIL_ID=L2.BUYER_FORCAST_DELIVER_DETAIL_ID
+            LEFT  JOIN ORDR_BUYER_BATCH_ORDER_DETAIL AS batchOrderDetail on batchOrderDetail.BUYER_BATCH_ORDER_DETAIL_ID=forcast.BUYER_BATCH_ORDER_DETAIL_ID
+            AND batchOrderDetail.DEL_FLG = 0
+            LEFT JOIN ORDR_DISTRIBUTION_CANCEL_NOTIFICATION  AS cancel ON cancel.DISTRIBUTION_NOTIFICATION_ID=L2.DISTRIBUTION_NOTIFICATION_ID
+            AND  cancel.DEL_FLG = 0
+        </if>
+        <if test="filter.saId != null"><!-- 以管家ID为检索条件 -->
+            INNER JOIN ORDR_BUYER_ORDER_ATTACHED AS BOA ON BOA.BUYER_ORDER_ID = L1.BUYER_ORDER_ID AND BOA.DEL_FLG = 0
+        </if>
+    </sql>
+
+    <sql id="Where">
+        AND L1.DEL_FLG = 0
+
+        <if test="filter.distributionNotificationId != null">
+            AND L1.DISTRIBUTION_NOTIFICATION_ID IN
+            <foreach collection="filter.distributionNotificationId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.distributionNotificationCode != null">
+            AND L1.DISTRIBUTION_NOTIFICATION_CODE LIKE #{filter.distributionNotificationCode}
+        </if>
+        <if test="filter.buyerOrderId != null">
+            AND L1.BUYER_ORDER_ID IN
+            <foreach collection="filter.buyerOrderId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.buyerOrderCode != null">
+            AND L1.BUYER_ORDER_CODE LIKE #{filter.buyerOrderCode}
+        </if>
+        <if test="filter.buyerId != null">
+            AND L1.BUYER_ID IN
+            <foreach collection="filter.buyerId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.buyerCode != null">
+            AND L1.BUYER_CODE LIKE #{filter.buyerCode}
+        </if>
+        <if test="filter.buyerName != null">
+            AND L1.BUYER_NAME LIKE #{filter.buyerName}
+        </if>
+        <if test="filter.buyerType != null">
+            AND L1.BUYER_TYPE LIKE #{filter.buyerType}
+        </if>
+        <if test="filter.buyerTypeName != null">
+            AND L1.BUYER_TYPE_NAME LIKE #{filter.buyerTypeName}
+        </if>
+        <if test="filter.logisticsZoneCode != null">
+            AND realBuyerOrder.LOGISTICS_ZONE_ID = #{filter.logisticsZoneCode}
+        </if>
+        <if test="null!=filter.expectedSendDateTimeFrom">
+            AND L1.EXPECTED_SEND_DATETIME <![CDATA[ >=  ]]>#{filter.expectedSendDateTimeFrom}
+        </if>
+        <if test="null!=filter.expectedSendDateTimeTo">
+            AND L1.EXPECTED_SEND_DATETIME <![CDATA[ <=  ]]>#{filter.expectedSendDateTimeTo}
+        </if>
+
+        <if test="null!=filter.crtTimeFrom">
+            AND L1.CRT_TIME <![CDATA[ >=  ]]>#{filter.crtTimeFrom}
+        </if>
+        <if test="null!=filter.crtTimeTo">
+            AND L1.CRT_TIME <![CDATA[ <=  ]]>#{filter.crtTimeTo}
+        </if>
+
+        <if test="filter.distributionNotificationStu != null">
+            AND L1.DISTRIBUTION_NOTIFICATION_STU IN
+            <foreach collection="filter.distributionNotificationStu" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="filter.saId != null">
+            AND BOA.SA_ID IN
+            <foreach collection="filter.saId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="GroupBy">
+        <if test="pagingLevel==1">
+            GROUP BY L1.DISTRIBUTION_NOTIFICATION_ID
+            ORDER BY L1.DISTRIBUTION_NOTIFICATION_ID DESC
+        </if>
+        <if test="pagingLevel==2">
+            GROUP BY L2.DISTRIBUTION_NOTIFICATION_DETAIL_ID
+            ORDER BY L2.DISTRIBUTION_NOTIFICATION_DETAIL_ID DESC
+        </if>
+    </sql>
+</mapper>

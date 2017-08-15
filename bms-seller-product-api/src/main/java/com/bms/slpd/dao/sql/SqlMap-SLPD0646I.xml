@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0646IDao">
+
+    <!-- 新增包装标准指标差异 -->
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO SLPD_DIF_PKG_STD (
+        PKG_DIF_STD_ID,
+        ITEM_ID,
+        PRODUCT_ID,
+        PKG_DIF_IN_SUTTLE,
+        PKG_DIF_IN_ERROR,
+        PKG_DIF_IN_NUMBER,
+        PKG_DIF_IN_SIZE,
+        PKG_DIF_IN_TEXTURE,
+        PKG_DIF_OUT_ERROR,
+        PKG_DIF_OUT_NUMBER,
+        PKG_DIF_OUT_SIZE,
+        PKG_DIF_OUT_TEXTURE,
+        REMARK,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="difPkgStd" index="index" separator=",">
+            (
+            #{difPkgStd.pkgDifStdId},
+            #{difPkgStd.itemId},
+            #{difPkgStd.productId},
+            #{difPkgStd.pkgDifInSuttle},
+            #{difPkgStd.pkgDifInError},
+            #{difPkgStd.pkgDifInNumber},
+            #{difPkgStd.pkgDifInSize},
+            #{difPkgStd.pkgDifInTexture},
+            #{difPkgStd.pkgDifOutError},
+            #{difPkgStd.pkgDifOutNumber},
+            #{difPkgStd.pkgDifOutSize},
+            #{difPkgStd.pkgDifOutTexture},
+            #{difPkgStd.remark},
+            0,
+            #{difPkgStd.crtId},
+            #{difPkgStd.crtTime},
+            #{difPkgStd.updId},
+            #{difPkgStd.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

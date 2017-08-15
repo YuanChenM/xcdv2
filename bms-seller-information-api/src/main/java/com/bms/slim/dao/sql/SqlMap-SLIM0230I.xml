@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0230IDao">
+    
+    <!--修改生产商车间 -->
+    <update id="updateProducerWorkShops" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_PRODUCER_WORKSHOP
+        <set>
+            <if test="target.sellerRoleIdFlg != null and target.sellerRoleIdFlg">
+                SELLER_ROLE_ID = #{entity.sellerRoleId},
+            </if>
+            <if test="target.workshopNameFlg != null and target.workshopNameFlg">
+                WORKSHOP_NAME = #{entity.workshopName},
+            </if>
+            <if test="target.productionProductFlg != null and target.productionProductFlg">
+                PRODUCTION_PRODUCT = #{entity.productionProduct},
+            </if>
+            <if test="target.proccessFlowCharacterFlg != null and target.proccessFlowCharacterFlg">
+                PROCCESS_FLOW_CHARACTER = #{entity.proccessFlowCharacter},
+            </if>
+            <if test="target.workshopPicUrlFlg != null and target.workshopPicUrlFlg">
+                WORKSHOP_PIC_URL = #{entity.workshopPicUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+            WORKSHOP_ID = #{entity.workshopId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+</mapper>

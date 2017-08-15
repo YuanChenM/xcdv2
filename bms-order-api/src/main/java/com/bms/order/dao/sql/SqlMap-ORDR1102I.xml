@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.ORDR1102IDao">
+
+    <!-- 查询字段 -->
+    <sql id="selectShortsellColumns">
+        ORDER_ID AS orderId,
+        ORDER_CODE AS orderCode,
+        BACK_NO AS backNo,
+        ORDER_TYPE AS orderType,
+        ORDER_SOURCE_TYPE AS orderSourceType,
+        LOGISTICS_ID AS logisticsId,
+        LOGISTICS_CODE AS logisticsCode,
+        LOGISTICS_NAME AS logisticsName,
+        SELLER_ID AS sellerId,
+        SELLER_CODE AS sellerCode,
+        SELLER_NAME AS sellerName,
+        SELLER_TYPE AS sellerType,
+        BUYER_ID AS buyerId,
+        BUYER_CODE AS buyerCode,
+        BUYER_NAME AS buyerName,
+        BUYER_TYPE AS buyerType,
+        TOTAL_AMOUNT AS totalAmount,
+        RECEIVE_AMOUNT AS receiveAmount,
+        PAYMENT_STU AS paymentStu,
+        TAX_RATE AS taxRate,
+        CURRENCY AS currency,
+        SELLER_FEE_MONEY AS sellerFeeMoney,
+        SELLER_DEPOSIT_MONEY AS sellerDepositMoney,
+        SELLER_DEL_MONEY AS sellerDelMoney,
+        BUYER_FEE_MONEY AS buyerFeeMoney,
+        BUYER_DEPOSIT_MONEY AS buyerDepositMoney,
+        BUYER_DEL_MONEY AS buyerDelMoney,
+        PLACE_CODE AS placeCode,
+        PLACE_NAME AS placeName,
+        PLACE_TIME AS placeTime,
+        TRADE_TIME AS tradeTime,
+        ORDER_STU AS orderStu,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS ver
+    </sql>
+
+
+    <!-- 查询字段 -->
+    <sql id="selectShortsellDetailColumns">
+        DETAIL_ID AS detailId,
+        ORDER_ID AS orderId,
+        MATERIAL_DATA_TYPE AS materialDataType,
+        MATERIAL_CODE AS materialCode,
+        MATERIAL_NAME AS materialName,
+        COMMODITY_ID AS commodityId,
+        COMMODITY_CODE AS commodityCode,
+        COMMODITY_NAME AS commodityName,
+        UOM AS uom,
+        TRADE_QTY AS tradeQty,
+        TRADE_PRICE AS tradePrice
+    </sql>
+
+
+    <select id="findPageList" parameterType="com.bms.order.bean.param.ORDR1102IRestParam" resultType="com.bms.order.bean.result.ORDR1102IRestResult">
+        SELECT
+        <include refid="selectShortsellColumns" />
+        FROM ordr_shortsell
+        WHERE DEL_FLG = 0
+        <if test="orderId != null and orderId.size() > 0">
+            AND ORDER_ID IN
+            <foreach collection="orderId" item="item" open="(" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test="orderCode != null and orderCode != ''">
+            AND ORDER_CODE LIKE #{orderCode}
+        </if>
+        <if test="backNo != null and backNo != ''">
+            AND BACK_NO = #{backNo}
+        </if>
+        <if test="orderType != null and orderType != ''">
+            AND ORDER_TYPE = #{orderType}
+        </if>
+        <if test="orderSourceType != null and orderSourceType != ''">
+            AND ORDER_SOURCE_TYPE = #{orderSourceType}
+        </if>
+        <if test="logisticsId != null and logisticsId != ''">
+            AND LOGISTICS_ID = #{logisticsId}
+        </if>
+        <if test="logisticsCode != null and logisticsCode != ''">
+            AND LOGISTICS_CODE = #{logisticsCode}
+        </if>
+        <if test="sellerId != null and sellerId != ''">
+            AND SELLER_ID = #{sellerId}
+        </if>
+        <if test="sellerCode != null and sellerCode != ''">
+            AND SELLER_CODE = #{sellerCode}
+        </if>
+        <if test="sellerName != null and sellerName != ''">
+            AND SELLER_NAME = #{sellerName}
+        </if>
+        <if test="sellerType != null and sellerType != ''">
+            AND SELLER_TYPE = #{sellerType}
+        </if>
+        <if test="buyerId != null and buyerId != ''">
+            AND BUYER_ID = #{buyerId}
+        </if>
+        <if test="buyerCode != null and buyerCode != ''">
+            AND BUYER_CODE = #{buyerCode}
+        </if>
+        <if test="buyerName != null and buyerName != ''">
+            AND BUYER_NAME = #{buyerName}
+        </if>
+        <if test="buyerType != null and buyerType != ''">
+            AND BUYER_TYPE = #{buyerType}
+        </if>
+        <if test="paymentStu != null and paymentStu != ''">
+            AND PAYMENT_STU = #{paymentStu}
+        </if>
+        <if test="orderStu != null and orderStu != ''">
+            AND ORDER_STU = #{orderStu}
+        </if>
+        <if test="placeTimeFrom != null">
+            AND DATE_FORMAT(PLACE_TIME,'%Y-%m-%d')  &gt;=  DATE_FORMAT(#{placeTimeFrom},'%Y-%m-%d')
+        </if>
+        <if test="placeTimeTo != null">
+            AND DATE_FORMAT(PLACE_TIME,'%Y-%m-%d')  &lt;=  DATE_FORMAT(#{placeTimeTo},'%Y-%m-%d')
+        </if>
+        <if test="tradeTimeFrom != null">
+            AND DATE_FORMAT(TRADE_TIME,'%Y-%m-%d')  &gt;=  DATE_FORMAT(#{tradeTimeFrom},'%Y-%m-%d')
+        </if>
+        <if test="tradeTimeTo != null">
+            AND DATE_FORMAT(TRADE_TIME,'%Y-%m-%d')  &lt;=  DATE_FORMAT(#{tradeTimeTo},'%Y-%m-%d')
+        </if>
+        ORDER BY ORDER_ID DESC
+    </select>
+
+
+
+    <select id="findOrdrShortsellDetail" parameterType="java.util.List" resultType="com.bms.order.bean.entity.OrdrShortsellDetail">
+        SELECT
+        <include refid="selectShortsellDetailColumns" />
+        FROM
+        ordr_shortsell_detail
+        WHERE DEL_FLG = 0
+        AND ORDER_ID IN
+        <foreach collection="list" item="item" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </select>
+</mapper>

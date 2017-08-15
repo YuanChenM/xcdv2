@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.DistributionCancelNotificationDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.DistributionCancelNotificationEntity">
+INSERT INTO
+ORDR_DISTRIBUTION_CANCEL_NOTIFICATION
+(
+DISTRIBUTION_CANCEL_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, CANCEL_TYPE
+, CANCEL_REASON
+, CANCEL_PERSON_ID
+, CANCEL_PERSON_NAME
+, CANCEL_PERSON_TYPE
+, CANCEL_DATETIME
+, WMS_CANCEL_DATETIME
+, SEND_FLG
+, SUCCESS_FLG
+, REMARK
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{distributionCancelNotificationId}
+, #{distributionNotificationId}
+, #{distributionNotificationCode}
+, #{cancelType}
+, #{cancelReason}
+, #{cancelPersonId}
+, #{cancelPersonName}
+, #{cancelPersonType}
+, #{cancelDatetime}
+, #{wmsCancelDatetime}
+, #{sendFlg}
+, #{successFlg}
+, #{remark}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_DISTRIBUTION_CANCEL_NOTIFICATION
+(
+DISTRIBUTION_CANCEL_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, CANCEL_TYPE
+, CANCEL_REASON
+, CANCEL_PERSON_ID
+, CANCEL_PERSON_NAME
+, CANCEL_PERSON_TYPE
+, CANCEL_DATETIME
+, WMS_CANCEL_DATETIME
+, SEND_FLG
+, SUCCESS_FLG
+, REMARK
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.distributionCancelNotificationId}
+, #{entity.distributionNotificationId}
+, #{entity.distributionNotificationCode}
+, #{entity.cancelType}
+, #{entity.cancelReason}
+, #{entity.cancelPersonId}
+, #{entity.cancelPersonName}
+, #{entity.cancelPersonType}
+, #{entity.cancelDatetime}
+, #{entity.wmsCancelDatetime}
+, #{entity.sendFlg}
+, #{entity.successFlg}
+, #{entity.remark}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.DistributionCancelNotificationEntity">
+UPDATE ORDR_DISTRIBUTION_CANCEL_NOTIFICATION
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+DISTRIBUTION_CANCEL_NOTIFICATION_ID = #{distributionCancelNotificationId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_DISTRIBUTION_CANCEL_NOTIFICATION
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+DISTRIBUTION_CANCEL_NOTIFICATION_ID = #{entity.distributionCancelNotificationId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.DistributionCancelNotificationEntity">
+UPDATE ORDR_DISTRIBUTION_CANCEL_NOTIFICATION
+SET
+DISTRIBUTION_CANCEL_NOTIFICATION_ID = #{distributionCancelNotificationId}
+, DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+, DISTRIBUTION_NOTIFICATION_CODE = #{distributionNotificationCode}
+, CANCEL_TYPE = #{cancelType}
+, CANCEL_REASON = #{cancelReason}
+, CANCEL_PERSON_ID = #{cancelPersonId}
+, CANCEL_PERSON_NAME = #{cancelPersonName}
+, CANCEL_PERSON_TYPE = #{cancelPersonType}
+, CANCEL_DATETIME = #{cancelDatetime}
+, WMS_CANCEL_DATETIME = #{wmsCancelDatetime}
+, SEND_FLG = #{sendFlg}
+, SUCCESS_FLG = #{successFlg}
+, REMARK = #{remark}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+DISTRIBUTION_CANCEL_NOTIFICATION_ID = #{distributionCancelNotificationId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_DISTRIBUTION_CANCEL_NOTIFICATION
+SET
+DISTRIBUTION_CANCEL_NOTIFICATION_ID = #{entity.distributionCancelNotificationId}
+, DISTRIBUTION_NOTIFICATION_ID = #{entity.distributionNotificationId}
+, DISTRIBUTION_NOTIFICATION_CODE = #{entity.distributionNotificationCode}
+, CANCEL_TYPE = #{entity.cancelType}
+, CANCEL_REASON = #{entity.cancelReason}
+, CANCEL_PERSON_ID = #{entity.cancelPersonId}
+, CANCEL_PERSON_NAME = #{entity.cancelPersonName}
+, CANCEL_PERSON_TYPE = #{entity.cancelPersonType}
+, CANCEL_DATETIME = #{entity.cancelDatetime}
+, WMS_CANCEL_DATETIME = #{entity.wmsCancelDatetime}
+, SEND_FLG = #{entity.sendFlg}
+, SUCCESS_FLG = #{entity.successFlg}
+, REMARK = #{entity.remark}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+DISTRIBUTION_CANCEL_NOTIFICATION_ID = #{entity.distributionCancelNotificationId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.DistributionCancelNotificationEntity" resultType="com.bms.order.bean.entity.DistributionCancelNotificationEntity">
+SELECT
+DISTRIBUTION_CANCEL_NOTIFICATION_ID AS distributionCancelNotificationId
+, DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, DISTRIBUTION_NOTIFICATION_CODE AS distributionNotificationCode
+, CANCEL_TYPE AS cancelType
+, CANCEL_REASON AS cancelReason
+, CANCEL_PERSON_ID AS cancelPersonId
+, CANCEL_PERSON_NAME AS cancelPersonName
+, CANCEL_PERSON_TYPE AS cancelPersonType
+, CANCEL_DATETIME AS cancelDatetime
+, WMS_CANCEL_DATETIME AS wmsCancelDatetime
+, SEND_FLG AS sendFlg
+, SUCCESS_FLG AS successFlg
+, REMARK AS remark
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_DISTRIBUTION_CANCEL_NOTIFICATION
+<where>
+<if test="distributionCancelNotificationId!=null">
+AND DISTRIBUTION_CANCEL_NOTIFICATION_ID = #{distributionCancelNotificationId}
+</if>
+<if test="distributionNotificationId!=null">
+AND DISTRIBUTION_NOTIFICATION_ID = #{distributionNotificationId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.DistributionCancelNotificationEntity">
+SELECT
+DISTRIBUTION_CANCEL_NOTIFICATION_ID AS distributionCancelNotificationId
+, DISTRIBUTION_NOTIFICATION_ID AS distributionNotificationId
+, DISTRIBUTION_NOTIFICATION_CODE AS distributionNotificationCode
+, CANCEL_TYPE AS cancelType
+, CANCEL_REASON AS cancelReason
+, CANCEL_PERSON_ID AS cancelPersonId
+, CANCEL_PERSON_NAME AS cancelPersonName
+, CANCEL_PERSON_TYPE AS cancelPersonType
+, CANCEL_DATETIME AS cancelDatetime
+, WMS_CANCEL_DATETIME AS wmsCancelDatetime
+, SEND_FLG AS sendFlg
+, SUCCESS_FLG AS successFlg
+, REMARK AS remark
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_DISTRIBUTION_CANCEL_NOTIFICATION
+<where>
+<if test="ids!=null">
+AND DISTRIBUTION_CANCEL_NOTIFICATION_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<insert id="saveHistory" parameterType="com.bms.order.bean.entity.DistributionCancelNotificationHistoryEntity">
+INSERT INTO
+ORDR_DISTRIBUTION_CANCEL_NOTIFICATION_HISTORY
+(
+HISTORY_ID
+, DISTRIBUTION_CANCEL_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, CANCEL_TYPE
+, CANCEL_REASON
+, CANCEL_PERSON_ID
+, CANCEL_PERSON_NAME
+, CANCEL_PERSON_TYPE
+, CANCEL_DATETIME
+, WMS_CANCEL_DATETIME
+, SEND_FLG
+, SUCCESS_FLG
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{historyId}
+, #{distributionCancelNotificationId}
+, #{distributionNotificationId}
+, #{distributionNotificationCode}
+, #{cancelType}
+, #{cancelReason}
+, #{cancelPersonId}
+, #{cancelPersonName}
+, #{cancelPersonType}
+, #{cancelDatetime}
+, #{wmsCancelDatetime}
+, #{sendFlg}
+, #{successFlg}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSaveHistory" parameterType="java.util.List">
+INSERT INTO
+ORDR_DISTRIBUTION_CANCEL_NOTIFICATION_HISTORY
+(
+HISTORY_ID
+, DISTRIBUTION_CANCEL_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_ID
+, DISTRIBUTION_NOTIFICATION_CODE
+, CANCEL_TYPE
+, CANCEL_REASON
+, CANCEL_PERSON_ID
+, CANCEL_PERSON_NAME
+, CANCEL_PERSON_TYPE
+, CANCEL_DATETIME
+, WMS_CANCEL_DATETIME
+, SEND_FLG
+, SUCCESS_FLG
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.historyId}
+, #{entity.distributionCancelNotificationId}
+, #{entity.distributionNotificationId}
+, #{entity.distributionNotificationCode}
+, #{entity.cancelType}
+, #{entity.cancelReason}
+, #{entity.cancelPersonId}
+, #{entity.cancelPersonName}
+, #{entity.cancelPersonType}
+, #{entity.cancelDatetime}
+, #{entity.wmsCancelDatetime}
+, #{entity.sendFlg}
+, #{entity.successFlg}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+</mapper>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.BsVirtualPerformDetailDao">
+<insert id="save" parameterType="com.bms.order.bean.entity.BsVirtualPerformDetailEntity">
+INSERT INTO
+ORDR_BS_VIRTUAL_PERFORM_DETAIL
+(
+PERFORM_DETAIL_ID
+, PERFORM_ID
+, BS_ORDER_ID
+, BS_STOCKPILE_SPLIT_DETAIL_ID
+, OLD_GOODS_ID
+, NEW_GOODS_ID
+, PERFORM_QTY
+, PERFORM_PRICE_WAY
+, PERFORM_PRICE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+(
+#{performDetailId}
+, #{performId}
+, #{bsOrderId}
+, #{bsStockpileSplitDetailId}
+, #{oldGoodsId}
+, #{newGoodsId}
+, #{performQty}
+, #{performPriceWay}
+, #{performPrice}
+, #{delFlg}
+, #{crtId}
+, #{crtTime}
+, #{updId}
+, #{updTime}
+, #{version}
+)
+</insert>
+
+
+<insert id="batchSave" parameterType="java.util.List">
+INSERT INTO
+ORDR_BS_VIRTUAL_PERFORM_DETAIL
+(
+PERFORM_DETAIL_ID
+, PERFORM_ID
+, BS_ORDER_ID
+, BS_STOCKPILE_SPLIT_DETAIL_ID
+, OLD_GOODS_ID
+, NEW_GOODS_ID
+, PERFORM_QTY
+, PERFORM_PRICE_WAY
+, PERFORM_PRICE
+, DEL_FLG
+, CRT_ID
+, CRT_TIME
+, UPD_ID
+, UPD_TIME
+, VERSION
+)
+VALUES
+<foreach collection="list" item="entity" separator=",">
+(
+#{entity.performDetailId}
+, #{entity.performId}
+, #{entity.bsOrderId}
+, #{entity.bsStockpileSplitDetailId}
+, #{entity.oldGoodsId}
+, #{entity.newGoodsId}
+, #{entity.performQty}
+, #{entity.performPriceWay}
+, #{entity.performPrice}
+, #{entity.delFlg}
+, #{entity.crtId}
+, #{entity.crtTime}
+, #{entity.updId}
+, #{entity.updTime}
+, #{entity.version}
+)
+</foreach>
+</insert>
+
+
+<update id="delete" parameterType="com.bms.order.bean.entity.BsVirtualPerformDetailEntity">
+UPDATE ORDR_BS_VIRTUAL_PERFORM_DETAIL
+SET
+DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+PERFORM_DETAIL_ID = #{performDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+
+<update id="batchDelete" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_VIRTUAL_PERFORM_DETAIL
+SET
+DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+PERFORM_DETAIL_ID = #{entity.performDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<update id="modify" parameterType="com.bms.order.bean.entity.BsVirtualPerformDetailEntity">
+UPDATE ORDR_BS_VIRTUAL_PERFORM_DETAIL
+SET
+PERFORM_DETAIL_ID = #{performDetailId}
+, PERFORM_ID = #{performId}
+, BS_ORDER_ID = #{bsOrderId}
+, BS_STOCKPILE_SPLIT_DETAIL_ID = #{bsStockpileSplitDetailId}
+, OLD_GOODS_ID = #{oldGoodsId}
+, NEW_GOODS_ID = #{newGoodsId}
+, PERFORM_QTY = #{performQty}
+, PERFORM_PRICE_WAY = #{performPriceWay}
+, PERFORM_PRICE = #{performPrice}
+, DEL_FLG = #{delFlg}
+, CRT_ID = #{crtId}
+, CRT_TIME = #{crtTime}
+, UPD_ID = #{updId}
+, UPD_TIME = #{updTime}
+, VERSION = #{version}
+WHERE
+PERFORM_DETAIL_ID = #{performDetailId}
+AND VERSION = #{version} - 1
+</update>
+
+<update id="batchModify" parameterType="java.util.List">
+<foreach collection="list" item="entity" separator=";">
+UPDATE ORDR_BS_VIRTUAL_PERFORM_DETAIL
+SET
+PERFORM_DETAIL_ID = #{entity.performDetailId}
+, PERFORM_ID = #{entity.performId}
+, BS_ORDER_ID = #{entity.bsOrderId}
+, BS_STOCKPILE_SPLIT_DETAIL_ID = #{entity.bsStockpileSplitDetailId}
+, OLD_GOODS_ID = #{entity.oldGoodsId}
+, NEW_GOODS_ID = #{entity.newGoodsId}
+, PERFORM_QTY = #{entity.performQty}
+, PERFORM_PRICE_WAY = #{entity.performPriceWay}
+, PERFORM_PRICE = #{entity.performPrice}
+, DEL_FLG = #{entity.delFlg}
+, CRT_ID = #{entity.crtId}
+, CRT_TIME = #{entity.crtTime}
+, UPD_ID = #{entity.updId}
+, UPD_TIME = #{entity.updTime}
+, VERSION = #{entity.version}
+WHERE
+PERFORM_DETAIL_ID = #{entity.performDetailId}
+AND VERSION = #{entity.version} - 1
+</foreach>
+</update>
+
+
+<select id="findOne" parameterType="com.bms.order.bean.entity.BsVirtualPerformDetailEntity" resultType="com.bms.order.bean.entity.BsVirtualPerformDetailEntity">
+SELECT
+PERFORM_DETAIL_ID AS performDetailId
+, PERFORM_ID AS performId
+, BS_ORDER_ID AS bsOrderId
+, BS_STOCKPILE_SPLIT_DETAIL_ID AS bsStockpileSplitDetailId
+, OLD_GOODS_ID AS oldGoodsId
+, NEW_GOODS_ID AS newGoodsId
+, PERFORM_QTY AS performQty
+, PERFORM_PRICE_WAY AS performPriceWay
+, PERFORM_PRICE AS performPrice
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_VIRTUAL_PERFORM_DETAIL
+<where>
+<if test="performDetailId!=null">
+AND PERFORM_DETAIL_ID = #{performDetailId}
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+
+<select id="findAll" parameterType="java.util.Map" resultType="com.bms.order.bean.entity.BsVirtualPerformDetailEntity">
+SELECT
+PERFORM_DETAIL_ID AS performDetailId
+, PERFORM_ID AS performId
+, BS_ORDER_ID AS bsOrderId
+, BS_STOCKPILE_SPLIT_DETAIL_ID AS bsStockpileSplitDetailId
+, OLD_GOODS_ID AS oldGoodsId
+, NEW_GOODS_ID AS newGoodsId
+, PERFORM_QTY AS performQty
+, PERFORM_PRICE_WAY AS performPriceWay
+, PERFORM_PRICE AS performPrice
+, DEL_FLG AS delFlg
+, CRT_ID AS crtId
+, CRT_TIME AS crtTime
+, UPD_ID AS updId
+, UPD_TIME AS updTime
+, VERSION AS version
+FROM 
+ORDR_BS_VIRTUAL_PERFORM_DETAIL
+<where>
+<if test="ids!=null">
+AND PERFORM_DETAIL_ID IN (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+</if>
+<if test="delFlg==false">
+AND DEL_FLG=#{delFlg}
+</if>
+</where>
+</select>
+
+    <select id="getBsVirtualPerforming" parameterType="com.bms.order.bean.result.ORDR1001IBsOrderDetailCountResult" resultType="com.bms.order.bean.result.ORDR1001IBsOrderDetailCountResult">
+        SELECT
+            obssd.BS_STOCKPILE_SPLIT_DETAIL_ID AS bsStockpileSplitDetailId,
+            IFNULL(obssd.GOODS_QUANTITY, 0) - IFNULL(obssd.RETURN_QUANTITY, 0) - IFNULL(a.num, 0) AS saleQuantity,
+            obod.BS_ORDER_ID AS bsOrderId,
+            obod.CRT_TIME AS bsOrderTime,
+            b.goodsQty AS orderGoodsQty
+        FROM
+            ORDR_BS_STOCKPILE_SPLIT_DETAIL obssd
+        INNER JOIN ORDR_BS_ORDER_DETAIL obod ON obod.BS_ORDER_DETAIL_ID = obssd.BS_ORDER_DETAIL_ID
+        INNER JOIN ORDR_BS_ORDER obo ON obo.BS_ORDER_ID = obod.BS_ORDER_ID
+        LEFT JOIN (
+            SELECT
+                obvp.BS_STOCKPILE_SPLIT_DETAIL_ID,
+                SUM(obvp.PERFORM_QTY) AS num
+            FROM
+                ORDR_BS_VIRTUAL_PERFORM_DETAIL obvp
+            WHERE
+                obvp.DEL_FLG = 0
+            GROUP BY
+                obvp.BS_STOCKPILE_SPLIT_DETAIL_ID
+        ) a ON a.BS_STOCKPILE_SPLIT_DETAIL_ID = obssd.BS_STOCKPILE_SPLIT_DETAIL_ID
+        LEFT JOIN (
+            SELECT
+                tmp.BS_ORDER_ID,
+                tmp.GOODS_ID,
+                sum(tmp.GOODS_QUANTITY) AS goodsQty
+            FROM
+                ORDR_BS_ORDER_DETAIL tmp
+            WHERE
+                tmp.DEL_FLG = 0
+            GROUP BY
+                tmp.BS_ORDER_ID,
+                tmp.GOODS_ID
+        ) b ON b.BS_ORDER_ID = obo.BS_ORDER_ID
+        AND b.GOODS_ID = obssd.GOODS_ID
+        WHERE
+            obod.GOODS_ID = #{goodsId}
+        AND obssd.GOODS_ID = #{goodsId}
+        AND obo.DEL_FLG = 0
+        AND obod.DEL_FLG = 0
+        AND obssd.DEL_FLG = 0
+        AND obo.BS_ORDER_STU IN ('003')
+        AND obo.BS_ID = #{ownerId}
+        AND IFNULL(obssd.GOODS_QUANTITY, 0) - IFNULL(obssd.RETURN_QUANTITY, 0) - IFNULL(a.num, 0) > 0
+        ORDER BY
+            obssd.CRT_TIME
+    </select>
+
+</mapper>

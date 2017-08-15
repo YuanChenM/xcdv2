@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0302IDao">
+    <!-- 新增单品-->
+    <insert id="saveItems" parameterType="java.util.List">
+        INSERT INTO SLPD_ITEM (
+        ITEM_ID,
+        CLASSES_ID,
+        MACHINING_ID,
+        BREED_ID,
+        ITEM_CODE,
+        ITEM_SKU,
+        ITEM_NAME,
+        SPECIFICATION,
+        PROCESSING_METHOD,
+        TASTE,
+        AUDIT_STU,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+        (
+            #{item.itemId},
+            #{item.classesId},
+            #{item.machiningId},
+            #{item.breedId},
+            #{item.itemCode},
+            #{item.itemSku},
+            #{item.itemName},
+            #{item.specification},
+            #{item.processingMethod},
+            #{item.taste},
+            #{item.auditStu},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.updId},
+            #{item.updTime},
+            1
+        )
+        </foreach>
+    </insert>
+
+    <!--查询品种sku-->
+    <select id="findBreedSku" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdBreed">
+        SELECT
+        breed.BREED_ID AS breedId,
+        CONCAT(classes.CLASSES_CODE,machining.MACHINING_CODE,breed.BREED_CODE) as breedSku
+        FROM
+        SLPD_BREED breed
+        LEFT JOIN SLPD_CLASSES classes ON classes.del_flg = 0
+        AND classes.classes_id = breed.classes_id
+        LEFT JOIN slpd_machining machining ON machining.DEL_FLG = 0
+        AND machining.MACHINING_ID = breed.MACHINING_ID
+        WHERE
+        BREED_ID IN
+        <foreach collection="list" item="breedId" open="(" separator="," close=")">
+            #{breedId}
+        </foreach>
+    </select>
+
+    <!-- 查询单品名称是否唯一 -->
+    <select id="findItemName" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdItem">
+        SELECT
+        ITEM_ID AS itemId,
+        BREED_ID AS breedId,
+        ITEM_NAME AS itemName
+        FROM SLPD_ITEM
+        WHERE
+        DEL_FLG = 0
+        AND
+        <foreach collection="list" item="item" open="(" separator="or" close=")">
+            (
+            ITEM_NAME = #{item.itemName}
+            AND
+            BREED_Id = #{item.breedId}
+            )
+        </foreach>
+    </select>
+
+    <!--查询单品特征编码-->
+    <select id="findItmeCode" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdItem">
+        SELECT
+        BREED_ID AS breedId,
+        max(cast(ITEM_SKU AS SIGNED)) AS itemSku
+        FROM SLPD_ITEM
+        WHERE BREED_ID IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.breedId}
+        </foreach>
+        GROUP BY BREED_ID
+    </select>
+</mapper>

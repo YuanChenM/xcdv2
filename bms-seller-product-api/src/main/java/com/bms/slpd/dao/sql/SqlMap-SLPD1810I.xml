@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD1810IDao">
+
+    <!-- 根据ID 查询制造商 -->
+    <select id="findManufacturerProductById" parameterType="java.util.List" resultType="com.bms.slpd.bean.entity.SlpdManufacturerProduct">
+        SELECT
+        MANUFACTURER_PRODUCT_ID AS manufacturerProductId,
+        MANUFACTURER_PRODUCT_CODE AS manufacturerProductCode,
+        MANUFACTURER_PRODUCT_SKU AS manufacturerProductSku,
+        MANUFACTURER_PRODUCT_BAR_CODE AS manufacturerProductBarCode,
+        PRODUCER_PRODUCT_ID AS producerProductId,
+        PRODUCT_ID AS productId,
+        ENTITY_SELLER_ID AS entitySellerId
+        FROM slpd_manufacturer_product
+        WHERE
+        DEL_FLG = 0
+        AND
+        MANUFACTURER_PRODUCT_ID IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <!-- End -->
+
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO
+        SLPD_AGENT_SUPPLY_PRODUCT(
+        AS_PRODUCT_ID,
+        AS_PRODUCT_CODE,
+        AS_PRODUCT_SKU,
+        MANUFACTURER_PRODUCT_ID,
+        PRODUCT_ID,
+        ENTITY_SELLER_ID,
+        AUDIT_STU,
+        AUDIT_REMARK,
+        AUDIT_HISTORY,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.asProductId},
+            #{item.asProductCode},
+            #{item.asProductSku},
+            #{item.manufacturerProductId},
+            #{item.productId},
+            #{item.entitySellerId},
+            #{item.auditStu},
+            #{item.auditRemark},
+            #{item.auditHistory},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.updId},
+            #{item.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+
+</mapper>

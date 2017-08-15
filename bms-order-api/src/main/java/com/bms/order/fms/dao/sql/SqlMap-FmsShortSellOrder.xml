@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.fms.dao.FmsShortSellOrderDao">
+    <select id="findShortSellOrder" parameterType="com.bms.order.fms.bean.FmsOrderParam"
+            resultType="com.bms.order.fms.bean.FmsShortSellOrderBean">
+        SELECT
+            shortSell.BACK_NO AS orgSystemId,
+            shortSell.ORDER_CODE AS omsOrderNumber,
+            shortSell.ORDER_ID AS omsOrderId,
+            shortSell.ORDER_TYPE AS orderType,
+            shortSell.PLACE_TIME AS orderPlaceDate,
+            shortSell.BUYER_NAME AS soldTo,
+            shortSell.BUYER_ID AS customerOrgNumber,
+            shortSell.BUYER_CODE AS customerNumber,
+            shortSell.SELLER_NAME AS sourceName,
+            shortSell.SELLER_ID AS sourceId,
+            shortSell.SELLER_CODE AS sourceAccount,
+            shortSell.ORDER_SOURCE_TYPE AS orderOrgSource,
+            shortSell.TOTAL_AMOUNT AS capitalAmount
+        FROM
+          ORDR_SHORTSELL shortSell
+        WHERE shortSell.DEL_FLG = FALSE
+        <if test="pushOrderId != null and pushOrderId != ''">
+            AND shortSell.ORDER_ID = #{pushOrderId}
+        </if>
+        <if test="pushOrderCode != null and pushOrderCode != ''">
+            AND shortSell.ORDER_CODE = #{pushOrderCode}
+        </if>
+        <if test="backNo != null and backNo != ''">
+            AND shortSell.BACK_NO = #{backNo}
+        </if>
+        ORDER BY shortSell.ORDER_ID
+    </select>
+    <select id="findShortSellOrderDetail" parameterType="com.bms.order.fms.bean.FmsShortSellOrderBean"
+            resultType="com.bms.order.fms.bean.FmsShortSellOrderDetail">
+        SELECT
+            shortSellDetail.DETAIL_ID AS lineNum,
+            shortSellDetail.COMMODITY_ID AS productId,
+            shortSellDetail.TRADE_QTY AS orderedQuantity,
+            shortSellDetail.UOM AS orderQuantityUom,
+            shortSellDetail.TRADE_PRICE AS unitSellingPrice
+        FROM
+            ORDR_SHORTSELL_DETAIL shortSellDetail
+        WHERE
+            shortSellDetail.ORDER_ID = #{omsOrderId}
+        ORDER BY shortSellDetail.COMMODITY_ID
+    </select>
+</mapper>

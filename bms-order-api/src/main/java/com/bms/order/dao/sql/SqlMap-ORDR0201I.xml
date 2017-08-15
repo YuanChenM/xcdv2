@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.dao.ORDR0201IDao">
+	<select id = "getOtherOrderCount" resultType = "Integer" parameterType = "com.bms.order.bean.entity.BuyerOrderEntity">
+		SELECT table1.count + table2.count
+		FROM
+		(
+		-- 订单中有超过限制的数量
+		SELECT count(1) as count
+		FROM
+		(
+		SELECT
+		obbod.GOODS_ID,
+		sum(ifnull(obbod.GOODS_QUANTITY,0) - ifnull(CANCEL_QUANTITY,0)) AS qty
+		FROM ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+		INNER JOIN ORDR_BUYER_ORDER obo
+		ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+		WHERE obo.BUYER_ORDER_ID = #{buyerOrderId}
+		AND obo.DEL_FLG = 0
+		AND obbod.DEL_FLG = 0
+		GROUP BY obbod.GOODS_ID
+		) t1
+		INNER JOIN ORDR_CONSTANT oc
+		ON oc.CONSTANT_TYPE = 'PackageQty'
+		AND oc.DEL_FLG = 0
+		AND oc.CONSTANT_VALUE is not null
+		WHERE  t1.qty > oc.CONSTANT_VALUE
+		) table1,
+		(-- 第一次购买
+		SELECT count(1) as count
+		FROM
+		(
+		SELECT obbod.GOODS_ID
+		FROM ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+		INNER JOIN ORDR_BUYER_ORDER obo
+		ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+		WHERE obo.BUYER_ORDER_ID = #{buyerOrderId}
+		AND obo.DEL_FLG = 0
+		AND obbod.DEL_FLG = 0
+		GROUP BY obbod.GOODS_ID
+		) t1
+		WHERE t1.GOODS_ID NOT IN (
+		SELECT obbod.GOODS_ID
+		FROM ORDR_BUYER_BATCH_ORDER_DETAIL obbod
+		INNER JOIN ORDR_BUYER_BATCH_ORDER obbo
+		ON obbo.BUYER_BATCH_ORDER_ID = obbod.BUYER_BATCH_ORDER_ID
+		AND obbo.DEL_FLG = 0
+		INNER JOIN ORDR_BUYER_ORDER obo
+		ON obo.BUYER_ORDER_ID = obbod.BUYER_ORDER_ID
+		AND obo.DEL_FLG = 0
+		WHERE obo.BUYER_ORDER_ID <![CDATA[ <> ]]> #{buyerOrderId}
+		AND obo.BUYER_ID = #{buyerId}
+		AND obbo.BUYER_BATCH_ORDER_STU NOT IN ('001','002','099')
+		AND obbod.DEL_FLG = 0
+		GROUP BY obbod.GOODS_ID
+		)
+		)table2
+	</select>
+</mapper>

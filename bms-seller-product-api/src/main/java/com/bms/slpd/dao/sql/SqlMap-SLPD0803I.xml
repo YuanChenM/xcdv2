@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0803IDao">
+
+    <!-- 修改(卖家)单品品牌(规格)生产商 -->
+    <update id="batchModify" parameterType="com.bms.slpd.bean.UpdateEntity">
+        UPDATE SLPD_SELLER_COMMODITY
+        SET
+        <if test="target.sellerIdFlg == true">
+            SELLER_ID = #{entity.sellerId},
+        </if>
+        <if test="target.producerProductIdFlg == true">
+            PRODUCER_PRODUCT_ID = #{entity.producerProductId},
+        </if>
+        <!--entity.articleNo!=null,防止禁止准入后,在准入时,修改原有货号为null -->
+        <if test="target.articleNoFlg == true and entity.articleNo!=null">
+            ARTICLE_NO = #{entity.articleNo},
+        </if>
+        <if test="target.commodityIdFlg == true">
+            COMMODITY_ID = #{entity.commodityId},
+        </if>
+        <if test="target.salesTitleFlg == true">
+            SALES_TITLE = #{entity.salesTitle},
+        </if>
+        <if test="target.delFlgFlg == true">
+            DEL_FLG = #{entity.delFlg},
+        </if>
+        <if test="target.auditStuFlg == true">
+            AUDIT_STU = #{entity.auditStu},
+        </if>
+        <if test="target.auditRemarkFlg == true">
+            AUDIT_REMARK = #{entity.auditRemark},
+        </if>
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        <where>
+            <!--新增通过producerProductId批量修改-->
+        <if test="entity.sellerCommodityId != null">
+         AND SELLER_COMMODITY_ID = #{entity.sellerCommodityId}
+        </if>
+            <if test="entity.producerProductId != null">
+                AND
+                PRODUCER_PRODUCT_ID = #{entity.producerProductId}
+            </if>
+        </where>
+    </update>
+
+
+
+    <!-- 修改产品类型 -->
+    <update id="updateProductTypes" parameterType="com.bms.slpd.bean.UpdateEntity">
+        UPDATE SLPD_PRODUCT
+        SET
+        AUDIT_STU = #{entity.auditStu},
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        WHERE
+        PRODUCT_ID = #{entity.productId}
+    </update>
+
+    <update id="updateProducerProductTypes" parameterType="com.bms.slpd.bean.UpdateEntity">
+        UPDATE SLPD_PRODUCER_PRODUCT
+        SET
+        AUDIT_STU = #{entity.auditStu},
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        WHERE
+        DEL_FLG = 0
+        <!--新增通过productId批量修改-->
+        <if test="entity.producerProductId != null">
+        AND
+        PRODUCER_PRODUCT_ID = #{entity.producerProductId}
+        </if>
+        <if test="entity.productId != null">
+            AND  PRODUCT_ID = #{entity.productId}
+        </if>
+    </update>
+
+
+    <select id="getMaxCode" resultType="String"
+            parameterType="com.bms.slpd.bean.entity.SlpdSellerCommodity">
+        select
+        MAX(ARTICLE_NO)
+        from SLPD_SELLER_COMMODITY A
+        where
+       A.SELLER_ID IN (select SELLER_ID from SLPD_SELLER_COMMODITY B where B.SELLER_COMMODITY_ID=#{sellerCommodityId})
+    </select>
+
+    <select id="findSaleTypeInfo" resultType="String"
+            parameterType="com.bms.slpd.bean.entity.SlpdSellerCommodity">
+    SELECT  ARTICLE_NO
+        FROM SLPD_SELLER_COMMODITY A
+        WHERE A.SELLER_ID = #{sellerId}
+        AND A.PRODUCT_ID = #{productId}
+        AND A.PRODUCER_ID = #{producerId}
+        AND A.PRODUCER_PRODUCT_ID = #{producerProductId}
+        AND A.ARTICLE_NO is not null
+        AND A.SALE_TYPE != #{saleType}
+    </select>
+
+    <select id="findSellerCommodityInfo" resultType="com.bms.slpd.bean.entity.SlpdSellerCommodity"
+            parameterType="com.bms.slpd.bean.entity.SlpdSellerCommodity">
+        SELECT
+        SELLER_COMMODITY_ID AS sellerCommodityId,
+        SELLER_COMMODITY_CODE AS sellerCommodityCode,
+        SELLER_COMMODITY_SKU AS sellerCommoditySku,
+        SELLER_ID AS sellerId,
+        SELLER_NAME AS sellerName,
+        PRODUCER_PRODUCT_ID AS producerProductId,
+        PRODUCT_ID AS productId,
+        PRODUCER_ID AS producerId,
+        PRODUCER_NAME AS producerName,
+        SALE_TYPE AS saleType,
+        ARTICLE_NO AS articleNo,
+        COMMODITY_ID AS commodityId,
+        SALES_TITLE AS salesTitle,
+        AUDIT_STU AS auditStu,
+        AUDIT_REMARK AS auditRemark,
+        DEL_FLG AS delFlg,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS version
+        FROM SLPD_SELLER_COMMODITY A
+        where 1=1
+        <if test="sellerCommodityId!=null">
+        AND A.SELLER_COMMODITY_ID = #{sellerCommodityId}
+        </if>
+    </select>
+
+<!--批量禁止状态不为0的卖家产品生产商-->
+    <update id="updateSellerCommodityAudit" parameterType="com.bms.slpd.bean.UpdateEntity">
+        UPDATE SLPD_SELLER_COMMODITY
+        SET
+        <if test="target.auditStuFlg == true">
+            AUDIT_STU = #{entity.auditStu},
+        </if>
+        <if test="target.auditRemarkFlg == true">
+            AUDIT_REMARK = #{entity.auditRemark},
+        </if>
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        <where>
+            <!--新增通过producerProductId批量修改-->
+            <if test="entity.producerProductId != null">
+                AND
+                PRODUCER_PRODUCT_ID = #{entity.producerProductId}
+            </if>
+            <if test="target.auditStuFlg == true">
+            AND AUDIT_STU !='0'
+             </if>
+        </where>
+    </update>
+
+</mapper>

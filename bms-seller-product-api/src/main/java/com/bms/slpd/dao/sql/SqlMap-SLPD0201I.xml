@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0201IDao">
+
+    <!-- 品种表字段 -->
+    <sql id="breedColumns">
+		A.BREED_ID AS breedId,
+		A.CLASSES_ID AS classesId,
+		A.MACHINING_ID AS machiningId,
+		A.BREED_CODE AS breedCode,
+		A.BREED_SKU AS breedSku,
+		A.BREED_SALES_NAME AS breedSalesName,
+		A.BREED_SCIENTIFIC_NAME AS breedScientificName,
+		A.BREED_LOCAL_NAME AS breedLocalName,
+		A.AUDIT_STU AS auditStu,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+	</sql>
+
+    <!-- 二级分类表字段 -->
+    <sql id="machiningColumns">
+        B.MACHINING_CODE AS machiningCode,
+		B.MACHINING_NAME AS machiningName
+    </sql>
+
+    <!-- 一级分类表字段 -->
+    <sql id="classesColumns">
+        C.CLASSES_CODE AS classesCode,
+        C.CLASSES_NAME AS classesName
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="whereConditions">
+        1 = 1
+        <if test="breedIds != null and breedIds.size() > 0">
+            AND A.BREED_ID IN
+            <foreach collection="breedIds" item="breedId" open="(" separator="," close=")">
+                #{breedId}
+            </foreach>
+        </if>
+        <if test="breedCodes != null and breedCodes.size() > 0">
+            AND A.BREED_CODE IN
+            <foreach collection="breedCodes" item="breedCode" open="(" separator="," close=")">
+                #{breedCode}
+            </foreach>
+        </if>
+        <if test="breedSkus != null and breedSkus.size() > 0">
+            AND A.BREED_SKU IN
+            <foreach collection="breedSkus" item="breedSku" open="(" separator="," close=")">
+                #{breedSku}
+            </foreach>
+        </if>
+        <if test="breedSalesName != null and breedSalesName !=''">
+            AND A.BREED_SALES_NAME LIKE #{breedSalesName}
+        </if>
+        <if test="auditStu != null">
+            AND A.AUDIT_STU = #{auditStu}
+        </if>
+        <if test="delFlg != null">
+            AND A.DEL_FLG = #{delFlg}
+        </if>
+        <if test="machiningIds != null and machiningIds.size() > 0">
+            AND B.MACHINING_ID IN
+            <foreach collection="machiningIds" item="machiningId" open="(" separator="," close=")">
+                #{machiningId}
+            </foreach>
+        </if>
+        <if test="machiningCodes != null and machiningCodes.size() > 0">
+            AND B.MACHINING_CODE IN
+            <foreach collection="machiningCodes" item="machiningCode" open="(" separator="," close=")">
+                #{machiningCode}
+            </foreach>
+        </if>
+        <if test="machiningName != null and machiningName !=''">
+            AND B.MACHINING_NAME LIKE #{machiningName}
+        </if>
+        <if test="classesIds != null and classesIds.size() > 0">
+            AND C.CLASSES_ID IN
+            <foreach collection="classesIds" item="classesId" open="(" separator="," close=")">
+                #{classesId}
+            </foreach>
+        </if>
+        <if test="classesCodes != null and classesCodes.size() > 0">
+            AND C.CLASSES_CODE IN
+            <foreach collection="classesCodes" item="classesCode" open="(" separator="," close=")">
+                #{classesCode}
+            </foreach>
+        </if>
+        <if test="classesName != null and classesName !=''">
+            AND C.CLASSES_NAME LIKE #{classesName}
+        </if>
+    </sql>
+
+    <!-- 批量查询品种 -->
+    <select id="findPageList" parameterType="com.bms.slpd.bean.param.SLPD0201IParam" resultType="com.bms.slpd.bean.result.field.SLPD0201IBreedResult">
+        SELECT
+            <include refid="breedColumns"/>,
+            <include refid="machiningColumns"/>,
+            <include refid="classesColumns"/>
+        FROM
+            SLPD_BREED AS A
+        LEFT JOIN SLPD_MACHINING AS B ON B.MACHINING_ID = A.MACHINING_ID
+        LEFT JOIN SLPD_CLASSES AS C ON C.CLASSES_ID = A.CLASSES_ID
+        WHERE
+            <include refid="whereConditions"/>
+        ORDER BY CONVERT(A.BREED_CODE,SIGNED)
+    </select>
+
+    <!-- 批量查询原种种源标准指标 -->
+    <select id="findOrgStds" parameterType="list" resultType="com.bms.slpd.bean.result.field.SLPD0201IOrgStdResult">
+        SELECT
+            ORG_STD_ID AS orgStdId,
+            ORG_STD_TYPE AS orgStdType,
+            BREED_ID AS breedId,
+            ORG_GOOD_VAL AS orgGoodVal,
+            ORG_NORMAL_VAL AS orgNormalVal,
+            ORG_OK_VAL AS orgOkVal,
+            REMARK AS remark,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+            SLPD_ORG_STD
+        WHERE
+            DEL_FLG = 0
+        AND BREED_ID IN
+        <foreach collection="list" item="breedId" open="(" separator="," close=")">
+            #{breedId}
+        </foreach>
+    </select>
+
+    <!-- 批量查询饲养标准指标 -->
+    <select id="findFedStds" parameterType="list" resultType="com.bms.slpd.bean.result.field.SLPD0201IFedStdResult">
+        SELECT
+            FED_STD_ID AS fedStdId,
+            FED_STD_TYPE AS fedStdType,
+            BREED_ID AS breedId,
+            FED_GOOD_VAL AS fedGoodVal,
+            FED_NORMAL_VAL AS fedNormalVal,
+            FED_OK_VAL AS fedOkVal,
+            REMARK AS remark,
+            DEL_FLG AS delFlg,
+            CRT_ID AS crtId,
+            CRT_TIME AS crtTime,
+            UPD_ID AS updId,
+            UPD_TIME AS updTime,
+            VERSION AS version
+        FROM
+            SLPD_FED_STD
+        WHERE
+            DEL_FLG = 0
+        AND BREED_ID IN
+        <foreach collection="list" item="breedId" open="(" separator="," close=")">
+            #{breedId}
+        </foreach>
+    </select>
+
+    <!-- 批量查询加工技术标准指标，Start -->
+    <resultMap id="mctStdList" type="com.bms.slpd.bean.result.field.SLPD0201IMctStdResult">
+        <id property="mctStdId" column="mctStdId"/>
+        <result property="mctStdType" column="mctStdType"/>
+        <result property="breedId" column="breedId"/>
+        <result property="mctOkVal" column="mctOkVal"/>
+        <result property="mctNgVal" column="mctNgVal"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlg" column="delFlg"/>
+        <result property="crtId" column="crtId"/>
+        <result property="crtTime" column="crtTime"/>
+        <result property="updId" column="updId"/>
+        <result property="updTime" column="updTime"/>
+        <result property="version" column="version"/>
+        <collection property="discussStdList" javaType="list" ofType="com.bms.slpd.bean.entity.SlpdDiscussStd">
+            <id property="discussId" column="discussId"/>
+            <result property="stdTypeId" column="stdTypeId"/>
+            <result property="stdType" column="stdType"/>
+            <result property="discussType" column="discussType"/>
+            <result property="discussVal" column="discussVal"/>
+            <result property="raiseDate" column="raiseDate"/>
+            <result property="fixDate" column="fixDate"/>
+            <result property="producerId" column="producerId"/>
+            <result property="remark" column="remark"/>
+        </collection>
+    </resultMap>
+    <select id="findMctStds" parameterType="list" resultMap="mctStdList">
+        SELECT
+            A.MCT_STD_ID AS mctStdId,
+            A.MCT_STD_TYPE AS mctStdType,
+            A.BREED_ID AS breedId,
+            A.MCT_OK_VAL AS mctOkVal,
+            A.MCT_NG_VAL AS mctNgVal,
+            A.REMARK AS remark,
+            A.DEL_FLG AS delFlg,
+            A.CRT_ID AS crtId,
+            A.CRT_TIME AS crtTime,
+            A.UPD_ID AS updId,
+            A.UPD_TIME AS updTime,
+            A.VERSION AS version,
+            B.DISCUSS_ID AS discussId,
+            B.STD_TYPE_ID AS stdTypeId,
+            B.STD_TYPE AS stdType,
+            B.DISCUSS_TYPE AS discussType,
+            B.DISCUSS_VAL AS discussVal,
+            B.RAISE_DATE AS raiseDate,
+            B.FIX_DATE AS fixDate,
+            B.PRODUCER_ID AS producerId,
+            B.REMARK AS remark
+        FROM
+            SLPD_MCT_STD AS mctStd
+        LEFT JOIN SLPD_DISCUSS_STD AS B ON B.STD_TYPE_ID = A.MCT_STD_ID
+        AND B.STD_TYPE = 0
+        AND B.DEL_FLG = 0
+        WHERE
+            A.DEL_FLG = 0
+        AND BREED_ID IN
+        <foreach collection="list" item="breedId" open="(" separator="," close=")">
+            #{breedId}
+        </foreach>
+    </select>
+    <!-- End -->
+
+    <!-- 查询加工质量档案卡 -->
+    <resultMap id="tncStdResult" type="com.bms.slpd.bean.result.field.SLPD0201ITncStdResult">
+        <id property="tncStdId" column="tncStdId"/>
+        <result property="tncStdType" column="tncStdType"/>
+        <result property="tncStdTypeStr" column="tncStdTypeStr"/>
+        <result property="breedId" column="breedId"/>
+        <result property="tncStdValA" column="tncStdValA"/>
+        <result property="tncStdValB" column="tncStdValB"/>
+        <result property="tncStdValC" column="tncStdValC"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlg" column="delFlg"/>
+        <result property="crtId" column="crtId"/>
+        <result property="crtTime" column="crtTime"/>
+        <result property="updId" column="updId"/>
+        <result property="updTime" column="updTime"/>
+        <result property="version" column="version"/>
+        <collection property="discussStdList" javaType="java.util.List" ofType="com.bms.slpd.bean.entity.SlpdDiscussStd">
+            <id property="discussId" column="discussId"/>
+            <result property="stdTypeId" column="stdTypeId"/>
+            <result property="stdType" column="stdType"/>
+            <result property="discussType" column="discussType"/>
+            <result property="discussVal" column="discussVal"/>
+            <result property="raiseDate" column="raiseDate"/>
+            <result property="fixDate" column="fixDate"/>
+            <result property="producerId" column="producerId"/>
+            <result property="remark" column="remark"/>
+        </collection>
+    </resultMap>
+    <select id="findTncStds" parameterType="java.util.List" resultMap="tncStdResult">
+        SELECT
+        tncStd.TNC_STD_ID AS tncStdId,
+        tncStd.TNC_STD_TYPE AS tncStdType,
+        tncStd.BREED_ID AS breedId,
+        tncStd.TNC_STD_VAL_A AS tncStdValA,
+        tncStd.TNC_STD_VAL_B AS tncStdValB,
+        tncStd.TNC_STD_VAL_C AS tncStdValC,
+        tncStd.REMARK AS remark,
+        tncStd.DEL_FLG AS delFlg,
+        tncStd.CRT_ID AS crtId,
+        tncStd.CRT_TIME AS crtTime,
+        tncStd.UPD_ID AS updId,
+        tncStd.UPD_TIME AS updTime,
+        tncStd.VERSION AS version,
+        B.DISCUSS_ID AS discussId,
+        B.STD_TYPE_ID AS stdTypeId,
+        B.STD_TYPE AS stdType,
+        B.DISCUSS_TYPE AS discussType,
+        B.DISCUSS_VAL AS discussVal,
+        B.RAISE_DATE AS raiseDate,
+        B.FIX_DATE AS fixDate,
+        B.PRODUCER_ID AS producerId,
+        B.REMARK AS remark
+        FROM
+        SLPD_TNC_STD AS tncStd
+        LEFT JOIN SLPD_DISCUSS_STD discuss ON discuss.STD_TYPE_ID = tncStd.TNC_STD_TYPE
+        WHERE
+        tncStd.DEL_FLG = 0
+        <if test="list != null and list.size() > 0">
+            AND tncStd.BREED_ID IN
+            <foreach collection="list" item="breed" open="(" separator="," close=")">
+                #{breed}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 查询通用质量档案卡 -->
+    <select id="findGnqStds" parameterType="java.util.List" resultType="com.bms.slpd.bean.result.field.SLPD0201IGnqStdResult">
+        SELECT
+        gnqStd.GNQ_STD_ID AS gnqStdId,
+        gnqStd.GNQ_STD_TYPE AS gnqStdType,
+        gnqStd.BREED_ID AS breedId,
+        gnqStd.GNQ_OK_VAL AS gnqOkVal,
+        gnqStd.GNQ_NG_VAL AS gnqNgVal,
+        gnqStd.REMARK AS remark,
+        gnqStd.DEL_FLG AS delFlg,
+        gnqStd.CRT_ID AS crtId,
+        gnqStd.CRT_TIME AS crtTime,
+        gnqStd.UPD_ID AS updId,
+        gnqStd.UPD_TIME AS updTime,
+        gnqStd.VERSION AS version
+        FROM
+        SLPD_GNQ_STD AS gnqStd
+        WHERE
+        gnqStd.DEL_FLG = 0
+        <if test="list != null and list.size() > 0">
+            AND gnqStd.BREED_ID IN
+            <foreach collection="list" item="breed" open="(" separator="," close=")">
+                #{breed}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 查询安全标准档案卡 -->
+    <select id="findSftStds" parameterType="java.util.List" resultType="com.bms.slpd.bean.result.field.SLPD0201ISftStdResult">
+        SELECT
+        sftStd.SFT_STD_ID AS sftStdId,
+        sftStd.SFT_STD_TYPE AS sftStdType,
+        sftStd.BREED_ID AS breedId,
+        sftStd.SFT_OK_VAL AS sftOkVal,
+        sftStd.SFT_NG_VAL AS sftNgVal,
+        sftStd.REMARK AS remark,
+        sftStd.DEL_FLG AS delFlg,
+        sftStd.CRT_ID AS crtId,
+        sftStd.CRT_TIME AS crtTime,
+        sftStd.UPD_ID AS updId,
+        sftStd.UPD_TIME AS updTime,
+        sftStd.VERSION AS version
+        FROM
+        SLPD_SFT_STD AS sftStd
+        WHERE
+        sftStd.DEL_FLG = 0
+        <if test="list != null and list.size() > 0">
+            AND sftStd.BREED_ID IN
+            <foreach collection="list" item="breed" open="(" separator="," close=")">
+                #{breed}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 查询存储运输档案卡 -->
+    <select id="findTspStds" parameterType="java.util.List" resultType="com.bms.slpd.bean.result.field.SLPD0201ITspStdResult">
+        SELECT
+        tspStd.TSP_STD_ID AS tspStdId,
+        tspStd.TSP_STD_TYPE AS tspStdType,
+        tspStd.BREED_ID AS breedId,
+        tspStd.TSP_OK_VAL AS tspOkVal,
+        tspStd.TSP_NG_VAL AS tspNgVal,
+        tspStd.REMARK AS remark,
+        tspStd.DEL_FLG AS delFlg,
+        tspStd.CRT_ID AS crtId,
+        tspStd.CRT_TIME AS crtTime,
+        tspStd.UPD_ID AS updId,
+        tspStd.UPD_TIME AS updTime,
+        tspStd.VERSION AS version
+        FROM
+        SLPD_TSP_STD AS tspStd
+        WHERE
+        tspStd.DEL_FLG = 0
+        <if test="list != null and list.size() > 0">
+            AND tspStd.BREED_ID IN
+            <foreach collection="list" item="breedId" open="(" separator="," close=")">
+                #{breedId}
+            </foreach>
+        </if>
+    </select>
+
+    <!--查询包装标准档案卡信息-->
+    <select id="findPkgStds" parameterType="java.util.List" resultType="com.bms.slpd.bean.result.field.SLPD0201IPkgStdResult">
+        SELECT
+        PKG_STD_ID AS pkgStdId,
+        ITEM_ID AS itemId,
+        PKG_IN_SUTTLE AS pkgInSuttle,
+        PKG_IN_ERROR AS pkgInError,
+        PKG_IN_NUMBER AS pkgInNumber,
+        PKG_IN_SIZE AS pkgInSize,
+        PKG_IN_TEXTURE AS pkgInTexture,
+        PKG_OUT_ERROR AS pkgOutError,
+        PKG_OUT_NUMBER AS pkgOutNumber,
+        PKG_OUT_SIZE AS pkgOutSize,
+        PKG_OUT_TEXTURE AS pkgOutTexture,
+        REMARK AS remark,
+        DEL_FLG AS delFlg,
+        CRT_ID AS crtId,
+        CRT_TIME AS crtTime,
+        UPD_ID AS updId,
+        UPD_TIME AS updTime,
+        VERSION AS version
+        FROM
+        SLPD_PKG_STD AS pkgStd
+        WHERE
+        DEL_FLG = 0
+        <if test="list != null and list.size() > 0">
+            AND ITEM_ID IN
+            (
+            <foreach collection="list" item="itemId" separator=",">
+                #{itemId}
+            </foreach>
+            )
+        </if>
+    </select>
+
+</mapper>

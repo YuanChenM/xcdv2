@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0405IDao">
+	<resultMap id = "itemResult" type = "com.bms.slpd.bean.result.field.SLPD0403IBrandResult">
+		<id property = "brandId" column = "brandId"/>
+		<collection property = "slpdBrandOwnerList" javaType = "List" ofType="com.bms.slpd.bean.entity.SlpdBrandOwner">
+			<id property = "brandOwnerId" column = "brandOwnerId"/>
+			<result property = "brandOwnerCode" column = "brandOwnerCode"/>
+			<result property = "ownerName" column = "ownerName"/>
+			<result property = "ownerType" column = "ownerType"/>
+			<result property = "delFlg" column = "delFlg"/>
+			<result property = "updId" column = "updId"/>
+			<result property = "updTime" column = "updTime"/>
+			<result property = "version" column = "version"/>
+		</collection>
+	</resultMap>
+	<select id="findPageList" parameterType="com.bms.slpd.bean.param.SLPD0405IParam" resultType="com.bms.slpd.bean.result.wrapper.SlpdBrandOwnerResult">
+		SELECT
+		A.BRAND_OWNER_ID AS brandOwnerId,
+		A.BRAND_OWNER_CODE AS brandOwnerCode,
+		A.OWNER_NAME AS ownerName,
+		A.OWNER_TYPE AS ownerType,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+		<if test="brandIds != null and brandIds.size()>0">
+		,B.BRAND_ID AS brandId
+		</if>
+		FROM
+		SLPD_BRAND_OWNER A
+		<if test="brandIds != null and brandIds.size()>0">
+		LEFT Join SLPD_BRAND_OWNER_RELATION B ON A.BRAND_OWNER_ID=B.BRAND_OWNER_ID
+		</if>
+		WHERE 1=1
+		<if test="brandOwnerIds != null and brandOwnerIds.size()>0">
+			AND A.BRAND_OWNER_ID in(
+			<foreach collection="brandOwnerIds" item="brandOwnerId" index="index" separator=",">
+					#{brandOwnerId}
+			</foreach>
+			)
+		</if>
+		<if test="brandIds != null and brandIds.size()>0">
+			AND B.BRAND_ID in(
+			<foreach collection="brandIds" item="brandId" index="index" separator=",">
+				#{brandId}
+			</foreach>
+			)
+			AND B.DEL_FLG=0
+		</if>
+		<if test="ownerName!=null and ownerName!=''">
+			AND A.OWNER_NAME LIKE #{ownerName}
+		</if>
+		<if test="ownerType!=null and ownerType!=''">
+			AND A.OWNER_TYPE =  #{ownerType}
+		</if>
+		AND A.DEL_FLG=0
+		ORDER BY
+		brandOwnerId DESC
+	</select>
+	<select id="findBrandOwner" parameterType="List" resultMap="itemResult">
+		SELECT
+		A.BRAND_OWNER_ID AS brandOwnerId,
+		A.BRAND_OWNER_CODE AS brandOwnerCode,
+		A.OWNER_NAME AS ownerName,
+		A.OWNER_TYPE AS ownerType,
+		A.DEL_FLG AS delFlg,
+		A.CRT_ID AS crtId,
+		A.CRT_TIME AS crtTime,
+		A.UPD_ID AS updId,
+		A.UPD_TIME AS updTime,
+		A.VERSION AS version
+		,B.BRAND_ID AS brandId
+		FROM
+		SLPD_BRAND_OWNER A
+		LEFT Join SLPD_BRAND_OWNER_RELATION B ON A.BRAND_OWNER_ID=B.BRAND_OWNER_ID
+		AND B.DEL_FLG = 0
+		WHERE 1 = 1
+		<if test="list!=null and list.size()>0">
+			AND B.BRAND_ID IN
+			<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+
+
+	<select id="findBrandOwnerByCode" resultType="com.bms.slpd.bean.result.wrapper.SlpdBrandOwnerResult">
+		SELECT
+		max(cast(BRAND_OWNER_CODE AS SIGNED)) AS brandOwnerCode
+		FROM SLPD_BRAND_OWNER
+		WHERE
+		DEL_FLG=0
+	</select>
+</mapper>

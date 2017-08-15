@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0118IDao">
+    <!-- 修改卖家合同信息准入 -->
+    <update id="updateSCP" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE
+        SLIM_SELLER_CONTRACT_PERMISSION
+        SET
+        <if test="null != target.entitySellerIdFlg and target.entitySellerIdFlg">
+            ENTITY_SELLER_ID = #{entity.entitySellerId},
+        </if>
+        <if test="null != target.sellerFullNameFlg and target.sellerFullNameFlg">
+            SELLER_FULL_NAME = #{entity.sellerFullName},
+        </if>
+        <if test="null != target.countryCodeFlg and target.countryCodeFlg">
+            COUNTRY_CODE = #{entity.countryCode},
+        </if>
+        <if test="null != target.countryNameFlg and target.countryNameFlg">
+            COUNTRY_NAME = #{entity.countryName},
+        </if>
+        <if test="null != target.provinceCodeFlg and target.provinceCodeFlg">
+            PROVINCE_CODE = #{entity.provinceCode},
+        </if>
+        <if test="null != target.provinceNameFlg and target.provinceNameFlg">
+            PROVINCE_NAME = #{entity.provinceName},
+        </if>
+        <if test="null != target.cityCodeFlg and target.cityCodeFlg">
+            CITY_CODE = #{entity.cityCode},
+        </if>
+        <if test="null != target.cityNameFlg and target.cityNameFlg">
+            CITY_NAME = #{entity.cityName},
+        </if>
+        <if test="null != target.businessAddressFlg and target.businessAddressFlg">
+            BUSINESS_ADDRESS = #{entity.businessAddress},
+        </if>
+        <if test="null != target.payeeNameFlg and target.payeeNameFlg">
+            PAYEE_NAME = #{entity.payeeName},
+        </if>
+        <if test="null != target.payeeBankFlg and target.payeeBankFlg">
+            PAYEE_BANK = #{entity.payeeBank},
+        </if>
+        <if test="null != target.bankAccountFlg and target.bankAccountFlg">
+            BANK_ACCOUNT = #{entity.bankAccount},
+        </if>
+        <if test="null != target.expressAddressFlg and target.expressAddressFlg">
+            EXPRESS_ADDRESS = #{entity.expressAddress},
+        </if>
+        <if test="null != target.delFlgFlg and target.delFlgFlg">
+            DEL_FLG = #{entity.delFlg},
+        </if>
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        WHERE
+        DEL_FLG = 0
+        AND
+        SCP_ID = #{entity.scpId}
+        AND VERSION = #{entity.version}
+    </update>
+
+</mapper>

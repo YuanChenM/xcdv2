@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0504IDao">
+    <insert id="batchInsert" parameterType="List">
+        INSERT INTO SLPD_ITEM_PROPERTY (
+        ITEM_PROPERTY_ID,
+        ITEM_PROPERTY_CODE,
+        ITEM_ID,
+        SOURCE_TYPE,
+        GROSS_WEIGHT,
+        PACKAGE_SPECIFICATION,
+        PACKAGE_QUANTITY,
+        CARTON_DIMENSION,
+        CARTON_LENGTH,
+        CARTON_WIDTH,
+        CARTON_HEIGHT,
+        PALLET_STACKING_LIMIT,
+        AUDIT_STU,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">(
+            #{item.itemPropertyId},
+            #{item.itemPropertyCode},
+            #{item.itemId},
+            #{item.sourceType},
+            #{item.grossWeight},
+            #{item.packageSpecification},
+            #{item.packageQuantity},
+            #{item.cartonDimension},
+            #{item.cartonLength},
+            #{item.cartonWidth},
+            #{item.cartonHeight},
+            #{item.palletStackingLimit},
+            #{item.auditStu},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.updId},
+            #{item.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+    <!-- 查询单品规格是否已经存在 -->
+    <select id="findExistItemProperties" parameterType="java.util.List"
+            resultType="com.bms.slpd.bean.result.field.SLPD0501IItemPropertyResult">
+        SELECT
+        ITEM_PROPERTY_ID AS itemPropertyId,
+        ITEM_ID AS itemId,
+        SOURCE_TYPE AS sourceType,
+		GROSS_WEIGHT AS grossWeight,
+		PACKAGE_SPECIFICATION AS packageSpecification,
+		PACKAGE_QUANTITY AS packageQuantity,
+		CARTON_DIMENSION AS cartonDimension,
+		CARTON_LENGTH AS cartonLength,
+		CARTON_WIDTH AS cartonWidth,
+		CARTON_HEIGHT AS cartonHeight,
+		PALLET_STACKING_LIMIT AS palletStackingLimit,
+		AUDIT_STU AS auditStu,
+		DEL_FLG AS delFlg,
+		CRT_ID AS crtId,
+		CRT_TIME AS crtTime,
+		UPD_ID AS updId,
+		UPD_TIME AS updTime,
+		VERSION AS version
+		FROM
+		SLPD_ITEM_PROPERTY
+		<include refid="whereConditions"/>
+    </select>
+
+    <sql id="whereConditions">
+        <where>
+            <foreach collection="list" item="itemProperty" open="(" separator="or" close=")">
+                (
+                ITEM_ID = #{itemProperty.itemId}
+                AND SOURCE_TYPE = #{itemProperty.sourceType}
+                AND GROSS_WEIGHT = #{itemProperty.grossWeight}
+                AND PACKAGE_SPECIFICATION = #{itemProperty.packageSpecification}
+                AND PACKAGE_QUANTITY = #{itemProperty.packageQuantity}
+                AND CARTON_DIMENSION = #{itemProperty.cartonDimension}
+                <!-- 判断单品品牌规格是否既存条件,去掉长,宽,高,托盘箱数四个非必填字段 -->
+                <!--<if test="itemProperty.cartonLength != null and itemProperty.cartonLength != ''">-->
+                    <!--AND CARTON_LENGTH = #{itemProperty.cartonLength}-->
+                <!--</if>-->
+                <!--<if test="itemProperty.cartonWidth != null and itemProperty.cartonWidth != ''">-->
+                    <!--AND CARTON_WIDTH = #{itemProperty.cartonWidth}-->
+                <!--</if>-->
+                <!--<if test="itemProperty.cartonHeight != null and itemProperty.cartonHeight != ''">-->
+                    <!--AND CARTON_HEIGHT = #{itemProperty.cartonHeight}-->
+                <!--</if>-->
+                <!--<if test="itemProperty.palletStackingLimit != null and itemProperty.palletStackingLimit != ''">-->
+                    <!--AND PALLET_STACKING_LIMIT = #{itemProperty.palletStackingLimit}-->
+                <!--</if>-->
+                <if test="itemProperty.itemPropertyId != null and itemProperty.itemPropertyId != ''">
+                    AND ITEM_PROPERTY_ID != #{itemProperty.itemPropertyId}
+                </if>
+                )
+            </foreach>
+
+        </where>
+    </sql>
+
+</mapper>

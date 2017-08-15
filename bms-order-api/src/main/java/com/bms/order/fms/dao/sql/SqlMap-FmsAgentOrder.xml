@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.fms.dao.FmsAgentOrderDao">
+    <select id="findAgentOrder" parameterType="com.bms.order.fms.bean.FmsOrderParam"
+            resultType="com.bms.order.fms.bean.FmsAgentOrderBean">
+        SELECT
+            agentOrder.BACK_NO AS orgSystemId,
+            agentOrder.BS_ORDER_CODE AS omsOrderNumber,
+            agentOrder.BS_ORDER_ID AS omsOrderId,
+            agentOrder.ORDER_PLACE_DATETIME AS orderPlaceDate,
+            agentOrder.BS_ID AS customerOrgNumber,
+            agentOrderAttached.BS_CODE AS customerNumber,
+            agentOrderAttached.BS_NAME AS soldTo,
+            agentOrder.ORDER_SOURCE_TYPE AS orderOrgsource
+        FROM ORDR_BS_ORDER agentOrder
+        INNER JOIN ORDR_BS_ORDER_ATTACHED agentOrderAttached
+        ON agentOrderAttached.BS_ORDER_ID = agentOrder.BS_ORDER_ID
+        WHERE agentOrder.DEL_FLG = FALSE
+        <if test="pushOrderId != null and pushOrderId != ''">
+            AND agentOrder.BS_ORDER_ID = #{pushOrderId}
+        </if>
+        <if test="pushOrderCode != null and pushOrderCode != ''">
+            AND agentOrder.BS_ORDER_CODE = #{pushOrderCode}
+        </if>
+        <if test="backNo != null and backNo != ''">
+            AND agentOrder.BACK_NO = #{backNo}
+        </if>
+        ORDER BY agentOrder.BS_ORDER_ID
+    </select>
+    <select id="findAgentOrderDetail" parameterType="com.bms.order.fms.bean.FmsAgentOrderBean"
+            resultType="com.bms.order.fms.bean.FmsAgentOrderDetail">
+        SELECT
+            agentOrderDetail.BS_ORDER_DETAIL_ID AS orderDetailId,
+            agentOrderDetail.GOODS_ID AS productId,
+            agentOrderDetail.GOODS_QUANTITY AS orderedQuantity,
+            agentOrderDetail.GOODS_UNIT AS orderQuantityUom,
+            agentOrderDetail.REAL_UNIT_PRICE AS unitSellingPriceDsp
+        FROM
+            ORDR_BS_ORDER_DETAIL agentOrderDetail
+        WHERE
+            agentOrderDetail.BS_ORDER_ID = #{omsOrderId}
+        ORDER BY agentOrderDetail.BS_ORDER_DETAIL_ID
+    </select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0215IDao">
+    
+    <!--修改生产商生产资质-进沪(京、津)登记信息 -->
+    <update id="updateShBjTjRegistration" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE SLIM_SH_BJ_TJ_REGISTRATION
+        <set>
+            <if test="target.sellerRoleIdFlg != null and target.sellerRoleIdFlg">
+                SELLER_ROLE_ID = #{entity.sellerRoleId},
+            </if>
+            <if test="target.workunitNameFlg != null and target.workunitNameFlg">
+                WORKUNIT_NAME = #{entity.workunitName},
+            </if>
+            <if test="target.productCategoryNameFlg != null and target.productCategoryNameFlg">
+                PRODUCT_CATEGORY_NAME = #{entity.productCategoryName},
+            </if>
+            <if test="target.regDateFlg != null and target.regDateFlg">
+                REG_DATE = #{entity.regDate},
+            </if>
+            <if test="target.sbtRegUrlFlg != null and target.sbtRegUrlFlg">
+                SBT_REG_URL = #{entity.sbtRegUrl},
+            </if>
+            <if test="target.delFlgFlg != null and target.delFlgFlg">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            VERSION = VERSION + 1,
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime}
+        </set>
+        WHERE
+        SBT_REG_ID = #{entity.sbtRegId} AND VERSION = #{entity.version} AND DEL_FLG = 0
+    </update>
+
+</mapper>

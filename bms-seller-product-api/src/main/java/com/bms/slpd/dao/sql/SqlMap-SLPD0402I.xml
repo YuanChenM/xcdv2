@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0402IDao">
+    <update id = "updateBrands" parameterType = "com.bms.slpd.bean.UpdateEntity">
+        update SLPD_BRAND
+        <set>
+            <if test="target.brandNameFlg == true">
+                BRAND_NAME = #{entity.brandName},
+            </if>
+            <if test="target.brandTypeFlg == true">
+                BRAND_TYPE = #{entity.brandType},
+            </if>
+            <if test="target.trademarkRegNoFlg == true">
+                TRADEMARK_REG_NO = #{entity.trademarkRegNo},
+            </if>
+            <if test="target.startValidDateFlg == true">
+                START_VALID_DATE = #{entity.startValidDate},
+            </if>
+            <if test="target.endValidDateFlg == true">
+                END_VALID_DATE = #{entity.endValidDate},
+            </if>
+            <if test="target.brandCertUrlFlg == true">
+                BRAND_CERT_URL = #{entity.brandCertUrl},
+            </if>
+            <if test="target.productPackageUrlFlg == true">
+                PRODUCT_PACKAGE_URL = #{entity.productPackageUrl},
+            </if>
+            <if test="target.honorCertNoFlg == true">
+                HONOR_CERT_NO = #{entity.honorCertNo},
+            </if>
+            <if test="target.honorCertDateFlg == true">
+                HONOR_CERT_DATE = #{entity.honorCertDate},
+            </if>
+            <if test="target.honorCertUnitFlg == true">
+                HONOR_CERT_UNIT = #{entity.honorCertUnit},
+            </if>
+            <if test="target.honorCertUrlFlg == true">
+                HONOR_CERT_URL = #{entity.honorCertUrl},
+            </if>
+            <if test="target.delFlgFlg == true">
+                DEL_FLG = #{entity.delFlg},
+            </if>
+            UPD_ID = #{entity.updId},
+            UPD_TIME = #{entity.updTime},
+            VERSION = VERSION+1
+        </set>
+        where
+        BRAND_ID = #{entity.brandId}
+        AND VERSION = #{entity.version}
+    </update>
+</mapper>

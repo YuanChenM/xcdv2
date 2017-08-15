@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0246IDao">
+    <!-- 修改卖家合同信息准入 -->
+    <update id="updateContact" parameterType="com.bms.slim.bean.UpdateEntity">
+        UPDATE
+        SLIM_CONTACT
+        SET
+        <if test="null != target.contactNameFlg and target.contactNameFlg">
+            CONTACT_NAME = #{entity.contactName},
+        </if>
+        <if test="null != target.contactTypeFlg and target.contactTypeFlg">
+            CONTACT_TYPE = #{entity.contactType},
+        </if>
+        <if test="null != target.mobileFlg and target.mobileFlg">
+            MOBILE = #{entity.mobile},
+        </if>
+        <if test="null != target.wechatFlg and target.wechatFlg">
+            WECHAT = #{entity.wechat},
+        </if>
+        <if test="null != target.qqFlg and target.qqFlg">
+            QQ = #{entity.qq},
+        </if>
+        <if test="null != target.emailFlg and target.emailFlg">
+            EMAIL = #{entity.email},
+        </if>
+        <if test="null != target.delFlgFlg and target.delFlgFlg">
+            DEL_FLG = #{entity.delFlg},
+        </if>
+        UPD_ID = #{entity.updId},
+        UPD_TIME = #{entity.updTime},
+        VERSION = VERSION + 1
+        WHERE
+        DEL_FLG = 0
+        AND
+        CONTACT_ID = #{entity.contactId} AND VERSION = #{entity.version}
+    </update>
+
+</mapper>

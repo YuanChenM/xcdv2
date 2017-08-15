@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.order.fms.dao.OmsOrderOriginDao">
+    <select id="findOrderSellerDetail" parameterType="com.bms.order.fms.bean.OmsOrderOrigin"
+            resultType="com.bms.order.fms.bean.OmsOrderSellerDetail">
+        SELECT
+        orderDetail.BUYER_BATCH_ORDER_DETAIL_ID AS orderDetailId,
+        orderSellerDetail.COMO_IV_TYPE AS comoInventoryType
+        FROM
+        ORDR_BUYER_BATCH_ORDER_DETAIL orderDetail
+        INNER JOIN ORDR_BUYER_SELLER_DETAIL orderSellerDetail
+        ON orderSellerDetail.BUYER_BATCH_ORDER_DETAIL_ID = orderDetail.BUYER_BATCH_ORDER_DETAIL_ID
+        WHERE
+        orderDetail.BUYER_ORDER_ID = #{buyerOrderId}
+        ORDER BY orderDetail.BUYER_ORDER_ID
+    </select>
+
+    <select id="findAgentOrder" parameterType="com.bms.order.fms.bean.OmsProductInventoryDetail"
+            resultType="com.bms.order.fms.bean.OmsOrderOrigin">
+        SELECT
+          agentOrder.BS_ORDER_ID AS orderId,
+          agentOrder.BS_ORDER_CODE AS orderCode,
+          perform.OLD_GOODS_ID AS commodityId,
+          perform.PERFORM_PRICE AS commodityPrice,
+          perform.PERFORM_QTY AS commodityQty
+        FROM ORDR_BS_VIRTUAL_PERFORM_DETAIL perform
+        INNER JOIN ORDR_BS_ORDER agentOrder
+        ON agentOrder.BS_ORDER_ID = perform.BS_ORDER_ID
+        WHERE perform.PERFORM_ID = #{srcTransactionId}
+        AND  perform.PERFORM_DETAIL_ID = #{srcTransactionDetailId}
+        AND  perform.NEW_GOODS_ID = #{srcCommodityId}
+    </select>
+</mapper>

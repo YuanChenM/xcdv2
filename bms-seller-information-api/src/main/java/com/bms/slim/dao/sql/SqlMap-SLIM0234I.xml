@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0234IDao">
+
+    <!--新增生产商实验室 -->
+    <insert id="saveProducerLaboratories" parameterType="java.util.List">
+        INSERT INTO SLIM_PRODUCER_LABORATORY (
+        LABORATORY_ID,
+        SELLER_ROLE_ID,
+        ACREAGE,
+        EFFECT,
+        INVERSTNENT,
+        MEMBER,
+        LAB_PIC_URL,
+        ORG_FRAME_IMG_URL,
+        QUALITY_CTRL_IMG_URL,
+        DEL_FLG,
+        CRT_ID,
+        CRT_TIME,
+        UPD_ID,
+        UPD_TIME,
+        VERSION
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.laboratoryId},
+            #{item.sellerRoleId},
+            #{item.acreage},
+            #{item.effect},
+            #{item.inverstnent},
+            #{item.member},
+            #{item.labPicUrl},
+            #{item.orgFrameImgUrl},
+            #{item.qualityCtrlImgUrl},
+            0,
+            #{item.crtId},
+            #{item.crtTime},
+            #{item.updId},
+            #{item.updTime},
+            1
+            )
+        </foreach>
+    </insert>
+
+</mapper>

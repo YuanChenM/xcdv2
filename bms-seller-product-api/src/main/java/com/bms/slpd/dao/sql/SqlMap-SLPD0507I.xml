@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slpd.dao.SLPD0507IDao">
+
+    <!-- 计数产品，该产品必须满足未删除，非指定产品ID，审核状态正式，指定单品品牌规格ID -->
+    <select id="countValidBrandItemProperties" parameterType="com.bms.slpd.bean.entity.SlpdProduct" resultType="int">
+        SELECT
+            count(1)
+        FROM
+            SLPD_PRODUCT
+        WHERE
+            DEL_FLG = 0
+        AND PRODUCT_ID != #{productId}
+        AND AUDIT_STU = 3
+        AND BRAND_ITEM_PROPERTY_ID = #{brandItemPropertyId}
+    </select>
+
+    <!-- 根据产品ID，批量查询产品 -->
+    <select id="findProductsByProductIds" parameterType="list" resultType="com.bms.slpd.bean.entity.SlpdProduct">
+        SELECT
+            PRODUCT_ID AS productId,
+            AUDIT_HISTORY AS auditHistory,
+            ITEM_PROPERTY_ID AS itemPropertyId,
+            BRAND_ITEM_ID AS brandItemId,
+            BRAND_ID AS brandId,
+            ITEM_ID AS itemId,
+            BREED_ID AS breedId,
+            MACHINING_ID AS machiningId,
+            CLASSES_ID AS classesId
+        FROM
+            SLPD_PRODUCT
+        WHERE
+            DEL_FLG = 0
+        AND PRODUCT_ID IN
+        <foreach collection="list" index="index" item="productId" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+    </select>
+
+    <!-- 修改一级分类的审核状态 -->
+    <update id="updateClassesAuditStu" parameterType="com.bms.slpd.bean.entity.SlpdClasses">
+        UPDATE SLPD_CLASSES
+        SET
+            AUDIT_STU = #{auditStu},
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime},
+            VERSION = VERSION + 1
+        WHERE
+            CLASSES_ID = #{classesId}
+        AND AUDIT_STU != #{auditStu}
+    </update>
+
+    <!-- 修改二级分类的审核状态 -->
+    <update id="updateMachiningAuditStu" parameterType="com.bms.slpd.bean.entity.SlpdMachining">
+        UPDATE SLPD_MACHINING
+        SET
+            AUDIT_STU = #{auditStu},
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime},
+            VERSION = VERSION + 1
+        WHERE
+            MACHINING_ID = #{machiningId}
+        AND AUDIT_STU != #{auditStu}
+    </update>
+
+    <!-- 修改品种的审核状态 -->
+    <update id="updateBreedAuditStu" parameterType="com.bms.slpd.bean.entity.SlpdBreed">
+        UPDATE SLPD_BREED
+        SET
+            AUDIT_STU = #{auditStu},
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime},
+            VERSION = VERSION + 1
+        WHERE
+            BREED_ID = #{breedId}
+        AND AUDIT_STU != #{auditStu}
+    </update>
+
+    <!-- 修改单品的审核状态 -->
+    <update id="updateItemAuditStu" parameterType="com.bms.slpd.bean.entity.SlpdItem">
+        UPDATE SLPD_ITEM
+        SET
+            AUDIT_STU = #{auditStu},
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime},
+            VERSION = VERSION + 1
+        WHERE
+            ITEM_ID = #{itemId}
+        AND AUDIT_STU != #{auditStu}
+    </update>
+
+    <!-- 修改品牌的审核状态 -->
+    <update id="updateBrandAuditStu" parameterType="com.bms.slpd.bean.entity.SlpdBrand">
+        UPDATE SLPD_BRAND
+        SET
+            AUDIT_STU = #{auditStu},
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime},
+            VERSION = VERSION + 1
+        WHERE
+            BRAND_ID = #{brandId}
+        AND AUDIT_STU != #{auditStu}
+    </update>
+
+    <!-- 修改单品品牌的审核状态 -->
+    <update id="updateBrandItemAuditStu" parameterType="com.bms.slpd.bean.entity.SlpdBrandItem">
+        UPDATE SLPD_BRAND_ITEM
+        SET
+            AUDIT_STU = #{auditStu},
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime},
+            VERSION = VERSION + 1
+        WHERE
+            BRAND_ITEM_ID = #{brandItemId}
+        AND AUDIT_STU != #{auditStu}
+    </update>
+
+    <!-- 修改单品品牌规格的审核状态 -->
+    <update id="updateItemPropertyAuditStu" parameterType="com.bms.slpd.bean.entity.SlpdItemProperty">
+        UPDATE SLPD_ITEM_PROPERTY
+        SET
+            AUDIT_STU = #{auditStu},
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime},
+            VERSION = VERSION + 1
+        WHERE
+            ITEM_PROPERTY_ID = #{itemPropertyId}
+        AND AUDIT_STU != #{auditStu}
+    </update>
+
+    <!-- 修改产品的审核状态 -->
+    <update id="updateProductAuditStu" parameterType="com.bms.slpd.bean.entity.SlpdProduct">
+        UPDATE SLPD_PRODUCT
+        SET
+            AUDIT_STU = #{auditStu},
+            AUDIT_REMARK = #{auditRemark},
+            AUDIT_HISTORY = #{auditHistory},
+            UPD_ID = #{updId},
+            UPD_TIME = #{updTime},
+            VERSION = VERSION + 1
+        WHERE
+            VERSION = #{version}
+        AND PRODUCT_ID = #{productId}
+    </update>
+
+    <!-- 根据产品ID，批量查询生产商产品 -->
+    <select id="findProducerProductsByProductIds" parameterType="list" resultType="com.bms.slpd.bean.entity.SlpdProducerProduct">
+        SELECT
+        PRODUCER_PRODUCT_ID AS producerProductId,
+        PRODUCT_ID AS productId,
+        AUDIT_STU AS auditStu,
+        AUDIT_HISTORY AS auditHistory,
+        VERSION AS version
+        FROM
+        SLPD_PRODUCER_PRODUCT
+        WHERE
+        DEL_FLG = 0
+        AND PRODUCT_ID IN
+        <foreach collection="list" index="index" item="productId" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+    </select>
+
+    <!-- 产品表字段 -->
+    <sql id="productColumns">
+        A.PRODUCT_ID AS productId,
+        A.QUALITY_GRADE_TYPE AS qualityGradeType,
+        A.BRAND_ITEM_PROPERTY_SKU AS brandItemPropertySku,
+        A.NET_WEIGHT AS netWeight,
+        A.NET_WEIGHT_CODE AS netWeightCode,
+        A.AUDIT_STU AS auditStu,
+        A.AUDIT_REMARK AS auditRemark,
+        A.AUDIT_HISTORY AS auditHistory,
+        A.BRAND_ITEM_ID AS brandItemId,
+        A.BRAND_ITEM_SKU AS brandItemSku,
+        A.BRAND_ID AS brandId,
+        A.BRAND_CODE AS brandCode,
+        A.BRAND_NAME AS brandName,
+        A.BRAND_TYPE AS brandType,
+        A.ITEM_ID AS itemId,
+        A.ITEM_CODE AS itemCode,
+        A.ITEM_SKU AS itemSku,
+        A.ITEM_NAME AS itemName,
+        A.SPECIFICATION AS specification,
+        A.PROCESSING_METHOD AS processingMethod,
+        A.TASTE AS taste,
+        A.BREED_ID AS breedId,
+        A.BREED_CODE AS breedCode,
+        A.BREED_SKU AS breedSku,
+        A.BREED_SALES_NAME AS breedSalesName,
+        A.BREED_SCIENTIFIC_NAME AS breedScientificName,
+        A.BREED_LOCAL_NAME AS breedLocalName,
+        A.MACHINING_ID AS machiningId,
+        A.MACHINING_CODE AS machiningCode,
+        A.MACHINING_NAME AS machiningName,
+        A.CLASSES_ID AS classesId,
+        A.CLASSES_CODE AS classesCode,
+        A.CLASSES_NAME AS classesName,
+        A.DEL_FLG AS delFlg,
+        A.CRT_ID AS crtId,
+        A.CRT_TIME AS crtTime,
+        A.UPD_ID AS updId,
+        A.UPD_TIME AS updTime,
+        A.VERSION AS version
+    </sql>
+
+    <!-- 单品规格表字段 -->
+    <sql id="itemPropertyColumns">
+        B.ITEM_PROPERTY_ID AS itemPropertyId,
+        B.ITEM_PROPERTY_CODE AS itemPropertyCode,
+        B.SOURCE_TYPE AS sourceType,
+        B.GROSS_WEIGHT AS grossWeight,
+        B.PACKAGE_SPECIFICATION AS packageSpecification,
+        B.PACKAGE_QUANTITY AS packageQuantity,
+        B.CARTON_DIMENSION AS cartonDimension,
+        B.CARTON_LENGTH AS cartonLength,
+        B.CARTON_WIDTH AS cartonWidth,
+        B.CARTON_HEIGHT AS cartonHeight,
+        B.PALLET_STACKING_LIMIT AS palletStackingLimit,
+        B.AUDIT_STU AS propertyAuditStu,
+        B.DEL_FLG,
+        B.CRT_ID,
+        B.CRT_TIME,
+        B.UPD_ID,
+        B.UPD_TIME,
+        B.VERSION
+    </sql>
+
+    <!-- 根据产品ID，批量查询产品(包含规格信息) -->
+    <select id="findProductsByIds" parameterType="java.util.List"
+            resultType="com.bms.slpd.bean.result.field.SLPD0507IProductResult">
+        SELECT
+        <include refid="productColumns"/>,
+        <include refid="itemPropertyColumns"/>
+        FROM
+        SLPD_PRODUCT AS A
+        LEFT JOIN SLPD_ITEM_PROPERTY AS B ON B.ITEM_PROPERTY_ID = A.ITEM_PROPERTY_ID AND B.DEL_FLG = 0
+        WHERE
+        A.DEL_FLG = 0
+        AND A.PRODUCT_ID IN
+        <foreach collection="list" index="index" item="productId" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+    </select>
+
+</mapper>

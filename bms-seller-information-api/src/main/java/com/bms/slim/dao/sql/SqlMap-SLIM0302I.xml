@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.bms.slim.dao.SLIM0302IDao">
+    <select id="findPageList" resultType="com.bms.slim.bean.result.wrapper.SlimSellerBrandResult" parameterType="com.bms.slim.bean.param.SLIM0302IParam" >
+        SELECT
+        A.SELLER_BRAND_ID AS sellerBrandId,
+        A.ENTITY_SELLER_ID AS entitySellerId,
+        A.BRAND_ID AS brandId,
+        A.COPYRIGHT_TYPE AS copyrightType,
+        A.AGCY_DIST_AUZ_CONT_NO AS agcyDistAuzContNo,
+        A.AGCY_DIST_AUZ_CONT_URL AS agcyDistAuzContUrl,
+        A.START_AUZ_DATE AS startAuzDate,
+        A.END_AUZ_DATE AS endAuzDate,
+        A.DEL_FLG AS delFlg,
+        A.CRT_ID AS crtId,
+        A.CRT_TIME AS crtTime,
+        A.UPD_ID AS updId,
+        A.UPD_TIME AS updTime,
+        A.VERSION AS version
+        FROM
+        SLIM_SELLER_BRAND A
+        WHERE A.DEL_FLG = 0
+        <if test="sellerBrandIds != null and sellerBrandIds.size()>0">
+            AND A.SELLER_BRAND_ID IN
+            <foreach collection="sellerBrandIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="entitySellerIds != null and entitySellerIds.size()>0">
+            AND A.ENTITY_SELLER_ID IN
+            <foreach collection="entitySellerIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test = "brandIds != null and brandIds.size() > 0">
+            AND A.BRAND_ID IN
+            <foreach collection="brandIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test = "copyrightType != null and copyrightType != ''">
+            AND A.COPYRIGHT_TYPE = #{copyrightType}
+        </if>
+        GROUP BY
+        A.SELLER_BRAND_ID
+        ORDER BY
+        A.SELLER_BRAND_ID DESC
+    </select>
+
+
+
+    <!--根据实体卖家ID 品牌ID  查询信息-->
+    <select id="findListById" parameterType="java.util.List" resultType="com.bms.slim.bean.result.wrapper.SlimSellerBrandResult">
+        SELECT
+        A.SELLER_BRAND_ID AS sellerBrandId,
+        A.ENTITY_SELLER_ID AS entitySellerId,
+        A.BRAND_ID AS brandId,
+        A.COPYRIGHT_TYPE AS copyrightType,
+        A.AGCY_DIST_AUZ_CONT_NO AS agcyDistAuzContNo,
+        A.AGCY_DIST_AUZ_CONT_URL AS agcyDistAuzContUrl,
+        A.START_AUZ_DATE AS startAuzDate,
+        A.END_AUZ_DATE AS endAuzDate,
+        A.DEL_FLG AS delFlg,
+        A.CRT_ID AS crtId,
+        A.CRT_TIME AS crtTime,
+        A.UPD_ID AS updId,
+        A.UPD_TIME AS updTime,
+        A.VERSION AS version
+        FROM SLIM_SELLER_BRAND A
+        WHERE
+        A.DEL_FLG=0
+        AND
+        <foreach collection="list" item="item" open="(" separator="OR" close=")">
+            (A.ENTITY_SELLER_ID = #{item.entitySellerId} AND A. BRAND_ID = #{item.brandId})
+        </foreach>
+    </select>
+
+
+</mapper>
